@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TestCode : MonoBehaviour 
 {
-    private void Start()
+    private async void Start()
     {
-        FirebaseInitalizer init = FirebaseInitalizer.Instance;
+        await FirebaseManager.Instance.WaitForInitalizedAsync();
     }
 }

@@ -2,16 +2,9 @@ using Cysharp.Threading.Tasks;
 using Firebase;
 using UnityEngine;
 
-public class FirebaseInitalizer : Singleton<FirebaseInitalizer>
+public class FirebaseInitalizer
 {
-    private bool initialize = false;
-
-    static FirebaseInitalizer()
-    {
-        Instance.InitAsync().Forget();
-    }
-
-    private async UniTaskVoid InitAsync()
+    public async UniTask InitAsync()
     {
         try
         {
@@ -21,7 +14,6 @@ public class FirebaseInitalizer : Singleton<FirebaseInitalizer>
 #if DEBUG_MODE
                 Debug.Log($"Firebase Initalized Success");
 #endif
-                initialize = true;
             }
             else 
             {
@@ -38,12 +30,5 @@ public class FirebaseInitalizer : Singleton<FirebaseInitalizer>
         }
     }
 
-    /// <summary>
-    /// Wait for Firebase Initalized
-    /// </summary>
-    /// <returns></returns>
-    public async UniTask WaitForInitalizedAsync()
-    {
-        await UniTask.WaitUntil(() => initialize);
-    }
+
 }
