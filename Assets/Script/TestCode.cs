@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class User : JsonSerialized
 {
@@ -14,14 +16,41 @@ public class User : JsonSerialized
 
 public class TestCode : MonoBehaviour 
 {
-    
+    public Button anymousLoginButton;
+    public TextMeshProUGUI uidText;
+
+    private void Awake()
+    {
+        anymousLoginButton.onClick.AddListener(async () =>
+        {
+            await FirebaseManager.Instance.WaitForInitalizedAsync();
+            var (id, success) = await FirebaseManager.Instance.Auth.SignInAnonymouslyAsync();
+            if (success)
+            {
+                uidText.text = $"User ID: {id}";
+            }
+        });
+    }
+
     private async void Start()
     {
         await FirebaseManager.Instance.WaitForInitalizedAsync();
-        User user = new User("asd" , 1);
-        bool isSuccess = await FirebaseManager.Instance.Database.PushWirteJsonData<User>("users" , user);
-        Debug.Log(isSuccess);
-        var data = await FirebaseManager.Instance.Database.GetData<User>("users");
-        Debug.Log(data.data.id +  " " + data.data.value);
+        var data = await FirebaseManager.Instance.Database.GetDatas<User>("users");
+        if(data.success)
+        {
+            foreach (var dat in data.data)
+            {
+                Debug.Log(dat.id + " " + dat.value);
+            }
+        }
+
+        if (FirebaseManager.Instance.Auth.UserId != string.Empty)
+        {
+            uidText.text = $"User ID: {FirebaseManager.Instance.Auth.UserId}";
+        }
+        User userData = new User("Ãµ¹Î¼º" , 11);
+        var setting = await FirebaseManager.Instance.Database.OverwriteJsonData($"users/{FirebaseManager.Instance.Auth.UserId}" , userData);
+        Debug.Log(setting);
+
     }
 }
