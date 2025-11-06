@@ -30,7 +30,6 @@ public class DataBase
             if (!snapshot.Exists)
                 throw new System.Exception($"Empty Value in Firebase database : {path}");
 
-            Debug.Log(snapshot.Key);
             data = JsonSerialized.FromJson<T>(snapshot.GetRawJsonValue());
             return (data, true);
         }       

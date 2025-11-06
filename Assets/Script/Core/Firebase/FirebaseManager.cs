@@ -6,6 +6,8 @@ public class FirebaseManager
 {
     private FirebaseInitalizer initalizer = new FirebaseInitalizer();
     private DataBase database = new DataBase();
+    private Auth auth = new Auth();
+
     private bool initialize = false;
 
     private static FirebaseManager instance;
@@ -24,6 +26,7 @@ public class FirebaseManager
      
     public FirebaseInitalizer Initalizer => initalizer;
     public DataBase Database => database;
+    public Auth Auth => auth;
 
     private FirebaseManager() {}
     static FirebaseManager()
@@ -36,6 +39,8 @@ public class FirebaseManager
         await initalizer.InitAsync();
         Debug.Log("Firebase Initalized");
         database.Init();
+        Debug.Log("Firebase Database Initalized");
+        auth.Init();
         Debug.Log("Firebase Database Initalized");
 
         initialize = true;
