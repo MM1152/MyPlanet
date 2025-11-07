@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using System.Linq;
+using System;
 
 
 public abstract class DataTable
@@ -15,7 +16,7 @@ public abstract class DataTable
     public abstract void Load(string filename);
 
     //데이터 로드 <비동기> [ 각 테이블 딕셔너리에 데이터 삽입  ]
-    public abstract UniTask<DataTable> LoadAsync(string filename);
+    public abstract UniTask<(string, DataTable)> LoadAsync(string filename);
 
     public static List<T> LoadCsv<T>(string csvText)
     {
@@ -26,7 +27,6 @@ public abstract class DataTable
             return recodes.ToList();
         }
     }
-
 
     public static async UniTask<List<T>> LoadCSVTest<T>(string csvText)
     {
