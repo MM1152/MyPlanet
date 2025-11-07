@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
+public enum WindowIds
+{
+    None = -1,
+    PlaceTowerWindow = 0
+}
 
 public static class DataTableIds
 {
