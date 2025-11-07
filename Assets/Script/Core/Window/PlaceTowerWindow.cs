@@ -1,14 +1,49 @@
 using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class PlaceTowerWindow : Window
 {
-    public override void Init()
+    [SerializeField] private int selectTowerUICount;
+    [SerializeField] private SelectTowerUI selectTowerUI;
+    [SerializeField] private Transform selectTowerUIRoot;
+    [SerializeField] private PlaceTower placeTower;
+    [SerializeField] private TowerManager towerManager;
+
+    private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
+    public Button testButton;
+    public override void Init(WindowManager manager)
     {
+        base.Init(manager);
+
+        for(int i = 0; i < selectTowerUICount; i++)
+        {
+            SelectTowerUI obj = Instantiate(selectTowerUI, selectTowerUIRoot);
+            selectTowerUIs.Add(obj);
+            Button objButton = obj.GetComponent<Button>();
+            objButton.onClick.AddListener(() =>
+            {
+                if (!placeTower.Place())
+                    return;
+
+                towerManager.AddTower(obj.GetTowerData());
+                manager.Close();
+            });
+        }
+        testButton.onClick.AddListener(() => manager.Open(WindowIds.PlaceTowerWindow));
         windowId = (int)WindowIds.PlaceTowerWindow;
     }
 
     public override void Open()
     {
+        for (int i = 0; i < selectTowerUICount; i++)
+        {
+            // FIX : 이부분 랜덤하게 데이터 넘겨주게 변경
+            TowerData.Data data = new TowerData.Data();
+            data.name = "Tower_" + i;
+            selectTowerUIs[i].SetTowerData(data);
+        }
+
         base.Open();
     }
 

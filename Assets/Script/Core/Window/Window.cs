@@ -3,10 +3,12 @@ using UnityEngine;
 public class Window : MonoBehaviour
 {
     protected int windowId;
+    protected WindowManager manager;
     public int WindowId => windowId;
 
-    public virtual void Init()
+    public virtual void Init(WindowManager manager)
     {
+        this.manager = manager;
         windowId = (int)WindowIds.None;
     }
 
