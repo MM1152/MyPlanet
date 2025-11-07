@@ -14,6 +14,7 @@ public class WindowManager : MonoBehaviour
         {
             window.Init();
             windowTable.Add(window.WindowId, window);
+            window.Close();
         }
 
         if(windowTable.ContainsKey((int)startWindow)) {
