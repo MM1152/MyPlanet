@@ -4,18 +4,16 @@ using UnityEngine.AddressableAssets;
 
 public class MuchineGunTower : Tower
 {
-    private GameObject projectilePrefab;
-    private bool init = false;
 
-    public override void Init(TowerManager manager, TowerData.Data data)
+    public override void Init(GameObject tower, TowerManager manager, TowerData.Data data)
     {
+        base.Init(tower, manager, data);
         LoadProjectile().Forget();
-        base.Init(manager, data);
     }
 
     private async UniTaskVoid LoadProjectile()
     {
-        projectilePrefab = await Addressables.LoadAssetAsync<GameObject>("Bullet").ToUniTask();
+        attackprefab = await Addressables.LoadAssetAsync<GameObject>("Bullet").ToUniTask();
         init = true;
     }
 
@@ -25,19 +23,13 @@ public class MuchineGunTower : Tower
 
         if(base.Attack())
         {
-            ProjectTile projectile = GameObject.Instantiate(projectilePrefab).GetComponent<ProjectTile>();
+            ProjectTile projectile = GameObject.Instantiate(attackprefab).GetComponent<ProjectTile>();
+            projectile.transform.position = tower.transform.position;
+
             projectile.Init(manager.FindTarget());
             return true;
         }
 
         return false;
-    }
-
-    public override void Release()
-    {
-        if(projectilePrefab != null)
-        {
-            Addressables.Release(projectilePrefab);
-        }
     }
 }

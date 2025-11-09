@@ -10,7 +10,6 @@ public class Missile : ProjectTile
     public override void Init(Transform target)
     {
         base.Init(target);
-
         currentAngle = transform.eulerAngles.z;
     }
 

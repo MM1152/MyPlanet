@@ -2,18 +2,24 @@ using UnityEngine;
 
 public class ProjectTile : MonoBehaviour
 {
+    [SerializeField] private Sprite sp;
     public float speed = 10f;
     public int damage = 10;
     protected Transform target;
     protected Vector3 dir;
+    protected SpriteRenderer spriteRenderer;
 
     public virtual void Init(Transform target)
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         this.target = target;
         dir = SetDir();
 
         float rad = Mathf.Atan2(dir.y , dir.x);
         transform.rotation = Quaternion.Euler(0f, 0f, rad * Mathf.Rad2Deg);
+
+        if(sp != null) 
+            spriteRenderer.sprite = sp;
     }
 
     protected virtual Vector3 SetDir()
@@ -30,11 +36,12 @@ public class ProjectTile : MonoBehaviour
             return;
         }
 
-        transform.localPosition += dir * speed * Time.deltaTime;
+        transform.position += dir * speed * Time.deltaTime;
     }
 
-    private void HitTarget()
+    protected virtual void HitTarget()
     {
+        // 데미지 주는 로직 
         Destroy(gameObject);
     }
 

@@ -1,22 +1,28 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public abstract class Tower
 {
     [SerializeField] protected GameObject projectTile;
     [SerializeField] protected float attackInterval = 2f;
     [SerializeField] protected float currentAttackInterval;
-    [SerializeField] protected Transform target;
-    protected IDamageAble targetDamageAble;
 
+    protected GameObject tower;
+    protected Transform target;
+    protected IDamageAble targetDamageAble;
     private bool attackAble;
+
     protected TowerManager manager;
     protected TowerData.Data data;
+    protected GameObject attackprefab;
+    protected bool init = false;
 
-    public virtual void Init(TowerManager manager, TowerData.Data data)
+    public virtual void Init(GameObject tower , TowerManager manager, TowerData.Data data)
     {
         this.manager = manager;
         this.data = data;
+        this.tower = tower;
     }
 
     public void Update(float deltaTime)
@@ -28,7 +34,7 @@ public abstract class Tower
             target = null;
         }
 
-        if(currentAttackInterval > attackInterval)
+        if(currentAttackInterval > data.attackInterval)
         {
             attackAble = true;
         }
@@ -36,13 +42,18 @@ public abstract class Tower
 
     public virtual bool Attack()
     {
+        if (!init) return false;
+
         if (attackAble)
         {
             target = manager.FindTarget();
             if (target == null) 
-                return false;   
-
+                return false;
             targetDamageAble = target.GetComponent<IDamageAble>();
+
+            if (Vector3.Distance(target.position, tower.transform.position) > data.attackRadius)
+                return false;
+
             attackAble = false;
             currentAttackInterval = 0;
             Debug.Log($"Attack Tower {data.name}");
@@ -52,5 +63,11 @@ public abstract class Tower
         return false;
     }
 
-    public abstract void Release();
+    public virtual void Release()
+    {
+        if(attackprefab != null)
+        {
+            Addressables.Release(attackprefab);
+        }
+    }
 }
