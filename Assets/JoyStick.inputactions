@@ -1,0 +1,63 @@
+{
+    "version": 1,
+    "name": "JoyStick",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "cf9a9c26-a525-4baf-b3f5-4438895186b6",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "6ed7bb9f-62c2-4312-9aab-c6a4f2495209",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5fc478a3-a81f-4f3f-b983-6db2c7f4195e",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Onoff",
+            "id": "f450b426-d2c2-42e1-aea8-ca8dcf775bda",
+            "actions": [
+                {
+                    "name": "Onoff",
+                    "type": "Button",
+                    "id": "73c7f998-215b-4398-8282-95ff9c6fd74a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "dced4912-9f9b-4e35-9d5f-563348ba0abe",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Onoff",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
