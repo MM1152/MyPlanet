@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -14,15 +14,20 @@ public abstract class Tower
     private bool attackAble;
 
     protected TowerManager manager;
-    protected TowerData.Data data;
+    protected TowerData.Data towerData;
     protected GameObject attackprefab;
     protected bool init = false;
+
+    protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
 
     public virtual void Init(GameObject tower , TowerManager manager, TowerData.Data data)
     {
         this.manager = manager;
-        this.data = data;
+        this.towerData = data;
         this.tower = tower;
+
+        typeEffectiveness.Init((ElementType)this.towerData.type);
+        LoadProjectTileAsync().Forget();
     }
 
     public void Update(float deltaTime)
@@ -34,10 +39,16 @@ public abstract class Tower
             target = null;
         }
 
-        if(currentAttackInterval > data.attackInterval)
+        if(currentAttackInterval > towerData.attackInterval)
         {
             attackAble = true;
         }
+    }
+
+    private async UniTaskVoid LoadProjectTileAsync()
+    {
+        attackprefab = await Addressables.LoadAssetAsync<GameObject>(towerData.projectilePrefabPath).ToUniTask();
+        init = true;
     }
 
     public virtual bool Attack()
@@ -47,16 +58,23 @@ public abstract class Tower
         if (attackAble)
         {
             target = manager.FindTarget();
+
             if (target == null) 
                 return false;
             targetDamageAble = target.GetComponent<IDamageAble>();
 
-            if (Vector3.Distance(target.position, tower.transform.position) > data.attackRadius)
+            if (Vector3.Distance(target.position, tower.transform.position) > towerData.attackRadius)
                 return false;
 
             attackAble = false;
             currentAttackInterval = 0;
-            Debug.Log($"Attack Tower {data.name}");
+
+            BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
+            attackprefab.transform.position = tower.transform.position;
+            attackPrefabs.SetTarget(target);
+
+            Debug.Log($"Attack Tower {towerData.name}");
+
             return true;
         }
 
@@ -70,4 +88,6 @@ public abstract class Tower
             Addressables.Release(attackprefab);
         }
     }
+
+    protected abstract BaseAttackPrefab CreateAttackPrefab();
 }

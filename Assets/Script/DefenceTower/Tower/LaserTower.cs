@@ -5,28 +5,11 @@ using UnityEngine.AddressableAssets;
 
 public class LaserTower : Tower
 {
-    public override void Init(GameObject tower, TowerManager manager, TowerData.Data data)
+    protected override BaseAttackPrefab CreateAttackPrefab()
     {
-        base.Init(tower, manager, data);
-        LoadProjectTileAsync().Forget();
-    }
+        Laser laser = GameObject.Instantiate(attackprefab).GetComponent<Laser>();
+        laser.Init(towerData, typeEffectiveness);
 
-    private async UniTaskVoid LoadProjectTileAsync()
-    {
-        attackprefab = await Addressables.LoadAssetAsync<GameObject>("Laser").ToUniTask();
-        init = true;
-    }
-    
-    public override bool Attack()
-    {
-        if(base.Attack())
-        {
-            Laser laser = GameObject.Instantiate(attackprefab).GetComponent<Laser>();
-            laser.transform.position = tower.transform.position;
-            laser.Init(target);
-            
-            return true;
-        }
-        return false;
+        return laser;
     }
 }

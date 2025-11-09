@@ -15,29 +15,29 @@ public class Laser : ProjectTile
     // 레이저 작아지는 현재 타이밍
     private float currentDuration;
     private float currentSize;
-    public override void Init(Transform target)
+
+    public override void SetTarget(Transform target)
     {
-        base.Init(target);
+        base.SetTarget(target);
 
         collder = GetComponent<CapsuleCollider2D>();
 
         // 레이저 길이 설정
         Vector3 linear = target.position - transform.position;
-        transform.localScale = 
+        transform.localScale =
             new Vector3(
                 linear.magnitude,
-                gameObject.transform.localScale.y, 
+                gameObject.transform.localScale.y,
                 gameObject.transform.localScale.z
             );
         collder.direction = CapsuleDirection2D.Horizontal;
-        collder.size = new Vector2(linear.magnitude , 1f);
+        collder.size = new Vector2(linear.magnitude, 1f);
 
         // 레이저 위치 설정
         transform.position = Vector3.Lerp(transform.position, target.position, 0.5f);
 
-        // 레이저 회전 설정
+        // 레이저 크기 줄이는 기본 설정
         currentSize = gameObject.transform.localScale.y;
-        dir = linear.normalized;
         currentDuration = 0f;
         decreaseAmount = currentSize / laserDurtaionTime * Time.deltaTime;
     }
@@ -60,6 +60,4 @@ public class Laser : ProjectTile
         }
     }
 
-    protected override void HitTarget()
-    { }
 }
