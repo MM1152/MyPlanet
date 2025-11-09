@@ -71,6 +71,7 @@ public abstract class Tower
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackprefab.transform.position = tower.transform.position;
+            attackPrefabs.Init(towerData, typeEffectiveness);
             attackPrefabs.SetTarget(target);
 
             Debug.Log($"Attack Tower {towerData.name}");
