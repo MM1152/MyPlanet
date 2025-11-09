@@ -1,22 +1,33 @@
-using Unity.VisualScripting;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public abstract class Tower
 {
     [SerializeField] protected GameObject projectTile;
     [SerializeField] protected float attackInterval = 2f;
     [SerializeField] protected float currentAttackInterval;
-    [SerializeField] protected Transform target;
+
+    protected GameObject tower;
+    protected Transform target;
     protected IDamageAble targetDamageAble;
-
     private bool attackAble;
-    protected TowerManager manager;
-    protected TowerData.Data data;
 
-    public virtual void Init(TowerManager manager, TowerData.Data data)
+    protected TowerManager manager;
+    protected TowerData.Data towerData;
+    protected GameObject attackprefab;
+    protected bool init = false;
+
+    protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
+
+    public virtual void Init(GameObject tower , TowerManager manager, TowerData.Data data)
     {
         this.manager = manager;
-        this.data = data;
+        this.towerData = data;
+        this.tower = tower;
+
+        typeEffectiveness.Init((ElementType)this.towerData.type);
+        LoadProjectTileAsync().Forget();
     }
 
     public void Update(float deltaTime)
@@ -28,29 +39,55 @@ public abstract class Tower
             target = null;
         }
 
-        if(currentAttackInterval > attackInterval)
+        if(currentAttackInterval > towerData.attackInterval)
         {
             attackAble = true;
         }
     }
 
+    private async UniTaskVoid LoadProjectTileAsync()
+    {
+        attackprefab = await Addressables.LoadAssetAsync<GameObject>(towerData.projectilePrefabPath).ToUniTask();
+        init = true;
+    }
+
     public virtual bool Attack()
     {
+        if (!init) return false;
+
         if (attackAble)
         {
             target = manager.FindTarget();
-            if (target == null) 
-                return false;   
 
+            if (target == null) 
+                return false;
             targetDamageAble = target.GetComponent<IDamageAble>();
+
+            if (Vector3.Distance(target.position, tower.transform.position) > towerData.attackRadius)
+                return false;
+
             attackAble = false;
             currentAttackInterval = 0;
-            Debug.Log($"Attack Tower {data.name}");
+
+            BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
+            attackprefab.transform.position = tower.transform.position;
+            attackPrefabs.SetTarget(target);
+
+            Debug.Log($"Attack Tower {towerData.name}");
+
             return true;
         }
 
         return false;
     }
 
-    public abstract void Release();
+    public virtual void Release()
+    {
+        if(attackprefab != null)
+        {
+            Addressables.Release(attackprefab);
+        }
+    }
+
+    protected abstract BaseAttackPrefab CreateAttackPrefab();
 }

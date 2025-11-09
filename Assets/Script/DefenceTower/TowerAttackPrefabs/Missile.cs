@@ -7,10 +7,9 @@ public class Missile : ProjectTile
     [SerializeField] private float trackingStrength = 0.5f;
     private float currentAngle;
 
-    public override void Init(Transform target)
+    public override void Init(TowerData.Data data , TypeEffectiveness typeEffectiveness)
     {
-        base.Init(target);
-
+        base.Init(data , typeEffectiveness);
         currentAngle = transform.eulerAngles.z;
     }
 
@@ -31,11 +30,18 @@ public class Missile : ProjectTile
 
         return new Vector3(Mathf.Cos(radAngle) , Mathf.Sin(radAngle) , 0).normalized;
     }
+
     protected override void Update()
     {
         base.Update();
 
         dir = SetDir();
         transform.eulerAngles = new Vector3(0f , 0f , currentAngle);
+    }
+
+    protected override void HitTarget()
+    {
+        base.HitTarget();
+        Destroy(gameObject);
     }
 }

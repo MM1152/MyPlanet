@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class CrewRankTable : DataTable
 {
@@ -37,10 +36,10 @@ public class CrewRankTable : DataTable
     }
   //리소스로딩이아닌 어드레서블로 로딩으로 변경
 
-    public override async UniTask<DataTable> LoadAsync(string filename)
+    public override async UniTask<(string , DataTable)> LoadAsync(string filename)
     {
         var path = string.Format(FormatPath, filename);
-        var ReAssets = await Resources.LoadAsync<TextAsset>(path).ToUniTask();
+        var ReAssets = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
 
         var textAsset = ReAssets as TextAsset;
         var datas = LoadCsv<Data>(textAsset.text);
@@ -50,7 +49,7 @@ public class CrewRankTable : DataTable
             rankTable.Add(data.rank_ID, data);
         }
 
-        return this as DataTable;
+        return (filename , this as DataTable);
     }
     public Data Get(int rank_Id)
     {

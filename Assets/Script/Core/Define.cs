@@ -9,6 +9,16 @@ public enum WindowIds
     PlaceTowerWindow = 0
 }
 
+public enum ElementType
+{
+    None = -1,
+    Fire = 0,
+    Steel = 1,
+    Water = 2,
+    Light = 3,
+    Dark = 4
+}
+
 public static class DataTableIds
 {
         public static readonly string CrewRankTable = "CrewRankTable";

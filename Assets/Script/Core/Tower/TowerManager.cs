@@ -5,6 +5,7 @@ using System;
 public class TowerManager : MonoBehaviour
 {
     [SerializeField] private EnemyTest testTarget;
+    [SerializeField] private GameObject tower;
     private List<Tower> towers = new List<Tower>();
 
     public void Update()
@@ -23,8 +24,7 @@ public class TowerManager : MonoBehaviour
 
     public void AddTower(TowerData.Data data)
     {
-        var muchine = new MuchineGunTower();
-        muchine.Init(this, data);
-        towers.Add(muchine);
+        towers.Add(data.tower);
+        data.tower.Init(tower , this , data);
     }
 }
