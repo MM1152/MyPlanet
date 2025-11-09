@@ -9,14 +9,15 @@ public class PlaceTowerWindow : Window
     [SerializeField] private Transform selectTowerUIRoot;
     [SerializeField] private PlaceTower placeTower;
     [SerializeField] private TowerManager towerManager;
-
+    
     private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
     public Button testButton;
+    private TowerData towerData;
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
-
-        for(int i = 0; i < selectTowerUICount; i++)
+        towerData = new TowerData();
+        for (int i = 0; i < selectTowerUICount; i++)
         {
             SelectTowerUI obj = Instantiate(selectTowerUI, selectTowerUIRoot);
             selectTowerUIs.Add(obj);
@@ -39,9 +40,7 @@ public class PlaceTowerWindow : Window
         for (int i = 0; i < selectTowerUICount; i++)
         {
             // FIX : 이부분 랜덤하게 데이터 넘겨주게 변경
-            TowerData.Data data = new TowerData.Data();
-            data.name = "Tower_" + i;
-            selectTowerUIs[i].SetTowerData(data);
+            selectTowerUIs[i].SetTowerData(towerData.GetData(i + 1));
         }
 
         base.Open();

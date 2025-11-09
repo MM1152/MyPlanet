@@ -4,29 +4,11 @@ using UnityEngine.AddressableAssets;
 
 public class MissileTower : Tower
 {
-    public override void Init(GameObject tower, TowerManager manager, TowerData.Data data)
+    protected override BaseAttackPrefab CreateAttackPrefab()
     {
-        base.Init(tower, manager, data);
-        LoadProjectTile().Forget();
-    }
+        Missile missile = GameObject.Instantiate(attackprefab).GetComponent<Missile>();
+        missile.Init(towerData , typeEffectiveness);
 
-    public async UniTask LoadProjectTile()
-    {
-        attackprefab = await Addressables.LoadAssetAsync<GameObject>("Missile").ToUniTask();
-        init = true;
-    }
-
-    public override bool Attack()
-    {
-        if(base.Attack())
-        {
-            Missile missile = GameObject.Instantiate(attackprefab).GetComponent<Missile>();
-            missile.transform.position = tower.transform.position;
-            missile.Init(target);
-            
-            return true;
-        }
-
-        return false;
+        return missile;
     }
 }
