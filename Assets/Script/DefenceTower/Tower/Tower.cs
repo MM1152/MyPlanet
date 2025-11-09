@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -70,7 +71,8 @@ public abstract class Tower
             currentAttackInterval = 0;
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
-            attackprefab.transform.position = tower.transform.position;
+            attackPrefabs.transform.position = tower.transform.position;
+            attackPrefabs.Init(towerData, typeEffectiveness);
             attackPrefabs.SetTarget(target);
 
             Debug.Log($"Attack Tower {towerData.name}");

@@ -8,7 +8,7 @@ public class TowerManager : MonoBehaviour
     [SerializeField] private GameObject tower;
     private List<Tower> towers = new List<Tower>();
 
-    public void Update()
+    public void LateUpdate()
     {
         foreach(var tower in towers)
         {
