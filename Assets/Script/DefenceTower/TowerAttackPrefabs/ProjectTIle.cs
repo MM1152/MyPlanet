@@ -40,7 +40,7 @@ public class ProjectTile : BaseAttackPrefab
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
 #if DEBUG_MODE
-            Debug.Log($"Àû ¼Ó¼º {find.ElementType}, ³» ¼Ó¼º {(ElementType)towerData.type}, Àû¿ë µ¥¹ÌÁö {percent}");
+            Debug.Log($"ï¿½ï¿½ ï¿½Ó¼ï¿½ {find.ElementType}, ï¿½ï¿½ ï¿½Ó¼ï¿½ {(ElementType)towerData.type}, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {percent}");
 #endif
             find.OnDamage((int)(towerData.damage * percent));
         }

@@ -18,7 +18,7 @@ public class TowerData
 
     public TowerData()
     {
-        // ÀÓ½Ã µ¥ÀÌÅÍ »ý¼º
+        // ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         towerTable.Add(1, new Data()
         {
             name = "Machine Gun Tower",
@@ -53,10 +53,10 @@ public class TowerData
 
     public Data GetData(int id)
     {
-        if(!towerTable.ContainsKey(id))
+        if (!towerTable.ContainsKey(id))
         {
 #if DEBUG_MODE
-            throw new System.Exception($"TowerData ¿¡´Â ID {id} °¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+            throw new System.Exception($"TowerData ï¿½ï¿½ï¿½ï¿½ ID {id} ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
 #endif
             return null;
         }

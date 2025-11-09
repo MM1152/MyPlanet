@@ -1,4 +1,4 @@
-// »ó¼º°ü·Ã
+// ï¿½ó¼º°ï¿½ï¿½ï¿½
 
 public class TypeEffectiveness
 {
@@ -6,7 +6,7 @@ public class TypeEffectiveness
     public ElementType Type => type;
     public int TypeToInt => (int)type;
 
-    // ¿ø·¡´Â ¼Ó¼º Å×ÀÌºí¿¡¼­ °ü¸®ÇØÁà¾ß ÇÒµí
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ó¼ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Òµï¿½
     public float[,] typeToDamageTable = new float[,]
     {
         //         Fire , Steel , Water , Light , Dark
