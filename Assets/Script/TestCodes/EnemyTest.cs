@@ -16,4 +16,16 @@ public class EnemyTest : MonoBehaviour , IDamageAble
     {
         throw new System.NotImplementedException();
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Player"))
+        {
+            var find = collision.GetComponent<IDamageAble>();
+            if(find != null)
+            {
+                find.OnDamage(5);
+            }
+        }
+    }
 }
