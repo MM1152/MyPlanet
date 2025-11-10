@@ -26,7 +26,6 @@ public class TowerPlaceHold : MonoBehaviour
         placed = true;
         image.color = Color.green;
     }
-
     public bool GetPlaced()
     {
         return placed;
