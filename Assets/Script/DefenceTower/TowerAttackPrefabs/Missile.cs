@@ -6,10 +6,15 @@ public class Missile : ProjectTile
     [SerializeField] private float roatationSpeed = 50f;
     [SerializeField] private float trackingStrength = 0.5f;
     private float currentAngle;
-
-    public override void Init(TowerData.Data data , TypeEffectiveness typeEffectiveness)
+    private float lookAngleNoise;
+    public override void SetTarget(Transform target, float noise)
     {
-        base.Init(data , typeEffectiveness);
+        base.SetTarget(target, noise);
+
+        Vector3 dir = target.position - transform.position;
+        float lookAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + Random.Range(-90f , 90f);
+        transform.eulerAngles = new Vector3(0f, 0f, lookAngle);
+
         currentAngle = transform.eulerAngles.z;
     }
 
