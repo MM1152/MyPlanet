@@ -1,4 +1,4 @@
-using UnityEngine;
+    using UnityEngine;
 
 public class EnemyTest : MonoBehaviour , IDamageAble
 {
@@ -22,6 +22,7 @@ public class EnemyTest : MonoBehaviour , IDamageAble
         if(collision.CompareTag("Player"))
         {
             var find = collision.GetComponent<IDamageAble>();
+            
             if(find != null)
             {
                 find.OnDamage(5);

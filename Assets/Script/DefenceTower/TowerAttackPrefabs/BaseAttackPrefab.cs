@@ -12,6 +12,8 @@ public abstract class BaseAttackPrefab : MonoBehaviour
     protected Transform target;
     protected TowerData.Data towerData;
 
+    protected float noise;
+
     public virtual void Init(TowerData.Data data , TypeEffectiveness typeEffectiveness)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -24,9 +26,10 @@ public abstract class BaseAttackPrefab : MonoBehaviour
         this.typeEffectiveness = typeEffectiveness;
     }
 
-    public virtual void SetTarget(Transform target)
+    public virtual void SetTarget(Transform target , float noise)
     {
         this.target = target;
+        this.noise = noise;
     }
 
     protected abstract void HitTarget();

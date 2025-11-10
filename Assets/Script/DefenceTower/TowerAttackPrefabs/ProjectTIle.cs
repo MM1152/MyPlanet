@@ -1,3 +1,4 @@
+using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class ProjectTile : BaseAttackPrefab
@@ -7,9 +8,9 @@ public class ProjectTile : BaseAttackPrefab
     protected Vector3 dir;
     protected SpriteRenderer spriteRenderer;
 
-    public override void SetTarget(Transform target)
+    public override void SetTarget(Transform target , float noise)
     {
-        base.SetTarget(target);
+        base.SetTarget(target , noise);
         dir = SetDir();
 
         float rad = Mathf.Atan2(dir.y, dir.x);
@@ -18,8 +19,8 @@ public class ProjectTile : BaseAttackPrefab
 
     protected virtual Vector3 SetDir()
     {
-        dir = target.position - transform.position;
-        return dir.normalized;
+        dir = target.transform.position - transform.position;
+        return dir.normalized + new Vector3(noise , 0f , 0f);
     }
     
     protected virtual void Update()
@@ -40,7 +41,7 @@ public class ProjectTile : BaseAttackPrefab
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
 #if DEBUG_MODE
-            Debug.Log($"Àû ¼Ó¼º {find.ElementType}, ³» ¼Ó¼º {(ElementType)towerData.type}, Àû¿ë µ¥¹ÌÁö {percent}");
+            Debug.Log($"ï¿½ï¿½ ï¿½Ó¼ï¿½ {find.ElementType}, ï¿½ï¿½ ï¿½Ó¼ï¿½ {(ElementType)towerData.type}, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {percent}");
 #endif
             find.OnDamage((int)(towerData.damage * percent));
         }
