@@ -12,21 +12,9 @@ public abstract class DataTable
 {
     public static readonly string FormatPath = "DataTables/{0}";
 
-    //데이터 로드 <동기> [ 각 테이블 딕셔너리에 데이터 삽입  ]
-    public abstract void Load(string filename);
 
     //데이터 로드 <비동기> [ 각 테이블 딕셔너리에 데이터 삽입  ]
     public abstract UniTask<(string, DataTable)> LoadAsync(string filename);
-
-    public static List<T> LoadCsv<T>(string csvText)
-    {
-        using (var reader = new StringReader(csvText))
-        using (var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
-        {
-            var recodes = csvReader.GetRecords<T>();
-            return recodes.ToList();
-        }
-    }
 
     public static async UniTask<List<T>> LoadCSVTest<T>(string csvText)
     {

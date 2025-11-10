@@ -14,29 +14,35 @@ public abstract class Tower
     protected bool attackAble;
 
     protected TowerManager manager;
-    protected TowerData.Data towerData;
+    protected TowerTable.Data towerData;
     protected GameObject attackprefab;
     protected bool init = false;
-
+    
     // 해당 방향으로 날라갈때의 노이즈 값
     // 해당 값을 통해서 탄퍼짐 구성 예정
     protected float minNoise = 0f;
     protected float maxNoise = 0f;
 
-    protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
+    protected int bonusDamage = 0;
 
-    public virtual void Init(GameObject tower , TowerManager manager, TowerData.Data data)
+    protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
+    private bool useAble = false;
+
+    public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data)
     {
         this.manager = manager;
         this.towerData = data;
         this.tower = tower;
 
-        typeEffectiveness.Init((ElementType)this.towerData.type);
+        typeEffectiveness.Init((ElementType)this.towerData.Attribute);
         LoadProjectTileAsync().Forget();
     }
 
     public virtual void Update(float deltaTime)
     {
+        if (!useAble)
+            return;
+
         currentAttackInterval += deltaTime;
 
         if(target != null && targetDamageAble.IsDead)
@@ -44,7 +50,7 @@ public abstract class Tower
             target = null;
         }
 
-        if(currentAttackInterval > towerData.attackInterval)
+        if(currentAttackInterval > towerData.Fire_Rate)
         {
             attackAble = true;
         }
@@ -68,7 +74,7 @@ public abstract class Tower
                 return false;
             targetDamageAble = target.GetComponent<IDamageAble>();
 
-            if (Vector3.Distance(target.position, tower.transform.position) > towerData.attackRadius)
+            if (Vector3.Distance(target.position, tower.transform.position) > towerData.AttackRadius)
                 return false;
 
             attackAble = false;
@@ -79,7 +85,7 @@ public abstract class Tower
             attackPrefabs.Init(towerData, typeEffectiveness);
             attackPrefabs.SetTarget(target , minNoise , maxNoise);
 
-            Debug.Log($"Attack Tower {towerData.name}");
+            Debug.Log($"Attack Tower {towerData.Name}");
 
             return true;
         }
@@ -98,6 +104,16 @@ public abstract class Tower
     public virtual void LevelUp()
     {
         Debug.Log("Level Up");
+    }
+
+    public void AddBonusDamage(int damage)
+    {
+        bonusDamage += damage;
+    }
+
+    public void PlaceTower()
+    {
+        useAble = true;
     }
 
     protected abstract BaseAttackPrefab CreateAttackPrefab();

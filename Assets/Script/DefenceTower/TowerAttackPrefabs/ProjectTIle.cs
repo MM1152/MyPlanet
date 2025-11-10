@@ -44,7 +44,7 @@ public class ProjectTile : BaseAttackPrefab
 #if DEBUG_MODE
             Debug.Log($"�� �Ӽ� {find.ElementType}, �� �Ӽ� {(ElementType)towerData.type}, ���� ������ {percent}");
 #endif
-            find.OnDamage((int)(towerData.damage * percent));
+            find.OnDamage((int)(towerData.ATK * percent));
         }
     }
 }

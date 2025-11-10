@@ -12,11 +12,12 @@ public class PlaceTowerWindow : Window
     
     private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
     public Button testButton;
-    private TowerData towerData;
+    private TowerTable towerData;
+
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
-        towerData = new TowerData();
+        towerData = new TowerTable();
         for (int i = 0; i < selectTowerUICount; i++)
         {
             SelectTowerUI obj = Instantiate(selectTowerUI, selectTowerUIRoot);
@@ -35,12 +36,14 @@ public class PlaceTowerWindow : Window
         windowId = (int)WindowIds.PlaceTowerWindow;
     }
 
-    public override void Open()
+    public async override void Open()
     {
+        await DataTableManager.WaitForInitalizeAsync();
+
         for (int i = 0; i < selectTowerUICount; i++)
         {
             // FIX : 이부분 랜덤하게 데이터 넘겨주게 변경
-            selectTowerUIs[i].SetTowerData(towerData.GetData(i + 1));
+            selectTowerUIs[i].SetTowerData(DataTableManager.Get<TowerTable>(DataTableIds.TowerTable).Get(i + 1));
         }
 
         base.Open();

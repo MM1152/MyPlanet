@@ -22,7 +22,7 @@ public class TowerManager : MonoBehaviour
         return testTarget.transform;
     }
 
-    public void AddTower(TowerData.Data data)
+    public void AddTower(TowerTable.Data data)
     {
         if(towers.Contains(data.tower))
         {
@@ -31,5 +31,6 @@ public class TowerManager : MonoBehaviour
         }
         towers.Add(data.tower);
         data.tower.Init(tower , this , data);
+        data.tower.PlaceTower();
     }
 }

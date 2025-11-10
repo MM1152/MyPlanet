@@ -23,17 +23,6 @@ public class CrewRankTable : DataTable
 
     private Dictionary<int, Data> rankTable = new Dictionary<int, Data>();
 
-    public override void Load(string filename)
-    {
-        var path = string.Format(FormatPath, filename);
-        var textAssets = Resources.Load<TextAsset>(path);
-        var datas = LoadCsv<Data>(textAssets.text);
-
-        foreach (var data in datas)
-        {
-            rankTable.Add(data.rank_ID, data);
-        }
-    }
   //리소스로딩이아닌 어드레서블로 로딩으로 변경
 
     public override async UniTask<(string , DataTable)> LoadAsync(string filename)
@@ -42,7 +31,7 @@ public class CrewRankTable : DataTable
         var ReAssets = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
 
         var textAsset = ReAssets as TextAsset;
-        var datas = LoadCsv<Data>(textAsset.text);
+        var datas =  await LoadCSVTest<Data>(textAsset.text);
 
         foreach (var data in datas)
         {
