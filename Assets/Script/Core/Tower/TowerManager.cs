@@ -24,6 +24,11 @@ public class TowerManager : MonoBehaviour
 
     public void AddTower(TowerData.Data data)
     {
+        if(towers.Contains(data.tower))
+        {
+            data.tower.LevelUp();
+            return;
+        }
         towers.Add(data.tower);
         data.tower.Init(tower , this , data);
     }

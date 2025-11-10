@@ -6,6 +6,7 @@ public class TowerData
     public class Data
     {
         public string name;
+        public int id;
         public float attackRadius;
         public float attackInterval;
         public int type;
@@ -21,28 +22,31 @@ public class TowerData
         // 임시 데이터 생성
         towerTable.Add(1, new Data()
         {
-            name = "Machine Gun Tower",
+            name = "HellFire Gun Tower",
             attackRadius = 5.0f,
+            id = 1,
             attackInterval = 0.5f,
             type = (int)ElementType.Fire,
             projectilePrefabPath = "Bullet",
             damage = 10,
-            tower = new MuchineGunTower(),
+            tower = new HellFireGunTower(),
         });
         towerTable.Add(2, new Data()
         {
             name = "Missile Tower",
             attackRadius = 7.0f,
+            id = 2,
             attackInterval = 1.5f,
             type = (int)ElementType.Water,
             projectilePrefabPath = "Missile",
             damage = 10,
-            tower = new MissileTower()
+            tower = new VolcanoLauncher()
         });
         towerTable.Add(3, new Data()
         {
             name = "Laser Tower",
             attackRadius = 6.0f,
+            id = 3,
             attackInterval = 2.0f,
             type = (int)ElementType.Steel,
             projectilePrefabPath = "Laser",
