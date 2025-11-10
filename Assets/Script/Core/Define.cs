@@ -19,6 +19,11 @@ public enum ElementType
     Dark = 4
 }
 
+public static class Variable
+{
+    public static bool IsJoyStickActive;
+}
+
 public static class DataTableIds
 {
         public static readonly string CrewRankTable = "CrewRankTable";

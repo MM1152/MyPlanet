@@ -16,9 +16,9 @@ public class Laser : ProjectTile
     private float currentDuration;
     private float currentSize;
 
-    public override void SetTarget(Transform target)
+    public override void SetTarget(Transform target , float minNoise , float maxNoise)
     {
-        base.SetTarget(target);
+        base.SetTarget(target , minNoise, maxNoise);
 
         collder = GetComponent<CapsuleCollider2D>();
 

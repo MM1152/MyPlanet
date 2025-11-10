@@ -21,13 +21,15 @@ public class WindowManager : MonoBehaviour
         }
 
         if(windowTable.ContainsKey((int)startWindow)) {
-            windowTable[(int)startWindow].Open();
+            Variable.IsJoyStickActive = false;
+            Open(startWindow);
             cureentWindow = windowTable[(int)startWindow];
         }
     }
 
     public void Open(WindowIds id)
     {
+        Variable.IsJoyStickActive = false;
         cureentWindow?.Close();
         cureentWindow = windowTable[(int)id];
         cureentWindow.Open();
@@ -35,6 +37,7 @@ public class WindowManager : MonoBehaviour
 
     public void Close()
     {
+        Variable.IsJoyStickActive = true;
         cureentWindow?.Close();
         cureentWindow = null;
     }

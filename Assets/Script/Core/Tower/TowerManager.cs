@@ -8,7 +8,7 @@ public class TowerManager : MonoBehaviour
     [SerializeField] private GameObject tower;
     private List<Tower> towers = new List<Tower>();
 
-    public void Update()
+    public void LateUpdate()
     {
         foreach(var tower in towers)
         {
@@ -24,6 +24,11 @@ public class TowerManager : MonoBehaviour
 
     public void AddTower(TowerData.Data data)
     {
+        if(towers.Contains(data.tower))
+        {
+            data.tower.LevelUp();
+            return;
+        }
         towers.Add(data.tower);
         data.tower.Init(tower , this , data);
     }

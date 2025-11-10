@@ -11,12 +11,17 @@ public abstract class Tower
     protected GameObject tower;
     protected Transform target;
     protected IDamageAble targetDamageAble;
-    private bool attackAble;
+    protected bool attackAble;
 
     protected TowerManager manager;
     protected TowerData.Data towerData;
     protected GameObject attackprefab;
     protected bool init = false;
+
+    // 해당 방향으로 날라갈때의 노이즈 값
+    // 해당 값을 통해서 탄퍼짐 구성 예정
+    protected float minNoise = 0f;
+    protected float maxNoise = 0f;
 
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
 
@@ -30,7 +35,7 @@ public abstract class Tower
         LoadProjectTileAsync().Forget();
     }
 
-    public void Update(float deltaTime)
+    public virtual void Update(float deltaTime)
     {
         currentAttackInterval += deltaTime;
 
@@ -71,7 +76,8 @@ public abstract class Tower
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackprefab.transform.position = tower.transform.position;
-            attackPrefabs.SetTarget(target);
+            attackPrefabs.Init(towerData, typeEffectiveness);
+            attackPrefabs.SetTarget(target , minNoise , maxNoise);
 
             Debug.Log($"Attack Tower {towerData.name}");
 
@@ -87,6 +93,11 @@ public abstract class Tower
         {
             Addressables.Release(attackprefab);
         }
+    }
+
+    public virtual void LevelUp()
+    {
+        Debug.Log("Level Up");
     }
 
     protected abstract BaseAttackPrefab CreateAttackPrefab();
