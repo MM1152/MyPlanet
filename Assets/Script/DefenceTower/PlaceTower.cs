@@ -14,9 +14,14 @@ public class PlaceTower : MonoBehaviour
     private RectTransform rect;
     private TowerPlaceHold[] placeHoldList;
     private float angle;
+    //FIX : 테스트용 프리셋 데이터
+    private PresetData presetData = new PresetData(new List<int>());
 
-    private void Awake()
+    private async void Awake()
     {
+        await DataTableManager.WaitForInitalizeAsync();
+
+        placeHoldCount = presetData.towerIds.Count; 
         rect = GetComponent<RectTransform>();
 
         float radius = rect.rect.width / 2f;
@@ -29,7 +34,7 @@ public class PlaceTower : MonoBehaviour
         for(int i = 0; i < placeHoldCount; i++)
         {
             TowerPlaceHold obj = Instantiate(placeHold, transform);
-            obj.Init(i + 1);
+            obj.Init(i + 1 , DataTableManager.Get<TowerTable>(DataTableIds.TowerTable).Get(presetData.towerIds[i]));
             placeHoldList[i] = obj;
 
             RectTransform objRect = obj.GetComponent<RectTransform>();

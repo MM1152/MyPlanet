@@ -11,14 +11,33 @@ public class TowerTable : DataTable
     {
         { 1 , new HellFireGunTower() },
         { 2 , new VolcanoLauncher() },
-        { 3 , new LaserTower() }
+        { 3 , new LaserTower() },
+        { 4 , new HellFireGunTower() },
+        { 5 , new VolcanoLauncher() },
+        { 6 , new LaserTower() },
+        { 7 , new HellFireGunTower() },
+        { 8 , new VolcanoLauncher() },
+        { 9 , new LaserTower() },
+        { 10 , new HellFireGunTower() },
+        { 11 , new VolcanoLauncher() },
+        { 12 , new LaserTower() },
     };
     private Dictionary<int, string> towerAttackPrefabs = new Dictionary<int, string>()
     {
         { 1 , "Bullet" },
         { 2 , "Missile" },
-        { 3 , "Laser" }
+        { 3 , "Laser" },
+        { 4 , "Bullet" },
+        { 5 , "Missile" },
+        { 6 , "Laser" },
+        { 7 , "Bullet" },
+        { 8 , "Missile" },
+        { 9 , "Laser" },
+        { 10 , "Bullet" },
+        { 11 , "Missile" },
+        { 12 , "Laser" },
     };
+
     public class Data
     {
         public int ID { get; set; }
@@ -43,13 +62,11 @@ public class TowerTable : DataTable
         public string projectilePrefabPath;
     }
 
-    //리소스로딩이아닌 어드레서블로 로딩으로 변경
-
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
     {
         var path = string.Format(FormatPath, filename);
-        var ReAssets = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
-        var datas = await LoadCSVTest<Data>(ReAssets.text);
+        var textAsset = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
+        var datas = await LoadCSVTest<Data>(textAsset.text);
 
         foreach (var data in datas)
         {

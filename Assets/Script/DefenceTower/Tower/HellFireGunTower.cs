@@ -2,7 +2,6 @@
 
 public class HellFireGunTower : MuchineGunTower
 {
-    private float increaseAttackInterval = 1f;
     public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data)
     {
         base.Init(tower, manager, data);
@@ -13,17 +12,6 @@ public class HellFireGunTower : MuchineGunTower
     public override void LevelUp()
     {
         base.LevelUp();
-
-        increaseAttackInterval += 0.1f;
-    }
-
-    public override void Update(float deltaTime)
-    {
-        base.Update(deltaTime * increaseAttackInterval);
-    }
-
-    protected override BaseAttackPrefab CreateAttackPrefab()
-    {
-        return base.CreateAttackPrefab();
+        bonusAttackSpeed += 0.1f;
     }
 }

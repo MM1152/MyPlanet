@@ -24,6 +24,7 @@ public abstract class Tower
     protected float maxNoise = 0f;
 
     protected int bonusDamage = 0;
+    protected float bonusAttackSpeed = 1f;
 
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
     private bool useAble = false;
@@ -43,7 +44,7 @@ public abstract class Tower
         if (!useAble)
             return;
 
-        currentAttackInterval += deltaTime;
+        currentAttackInterval += deltaTime * bonusAttackSpeed;
 
         if(target != null && targetDamageAble.IsDead)
         {
@@ -84,9 +85,9 @@ public abstract class Tower
             attackPrefabs.transform.position = tower.transform.position;
             attackPrefabs.Init(towerData, typeEffectiveness);
             attackPrefabs.SetTarget(target , minNoise , maxNoise);
-
+#if DEBUG_MODE
             Debug.Log($"Attack Tower {towerData.Name}");
-
+#endif
             return true;
         }
 
@@ -109,6 +110,11 @@ public abstract class Tower
     public void AddBonusDamage(int damage)
     {
         bonusDamage += damage;
+    }
+
+    public void AddBonusAttackSpeed(float speed)
+    {
+        bonusAttackSpeed += speed;
     }
 
     public void PlaceTower()
