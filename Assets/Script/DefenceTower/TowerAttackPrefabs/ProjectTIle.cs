@@ -8,9 +8,9 @@ public class ProjectTile : BaseAttackPrefab
     protected Vector3 dir;
     protected SpriteRenderer spriteRenderer;
 
-    public override void SetTarget(Transform target , float noise)
+    public override void SetTarget(Transform target , float minNoise , float maxNoise)
     {
-        base.SetTarget(target , noise);
+        base.SetTarget(target , minNoise , maxNoise);
         dir = SetDir();
 
         float rad = Mathf.Atan2(dir.y, dir.x);
@@ -20,6 +20,7 @@ public class ProjectTile : BaseAttackPrefab
     protected virtual Vector3 SetDir()
     {
         dir = target.transform.position - transform.position;
+        float noise = Random.Range(minNoise , maxNoise);
         return dir.normalized + new Vector3(noise , 0f , 0f);
     }
     

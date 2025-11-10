@@ -40,7 +40,7 @@ public class TowerData
             type = (int)ElementType.Water,
             projectilePrefabPath = "Missile",
             damage = 10,
-            tower = new MissileTower()
+            tower = new VolcanoLauncher()
         });
         towerTable.Add(3, new Data()
         {

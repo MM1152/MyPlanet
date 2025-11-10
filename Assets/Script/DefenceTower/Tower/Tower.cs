@@ -11,7 +11,7 @@ public abstract class Tower
     protected GameObject tower;
     protected Transform target;
     protected IDamageAble targetDamageAble;
-    private bool attackAble;
+    protected bool attackAble;
 
     protected TowerManager manager;
     protected TowerData.Data towerData;
@@ -77,7 +77,7 @@ public abstract class Tower
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackprefab.transform.position = tower.transform.position;
             attackPrefabs.Init(towerData, typeEffectiveness);
-            attackPrefabs.SetTarget(target , Random.Range(minNoise , maxNoise));
+            attackPrefabs.SetTarget(target , minNoise , maxNoise);
 
             Debug.Log($"Attack Tower {towerData.name}");
 

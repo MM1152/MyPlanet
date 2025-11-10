@@ -12,7 +12,8 @@ public abstract class BaseAttackPrefab : MonoBehaviour
     protected Transform target;
     protected TowerData.Data towerData;
 
-    protected float noise;
+    protected float minNoise;
+    protected float maxNoise;
 
     public virtual void Init(TowerData.Data data , TypeEffectiveness typeEffectiveness)
     {
@@ -26,10 +27,11 @@ public abstract class BaseAttackPrefab : MonoBehaviour
         this.typeEffectiveness = typeEffectiveness;
     }
 
-    public virtual void SetTarget(Transform target , float noise)
+    public virtual void SetTarget(Transform target , float minNoise , float maxNoise)
     {
         this.target = target;
-        this.noise = noise;
+        this.minNoise = minNoise;
+        this.maxNoise = maxNoise;
     }
 
     protected abstract void HitTarget();
