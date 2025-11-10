@@ -113,7 +113,6 @@ public class Move : MonoBehaviour
         if (context.performed)
         {
             jotstickInput = context.ReadValue<Vector2>();
-            Debug.Log(jotstickInput);
         }
         else if (context.canceled)
         {
