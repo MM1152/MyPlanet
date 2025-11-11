@@ -25,14 +25,8 @@ public class Enemy : MonoBehaviour, IDamageAble
     }
     public void OnEnable()
     {
-        target = GameObject.FindGameObjectWithTag(TargetTag);
-    }
-    // 스테이터스 설정
-    private void Start()
-    {
-        stateMachine = new StateMachine(this);
+        target = GameObject.FindGameObjectWithTag(TargetTag);        
         stateMachine.Init(stateMachine.idleState);
-
         currentHP = enemyData.HP;
         atk = enemyData.ATK;
         speed = enemyData.Speed;
@@ -40,7 +34,12 @@ public class Enemy : MonoBehaviour, IDamageAble
         typeEffectiveness = new TypeEffectiveness();
         typeEffectiveness.Init(ElementType);
     }
-    // 타겟 설정
+    // 스테이터스 설정
+    private void Start()
+    {
+        stateMachine = new StateMachine(this);
+    }
+    
     // 상태 확인
     private void CheckState()
     {   // 사망 체크
