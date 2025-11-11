@@ -1086,6 +1086,7 @@ MonoBehaviour:
   rotateLeft: {fileID: 1518463823}
   rotateRight: {fileID: 1580673891}
   currentIndex: 0
+  towerManager: {fileID: 735681389}
 --- !u!1 &620590075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1248,7 +1249,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testTarget: {fileID: 2014543562}
   tower: {fileID: 548975405}
-  placeTower: {fileID: 0}
 --- !u!4 &735681390
 Transform:
   m_ObjectHideFlags: 0
@@ -2785,6 +2785,7 @@ GameObject:
   - component: {fileID: 2014543562}
   - component: {fileID: 2014543564}
   - component: {fileID: 2014543563}
+  - component: {fileID: 2014543567}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Enemy
@@ -2938,6 +2939,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2014543567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2014543561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e39e21777b9c094dab8f9b11a9b71ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  speed: 10
+  atk: 5
+  attackrange: 1
 --- !u!1 &2097040752
 GameObject:
   m_ObjectHideFlags: 0
