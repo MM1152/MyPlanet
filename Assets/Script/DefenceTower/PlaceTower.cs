@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
 
 public class PlaceTower : MonoBehaviour
 {
@@ -10,16 +11,20 @@ public class PlaceTower : MonoBehaviour
     [SerializeField] private Button rotateLeft;
     [SerializeField] private Button rotateRight;
     [SerializeField] private int currentIndex;
+    [SerializeField] private TowerManager towerManager;
 
     private RectTransform rect;
     private TowerPlaceHold[] placeHoldList;
     private float angle;
+    private bool init = false;
     //FIX : 테스트용 프리셋 데이터
     private PresetData presetData = new PresetData(new List<int>());
 
-    private async void Awake()
+    public async UniTask Init()
     {
         await DataTableManager.WaitForInitalizeAsync();
+
+        if (init) return;
 
         placeHoldCount = presetData.towerIds.Count; 
         rect = GetComponent<RectTransform>();
@@ -33,11 +38,17 @@ public class PlaceTower : MonoBehaviour
         //설치된 타워 구분용으로 사용됨
         for(int i = 0; i < placeHoldCount; i++)
         {
-            TowerPlaceHold obj = Instantiate(placeHold, transform);
-            obj.Init(i + 1 , DataTableManager.Get<TowerTable>(DataTableIds.TowerTable).Get(presetData.towerIds[i]));
-            placeHoldList[i] = obj;
+            var data = DataTableManager.Get<TowerTable>(DataTableIds.TowerTable).Get(presetData.towerIds[i]);
 
-            RectTransform objRect = obj.GetComponent<RectTransform>();
+            // 타워 플레이스 홀더와 더불어서 TowerManager에 Preset 타워들 세팅
+            TowerPlaceHold towerPlaceHolder = Instantiate(placeHold, transform);
+            towerPlaceHolder.Init(i + 1, data.ID);
+
+            towerManager.AddTower(data);
+
+            placeHoldList[i] = towerPlaceHolder;
+
+            RectTransform objRect = towerPlaceHolder.GetComponent<RectTransform>();
 
             float x = radius * Mathf.Cos(Mathf.Deg2Rad * angle * i);
             float y = radius * Mathf.Sin(Mathf.Deg2Rad * angle * i);
@@ -47,6 +58,7 @@ public class PlaceTower : MonoBehaviour
 
         rotateLeft.onClick.AddListener(() => Rotate(-1));
         rotateRight.onClick.AddListener(() => Rotate(1));
+        init = true;
     }
     
 
@@ -60,17 +72,20 @@ public class PlaceTower : MonoBehaviour
             currentIndex = currentIndex % placeHoldCount;   
     }
 
-    public bool Place(TowerTable.Data towerData)
+    public void Place(TowerTable.Data towerData)
     {
-        for(int i = 0; i < placeHoldCount; i++)
+        for(int i = 0; i < placeHoldList.Length; i++)
         {
-            if (placeHoldList[i].GetTowerData() == towerData.tower)
+            if(placeHoldList[i].TowerId == towerData.ID)
             {
                 placeHoldList[i].SetPlace();
-                return true;
+                break;
             }
         }
+    }
 
-        return false;
+    public bool IsPlaced(int index)
+    {
+        return placeHoldList[index].GetPlaced();
     }
 }

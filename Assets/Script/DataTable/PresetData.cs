@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class PresetData
 {
@@ -17,6 +18,12 @@ public class PresetData
         this.towerIds.Add(6);
         this.towerIds.Add(7);
         this.towerIds.Add(8);
+    }
+
+    public int GetRandomTowerId()
+    {
+        int rand = Random.Range(0, towerIds.Count);
+        return towerIds[rand];
     }
 }
 

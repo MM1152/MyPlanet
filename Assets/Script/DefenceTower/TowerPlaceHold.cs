@@ -9,18 +9,16 @@ public class TowerPlaceHold : MonoBehaviour
 
     private Image image;
     private bool placed = false;
-    private TowerTable.Data towerData;
+    private int towerId;
+    public int TowerId => towerId;
 
-    private void Awake()
+    public void Init(int index, int towerId)
     {
         image = GetComponent<Image>();
-    }
 
-    public void Init(int index , TowerTable.Data towerData)
-    {
         placeHoldCountText.text = index.ToString();
         image.color = Color.gray;
-        this.towerData = towerData;
+        this.towerId = towerId;
     }
 
     public void SetPlace()
@@ -32,10 +30,5 @@ public class TowerPlaceHold : MonoBehaviour
     public bool GetPlaced()
     {
         return placed;
-    }
-
-    public Tower GetTowerData()
-    {
-        return towerData.tower;
     }
 }

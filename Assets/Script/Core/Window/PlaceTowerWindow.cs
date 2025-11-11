@@ -13,9 +13,10 @@ public class PlaceTowerWindow : Window
     private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
     public Button testButton;
     private TowerTable towerData;
-
+    private PresetData presetData;
     public override void Init(WindowManager manager)
     {
+        presetData = new PresetData(new List<int>());
         base.Init(manager);
         towerData = new TowerTable();
         for (int i = 0; i < selectTowerUICount; i++)
@@ -25,25 +26,27 @@ public class PlaceTowerWindow : Window
             Button objButton = obj.GetComponent<Button>();
             objButton.onClick.AddListener(() =>
             {
-                if (!placeTower.Place(obj.GetTowerData()))
-                    return;
-
-                towerManager.AddTower(obj.GetTowerData());
+                towerManager.PlaceTower(obj.GetTowerData());
+                placeTower.Place(obj.GetTowerData());
                 manager.Close();
             });
         }
         testButton.onClick.AddListener(() => manager.Open(WindowIds.PlaceTowerWindow));
         windowId = (int)WindowIds.PlaceTowerWindow;
+
+        
     }
 
     public async override void Open()
     {
         await DataTableManager.WaitForInitalizeAsync();
+        await placeTower.Init();
 
         for (int i = 0; i < selectTowerUICount; i++)
         {
+            var tower = towerManager.GetRandomTower();
             // FIX : 이부분 랜덤하게 데이터 넘겨주게 변경
-            selectTowerUIs[i].SetTowerData(DataTableManager.Get<TowerTable>(DataTableIds.TowerTable).Get(i + 1));
+            selectTowerUIs[i].SetTowerData(tower);
         }
 
         base.Open();

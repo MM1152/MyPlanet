@@ -4,9 +4,13 @@ using UnityEngine.AddressableAssets;
 
 public abstract class Tower
 {
-    [SerializeField] protected GameObject projectTile;
-    [SerializeField] protected float attackInterval = 2f;
-    [SerializeField] protected float currentAttackInterval;
+    public int Damage => towerData.ATK + bonusDamage;
+    public int ID => towerData.ID;
+
+
+    protected GameObject projectTile;
+    protected float attackInterval = 2f;
+    protected float currentAttackInterval;
 
     protected GameObject tower;
     protected Transform target;
@@ -15,6 +19,7 @@ public abstract class Tower
 
     protected TowerManager manager;
     protected TowerTable.Data towerData;
+    public TowerTable.Data TowerData => towerData;
     protected GameObject attackprefab;
     protected bool init = false;
     
@@ -23,20 +28,60 @@ public abstract class Tower
     protected float minNoise = 0f;
     protected float maxNoise = 0f;
 
-    protected int bonusDamage = 0;
+    public int bonusDamage = 0;
+
     protected float bonusAttackSpeed = 1f;
 
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
     private bool useAble = false;
+    public bool UseAble => useAble;
+    //Fix: 테스트 용임
+    private RandomOptionData randomOptionData = new RandomOptionData();
+    public RandomOptionData RandomOptionData => randomOptionData;
+
+    protected RandomOptionData.Data optionData;
+    protected RandomOptionBase baseRandomOption;
+    public RandomOptionBase Option => baseRandomOption;
+
+    protected string attackPrefabPath;
 
     public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data)
     {
         this.manager = manager;
         this.towerData = data;
         this.tower = tower;
-
         typeEffectiveness.Init((ElementType)this.towerData.Attribute);
-        LoadProjectTileAsync().Forget();
+        SetRandomOption();
+        Debug.Log("Tower Inital");
+    }
+
+    public void SetLoadAttackPrefab(string path)
+    {
+        LoadProjectTileAsync(path).Forget();
+    }
+
+    private void SetRandomOption()
+    {
+        //Option Value Change 되면 맞춰서 Update 해줘야됌
+        if(towerData.Option == 0)
+        {
+            optionData = randomOptionData.GetRandomOption();
+            baseRandomOption = randomOptionData.GetRandomOptionBase(optionData.id);
+            baseRandomOption.Init(manager , towerData, optionData);
+            towerData.Option = optionData.id;
+        }
+        else
+        {
+            optionData = randomOptionData.GetData(towerData.Option);
+            baseRandomOption = randomOptionData.GetRandomOptionBase(optionData.id);
+            baseRandomOption.Init(manager , towerData, optionData);
+        }
+    }
+
+    public void ResetRandomOption()
+    {
+        towerData.Option = -1;
+        SetRandomOption();
     }
 
     public virtual void Update(float deltaTime)
@@ -57,9 +102,9 @@ public abstract class Tower
         }
     }
 
-    private async UniTaskVoid LoadProjectTileAsync()
+    private async UniTaskVoid LoadProjectTileAsync(string path)
     {
-        attackprefab = await Addressables.LoadAssetAsync<GameObject>(towerData.projectilePrefabPath).ToUniTask();
+        attackprefab = await Addressables.LoadAssetAsync<GameObject>(path).ToUniTask();
         init = true;
     }
 
@@ -75,7 +120,7 @@ public abstract class Tower
                 return false;
             targetDamageAble = target.GetComponent<IDamageAble>();
 
-            if (Vector3.Distance(target.position, tower.transform.position) > towerData.AttackRadius)
+            if (Vector3.Distance(target.position, tower.transform.position) > towerData.Range)
                 return false;
 
             attackAble = false;
@@ -83,9 +128,10 @@ public abstract class Tower
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = tower.transform.position;
-            attackPrefabs.Init(towerData, typeEffectiveness);
+            attackPrefabs.Init(this, typeEffectiveness);
             attackPrefabs.SetTarget(target , minNoise , maxNoise);
 #if DEBUG_MODE
+            Debug.Log($"Attack Tower {Damage}");
             Debug.Log($"Attack Tower {towerData.Name}");
 #endif
             return true;
@@ -120,6 +166,7 @@ public abstract class Tower
     public void PlaceTower()
     {
         useAble = true;
+        baseRandomOption.SetRandomOption();
     }
 
     protected abstract BaseAttackPrefab CreateAttackPrefab();

@@ -10,12 +10,12 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     protected TypeEffectiveness typeEffectiveness;
     protected Transform target;
-    protected TowerTable.Data towerData;
+    protected Tower towerData;
 
     protected float minNoise;
     protected float maxNoise;
 
-    public virtual void Init(TowerTable.Data data , TypeEffectiveness typeEffectiveness)
+    public virtual void Init(Tower data , TypeEffectiveness typeEffectiveness)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null && sprite != null)
