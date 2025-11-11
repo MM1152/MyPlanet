@@ -4,15 +4,16 @@ using UnityEngine;
 public class SelectTowerUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
-    private TowerData.Data towerData;
-    
-    public void SetTowerData(TowerData.Data data)
+    private TowerTable.Data towerData;
+
+    public void SetTowerData(Tower data)
     {
-        this.towerData = data;
-        text.text = data.name;
+        this.towerData = data.TowerData;
+        text.text = data.ID.ToString() + "\n";
+        text.text += data.Option.GetOptionStringFormatting();
     }
 
-    public TowerData.Data GetTowerData()
+    public TowerTable.Data GetTowerData()
     {
         return towerData;
     }

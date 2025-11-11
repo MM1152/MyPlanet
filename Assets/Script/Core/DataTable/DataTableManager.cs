@@ -6,25 +6,23 @@ using Unity.VisualScripting;
 using Unity.Android.Gradle.Manifest;
 using System.Threading.Tasks;
 
-public class DataTableManager
+public static class DataTableManager
 {
     private static readonly Dictionary<string, DataTable> tables = new Dictionary<string, DataTable>();
 
-    //기존에 있던 테이블 코드
-    public static CrewRankTable CrewRankTable
+    public static bool init = false;
+
+    static DataTableManager()
     {
-        get
-        {
-            return Get<CrewRankTable>(DataTableIds.CrewRankTable);
-        }
+        LoadAllAsync().Forget();
     }
     // 그씬에 필요한 테이블들을 한번에 비동기로 로드하는 메서드   
-    public static async UniTask LoadAllAsync()
+    private static async UniTask LoadAllAsync()
     {
-        var crewRankTable = new CrewRankTable();
+        var towerTable = new TowerTable();
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
-            crewRankTable.LoadAsync(DataTableIds.CrewRankTable),
+            towerTable.LoadAsync(DataTableIds.TowerTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);
@@ -36,6 +34,7 @@ public class DataTableManager
             Debug.Log($"Loaded DataTable: {data.id}");
         }
         Debug.Log($"테이블 갯수: {tables.Count}");
+        init = true;
     }
 
     //기존에 있던 테이블 코드
@@ -47,5 +46,10 @@ public class DataTableManager
             return null;
         }
         return tables[id] as T;
+    }
+
+    public static async UniTask WaitForInitalizeAsync()
+    {
+        await UniTask.WaitUntil(() => init);
     }
 }

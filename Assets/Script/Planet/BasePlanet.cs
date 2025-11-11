@@ -11,6 +11,8 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     private bool isDead = false;
     private TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
 
+    public event Action OnPassive;
+
     [Header("Test Datas")]
     public ElementType elementType;
     public int maxHp;
@@ -43,5 +45,10 @@ public class BasePlanet : MonoBehaviour , IDamageAble
         OnDieAction?.Invoke();
 
         Destroy(gameObject);
+    }
+
+    private void Update()
+    {
+        OnPassive?.Invoke();
     }
 }

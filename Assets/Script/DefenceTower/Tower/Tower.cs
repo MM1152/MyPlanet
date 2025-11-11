@@ -4,9 +4,13 @@ using UnityEngine.AddressableAssets;
 
 public abstract class Tower
 {
-    [SerializeField] protected GameObject projectTile;
-    [SerializeField] protected float attackInterval = 2f;
-    [SerializeField] protected float currentAttackInterval;
+    public int Damage => towerData.ATK + bonusDamage;
+    public int ID => towerData.ID;
+
+
+    protected GameObject projectTile;
+    protected float attackInterval = 2f;
+    protected float currentAttackInterval;
 
     protected GameObject tower;
     protected Transform target;
@@ -14,45 +18,93 @@ public abstract class Tower
     protected bool attackAble;
 
     protected TowerManager manager;
-    protected TowerData.Data towerData;
+    protected TowerTable.Data towerData;
+    public TowerTable.Data TowerData => towerData;
     protected GameObject attackprefab;
     protected bool init = false;
-
+    
     // 해당 방향으로 날라갈때의 노이즈 값
     // 해당 값을 통해서 탄퍼짐 구성 예정
     protected float minNoise = 0f;
     protected float maxNoise = 0f;
 
-    protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
+    public int bonusDamage = 0;
 
-    public virtual void Init(GameObject tower , TowerManager manager, TowerData.Data data)
+    protected float bonusAttackSpeed = 1f;
+
+    protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
+    private bool useAble = false;
+    public bool UseAble => useAble;
+    //Fix: 테스트 용임
+    private RandomOptionData randomOptionData = new RandomOptionData();
+    public RandomOptionData RandomOptionData => randomOptionData;
+
+    protected RandomOptionData.Data optionData;
+    protected RandomOptionBase baseRandomOption;
+    public RandomOptionBase Option => baseRandomOption;
+
+    protected string attackPrefabPath;
+
+    public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data)
     {
         this.manager = manager;
         this.towerData = data;
         this.tower = tower;
+        typeEffectiveness.Init((ElementType)this.towerData.Attribute);
+        SetRandomOption();
+        Debug.Log("Tower Inital");
+    }
 
-        typeEffectiveness.Init((ElementType)this.towerData.type);
-        LoadProjectTileAsync().Forget();
+    public void SetLoadAttackPrefab(string path)
+    {
+        LoadProjectTileAsync(path).Forget();
+    }
+
+    private void SetRandomOption()
+    {
+        //Option Value Change 되면 맞춰서 Update 해줘야됌
+        if(towerData.Option == 0)
+        {
+            optionData = randomOptionData.GetRandomOption();
+            baseRandomOption = randomOptionData.GetRandomOptionBase(optionData.id);
+            baseRandomOption.Init(manager , towerData, optionData);
+            towerData.Option = optionData.id;
+        }
+        else
+        {
+            optionData = randomOptionData.GetData(towerData.Option);
+            baseRandomOption = randomOptionData.GetRandomOptionBase(optionData.id);
+            baseRandomOption.Init(manager , towerData, optionData);
+        }
+    }
+
+    public void ResetRandomOption()
+    {
+        towerData.Option = -1;
+        SetRandomOption();
     }
 
     public virtual void Update(float deltaTime)
     {
-        currentAttackInterval += deltaTime;
+        if (!useAble)
+            return;
+
+        currentAttackInterval += deltaTime * bonusAttackSpeed;
 
         if(target != null && targetDamageAble.IsDead)
         {
             target = null;
         }
 
-        if(currentAttackInterval > towerData.attackInterval)
+        if(currentAttackInterval > towerData.Fire_Rate)
         {
             attackAble = true;
         }
     }
 
-    private async UniTaskVoid LoadProjectTileAsync()
+    private async UniTaskVoid LoadProjectTileAsync(string path)
     {
-        attackprefab = await Addressables.LoadAssetAsync<GameObject>(towerData.projectilePrefabPath).ToUniTask();
+        attackprefab = await Addressables.LoadAssetAsync<GameObject>(path).ToUniTask();
         init = true;
     }
 
@@ -68,7 +120,7 @@ public abstract class Tower
                 return false;
             targetDamageAble = target.GetComponent<IDamageAble>();
 
-            if (Vector3.Distance(target.position, tower.transform.position) > towerData.attackRadius)
+            if (Vector3.Distance(target.position, tower.transform.position) > towerData.Range)
                 return false;
 
             attackAble = false;
@@ -76,11 +128,12 @@ public abstract class Tower
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = tower.transform.position;
-            attackPrefabs.Init(towerData, typeEffectiveness);
+            attackPrefabs.Init(this, typeEffectiveness);
             attackPrefabs.SetTarget(target , minNoise , maxNoise);
-
-            Debug.Log($"Attack Tower {towerData.name}");
-
+#if DEBUG_MODE
+            Debug.Log($"Attack Tower {Damage}");
+            Debug.Log($"Attack Tower {towerData.Name}");
+#endif
             return true;
         }
 
@@ -98,6 +151,22 @@ public abstract class Tower
     public virtual void LevelUp()
     {
         Debug.Log("Level Up");
+    }
+
+    public void AddBonusDamage(int damage)
+    {
+        bonusDamage += damage;
+    }
+
+    public void AddBonusAttackSpeed(float speed)
+    {
+        bonusAttackSpeed += speed;
+    }
+
+    public void PlaceTower()
+    {
+        useAble = true;
+        baseRandomOption.SetRandomOption();
     }
 
     protected abstract BaseAttackPrefab CreateAttackPrefab();

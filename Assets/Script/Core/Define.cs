@@ -27,6 +27,7 @@ public static class Variable
 public static class DataTableIds
 {
         public static readonly string CrewRankTable = "CrewRankTable";
+        public static readonly string TowerTable = "TowerTable";
 
 
         public static readonly HashSet<string> AllIds = new HashSet<string>()
