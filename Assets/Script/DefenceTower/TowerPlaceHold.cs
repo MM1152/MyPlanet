@@ -33,4 +33,9 @@ public class TowerPlaceHold : MonoBehaviour
     {
         return placed;
     }
+
+    public Tower GetTowerData()
+    {
+        return towerData.tower;
+    }
 }

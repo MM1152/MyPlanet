@@ -60,11 +60,17 @@ public class PlaceTower : MonoBehaviour
             currentIndex = currentIndex % placeHoldCount;   
     }
 
-    public bool Place()
+    public bool Place(TowerTable.Data towerData)
     {
-        if (placeHoldList[currentIndex].GetPlaced()) return false;
+        for(int i = 0; i < placeHoldCount; i++)
+        {
+            if (placeHoldList[i].GetTowerData() == towerData.tower)
+            {
+                placeHoldList[i].SetPlace();
+                return true;
+            }
+        }
 
-        placeHoldList[currentIndex].SetPlace();
-        return true;
+        return false;
     }
 }

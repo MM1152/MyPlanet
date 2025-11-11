@@ -25,7 +25,7 @@ public class PlaceTowerWindow : Window
             Button objButton = obj.GetComponent<Button>();
             objButton.onClick.AddListener(() =>
             {
-                if (!placeTower.Place())
+                if (!placeTower.Place(obj.GetTowerData()))
                     return;
 
                 towerManager.AddTower(obj.GetTowerData());
