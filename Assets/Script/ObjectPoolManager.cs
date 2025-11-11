@@ -2,77 +2,147 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Pool;
 using Cysharp.Threading.Tasks;
-using UnityEngine.AddressableAssets;
+using UnityEditor;
+using Unity.VisualScripting;
+using Cysharp.Threading.Tasks.Triggers;
 
 
 public class ObjectPoolManager : MonoBehaviour
 {
 
-    // 키: 풀 id , 값: 오브젝트 풀
-    private Dictionary<int, ObjectPool<GameObject>> poolDictionary = new Dictionary<int, ObjectPool<GameObject>>();
+    // 관리할 오브젝트 id  , 오브젝트 풀
+    private static Dictionary<int, ObjectPool<GameObject>> ObjPools = new Dictionary<int, ObjectPool<GameObject>>();
 
-    // 풀 초기화 메서드 / 풀 생성/  AddressableManager 통해 프리팹 로드 / 키 검사 // 
-    public async UniTask InitPool(PoolData.Data poolData)
+
+    private static ObjectPoolManager instance;
+    public static ObjectPoolManager Instance => instance;
+
+    private static Transform poolsRoot;
+
+    private void Awake()
     {
-        if (poolDictionary.ContainsKey(poolData.id))
+        if (instance == null)
+        {
+            instance = this;
+            var poolRoot = new GameObject("PoolsRoot");
+            poolRoot.transform.SetParent(this.transform, false);
+            poolsRoot = poolRoot.transform;
+            //스테이지가 바뀌어도 오브젝트 풀 매니저가 파괴되지 않도록 설정            
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // 오브젝트 풀 생성
+    private static void CreatePool(int id, GameObject prefab)
+    {
+        var newPool = new ObjectPool<GameObject>(
+          createFunc: () => CreateObject(prefab),
+          actionOnGet: OnGetObject,
+          actionOnRelease: OnReleaseObject,
+          actionOnDestroy: OnDestoryObject,
+          collectionCheck: false,
+          defaultCapacity: 10,
+          maxSize: 100
+        );
+
+        ObjPools.Add(id, newPool);
+    }
+
+    // 오브젝트 생성
+    private static GameObject CreateObject(GameObject prefab)
+    {
+        var obj = Instantiate(prefab, poolsRoot);
+        obj.SetActive(false);
+        return obj;
+    }
+    // 오브젝트 활성화    
+    private static void OnGetObject(GameObject obj)
+    {
+        obj.SetActive(true);
+    }
+    // 오브젝트 비활성화
+    private static void OnReleaseObject(GameObject obj)
+    {
+        obj.SetActive(false);
+    }
+
+    //풀 사이즈를 조절하는데 현재 풀사이즈 유지를 얼마나할지 몰라서 일단 넣어둠
+    private static void OnDestoryObject(GameObject obj)
+    {
+        Destroy(obj);
+    }
+
+    // 오브젝트 스폰 (풀에서 오브젝트 가져오기)
+    public static T SpawnObject<T>(int id, GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        if (!ObjPools.ContainsKey(id))
+        {
+            CreatePool(id, prefab);
+        }
+
+        GameObject obj = ObjPools[id].Get();
+        if (obj != null)
+        {
+            obj.transform.position = position;
+            obj.transform.rotation = rotation;
+
+
+            T component = obj.GetComponent<T>();
+#if DEBUG_MODE
+            if (component == null)
+            {
+                Debug.LogWarning($"Component {typeof(T).Name} not found on {prefab.name}");
+            }
+#endif
+
+            return component;
+        }
+        return default;
+    }
+    private static void Despawn(int id, GameObject obj)
+    {
+        if (ObjPools.ContainsKey(id))
         {
 #if DEBUG_MODE
-            throw new Exception($"이러한 ID: {poolData.id} 풀이 이미 있어요 .");
+            Debug.Log($"디스폰 호출");
 #endif
-            return;
+            ObjPools[id].Release(obj);
         }
-        // 프리펩 어드레서블 로드함 
-        GameObject prefab = await Addressables.LoadAssetAsync<GameObject>(poolData.addressableKey).ToUniTask();
-        // 로드한 프리팹으로 오브젝트 풀 생성 // 각 콜백 함수 작성 연결    
-        ObjectPool<GameObject> newPool = new ObjectPool<GameObject>(
-           createFunc: () => Instantiate(prefab),
-           actionOnGet: (obj) => obj.SetActive(true),
-           actionOnRelease: (obj) => obj.SetActive(false),
-           actionOnDestroy: (obj) => Destroy(obj),
-           collectionCheck: false,
-           defaultCapacity: poolData.poolCount,
-           maxSize: poolData.maxPoolCount
-        );
-        // 생성한 풀을 딕셔너리에 추가
-        poolDictionary.Add(poolData.id, newPool);
-    }
-    // 객체 가져오기 메서드 / 객체 반환 메서드 //
-    public GameObject GetObject(int poolId)
-    {
-        if (poolDictionary.TryGetValue(poolId, out var pool))
-        {
-            return pool.Get();
-        }
-        return null;    
-    }
-     // 객체 반환 메서드 // id  검사 벨류접근 
-    public void ReleaseObject(int id, GameObject obj)
-    {
-        if (poolDictionary.TryGetValue(id, out var pool))
-        {
-            pool.Release(obj);
-        }
-    }
-    // 풀 존재 여부 확인 메서드 //
-    public bool HasPool(int id)
-    {
-        return poolDictionary.ContainsKey(id);
     }
 
-     //id  검사 벨류접근 비우고 id 삭제
-    public void ClearPool(int id)
+    private static void ClearPool(int id)
     {
-       if(poolDictionary.TryGetValue(id, out var pool))
+        if (ObjPools.ContainsKey(id))
         {
-            pool.Clear();
-            poolDictionary.Remove(id);
+#if DEBUG_MODE
+            Debug.Log($"클리어 호출");
+#endif
+            ObjPools[id].Clear();
+            ObjPools.Remove(id);
         }
+    }
+
+    private static void ClearAllPools()
+    {
+        foreach (var pool in ObjPools.Values)
+        {
+
+            pool.Clear();
+        }
+#if DEBUG_MODE
+        Debug.Log($"클리어 올 호출");
+#endif
+        ObjPools.Clear();
     }
 }
 
 
 
- 
+
 
 
 

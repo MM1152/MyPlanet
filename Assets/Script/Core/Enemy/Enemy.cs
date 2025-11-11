@@ -1,17 +1,18 @@
 using UnityEngine;
-
+using UnityEngine.AddressableAssets;
+using UnityEngine.InputSystem;
 public class Enemy : MonoBehaviour, IDamageAble
 {
     private static readonly string TargetTag = "Player";
     [SerializeField]
     private GameObject target;
+    
     public EnemyData.Data enemyData;
     public StateMachine stateMachine;
-    public bool IsDead => false;
+    public bool IsDead => stateMachine.dieState.isDead;
     public ElementType ElementType => (ElementType)enemyData.Attribute;
     public float speed;
     public int atk;
-
     public float attackrange;
     private float attackCooldownTimer = 0f;
     private int currentHP;
@@ -25,8 +26,7 @@ public class Enemy : MonoBehaviour, IDamageAble
     }
     public void OnEnable()
     {
-        target = GameObject.FindGameObjectWithTag(TargetTag);        
-        stateMachine.Init(stateMachine.idleState);
+        target = GameObject.FindGameObjectWithTag(TargetTag);
         currentHP = enemyData.HP;
         atk = enemyData.ATK;
         speed = enemyData.Speed;
@@ -38,8 +38,9 @@ public class Enemy : MonoBehaviour, IDamageAble
     private void Start()
     {
         stateMachine = new StateMachine(this);
+        stateMachine.Init(stateMachine.idleState);
     }
-    
+
     // 상태 확인
     private void CheckState()
     {   // 사망 체크
@@ -56,16 +57,14 @@ public class Enemy : MonoBehaviour, IDamageAble
         if (distanceToTarget <= enemyData.AttackRange && enemyData.AttackInterval <= attackCooldownTimer)
         {
             stateMachine.ChangeState(stateMachine.attackState);
-            attackCooldownTimer = 0f;         
+            attackCooldownTimer = 0f;
             return;
         }
-        
-
         // 이동 상태로 전환        
         if (distanceToTarget > enemyData.AttackRange)
         {
             stateMachine.ChangeState(stateMachine.walkState);
-        } 
+        }
         else
         {
             stateMachine.ChangeState(stateMachine.idleState);
@@ -77,10 +76,21 @@ public class Enemy : MonoBehaviour, IDamageAble
     // 상태 실행
     private void Update()
     {
+        if (IsDead) return;
+
         // 현재 상태 실행
         stateMachine.currentState.Execute();
         // 상태 전환 체크
-        CheckState();  
+        CheckState();
+
+
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            Debug.Log("테스트용 죽이기");
+
+            OnDead();        
+
+        }
     }
 
     // 타겟 반환
@@ -93,9 +103,9 @@ public class Enemy : MonoBehaviour, IDamageAble
     {
         var damgePercent = typeEffectiveness.GetDamagePercent(target.GetComponent<IDamageAble>().ElementType);
         damgePercent *= damage;
-        enemyData.HP = Mathf.Min(currentHP -= Mathf.RoundToInt(damgePercent), 0);
+        currentHP = Mathf.Max(currentHP -= Mathf.RoundToInt(damgePercent), 0);
 
-        if (enemyData.HP <= 0)
+        if (currentHP <= 0)
         {
             OnDead();
         }
@@ -103,6 +113,11 @@ public class Enemy : MonoBehaviour, IDamageAble
     // 사망 처리    
     public void OnDead()
     {
+        if (IsDead && stateMachine.currentState == stateMachine.dieState)
+        {
+            return; // 이미 DieState면 무시
+        }
+
         stateMachine.ChangeState(stateMachine.dieState);
     }
 }
