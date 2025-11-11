@@ -15,7 +15,7 @@ public class JoyStick : MonoBehaviour
 
     private void Awake()
     {
-        canvasGroup = GetComponentInParent<CanvasGroup>();
+        canvasGroup = GetComponent<CanvasGroup>();
     }
     // 초기화 
     private void Start()

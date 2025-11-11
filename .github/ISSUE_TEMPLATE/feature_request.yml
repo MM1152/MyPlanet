@@ -1,0 +1,81 @@
+name: "🎮 기능 추가 (Game Feature)"
+description: 간단 설명과 구현 체크리스트 중심의 게임 기능 이슈
+title: "feat: [시스템/화면/씬] [이름] 한 줄 요약"
+labels:
+  - enhancement
+  - feature
+  - game-dev
+assignees: []
+projects: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        간단 설명과 구현 체크리스트만 작성하면 바로 작업을 시작할 수 있도록 구성된 템플릿입니다.
+
+  - type: input
+    id: summary
+    attributes:
+      label: 간단 설명
+      description: 이 기능이 플레이/툴/파이프라인에 어떻게 기여하는지 한 줄로 적어주세요.
+      placeholder: 예) 점프 후 착지 시 카메라 흔들림과 먼지 VFX 추가
+    validations:
+      required: true
+  
+  - type: checkboxes
+    id: work_time
+    attributes:
+      label: 작업 시간대
+      description: 각 작업을 진행 하기 위한 선호 시간대를 선택해 주세요.
+      options:
+        - label: 오전 개발
+        - label: 오후 개발
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 분류
+      options:
+        - Gameplay
+        - UI/UX
+        - Audio
+        - VFX
+        - Tools/Editor
+        - Optimization
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: context
+    attributes:
+      label: 적용 범위(선택)
+      description: 관련 씬/프리팹/스크립트/에셋 경로 등
+      placeholder: 예) Scenes/Main.unity, Prefabs/Player.prefab, Scripts/CameraShake.cs
+    validations:
+      required: false
+
+  - type: textarea
+    id: tasks_detail
+    attributes:
+      label: 세부 작업(선택)
+      description: 구체적인 하위 작업이 있다면 여기에 적어 주세요.
+      placeholder: 예) CameraShake 파라미터 튜닝, LandingDust.prefab 스폰 타이밍 조정 등
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: dod
+    attributes:
+      label: 완료 기준 (Definition of Done)
+      description: 이 이슈가 “완료”로 간주되기 위한 조건입니다.
+      options:
+        - label: 에디터/개발 빌드에서 정상 동작 확인
+        - label: 주요 플랫폼(해당 시)에서 문제 없음
+        - label: 리그레션 없는지 핵심 플로우 수동 테스트
+        - label: 로그/에러/경고 무분별 발생 없음
+    validations:
+      required: false
