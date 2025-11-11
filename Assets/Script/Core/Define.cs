@@ -26,23 +26,24 @@ public static class Variable
 
 public static class DataTableIds
 {
-        public static readonly string CrewRankTable = "CrewRankTable";
-        public static readonly string TowerTable = "TowerTable";
+    public static readonly string EnemyTable = "EnemyTable";
+    public static readonly string CrewRankTable = "CrewRankTable";
+    public static readonly string TowerTable = "TowerTable";
 
 
-        public static readonly HashSet<string> AllIds = new HashSet<string>()
-        {
-            CrewRankTable,
-        };
+    public static readonly HashSet<string> AllIds = new HashSet<string>()
+    {
+            EnemyTable
+    };
 
-        public static bool Contains(string id)
-        {        
-                return AllIds.Contains(id);
-        }
+    public static bool Contains(string id)
+    {
+        return AllIds.Contains(id);
+    }
 
-        public static IEnumerable<string> GetAllIds()
-        {
-                return AllIds;
-        }
+    public static IEnumerable<string> GetAllIds()
+    {
+        return AllIds;
+    }
 
 }

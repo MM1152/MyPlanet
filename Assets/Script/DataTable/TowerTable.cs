@@ -10,16 +10,16 @@ public class TowerTable : DataTable
     public class Data
     {
         public int ID { get; set; }
-        public int Name { get; set; }
-        public int Explanation { get; set; }
-        public char Grade { get; set; }
+        public string Name { get; set; }
+        public string Explanation { get; set; }
+        public string Grade { get; set; }
         public int Attribute { get; set; }
         public int ATK { get; set; }
-        public float Range { get; set; }
+        public int Range { get; set; }
         public string Bullet_Path { get; set; }
         public string Image_Path { get; set; }
         public int Fire_Rate { get; set; }
-        public int Option { get; set; } // 鸥况俊 厘馒等 罚待 可记 
+        public int Option { get; set; }
         public int Min_Value { get; set; }
         public int Max_Value { get; set; }
         public int Option_Type { get; set; }
@@ -33,7 +33,7 @@ public class TowerTable : DataTable
     {
         var path = string.Format(FormatPath, filename);
         var textAsset = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
-        var datas = await LoadCSVTest<Data>(textAsset.text);
+        var datas = await LoadCSV<Data>(textAsset.text);
 
         foreach (var data in datas)
         {
