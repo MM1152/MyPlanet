@@ -60,12 +60,13 @@ public class PlaceTowerWindow : Window
             // FIX : 이부분 랜덤하게 데이터 넘겨주게 변경
             selectTowerUIs[i].SetTowerData(tower);
         }
-
+        Time.timeScale = 0f;
         base.Open();
     }
 
     public override void Close()
     {
+        Time.timeScale = 1f;
         base.Close();
     }
 }

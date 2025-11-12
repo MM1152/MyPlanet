@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 public class TowerManager : MonoBehaviour
 {
     [SerializeField] private Enemy testTarget;
-    [SerializeField] private Enemy testTarget;
     [SerializeField] private GameObject tower;
     [SerializeField] private EnemySpawnManager enemySpawnManager;
 
@@ -22,7 +21,7 @@ public class TowerManager : MonoBehaviour
 
     private bool isLevelUp = false;
 
-    private GameObject WindowManager;
+    private WindowManager windowManager;
 
 #if DEBUG_MODE
     [Header("����� ��")]
@@ -32,19 +31,18 @@ public class TowerManager : MonoBehaviour
     private async void Awake()
     {
         await DataTableManager.WaitForInitalizeAsync();
-        WindowManager = GameObject.FindGameObjectWithTag("WindowManager");
+        windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
     }
 
     public void LateUpdate()
     {
-        foreach (var tower in towers)
 #if DEBUG_MODE
         if(stopAttack)
         {
             return;
         }
 #endif
-            foreach(var tower in towers)
+        foreach(var tower in towers)
         {
             tower.Update(Time.deltaTime);
         }
@@ -133,11 +131,11 @@ public class TowerManager : MonoBehaviour
 #if DEBUG_MODE
             Debug.Log("Level Up!");
 #endif
-            LevelUp().Forget();
+            LevelUp();
         }
     }
 
-    private async UniTask LevelUp()
+    private void LevelUp()
     {
         if (currentLevel >= maxLevel)
         {
@@ -150,8 +148,7 @@ public class TowerManager : MonoBehaviour
         totalExp = 0;
 
 
-        WindowManager.GetComponent<WindowManager>().Open(WindowIds.PlaceTowerWindow);
-        Time.timeScale = 0f; // 게임 일시정지    
+        windowManager.Open(WindowIds.PlaceTowerWindow);
     }
 
     public Tower GetTower(int id)

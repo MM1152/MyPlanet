@@ -19,7 +19,6 @@ public class Window : MonoBehaviour
 
     public virtual void Close()
     {
-        Time.timeScale = 1f; // 게임 재개
         gameObject.SetActive(false);
     }
 }

@@ -42,6 +42,7 @@ public class Enemy : MonoBehaviour, IDamageAble
         stateMachine.Init(stateMachine.idleState);
         typeEffectiveness = new TypeEffectiveness();
         typeEffectiveness.Init(ElementType);
+        statusEffect.Init();
 
         IsDead = false;
     }
@@ -98,6 +99,10 @@ public class Enemy : MonoBehaviour, IDamageAble
         stateMachine.currentState.Execute();
         // 상태 전환 체크
         CheckState();
+    }
+
+    private void LateUpdate()
+    {
         statusEffect.Update(Time.deltaTime);
     }
 
@@ -119,6 +124,7 @@ public class Enemy : MonoBehaviour, IDamageAble
     public void OnDead()
     {
         stateMachine.ChangeState(stateMachine.dieState);
+        statusEffect.Clear();
         OnDie?.Invoke(this);
     }
 }
