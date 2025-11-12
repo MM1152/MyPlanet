@@ -4,8 +4,12 @@ using UnityEngine.Rendering;
 
 public class BasePlanet : MonoBehaviour , IDamageAble
 {
+    private StatusEffect statusEffect = new StatusEffect();
+
     public bool IsDead => isDead;
     public ElementType ElementType => elementType;
+
+    public StatusEffect StatusEffect => statusEffect;
     public event Action OnDieAction;
 
     private bool isDead = false;

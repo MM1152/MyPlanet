@@ -12,7 +12,7 @@ public class WalkState : IState
     public void Enter()
     {
 #if DEBUG_MODE
-        Debug.Log("Walk State Enter");
+        //Debug.Log("Walk State Enter");
 #endif
         target = enemy.GetTarget();
     }
@@ -33,7 +33,7 @@ public class WalkState : IState
     public void Exit()
     {
        #if DEBUG_MODE
-        Debug.Log("Walk State Exit");  
+        //Debug.Log("Walk State Exit");  
          #endif     
     }
 }
