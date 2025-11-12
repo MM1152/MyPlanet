@@ -1247,7 +1247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf6f236d6ea544449f7543301446949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testTarget: {fileID: 2014543562}
+  testTarget: {fileID: 0}
   tower: {fileID: 548975405}
 --- !u!4 &735681390
 Transform:
@@ -2782,7 +2782,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2014543566}
   - component: {fileID: 2014543565}
-  - component: {fileID: 2014543562}
   - component: {fileID: 2014543564}
   - component: {fileID: 2014543563}
   - component: {fileID: 2014543567}
@@ -2793,19 +2792,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2014543562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2014543561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f87ad161c92f0a44862ed8040ebdbc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyType: 0
 --- !u!58 &2014543563
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2951,10 +2937,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e39e21777b9c094dab8f9b11a9b71ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   speed: 10
   atk: 5
   attackrange: 1
+  currentHP: 0
 --- !u!1 &2097040752
 GameObject:
   m_ObjectHideFlags: 0

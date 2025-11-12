@@ -4,7 +4,7 @@ using System;
 
 public class TowerManager : MonoBehaviour
 {
-    [SerializeField] private EnemyTest testTarget;
+    [SerializeField] private Enemy testTarget;
     [SerializeField] private GameObject tower;
     private List<Tower> towers = new List<Tower>();
     public List<Tower> Towers => towers;

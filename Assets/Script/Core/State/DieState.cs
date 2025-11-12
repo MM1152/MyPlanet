@@ -18,7 +18,7 @@ public class DieState : IState
     public void Execute()
     {
         
-        Object.Destroy(enemy.gameObject);
+        GameObject.Destroy(enemy.gameObject);
         isDead = true;
     }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageAble
 {
     private static readonly string TargetTag = "Player";
-    [SerializeField]
+    
     private GameObject target;
     public EnemyData.Data enemyData;
     public StateMachine stateMachine;
@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour, IDamageAble
 
     public float attackrange;
     private float attackCooldownTimer = 0f;
-    private int currentHP;
+    [SerializeField] private int currentHP;
 
     private TypeEffectiveness typeEffectiveness;
 
@@ -101,11 +101,9 @@ public class Enemy : MonoBehaviour, IDamageAble
     // 데미지 처리
     public void OnDamage(int damage)
     {
-        var damgePercent = typeEffectiveness.GetDamagePercent(target.GetComponent<IDamageAble>().ElementType);
-        damgePercent *= damage;
-        enemyData.HP = Mathf.Min(currentHP -= Mathf.RoundToInt(damgePercent), 0);
-
-        if (enemyData.HP <= 0)
+        currentHP -= damage;
+        Debug.Log("Damage");
+        if (currentHP <= 0)
         {
             OnDead();
         }
@@ -114,5 +112,6 @@ public class Enemy : MonoBehaviour, IDamageAble
     public void OnDead()
     {
         stateMachine.ChangeState(stateMachine.dieState);
+        Debug.Log("Die");
     }
 }
