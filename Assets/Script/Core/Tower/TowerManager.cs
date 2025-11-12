@@ -17,7 +17,9 @@ public class TowerManager : MonoBehaviour
     private int maxLevel = 10;
     public int levelUpExp => currentLevel * 100;
 
-    private GameObject WindowManager;   
+    private bool isLevelUp = false;
+
+    private GameObject WindowManager;
 
     private async void Awake()
     {
@@ -107,17 +109,16 @@ public class TowerManager : MonoBehaviour
 #if DEBUG_MODE
         Debug.Log($"Current Exp : {sumExp} / {levelUpExp}");
 #endif
-
         if (sumExp >= levelUpExp)
         {
 #if DEBUG_MODE
             Debug.Log("Level Up!");
 #endif
-             LevelUp();
+            LevelUp().Forget();
         }
     }
 
-    private void  LevelUp()
+    private async UniTask LevelUp()
     {
         if (currentLevel >= maxLevel)
         {
@@ -129,8 +130,9 @@ public class TowerManager : MonoBehaviour
         currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
         totalExp = 0;
 
-        WindowManager.GetComponent<WindowManager>().Open(WindowIds.PlaceTowerWindow);      
-        
+
+        WindowManager.GetComponent<WindowManager>().Open(WindowIds.PlaceTowerWindow);
+        Time.timeScale = 0f; // 게임 일시정지    
     }
 
 
