@@ -11,4 +11,10 @@ public class LaserTower : Tower
 
         return laser;
     }
+
+    public override bool Attack()
+    {
+        target = manager.FindTarget()?.transform;
+        return base.Attack();
+    }
 }

@@ -10,6 +10,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     protected TypeEffectiveness typeEffectiveness;
     protected Transform target;
+    protected IDamageAble targetDamageAble;
     protected Tower towerData;
 
     protected float minNoise;
@@ -32,6 +33,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
         this.target = target;
         this.minNoise = minNoise;
         this.maxNoise = maxNoise;
+        targetDamageAble = target.GetComponent<IDamageAble>();
     }
 
     protected abstract void HitTarget();

@@ -91,7 +91,7 @@ public abstract class Tower
 
         currentAttackInterval += deltaTime * bonusAttackSpeed;
 
-        if(target != null && targetDamageAble.IsDead)
+        if(target != null && !targetDamageAble.IsDead)
         {
             target = null;
         }
@@ -99,6 +99,7 @@ public abstract class Tower
         if(currentAttackInterval > towerData.Fire_Rate)
         {
             attackAble = true;
+            Attack();
         }
     }
 
@@ -114,14 +115,15 @@ public abstract class Tower
 
         if (attackAble)
         {
-            target = manager.FindTarget();
-
             if (target == null) 
                 return false;
             targetDamageAble = target.GetComponent<IDamageAble>();
 
             if (Vector3.Distance(target.position, tower.transform.position) > towerData.Range)
+            {
+                target = null;
                 return false;
+            }
 
             attackAble = false;
             currentAttackInterval = 0;

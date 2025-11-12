@@ -32,7 +32,6 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public void OnDamage(int damage)
     {
         hp -= damage;
-        Debug.Log($"행성 데미지 입음 {damage}");
         if(hp <= 0 && !isDead)
         {
             OnDead();
