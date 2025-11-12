@@ -12,6 +12,7 @@ public class LaserTower : Tower
         return laser;
     }
 
+    //FIX : 상속받은 자식에서 정의해주기
     public override bool Attack()
     {
         target = manager.FindTarget()?.transform;
