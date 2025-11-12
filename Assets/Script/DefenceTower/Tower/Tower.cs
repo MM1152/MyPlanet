@@ -23,8 +23,8 @@ public abstract class Tower
     protected GameObject attackprefab;
     protected bool init = false;
     
-    // ÇØ´ç ¹æÇâÀ¸·Î ³¯¶ó°¥¶§ÀÇ ³ëÀÌÁî °ª
-    // ÇØ´ç °ªÀ» ÅëÇØ¼­ ÅºÆÛÁü ±¸¼º ¿¹Á¤
+    // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ó°¥¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+    // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ Åºï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     protected float minNoise = 0f;
     protected float maxNoise = 0f;
 
@@ -35,7 +35,7 @@ public abstract class Tower
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
     private bool useAble = false;
     public bool UseAble => useAble;
-    //Fix: Å×½ºÆ® ¿ëÀÓ
+    //Fix: ï¿½×½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     private RandomOptionData randomOptionData = new RandomOptionData();
     public RandomOptionData RandomOptionData => randomOptionData;
 
@@ -62,7 +62,7 @@ public abstract class Tower
 
     private void SetRandomOption()
     {
-        //Option Value Change µÇ¸é ¸ÂÃç¼­ Update ÇØÁà¾ß‰Î
+        //Option Value Change ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ç¼­ Update ï¿½ï¿½ï¿½ï¿½ß‰ï¿½
         if(towerData.Option == 0)
         {
             optionData = randomOptionData.GetRandomOption();
@@ -115,6 +115,7 @@ public abstract class Tower
         if (attackAble)
         {
             target = manager.FindTarget();
+            Debug.Log($"Tower Target : {target.transform.position}");
 
             if (target == null) 
                 return false;
@@ -150,7 +151,7 @@ public abstract class Tower
 
     public virtual void LevelUp()
     {
-        Debug.Log("Level Up");
+   Debug.Log("Level Up");
     }
 
     public void AddBonusDamage(int damage)

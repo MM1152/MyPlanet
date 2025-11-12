@@ -3,22 +3,27 @@ using Cysharp.Threading.Tasks;
 
 public class Exp : MonoBehaviour
 {
-      [SerializeField]
+    [SerializeField]
     private GameObject defenseTower;
-    private float speed = 1f;
-
+    [SerializeField]
+    private GameObject towerManager;
     private bool moveing = false;
     private bool isWaiting = false;
+    private float speed = 1f;
+    private float distance;
+    public int exp;
 
-     private float distance;
+       
 
 
      [SerializeField]
      private string targetTag = "DefenseTower";
+    private string towerTag = "TowerManager"; 
 
     private void OnEnable()
     {
         defenseTower = GameObject.FindGameObjectWithTag(targetTag);
+        towerManager = GameObject.FindGameObjectWithTag(towerTag);        
         moveing = false;
         isWaiting = true;
         AwaitMove().Forget();
@@ -36,7 +41,7 @@ public class Exp : MonoBehaviour
     {
         if (other.CompareTag(targetTag))
         {
-            //경험치 획득 로직 추가
+            towerManager.GetComponent<TowerManager>().AddExp(exp);
             Destroy(gameObject);
         }
     }

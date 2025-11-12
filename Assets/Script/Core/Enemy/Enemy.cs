@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageAble
-{
+{  
     private static readonly string TargetTag = "Player";
     [SerializeField]
     private GameObject target;
@@ -105,10 +105,8 @@ public class Enemy : MonoBehaviour, IDamageAble
     }
     // 데미지 처리
     public void OnDamage(int damage)
-    {
-        var damgePercent = typeEffectiveness.GetDamagePercent(target.GetComponent<IDamageAble>().ElementType);
-        damgePercent *= damage;
-        enemyData.HP = Mathf.Min(currentHP -= Mathf.RoundToInt(damgePercent), 0);
+    {        
+        enemyData.HP = Mathf.Min(currentHP -= damage, 0);
 
         if (enemyData.HP <= 0)
         {

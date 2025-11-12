@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using UnityEngine;
 
 public class DieState : IState
@@ -16,8 +17,9 @@ public class DieState : IState
     }
 
     public void Execute()
-    {        
-        ObjectPoolManager.SpawnObject(2,enemy.expPrefab, enemy.transform.position, Quaternion.identity);   
+    {
+        var exp = ObjectPoolManager.SpawnObject(2, enemy.expPrefab, enemy.transform.position, Quaternion.identity);   
+        exp.GetComponent<Exp>().exp = enemy.enemyData.EXP;
         ObjectPoolManager.Despawn(1, enemy.gameObject);            
         isDead = true;
     }
