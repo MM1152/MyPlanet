@@ -7,13 +7,13 @@ public class Enemy : MonoBehaviour, IDamageAble
     private static readonly string TargetTag = "Player";
     [SerializeField]
     private GameObject target;
+    public GameObject expPrefab;
     public EnemyData.Data enemyData;
     public StateMachine stateMachine;
     public bool IsDead => false;
     public ElementType ElementType => (ElementType)enemyData.Attribute;
     public float speed;
     public int atk;
-
     public float attackrange;
     private float attackCooldownTimer = 0f;
     private int currentHP;
@@ -55,6 +55,11 @@ public class Enemy : MonoBehaviour, IDamageAble
         if (currentHP <= 0)
         {
             stateMachine.ChangeState(stateMachine.dieState);
+            return;
+        }
+        if( target == null)
+        {            
+            target = GameObject.FindGameObjectWithTag(TargetTag);
             return;
         }
         // 거리 계산

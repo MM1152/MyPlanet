@@ -16,9 +16,9 @@ public class DieState : IState
     }
 
     public void Execute()
-    {
-        
-        Object.Destroy(enemy.gameObject);
+    {        
+        ObjectPoolManager.SpawnObject(2,enemy.expPrefab, enemy.transform.position, Quaternion.identity);   
+        ObjectPoolManager.Despawn(1, enemy.gameObject);            
         isDead = true;
     }
 

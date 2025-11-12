@@ -24,9 +24,9 @@ public class ObjectPoolManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            var poolRoot = new GameObject("PoolsRoot");
-            poolRoot.transform.SetParent(this.transform, false);
-            poolsRoot = poolRoot.transform;
+             var poolRoot = new GameObject("PoolsRoot");
+             poolRoot.transform.SetParent(this.transform, false);
+             poolsRoot = poolRoot.transform;
             //스테이지가 바뀌어도 오브젝트 풀 매니저가 파괴되지 않도록 설정            
             DontDestroyOnLoad(gameObject);
         }
@@ -55,7 +55,7 @@ public class ObjectPoolManager : MonoBehaviour
     // 오브젝트 생성
     private static GameObject CreateObject(GameObject prefab)
     {
-        var obj = Instantiate(prefab, poolsRoot);
+         var obj = Instantiate(prefab, poolsRoot);        
         obj.SetActive(false);
         return obj;
     }
@@ -66,8 +66,8 @@ public class ObjectPoolManager : MonoBehaviour
     }
     // 오브젝트 비활성화
     private static void OnReleaseObject(GameObject obj)
-    {
-        obj.SetActive(false);
+    {       
+        obj.SetActive(false);  
     }
 
     //풀 사이즈를 조절하는데 현재 풀사이즈 유지를 얼마나할지 몰라서 일단 넣어둠
@@ -103,7 +103,24 @@ public class ObjectPoolManager : MonoBehaviour
         }
         return default;
     }
-    private static void Despawn(int id, GameObject obj)
+    public static GameObject SpawnObject(int id, GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        if (!ObjPools.ContainsKey(id))
+        {
+            CreatePool(id, prefab);
+        }
+
+        GameObject obj = ObjPools[id].Get();
+        if (obj != null)
+        {
+            obj.transform.position = position;
+            obj.transform.rotation = rotation;
+            return obj;
+        }
+        return null;
+    }
+
+    public static void Despawn(int id, GameObject obj)
     {
         if (ObjPools.ContainsKey(id))
         {
@@ -130,7 +147,6 @@ public class ObjectPoolManager : MonoBehaviour
     {
         foreach (var pool in ObjPools.Values)
         {
-
             pool.Clear();
         }
 #if DEBUG_MODE
