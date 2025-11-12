@@ -1,9 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 
 public class TowerManager : MonoBehaviour
 {
+    [SerializeField] private Enemy testTarget;
     [SerializeField] private Enemy testTarget;
     [SerializeField] private GameObject tower;
     [SerializeField] private EnemySpawnManager enemySpawnManager;
@@ -12,19 +15,29 @@ public class TowerManager : MonoBehaviour
     public List<Tower> Towers => towers;
     private TowerFactory towerFactory = new TowerFactory();
 
+    private int totalExp = 0;
+    private int currentLevel = 1;
+    private int maxLevel = 10;
+    public int levelUpExp => currentLevel * 100;
+
+    private bool isLevelUp = false;
+
+    private GameObject WindowManager;
+
 #if DEBUG_MODE
-    [Header("µπˆ±◊ øÎ")]
+    [Header("ÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩ")]
     public bool stopAttack;
 #endif
 
     private async void Awake()
     {
         await DataTableManager.WaitForInitalizeAsync();
-
+        WindowManager = GameObject.FindGameObjectWithTag("WindowManager");
     }
 
     public void LateUpdate()
     {
+        foreach (var tower in towers)
 #if DEBUG_MODE
         if(stopAttack)
         {
@@ -51,7 +64,7 @@ public class TowerManager : MonoBehaviour
     {
         Tower instanceTower = towerFactory.CreateInstance(data.ID);
         towers.Add(instanceTower);
-        instanceTower.Init(tower , this , data);
+        instanceTower.Init(tower, this, data);
     }
 
     public void PlaceTower(TowerTable.Data towerData)
@@ -68,7 +81,7 @@ public class TowerManager : MonoBehaviour
 
     private int FindTowerPlaceIndex(TowerTable.Data towerData)
     {
-        for(int i = 0; i < towers.Count; i++)
+        for (int i = 0; i < towers.Count; i++)
         {
             if (towers[i].ID == towerData.ID)
             {
@@ -81,7 +94,7 @@ public class TowerManager : MonoBehaviour
     public List<Tower> GetAroundTower(TowerTable.Data towerData, int radius)
     {
         int target = FindTowerPlaceIndex(towerData);
-        if(target == -1)
+        if (target == -1)
         {
             return null;
         }
@@ -90,9 +103,9 @@ public class TowerManager : MonoBehaviour
 #if DEBUG_MODE
         //Debug.Log($"targetIndex : {target} , range : {radius}");
 #endif
-        for(int i = 1; i <= radius; i++)
+        for (int i = 1; i <= radius; i++)
         {
-            int leftPointer = Utils.ClampIndex(target - i , towers.Count);
+            int leftPointer = Utils.ClampIndex(target - i, towers.Count);
             int rightPointer = Utils.ClampIndex(target + i, towers.Count);
             Debug.Log($"leftPointer : {leftPointer} , rightPointer : {rightPointer}");
             targetedTowres.Add(towers[leftPointer]);
@@ -108,6 +121,38 @@ public class TowerManager : MonoBehaviour
         return towers[rand];
     }
 
+    public void AddExp(int exp)
+    {
+        var sumExp = Mathf.Min(totalExp += exp, levelUpExp);
+
+#if DEBUG_MODE
+        Debug.Log($"Current Exp : {sumExp} / {levelUpExp}");
+#endif
+        if (sumExp >= levelUpExp)
+        {
+#if DEBUG_MODE
+            Debug.Log("Level Up!");
+#endif
+            LevelUp().Forget();
+        }
+    }
+
+    private async UniTask LevelUp()
+    {
+        if (currentLevel >= maxLevel)
+        {
+#if DEBUG_MODE
+            Debug.Log("Max Level.");
+#endif
+            return;
+        }
+        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
+        totalExp = 0;
+
+
+        WindowManager.GetComponent<WindowManager>().Open(WindowIds.PlaceTowerWindow);
+        Time.timeScale = 0f; // Í≤åÏûÑ ÏùºÏãúÏ†ïÏßÄ    
+    }
 
     public Tower GetTower(int id)
     {
