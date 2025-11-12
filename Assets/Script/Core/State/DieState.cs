@@ -3,7 +3,7 @@ using UnityEngine;
 public class DieState : IState
 {
     private Enemy enemy;    
-    public bool isDead { get; private set; } 
+
     public DieState(Enemy enemy)
     {
         this.enemy = enemy;
@@ -17,9 +17,8 @@ public class DieState : IState
 
     public void Execute()
     {
-        
-        GameObject.Destroy(enemy.gameObject);
-        isDead = true;
+        ObjectPoolManager.Instance.Despawn(1 , enemy.gameObject);
+        enemy.IsDead = true;
     }
 
     public void Exit()

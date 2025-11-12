@@ -14,15 +14,22 @@ public class VolcanoLauncher : MissileTower
     {
         if(attackAble)
         {
+            var targets = manager.FindTargets();
+
             for (int i = 0; i < attackCount; i++)
             {
-                if(base.Attack())
-                {
+                if (targets == null || targets.Count <= i)
+                    break;
+
+                target = targets[i].transform;
+
+                if (target == null)
+                    break;
+
+                if (base.Attack())
                     attackAble = true;
-                }else
-                {
-                    return false;
-                }
+                else
+                    break;
             }
         }
         attackAble = false;

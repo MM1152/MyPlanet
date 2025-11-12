@@ -1,43 +1,34 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Pool;
-using Cysharp.Threading.Tasks;
-using UnityEditor;
-using Unity.VisualScripting;
-using Cysharp.Threading.Tasks.Triggers;
 
 
-public class ObjectPoolManager : MonoBehaviour
+public class ObjectPoolManager
 {
-
     // 관리할 오브젝트 id  , 오브젝트 풀
-    private static Dictionary<int, ObjectPool<GameObject>> ObjPools = new Dictionary<int, ObjectPool<GameObject>>();
-
+    private Dictionary<int, ObjectPool<GameObject>> ObjPools = new Dictionary<int, ObjectPool<GameObject>>();
+    private static GameObject root;
 
     private static ObjectPoolManager instance;
-    public static ObjectPoolManager Instance => instance;
-
-    private static Transform poolsRoot;
-
-    private void Awake()
+    public static ObjectPoolManager Instance 
     {
-        if (instance == null)
+        get
         {
-            instance = this;
-            var poolRoot = new GameObject("PoolsRoot");
-            poolRoot.transform.SetParent(this.transform, false);
-            poolsRoot = poolRoot.transform;
-            //스테이지가 바뀌어도 오브젝트 풀 매니저가 파괴되지 않도록 설정            
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
+            if( instance == null )
+            {
+                instance = new ObjectPoolManager();
+                root = new GameObject("ObjectPools");
+                Object.DontDestroyOnLoad(root);
+                poolsRoot = root.transform;
+            }
+            return instance;
         }
     }
 
+    private static Transform poolsRoot;
+
     // 오브젝트 풀 생성
-    private static void CreatePool(int id, GameObject prefab)
+    private void CreatePool(int id, GameObject prefab)
     {
         var newPool = new ObjectPool<GameObject>(
           createFunc: () => CreateObject(prefab),
@@ -53,31 +44,31 @@ public class ObjectPoolManager : MonoBehaviour
     }
 
     // 오브젝트 생성
-    private static GameObject CreateObject(GameObject prefab)
+    private GameObject CreateObject(GameObject prefab)
     {
-        var obj = Instantiate(prefab, poolsRoot);
+        var obj = GameObject.Instantiate(prefab, poolsRoot);
         obj.SetActive(false);
         return obj;
     }
     // 오브젝트 활성화    
-    private static void OnGetObject(GameObject obj)
+    private void OnGetObject(GameObject obj)
     {
         obj.SetActive(true);
     }
     // 오브젝트 비활성화
-    private static void OnReleaseObject(GameObject obj)
+    private void OnReleaseObject(GameObject obj)
     {
         obj.SetActive(false);
     }
 
     //풀 사이즈를 조절하는데 현재 풀사이즈 유지를 얼마나할지 몰라서 일단 넣어둠
-    private static void OnDestoryObject(GameObject obj)
+    private void OnDestoryObject(GameObject obj)
     {
-        Destroy(obj);
+        GameObject.Destroy(obj);
     }
 
     // 오브젝트 스폰 (풀에서 오브젝트 가져오기)
-    public static T SpawnObject<T>(int id, GameObject prefab, Vector3 position, Quaternion rotation)
+    public T SpawnObject<T>(int id, GameObject prefab)
     {
         if (!ObjPools.ContainsKey(id))
         {
@@ -87,10 +78,6 @@ public class ObjectPoolManager : MonoBehaviour
         GameObject obj = ObjPools[id].Get();
         if (obj != null)
         {
-            obj.transform.position = position;
-            obj.transform.rotation = rotation;
-
-
             T component = obj.GetComponent<T>();
 #if DEBUG_MODE
             if (component == null)
@@ -103,7 +90,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
         return default;
     }
-    private static void Despawn(int id, GameObject obj)
+    public void Despawn(int id, GameObject obj)
     {
         if (ObjPools.ContainsKey(id))
         {
@@ -114,7 +101,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    private static void ClearPool(int id)
+    private void ClearPool(int id)
     {
         if (ObjPools.ContainsKey(id))
         {
@@ -126,7 +113,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    private static void ClearAllPools()
+    private void ClearAllPools()
     {
         foreach (var pool in ObjPools.Values)
         {

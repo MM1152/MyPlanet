@@ -9,6 +9,12 @@ public class HellFireGunTower : MuchineGunTower
         maxNoise = 0.05f;
     }
 
+    public override bool Attack()
+    {
+        target = manager.FindTarget()?.transform;
+        return base.Attack();
+    }
+
     public override void LevelUp()
     {
         base.LevelUp();

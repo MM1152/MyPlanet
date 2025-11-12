@@ -11,6 +11,10 @@ public static class DataTableManager
 
     public static bool init = false;
 
+    public static EnemyData EnemyTable => Get<EnemyData>(DataTableIds.EnemyTable); 
+    public static TowerTable TowerTable => Get<TowerTable>(DataTableIds.TowerTable); 
+
+
     static DataTableManager()
     {
         LoadAllAsync().Forget();

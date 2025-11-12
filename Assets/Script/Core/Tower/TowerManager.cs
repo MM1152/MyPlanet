@@ -6,6 +6,8 @@ public class TowerManager : MonoBehaviour
 {
     [SerializeField] private Enemy testTarget;
     [SerializeField] private GameObject tower;
+    [SerializeField] private EnemySpawnManager enemySpawnManager;
+
     private List<Tower> towers = new List<Tower>();
     public List<Tower> Towers => towers;
     private TowerFactory towerFactory = new TowerFactory();
@@ -21,13 +23,17 @@ public class TowerManager : MonoBehaviour
         foreach(var tower in towers)
         {
             tower.Update(Time.deltaTime);
-            tower.Attack();
         }
     }
 
-    public Transform FindTarget()
+    public List<Enemy> FindTargets()
     {
-        return testTarget.transform;
+        return enemySpawnManager.GetEnemyDatas(tower.transform.position);
+    }
+
+    public Enemy FindTarget()
+    {
+        return enemySpawnManager.GetEnemyData(tower.transform.position);
     }
 
     public void AddTower(TowerTable.Data data)

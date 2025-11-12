@@ -26,7 +26,7 @@ public class ProjectTile : BaseAttackPrefab
     
     protected virtual void Update()
     {
-        if (target == null)
+        if (target == null || targetDamageAble.IsDead)
         {
             Destroy(gameObject);
             return;

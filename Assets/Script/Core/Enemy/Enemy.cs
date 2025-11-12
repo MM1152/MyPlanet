@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour, IDamageAble
     private GameObject target;
     public EnemyData.Data enemyData;
     public StateMachine stateMachine;
-    public bool IsDead => false;
+    public bool IsDead { get; set; }
     public ElementType ElementType => (ElementType)enemyData.Attribute;
     public float speed;
     public int atk;
@@ -20,38 +20,37 @@ public class Enemy : MonoBehaviour, IDamageAble
 
     private TypeEffectiveness typeEffectiveness;
 
-    private bool init = false;
-
-    public async UniTaskVoid EnemySetting()
-    {
-        await DataTableManager.WaitForInitalizeAsync();
-
-        enemyData = DataTableManager.Get<EnemyData>(DataTableIds.EnemyTable).GetData(1);
-        target = GameObject.FindGameObjectWithTag(TargetTag);
-        stateMachine.Init(stateMachine.idleState);
-        currentHP = enemyData.HP;
-        atk = enemyData.ATK;
-        speed = enemyData.Speed;
-        attackrange = enemyData.AttackRange;
-        typeEffectiveness = new TypeEffectiveness();
-        typeEffectiveness.Init(ElementType);
-
-        init = true;
-    }
-
+    public event Action<Enemy> OnDie;
     private void Awake()
     {
         stateMachine = new StateMachine(this);
     }
 
-    private void OnEnable()
+    public virtual void Initallized(EnemyData.Data data)
     {
-        EnemySetting().Forget();
+        this.enemyData = data;
+        currentHP = enemyData.HP;
+        atk = enemyData.ATK;
+        speed = enemyData.Speed;
+        attackrange = enemyData.AttackRange;
+
+        target = GameObject.FindGameObjectWithTag(TargetTag);
+        stateMachine.Init(stateMachine.idleState);
+        typeEffectiveness = new TypeEffectiveness();
+        typeEffectiveness.Init(ElementType);
+
+        IsDead = false;
     }
 
     // 상태 확인
     private void CheckState()
     {   // 사망 체크
+        if( target == null )
+        {
+            stateMachine.ChangeState(stateMachine.idleState);
+            return;
+        }
+
         if (currentHP <= 0)
         {
             stateMachine.ChangeState(stateMachine.dieState);
@@ -86,7 +85,6 @@ public class Enemy : MonoBehaviour, IDamageAble
     // 상태 실행
     private void Update()
     {
-        if (!init) return;
         // 현재 상태 실행
         stateMachine.currentState.Execute();
         // 상태 전환 체크
@@ -112,6 +110,7 @@ public class Enemy : MonoBehaviour, IDamageAble
     public void OnDead()
     {
         stateMachine.ChangeState(stateMachine.dieState);
+        OnDie?.Invoke(this);
         Debug.Log("Die");
     }
 }
