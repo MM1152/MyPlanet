@@ -12,7 +12,7 @@ public class IdleState : IState
      public void Enter()
     {
        #if DEBUG_MODE
-        Debug.Log("Idle State Enter");  
+        //Debug.Log("Idle State Enter");  
          #endif
     }
 
@@ -25,7 +25,7 @@ public class IdleState : IState
     public void Exit()
     {    
         #if DEBUG_MODE
-        Debug.Log("Idle State Exit");  
+        //Debug.Log("Idle State Exit");  
          #endif
            
     }

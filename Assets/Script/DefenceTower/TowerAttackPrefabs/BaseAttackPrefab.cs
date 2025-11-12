@@ -16,7 +16,8 @@ public abstract class BaseAttackPrefab : MonoBehaviour
     protected float minNoise;
     protected float maxNoise;
 
-    public virtual void Init(Tower data , TypeEffectiveness typeEffectiveness)
+    protected IStatusEffect effect;
+    public virtual void Init(Tower data , TypeEffectiveness typeEffectiveness , IStatusEffect effect)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null && sprite != null)
@@ -26,6 +27,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
         this.towerData = data;
         this.typeEffectiveness = typeEffectiveness;
+        this.effect = effect;
     }
 
     public virtual void SetTarget(Transform target , float minNoise , float maxNoise)

@@ -42,11 +42,13 @@ public abstract class Tower
     protected RandomOptionData.Data optionData;
     protected RandomOptionBase baseRandomOption;
     public RandomOptionBase Option => baseRandomOption;
-
+    
     protected string attackPrefabPath;
+    protected IStatusEffect statusEffect;
 
     public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data)
     {
+        statusEffect = null;
         this.manager = manager;
         this.towerData = data;
         this.tower = tower;
@@ -130,12 +132,8 @@ public abstract class Tower
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = tower.transform.position;
-            attackPrefabs.Init(this, typeEffectiveness);
+            attackPrefabs.Init(this, typeEffectiveness, statusEffect?.DeepCopy());
             attackPrefabs.SetTarget(target , minNoise , maxNoise);
-#if DEBUG_MODE
-            Debug.Log($"Attack Tower {Damage}");
-            Debug.Log($"Attack Tower {towerData.Name}");
-#endif
             return true;
         }
 

@@ -7,10 +7,15 @@ public class Enemy : MonoBehaviour, IDamageAble
     private static readonly string TargetTag = "Player";
     
     private GameObject target;
+    private StatusEffect statusEffect = new StatusEffect();
+
     public EnemyData.Data enemyData;
     public StateMachine stateMachine;
     public bool IsDead { get; set; }
+    
     public ElementType ElementType => (ElementType)enemyData.Attribute;
+    public StatusEffect StatusEffect => statusEffect;
+
     public float speed;
     public int atk;
 
@@ -88,7 +93,8 @@ public class Enemy : MonoBehaviour, IDamageAble
         // 현재 상태 실행
         stateMachine.currentState.Execute();
         // 상태 전환 체크
-        CheckState();  
+        CheckState();
+        statusEffect.Update(Time.deltaTime);
     }
 
     // 타겟 반환
@@ -100,7 +106,6 @@ public class Enemy : MonoBehaviour, IDamageAble
     public void OnDamage(int damage)
     {
         currentHP -= damage;
-        Debug.Log("Damage");
         if (currentHP <= 0)
         {
             OnDead();
@@ -111,6 +116,5 @@ public class Enemy : MonoBehaviour, IDamageAble
     {
         stateMachine.ChangeState(stateMachine.dieState);
         OnDie?.Invoke(this);
-        Debug.Log("Die");
     }
 }

@@ -13,7 +13,7 @@ public class AttackState : IState
     public void Enter()
     {
 #if DEBUG_MODE
-        Debug.Log("Attack State Enter");  
+       // Debug.Log("Attack State Enter");  
 #endif
 
     }
@@ -27,7 +27,7 @@ public class AttackState : IState
     public void Exit()
     {
 #if DEBUG_MODE
-        Debug.Log("Attack State Exit");  
+       // Debug.Log("Attack State Exit");  
 #endif
     }
 }

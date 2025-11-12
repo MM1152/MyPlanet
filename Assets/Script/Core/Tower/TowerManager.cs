@@ -12,6 +12,11 @@ public class TowerManager : MonoBehaviour
     public List<Tower> Towers => towers;
     private TowerFactory towerFactory = new TowerFactory();
 
+#if DEBUG_MODE
+    [Header("디버그 용")]
+    public bool stopAttack;
+#endif
+
     private async void Awake()
     {
         await DataTableManager.WaitForInitalizeAsync();
@@ -20,7 +25,13 @@ public class TowerManager : MonoBehaviour
 
     public void LateUpdate()
     {
-        foreach(var tower in towers)
+#if DEBUG_MODE
+        if(stopAttack)
+        {
+            return;
+        }
+#endif
+            foreach(var tower in towers)
         {
             tower.Update(Time.deltaTime);
         }
@@ -95,5 +106,11 @@ public class TowerManager : MonoBehaviour
     {
         int rand = UnityEngine.Random.Range(0, towers.Count);
         return towers[rand];
+    }
+
+
+    public Tower GetTower(int id)
+    {
+        return towers[id];
     }
 }

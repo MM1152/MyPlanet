@@ -14,6 +14,12 @@ public class PlaceTowerWindow : Window
     public Button testButton;
     private TowerTable towerData;
     private PresetData presetData;
+
+#if DEBUG_MODE
+    [Header("뽑고 싶은 타워 ID 값 넣기")]
+    public int towerId;
+#endif
+
     public override void Init(WindowManager manager)
     {
         presetData = new PresetData(new List<int>());
@@ -45,6 +51,12 @@ public class PlaceTowerWindow : Window
         for (int i = 0; i < selectTowerUICount; i++)
         {
             var tower = towerManager.GetRandomTower();
+#if DEBUG_MODE
+            if (towerId != -1)
+            {
+                tower = towerManager.GetTower(towerId);
+            }
+#endif
             // FIX : 이부분 랜덤하게 데이터 넘겨주게 변경
             selectTowerUIs[i].SetTowerData(tower);
         }

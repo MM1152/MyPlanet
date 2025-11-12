@@ -7,6 +7,8 @@ public class HellFireGunTower : MuchineGunTower
         base.Init(tower, manager, data);
         minNoise = -0.05f;
         maxNoise = 0.05f;
+
+        statusEffect = new BurnStatusEffect(3f, 0.5f , 5);
     }
 
     public override bool Attack()
