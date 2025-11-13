@@ -8,7 +8,7 @@ public class HellFireGunTower : MuchineGunTower
         minNoise = -0.05f;
         maxNoise = 0.05f;
 
-        statusEffect = new BurnStatusEffect(3f, 0.5f , 5);
+        statusEffect = new SlowStatusEffect(3f, 0.5f);
     }
 
     public override bool Attack()

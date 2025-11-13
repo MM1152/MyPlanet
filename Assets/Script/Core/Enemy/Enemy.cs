@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageAble
+public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 {  
     private static readonly string TargetTag = "Player";
     
@@ -15,6 +15,11 @@ public class Enemy : MonoBehaviour, IDamageAble
     
     public ElementType ElementType => (ElementType)enemyData.Attribute;
     public StatusEffect StatusEffect => statusEffect;
+
+    public bool IsStun { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    public float BaseSpeed => speed;
+    public float CurrentSpeed { get => speed; set => speed = value; }
 
     public float speed;
     public int atk;

@@ -18,8 +18,7 @@ public class IdleState : IState
 
     public void Execute()
     {
-        // 이동 속도 0으로 설정
-        enemy.speed = 0f;
+        
     }
     // 애니메이션 종료 
     public void Exit()
