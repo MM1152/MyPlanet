@@ -25,8 +25,6 @@ public class TouchManager : MonoBehaviour
     public InputAction touchPositionAction;
     public void Init()
     {
-        DontDestroyOnLoad(this.gameObject);
-
         touchAction = new InputAction
         (
             type: InputActionType.Button,

@@ -23,7 +23,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void Awake()
     {
-        poolManager = ObjectPoolManager.Instance;
+        poolManager = Managers.ObjectPoolManager;
         InitalizedAsync().Forget();
     }
 
