@@ -14,7 +14,19 @@ public class StatusEffect
 {
     private List<IStatusEffect> status = new List<IStatusEffect>();
     private List<IStatusEffect> removeStatus = new List<IStatusEffect>();
+
     private StatusEffectType effectTypes = StatusEffectType.None;
+    public StatusEffectType EffectTypes => effectTypes;
+
+    private bool clearAllStatus = false;
+    
+    public void Init()
+    {
+        status.Clear();
+        removeStatus.Clear();
+        effectTypes = StatusEffectType.None;
+        clearAllStatus = false;
+    }
 
     public void Apply(IStatusEffect status, IDamageAble target)
     {
@@ -38,9 +50,9 @@ public class StatusEffect
             status.Apply(target);
             this.status.Add(status);
         }
-
     }
 
+    // LateUpdate에서 실행해야됨
     public void Update(float deltaTime)
     {
         foreach(var statu in status)
@@ -57,6 +69,11 @@ public class StatusEffect
             }
             removeStatus.Clear();
         }
+
+        if(clearAllStatus)
+        {
+            status.Clear();
+        }
     }
 
     public void Remove(IStatusEffect status)
@@ -66,6 +83,6 @@ public class StatusEffect
 
     public void Clear()
     {
-        status.Clear();
+        clearAllStatus = true;
     }
 }

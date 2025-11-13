@@ -2,13 +2,13 @@ using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageAble
-{
+public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
+{  
     private static readonly string TargetTag = "Player";
     
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
-
+    public GameObject expPrefab;
     public EnemyData.Data enemyData;
     public StateMachine stateMachine;
     public bool IsDead { get; set; }
@@ -16,9 +16,13 @@ public class Enemy : MonoBehaviour, IDamageAble
     public ElementType ElementType => (ElementType)enemyData.Attribute;
     public StatusEffect StatusEffect => statusEffect;
 
+    public bool IsStun { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    public float BaseSpeed => speed;
+    public float CurrentSpeed { get => speed; set => speed = value; }
+
     public float speed;
     public int atk;
-
     public float attackrange;
     private float attackCooldownTimer = 0f;
     [SerializeField] private int currentHP;
@@ -43,6 +47,7 @@ public class Enemy : MonoBehaviour, IDamageAble
         stateMachine.Init(stateMachine.idleState);
         typeEffectiveness = new TypeEffectiveness();
         typeEffectiveness.Init(ElementType);
+        statusEffect.Init();
 
         IsDead = false;
     }
@@ -59,6 +64,11 @@ public class Enemy : MonoBehaviour, IDamageAble
         if (currentHP <= 0)
         {
             stateMachine.ChangeState(stateMachine.dieState);
+            return;
+        }
+        if( target == null)
+        {            
+            target = GameObject.FindGameObjectWithTag(TargetTag);
             return;
         }
         // 거리 계산
@@ -94,6 +104,10 @@ public class Enemy : MonoBehaviour, IDamageAble
         stateMachine.currentState.Execute();
         // 상태 전환 체크
         CheckState();
+    }
+
+    private void LateUpdate()
+    {
         statusEffect.Update(Time.deltaTime);
     }
 
@@ -115,6 +129,7 @@ public class Enemy : MonoBehaviour, IDamageAble
     public void OnDead()
     {
         stateMachine.ChangeState(stateMachine.dieState);
+        statusEffect.Clear();
         OnDie?.Invoke(this);
     }
 }

@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using UnityEngine;
 
 public class DieState : IState
@@ -17,7 +18,10 @@ public class DieState : IState
 
     public void Execute()
     {
-        ObjectPoolManager.Instance.Despawn(1 , enemy.gameObject);
+        var exp = ObjectPoolManager.Instance.SpawnObject<Exp>(2, enemy.expPrefab);   
+        exp.transform.position = enemy.transform.position;
+        exp.exp = enemy.enemyData.EXP;
+        ObjectPoolManager.Instance.Despawn(1, enemy.gameObject);            
         enemy.IsDead = true;
     }
 

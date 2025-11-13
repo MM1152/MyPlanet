@@ -24,6 +24,13 @@ public static class Variable
     public static bool IsJoyStickActive;
 }
 
+public static class TagIds
+{
+    public readonly static string DefenseTowerTag = "DefenseTower";
+    public readonly static string TowerManagerTag = "TowerManager";
+    public readonly static string WindowManagerTag = "WindowManager";
+}
+
 public static class DataTableIds
 {
     public static readonly string EnemyTable = "EnemyTable";

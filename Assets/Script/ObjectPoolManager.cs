@@ -117,7 +117,6 @@ public class ObjectPoolManager
     {
         foreach (var pool in ObjPools.Values)
         {
-
             pool.Clear();
         }
 #if DEBUG_MODE
