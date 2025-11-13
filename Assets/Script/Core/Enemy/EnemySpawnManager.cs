@@ -11,9 +11,22 @@ public class EnemySpawnManager : MonoBehaviour
     private List<Enemy> spawnEnemys = new List<Enemy>();
     private bool init = false;
 
+    [SerializeField]
+    private List<Vector3> spawnerList = new List<Vector3>();
+
+    private Rect screenRect;
+
+    // ìŠ¤í¬ë„ˆ ê°¯ìˆ˜
+    private const int topCount = 3;
+    private const int rightCount = 4;
+    private const int bottomCount = 3;
+    private const int leftCount = 4;
+
+    private const float addDis = 0.5f;
+    
+
     private async UniTaskVoid InitalizedAsync()
-    {
-        //FIX: µ¥ÀÌÅÍ Å×ÀÌºí ÃÊ±âÈ­ ¾È±â´Ù¸±²¨ÀÓ
+    {      
         await DataTableManager.WaitForInitalizeAsync();
         var enemy = await Addressables.LoadAssetAsync<GameObject>("Enemy").ToUniTask();
         enemyPrefab = enemy.GetComponent<Enemy>();
@@ -25,28 +38,74 @@ public class EnemySpawnManager : MonoBehaviour
     {
         poolManager = ObjectPoolManager.Instance;
         InitalizedAsync().Forget();
+        //ìŠ¤í¬ë„ˆ ì…‹íŒ… 
+        SpawnaerSetting();
     }
-
-    private void Update()
+    // í™”ë©´ í¬ê¸° ì„¤ì •                                                         
+    private void ScreenSizSet()
     {
-        if(Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            SpawnEnemy(1);
-        }
+        Camera mainCamera = Camera.main;
+
+        float zDistance = Mathf.Abs(mainCamera.transform.position.z);
+
+        Vector3 bottomLeft = mainCamera.ScreenToWorldPoint(new Vector3(0, 0, zDistance));
+        Vector3 topRight = mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, zDistance));
+
+        screenRect = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
     }
 
-    public Enemy SpawnEnemy(int id)
+    private void SpawnaerSetting()
+    {
+        ScreenSizSet();
+        spawnerList.Clear();
+        var xTopRatio = screenRect.width / (topCount+1);
+        var xRightRatio = screenRect.height  / (rightCount+1);
+        var xBottomRatio = screenRect.width / (bottomCount+1);
+        var xLeftRatio = screenRect.height  / (leftCount+1);
+
+        //ìœ„ ì‹œê³„ë°©í–¥ìœ¼ë¡œ ì¶”ê°€  25
+        for (int i = 1; i <= topCount; i++)
+        {
+            spawnerList.Add(new Vector3(screenRect.xMin +xTopRatio*i, screenRect.yMax + addDis, 0f));
+        }
+        //ì˜¤ë¥¸ìª½ Y -- 20
+        for (int i = 1; i <= rightCount; i++)
+        {
+            spawnerList.Add(new Vector3(screenRect.xMax + addDis, screenRect.yMax-(xRightRatio * i), 0f));
+        }
+        //ì•„ë˜ 25 
+        for (int i = 1; i <= bottomCount; i++)
+        {
+            spawnerList.Add(new Vector3(screenRect.xMax - (xBottomRatio * i), screenRect.yMin - addDis, 0f));
+        }
+        //ì™¼ìª½ 20 
+        for (int i = 1; i <= leftCount; i++)
+        {
+            spawnerList.Add(new Vector3(screenRect.xMin - addDis,screenRect.yMin + (xLeftRatio * i), 0f));
+        }        
+    }
+
+    // private void Update()
+    // {
+    //     if(Keyboard.current.spaceKey.wasPressedThisFrame)
+    //     {
+    //         SpawnEnemy(1);
+    //     }
+    // }
+
+    public Enemy SpawnEnemy(int id, int index)
     {
         if (!init) return null;
 
         var data = DataTableManager.EnemyTable.GetData(id);
 
-        if(data != null)
+        if (data != null)
         {
-            var spawnEnemy = poolManager.SpawnObject<Enemy>(id , enemyPrefab.gameObject);
+            var spawnEnemy = poolManager.SpawnObject<Enemy>(id, enemyPrefab.gameObject);
             spawnEnemy.Initallized(data);
-            //FIX : ½ºÆù À§Ä¡ ÀÓ½Ã ÁöÁ¤
-            spawnEnemy.transform.position = new Vector3(Random.Range(-5,5) , 5f , 0f);
+            //FIX : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            // spawnEnemy.transform.position = new Vector3(Random.Range(-5,5) , 5f , 0f);
+            spawnEnemy.transform.position = spawnerList[index];
             spawnEnemy.OnDie += CheckDieEnemy;
             spawnEnemys.Add(spawnEnemy);
 
@@ -60,14 +119,14 @@ public class EnemySpawnManager : MonoBehaviour
         spawnEnemys.Remove(enemy);
     }
 
-    // targetÀ¸·ÎºÎÅÍ °Å¸®°¡ °¡Àå ÂªÀº Å¸°Ù µ¹·ÁÁÖ±â
+    // targetï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Âªï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½
     public List<Enemy> GetEnemyDatas(Vector3 position)
     {
         if (spawnEnemys.Count == 0) return null;
 
         List<Enemy> copyList = new List<Enemy>(spawnEnemys);
 
-        copyList.Sort((a, b) => 
+        copyList.Sort((a, b) =>
         {
             float distA = Vector3.Distance(a.transform.position, position);
             float distB = Vector3.Distance(b.transform.position, position);
@@ -80,7 +139,7 @@ public class EnemySpawnManager : MonoBehaviour
     public Enemy GetEnemyData(Vector3 position)
     {
         var list = GetEnemyDatas(position);
-        if(list != null && list.Count != 0)
+        if (list != null && list.Count != 0)
         {
             return list[0];
         }

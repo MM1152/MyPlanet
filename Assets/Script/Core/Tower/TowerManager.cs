@@ -15,6 +15,7 @@ public class TowerManager : MonoBehaviour
     private TowerFactory towerFactory = new TowerFactory();
 
     private int totalExp = 0;
+    public int TotalExp => totalExp;    
     private int currentLevel = 1;
     private int maxLevel = 10;
     public int levelUpExp => currentLevel * 100;

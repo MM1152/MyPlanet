@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class DieState : IState
 {
-    private Enemy enemy;    
+    private Enemy enemy;
+    private WaveManager waveManager;
 
     public DieState(Enemy enemy)
     {
@@ -11,6 +12,7 @@ public class DieState : IState
     }
     public void Enter()
     {
+        waveManager = GameObject.FindGameObjectWithTag(TagIds.WaveManager).GetComponent<WaveManager>();   
        #if DEBUG_MODE
         Debug.Log("Die State Enter");  
          #endif
@@ -21,7 +23,8 @@ public class DieState : IState
         var exp = ObjectPoolManager.Instance.SpawnObject<Exp>(2, enemy.expPrefab);   
         exp.transform.position = enemy.transform.position;
         exp.exp = enemy.enemyData.EXP;
-        ObjectPoolManager.Instance.Despawn(1, enemy.gameObject);            
+        ObjectPoolManager.Instance.Despawn(1, enemy.gameObject);  
+        waveManager.currentWave.EnemyDefeated();                  
         enemy.IsDead = true;
     }
 

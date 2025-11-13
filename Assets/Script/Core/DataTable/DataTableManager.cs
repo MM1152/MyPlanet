@@ -11,8 +11,9 @@ public static class DataTableManager
 
     public static bool init = false;
 
-    public static EnemyData EnemyTable => Get<EnemyData>(DataTableIds.EnemyTable); 
-    public static TowerTable TowerTable => Get<TowerTable>(DataTableIds.TowerTable); 
+    public static EnemyData EnemyTable => Get<EnemyData>(DataTableIds.EnemyTable);
+    public static TowerTable TowerTable => Get<TowerTable>(DataTableIds.TowerTable);
+    public static WaveData WaveTable => Get<WaveData>(DataTableIds.WaveTable);
 
 
     static DataTableManager()
@@ -24,20 +25,22 @@ public static class DataTableManager
     {
         var enemyDatatable = new EnemyData();
         var towerTable = new TowerTable();
+        var waveTable = new WaveData();
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
             enemyDatatable.LoadAsync(DataTableIds.EnemyTable),
             towerTable.LoadAsync(DataTableIds.TowerTable),
+            waveTable.LoadAsync(DataTableIds.WaveTable)
         };
 
         var datas = await UniTask.WhenAll(tasks);
-        
+
 
         foreach (var data in datas)
         {
-            tables.Add(data.id, data.table);            
+            tables.Add(data.id, data.table);
         }
-        
+
         Debug.Log($"테이블 갯수: {tables.Count}");
         init = true;
     }

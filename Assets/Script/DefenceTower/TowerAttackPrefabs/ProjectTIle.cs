@@ -6,7 +6,7 @@ public class ProjectTile : BaseAttackPrefab
     [SerializeField] private float speed = 5f;
 
     protected Vector3 dir;
-    protected SpriteRenderer spriteRenderer;
+   
 
     public override void SetTarget(Transform target , float minNoise , float maxNoise)
     {
