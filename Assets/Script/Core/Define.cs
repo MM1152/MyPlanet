@@ -9,6 +9,12 @@ public enum WindowIds
     PlaceTowerWindow = 0
 }
 
+public enum PopupIds
+{
+    None = -1,
+    TowerInfomationPopup = 0
+}
+
 public enum ElementType
 {
     None = -1,

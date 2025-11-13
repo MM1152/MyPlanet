@@ -57,6 +57,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void CheckDieEnemy(Enemy enemy)
     {
+        enemy.OnDie -= CheckDieEnemy;
         spawnEnemys.Remove(enemy);
     }
 

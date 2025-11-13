@@ -24,7 +24,7 @@ public class TowerManager : MonoBehaviour
     private WindowManager windowManager;
 
 #if DEBUG_MODE
-    [Header("����� ��")]
+    [Header("DEBUG")]
     public bool stopAttack;
 #endif
 
@@ -154,5 +154,18 @@ public class TowerManager : MonoBehaviour
     public Tower GetTower(int id)
     {
         return towers[id];
+    }
+
+    public Tower GetIdToTower(int id)
+    {
+        for(int i = 0; i < towers.Count; i++)
+        {
+            if (towers[i].ID == id)
+            {
+                return towers[i];
+            }
+        }
+
+        return null;
     }
 }
