@@ -14,9 +14,12 @@ public class StatusEffect
 {
     private List<IStatusEffect> status = new List<IStatusEffect>();
     private List<IStatusEffect> removeStatus = new List<IStatusEffect>();
-    private StatusEffectType effectTypes = StatusEffectType.None;
-    private bool clearAllStatus = false;
 
+    private StatusEffectType effectTypes = StatusEffectType.None;
+    public StatusEffectType EffectTypes => effectTypes;
+
+    private bool clearAllStatus = false;
+    
     public void Init()
     {
         status.Clear();
@@ -47,8 +50,8 @@ public class StatusEffect
             status.Apply(target);
             this.status.Add(status);
         }
-
     }
+
     // LateUpdate에서 실행해야됨
     public void Update(float deltaTime)
     {

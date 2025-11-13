@@ -15,6 +15,7 @@ public class WalkState : IState
         //Debug.Log("Walk State Enter");
 #endif
         target = enemy.GetTarget();
+        enemy.speed = enemy.CurrentSpeed;
     }
     
 
@@ -25,9 +26,8 @@ public class WalkState : IState
         {           
             return;
         }
-        enemy.speed = enemy.enemyData.Speed;
-      
-        enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target.transform.position, enemy.speed * Time.deltaTime);
+
+        enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target.transform.position, enemy.CurrentSpeed * Time.deltaTime);
     }
 
     public void Exit()

@@ -7,7 +7,7 @@ public abstract class RandomOptionBase
     protected TowerManager towerManager;
     protected TowerTable.Data baseTowerData;
     protected RandomOptionData.Data optionData;
-    // Deep Copy 된 대상에서 사용하기
+    // Deep Copy 된 대상에서 사용하기Q
     public virtual void Init(TowerManager towerManager, TowerTable.Data baseTowerData , RandomOptionData.Data optionData)
     {
         this.optionData = optionData;

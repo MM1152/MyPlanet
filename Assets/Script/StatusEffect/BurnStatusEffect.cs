@@ -21,8 +21,7 @@ public class BurnStatusEffect : IStatusEffect
 
     public IStatusEffect DeepCopy()
     {
-        BurnStatusEffect copyEffect = new BurnStatusEffect(duration, tickInterval, damage);
-        return copyEffect;
+        return new BurnStatusEffect(duration, tickInterval, damage);
     }
 
     public void Apply(IDamageAble target)
