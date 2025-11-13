@@ -6,6 +6,10 @@ public abstract class Tower
 {
     public int Damage => towerData.ATK + bonusDamage;
     public int ID => towerData.ID;
+    public int AttackSpeed => towerData.Fire_Rate;
+    public int AttackRange => towerData.Range;
+
+    public TowerTable.Data TowerData => towerData;
 
 
     protected GameObject projectTile;
@@ -19,12 +23,9 @@ public abstract class Tower
 
     protected TowerManager manager;
     protected TowerTable.Data towerData;
-    public TowerTable.Data TowerData => towerData;
     protected GameObject attackprefab;
     protected bool init = false;
     
-    // �ش� �������� ���󰥶��� ������ ��
-    // �ش� ���� ���ؼ� ź���� ���� ����
     protected float minNoise = 0f;
     protected float maxNoise = 0f;
 
@@ -35,7 +36,7 @@ public abstract class Tower
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
     private bool useAble = false;
     public bool UseAble => useAble;
-    //Fix: �׽�Ʈ ����
+
     private RandomOptionData randomOptionData = new RandomOptionData();
     public RandomOptionData RandomOptionData => randomOptionData;
 

@@ -35,7 +35,7 @@ public class Exp : MonoBehaviour
         if (collision.CompareTag(TagIds.DefenseTowerTag))
         {
             towerManager.GetComponent<TowerManager>().AddExp(exp);
-            ObjectPoolManager.Instance.Despawn(2, gameObject);
+            Managers.ObjectPoolManager.Despawn(PoolsId.Exp, gameObject);
         }
     }
 

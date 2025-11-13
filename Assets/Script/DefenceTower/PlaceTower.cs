@@ -12,6 +12,7 @@ public class PlaceTower : MonoBehaviour
     [SerializeField] private Button rotateRight;
     [SerializeField] private int currentIndex;
     [SerializeField] private TowerManager towerManager;
+    [SerializeField] private PopupManager popupManager;
 
     private RectTransform rect;
     private TowerPlaceHold[] placeHoldList;
@@ -42,7 +43,7 @@ public class PlaceTower : MonoBehaviour
 
             // 타워 플레이스 홀더와 더불어서 TowerManager에 Preset 타워들 세팅
             TowerPlaceHold towerPlaceHolder = Instantiate(placeHold, transform);
-            towerPlaceHolder.Init(i + 1, data.ID);
+            towerPlaceHolder.Init(i + 1, data.ID , towerManager , popupManager);
 
             towerManager.AddTower(data);
 

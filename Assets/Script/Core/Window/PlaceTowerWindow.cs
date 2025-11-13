@@ -11,11 +11,11 @@ public class PlaceTowerWindow : Window
     [SerializeField] private TowerManager towerManager;
     
     private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
-    public Button testButton;
     private TowerTable towerData;
     private PresetData presetData;
 
 #if DEBUG_MODE
+    public Button testButton;
     [Header("뽑고 싶은 타워 ID 값 넣기")]
     public int towerId;
 #endif
@@ -37,7 +37,10 @@ public class PlaceTowerWindow : Window
                 manager.Close();
             });
         }
+#if DEBUG_MODE
+        testButton.gameObject.SetActive(true);
         testButton.onClick.AddListener(() => manager.Open(WindowIds.PlaceTowerWindow));
+#endif
         windowId = (int)WindowIds.PlaceTowerWindow;
 
         

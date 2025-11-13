@@ -1,34 +1,35 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Pool;
+using Cysharp.Threading.Tasks;
+using UnityEngine.AddressableAssets;
+using System;
 
-
-public class ObjectPoolManager
+public class ObjectPoolManager : MonoBehaviour
 {
     // 관리할 오브젝트 id  , 오브젝트 풀
-    private Dictionary<int, ObjectPool<GameObject>> ObjPools = new Dictionary<int, ObjectPool<GameObject>>();
-    private static GameObject root;
-
-    private static ObjectPoolManager instance;
-    public static ObjectPoolManager Instance 
+    private Dictionary<PoolsId, ObjectPool<GameObject>> ObjPools = new Dictionary<PoolsId, ObjectPool<GameObject>>();
+    
+    public async UniTask Init()
     {
-        get
+        var assets = await Addressables.LoadAssetsAsync<GameObject>(AddressableLabelIds.PoolsIds).ToUniTask();
+
+        foreach(var asset in assets)
         {
-            if( instance == null )
+            var id = AddressableNames.GetPoolsId(asset.name);
+            if (id != PoolsId.None)
             {
-                instance = new ObjectPoolManager();
-                root = new GameObject("ObjectPools");
-                Object.DontDestroyOnLoad(root);
-                poolsRoot = root.transform;
+                CreatePool(id, asset);
             }
-            return instance;
+            else
+            {
+                Debug.Log($"Addrassable Asset Load Fail To {asset.name}");
+            }
         }
     }
 
-    private static Transform poolsRoot;
-
     // 오브젝트 풀 생성
-    private void CreatePool(int id, GameObject prefab)
+    private void CreatePool(PoolsId id, GameObject prefab)
     {
         var newPool = new ObjectPool<GameObject>(
           createFunc: () => CreateObject(prefab),
@@ -46,7 +47,7 @@ public class ObjectPoolManager
     // 오브젝트 생성
     private GameObject CreateObject(GameObject prefab)
     {
-        var obj = GameObject.Instantiate(prefab, poolsRoot);
+        var obj = Instantiate(prefab, transform);
         obj.SetActive(false);
         return obj;
     }
@@ -64,11 +65,11 @@ public class ObjectPoolManager
     //풀 사이즈를 조절하는데 현재 풀사이즈 유지를 얼마나할지 몰라서 일단 넣어둠
     private void OnDestoryObject(GameObject obj)
     {
-        GameObject.Destroy(obj);
+        Destroy(obj);
     }
 
     // 오브젝트 스폰 (풀에서 오브젝트 가져오기)
-    public T SpawnObject<T>(int id, GameObject prefab)
+    public T SpawnObject<T>(PoolsId id, GameObject prefab)
     {
         if (!ObjPools.ContainsKey(id))
         {
@@ -90,7 +91,7 @@ public class ObjectPoolManager
         }
         return default;
     }
-    public void Despawn(int id, GameObject obj)
+    public void Despawn(PoolsId id, GameObject obj)
     {
         if (ObjPools.ContainsKey(id))
         {
@@ -101,7 +102,7 @@ public class ObjectPoolManager
         }
     }
 
-    private void ClearPool(int id)
+    private void ClearPool(PoolsId id)
     {
         if (ObjPools.ContainsKey(id))
         {
@@ -123,6 +124,11 @@ public class ObjectPoolManager
         Debug.Log($"클리어 올 호출");
 #endif
         ObjPools.Clear();
+    }
+
+    public void Release()
+    {
+        ClearAllPools();
     }
 }
 

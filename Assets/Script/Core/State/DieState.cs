@@ -18,10 +18,10 @@ public class DieState : IState
 
     public void Execute()
     {
-        var exp = ObjectPoolManager.Instance.SpawnObject<Exp>(2, enemy.expPrefab);   
+        var exp = Managers.ObjectPoolManager.SpawnObject<Exp>(PoolsId.Exp, enemy.expPrefab);   
         exp.transform.position = enemy.transform.position;
         exp.exp = enemy.enemyData.EXP;
-        ObjectPoolManager.Instance.Despawn(1, enemy.gameObject);            
+        Managers.ObjectPoolManager.Despawn(PoolsId.Enemy, enemy.gameObject);            
         enemy.IsDead = true;
     }
 

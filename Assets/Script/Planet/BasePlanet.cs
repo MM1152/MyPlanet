@@ -10,12 +10,16 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public ElementType ElementType => elementType;
 
     public StatusEffect StatusEffect => statusEffect;
-    public event Action OnDieAction;
 
     private bool isDead = false;
     private TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
 
-    public event Action OnPassive;
+    public event Action OnDieAction;
+    public event Action OnRandomOption;
+    public event Action OnChangeHp;
+
+    [Header("On Reference In inspector")]
+    [SerializeField] private HpSlider slider;
 
     [Header("Test Datas")]
     public ElementType elementType;
@@ -25,6 +29,12 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     private void Awake()
     {
         Init();
+        OnChangeHp += OnChanageHP;
+    }
+
+    private void Start()
+    {
+        slider.UpdateSlider(hp, maxHp);
     }
 
     public virtual void Init()
@@ -36,7 +46,8 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public void OnDamage(int damage)
     {
         hp -= damage;
-        if(hp <= 0 && !isDead)
+        OnChangeHp?.Invoke();
+        if (hp <= 0 && !isDead)
         {
             OnDead();
         }
@@ -52,6 +63,12 @@ public class BasePlanet : MonoBehaviour , IDamageAble
 
     private void Update()
     {
-        OnPassive?.Invoke();
+        OnRandomOption?.Invoke();
     }
+
+    public void OnChanageHP()
+    {
+        slider.UpdateSlider(hp, maxHp);
+    }
+    
 }
