@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class EnemySpawnManager : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class EnemySpawnManager : MonoBehaviour
     private Enemy enemyPrefab;
     private List<Enemy> spawnEnemys = new List<Enemy>();
     private bool init = false;
+
+#if DEBUG_MODE
+    public Button testButton;
+#endif
 
     private async UniTaskVoid InitalizedAsync()
     {
@@ -19,6 +24,10 @@ public class EnemySpawnManager : MonoBehaviour
         enemyPrefab = enemy.GetComponent<Enemy>();
 
         init = true;
+#if DEBUG_MODE
+        testButton.gameObject.SetActive(true);
+        testButton.onClick.AddListener(() => SpawnEnemy(1));
+#endif
     }
 
     private void Awake()
@@ -43,7 +52,7 @@ public class EnemySpawnManager : MonoBehaviour
 
         if(data != null)
         {
-            var spawnEnemy = poolManager.SpawnObject<Enemy>(id , enemyPrefab.gameObject);
+            var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy , enemyPrefab.gameObject);
             spawnEnemy.Initallized(data);
             //FIX : 스폰 위치 임시 지정
             spawnEnemy.transform.position = new Vector3(Random.Range(-5,5) , 5f , 0f);

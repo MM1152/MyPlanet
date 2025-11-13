@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -28,6 +29,45 @@ public enum ElementType
 public static class Variable
 {
     public static bool IsJoyStickActive;
+}
+
+public static class AddressableLabelIds
+{
+    public readonly static string PoolsIds = "Pools";
+}
+
+public enum PoolsId
+{
+    None = -1,
+
+    Enemy = 100,
+
+    Bullet = 200,
+    Missile = 201,
+    Laser = 202,
+
+    Exp = 300,
+}
+
+public static class AddressableNames
+{
+    private static readonly Dictionary<string, PoolsId> PoolsName = new()
+    {
+        { "Enemy", PoolsId.Enemy },
+        { "Bullet", PoolsId.Bullet },
+        { "Missile", PoolsId.Missile },
+        { "Laser", PoolsId.Laser },
+        { "Exp", PoolsId.Exp },
+    };
+
+    public static PoolsId GetPoolsId(string name)
+    {
+        if (PoolsName.TryGetValue(name, out PoolsId id))
+        {
+            return id;
+        }
+        return PoolsId.None;
+    }
 }
 
 public static class TagIds

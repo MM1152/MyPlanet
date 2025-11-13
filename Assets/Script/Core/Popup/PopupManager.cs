@@ -4,8 +4,8 @@ using Cysharp.Threading.Tasks;
 
 public class PopupManager : MonoBehaviour
 {
-    [SerializeField] private List<Popup> popups = new List<Popup>();
-    [SerializeField] private GameObject popupBackGroundPanel;
+    public List<Popup> popups = new List<Popup>();
+    public GameObject popupBackGroundPanel;
     private Dictionary<int, Popup> popupTable = new Dictionary<int, Popup>();
 
     private Stack<Popup> popupStack = new Stack<Popup>();

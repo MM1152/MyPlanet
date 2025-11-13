@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class Managers
             if( instance == null)
             {
                 instance = new Managers();
-                instance.Init();
+                instance.Init().Forget();
             }
 
             return instance;
@@ -24,7 +25,9 @@ public class Managers
     private TouchManager touchManager;
     private ObjectPoolManager objectPoolManager;
 
-    private void Init()
+    private bool init;
+
+    private async UniTaskVoid Init()
     {
         var go = new GameObject("Managers");
         GameObject.DontDestroyOnLoad(go);
@@ -37,10 +40,18 @@ public class Managers
         var objectPoolManager = new GameObject("ObjectPoolManager");
         this.objectPoolManager = objectPoolManager.AddComponent<ObjectPoolManager>();
         this.objectPoolManager.transform.SetParent(go.transform);
+        await this.objectPoolManager.Init();
+
+        init = true;
     }
 
     public void Release()
     {
         objectPoolManager.Release();
+    }
+
+    public async UniTaskVoid WaitForManagerInitalizedAsync()
+    {
+        await UniTask.WaitUntil(() => init);
     }
 }
