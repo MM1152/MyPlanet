@@ -69,24 +69,13 @@ public class ObjectPoolManager : MonoBehaviour
     }
 
     // 오브젝트 스폰 (풀에서 오브젝트 가져오기)
-    public T SpawnObject<T>(PoolsId id, GameObject prefab)
+    public T SpawnObject<T>(PoolsId id)
     {
-        if (!ObjPools.ContainsKey(id))
-        {
-            CreatePool(id, prefab);
-        }
 
         GameObject obj = ObjPools[id].Get();
         if (obj != null)
         {
             T component = obj.GetComponent<T>();
-#if DEBUG_MODE
-            if (component == null)
-            {
-                Debug.LogWarning($"Component {typeof(T).Name} not found on {prefab.name}");
-            }
-#endif
-
             return component;
         }
         return default;
@@ -118,6 +107,11 @@ public class ObjectPoolManager : MonoBehaviour
     {
         foreach (var pool in ObjPools.Values)
         {
+            for(int i = 0; i < pool.CountAll; i++)
+            {
+                var obj = pool.Get();
+                Destroy(obj);
+            }
             pool.Clear();
         }
 #if DEBUG_MODE

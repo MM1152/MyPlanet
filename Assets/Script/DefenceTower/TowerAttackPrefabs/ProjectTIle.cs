@@ -5,8 +5,7 @@ public class ProjectTile : BaseAttackPrefab
     [SerializeField] private float speed = 5f;
 
     protected Vector3 dir;
-    protected SpriteRenderer spriteRenderer;
-
+    
     public override void SetTarget(Transform target , float minNoise , float maxNoise)
     {
         base.SetTarget(target , minNoise , maxNoise);
@@ -27,7 +26,8 @@ public class ProjectTile : BaseAttackPrefab
     {
         if (target == null || targetDamageAble.IsDead)
         {
-            Destroy(gameObject);
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            //Destroy(gameObject);
             return;
         }
 

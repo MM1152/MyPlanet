@@ -15,6 +15,12 @@ public class Laser : ProjectTile
     private float currentDuration;
     private float currentSize;
 
+    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    {
+        base.Init(data, typeEffectiveness, effect);
+        poolsId = PoolsId.Laser;
+    }
+
     public override void SetTarget(Transform target , float minNoise , float maxNoise)
     {
         base.SetTarget(target , minNoise, maxNoise);
@@ -56,7 +62,7 @@ public class Laser : ProjectTile
 
             if (currentDuration >= laserDurtaionTime)
             {
-                Destroy(gameObject);
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
                 return;
             }
         }

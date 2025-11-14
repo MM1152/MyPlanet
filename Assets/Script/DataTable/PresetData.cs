@@ -5,7 +5,7 @@ public class PresetData
 {
     public List<int> towerIds;
 
-    public PresetData(List<int> towerIds)
+    public PresetData()
     {
         this.towerIds = new List<int>();
 

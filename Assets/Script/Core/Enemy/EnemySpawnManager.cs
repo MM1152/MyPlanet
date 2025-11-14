@@ -52,7 +52,7 @@ public class EnemySpawnManager : MonoBehaviour
 
         if(data != null)
         {
-            var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy , enemyPrefab.gameObject);
+            var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy);
             spawnEnemy.Initallized(data);
             //FIX : 스폰 위치 임시 지정
             spawnEnemy.transform.position = new Vector3(Random.Range(-5,5) , 5f , 0f);

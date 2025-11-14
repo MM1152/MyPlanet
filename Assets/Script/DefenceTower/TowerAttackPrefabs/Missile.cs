@@ -7,7 +7,13 @@ public class Missile : ProjectTile
     [SerializeField] private float trackingStrength = 0.5f;
     private float currentAngle;
     private float lookAngleNoise = 0f;
-    
+
+    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    {
+        base.Init(data, typeEffectiveness, effect);
+        poolsId = PoolsId.Missile;
+    }
+
     public override void SetTarget(Transform target, float minNoise , float maxNoise)
     {
         base.SetTarget(target, minNoise , maxNoise);
@@ -51,6 +57,7 @@ public class Missile : ProjectTile
     protected override void HitTarget()
     {
         base.HitTarget();
-        Destroy(gameObject);
+        Managers.ObjectPoolManager.Despawn(PoolsId.Missile, this.gameObject);
+        //Destroy(gameObject);
     }
 }
