@@ -23,16 +23,28 @@ public class TowerManager : MonoBehaviour
     private bool isLevelUp = false;
 
     private WindowManager windowManager;
-    
+    //Fix : 임시용임
+    private PresetData presetData = new PresetData();
 #if DEBUG_MODE
     [Header("DEBUG")]
     public bool stopAttack;
 #endif
 
-    private async void Awake()
+    private void Awake()
     {
-        await DataTableManager.WaitForInitalizeAsync();
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
+
+        for(int i = 0; i < presetData.towerIds.Count; i++)
+        {
+            int towerId = presetData.towerIds[i];
+            var data = DataTableManager.TowerTable.Get(towerId);
+
+            AddTower(data);
+        }
+    }
+
+    private void Start()
+    {
         expSlider.UpdateSlider(0, levelUpExp);
     }
 

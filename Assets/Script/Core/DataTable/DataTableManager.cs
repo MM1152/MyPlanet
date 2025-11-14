@@ -19,6 +19,7 @@ public static class DataTableManager
     {
         LoadAllAsync().Forget();
     }
+
     // 그씬에 필요한 테이블들을 한번에 비동기로 로드하는 메서드   
     private static async UniTask LoadAllAsync()
     {

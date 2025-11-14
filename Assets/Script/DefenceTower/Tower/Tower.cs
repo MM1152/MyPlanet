@@ -151,7 +151,7 @@ public abstract class Tower
 
     public virtual void LevelUp()
     {
-   Debug.Log("Level Up");
+        Debug.Log("Level Up");
     }
 
     public void AddBonusDamage(int damage)

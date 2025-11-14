@@ -7,12 +7,9 @@ public class PlaceTowerWindow : Window
     [SerializeField] private int selectTowerUICount;
     [SerializeField] private SelectTowerUI selectTowerUI;
     [SerializeField] private Transform selectTowerUIRoot;
-    [SerializeField] private PlaceTower placeTower;
     [SerializeField] private TowerManager towerManager;
     
     private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
-    private TowerTable towerData;
-    private PresetData presetData;
 
 #if DEBUG_MODE
     public Button testButton;
@@ -22,9 +19,8 @@ public class PlaceTowerWindow : Window
 
     public override void Init(WindowManager manager)
     {
-        presetData = new PresetData(new List<int>());
         base.Init(manager);
-        towerData = new TowerTable();
+
         for (int i = 0; i < selectTowerUICount; i++)
         {
             SelectTowerUI obj = Instantiate(selectTowerUI, selectTowerUIRoot);
@@ -33,7 +29,6 @@ public class PlaceTowerWindow : Window
             objButton.onClick.AddListener(() =>
             {
                 towerManager.PlaceTower(obj.GetTowerData());
-                placeTower.Place(obj.GetTowerData());
                 manager.Close();
             });
         }
@@ -49,7 +44,6 @@ public class PlaceTowerWindow : Window
     public async override void Open()
     {
         await DataTableManager.WaitForInitalizeAsync();
-        await placeTower.Init();
 
         for (int i = 0; i < selectTowerUICount; i++)
         {

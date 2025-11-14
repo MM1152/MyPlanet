@@ -50,7 +50,7 @@ public class Managers
         objectPoolManager.Release();
     }
 
-    public async UniTaskVoid WaitForManagerInitalizedAsync()
+    public async UniTask WaitForManagerInitalizedAsync()
     {
         await UniTask.WaitUntil(() => init);
     }
