@@ -19,7 +19,7 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public event Action OnChangeHp;
 
     [Header("On Reference In inspector")]
-    [SerializeField] private HpSlider slider;
+    [SerializeField] private SliderValue slider;
 
     [Header("Test Datas")]
     public ElementType elementType;
