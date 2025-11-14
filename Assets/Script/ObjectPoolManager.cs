@@ -10,11 +10,11 @@ public class ObjectPoolManager
     private static GameObject root;
 
     private static ObjectPoolManager instance;
-    public static ObjectPoolManager Instance 
+    public static ObjectPoolManager Instance
     {
         get
         {
-            if( instance == null )
+            if (instance == null)
             {
                 instance = new ObjectPoolManager();
                 root = new GameObject("ObjectPools");
@@ -34,12 +34,12 @@ public class ObjectPoolManager
           createFunc: () => CreateObject(prefab),
           actionOnGet: OnGetObject,
           actionOnRelease: OnReleaseObject,
-          actionOnDestroy: OnDestoryObject,
+          actionOnDestroy: OnDestroyObject,
           collectionCheck: false,
           defaultCapacity: 10,
-          maxSize: 100
+          maxSize: 10
         );
-
+Debug.Log($"id: {id}, 프리팹{prefab.name} 으로 오브젝트 풀 생성");
         ObjPools.Add(id, newPool);
     }
 
@@ -52,7 +52,12 @@ public class ObjectPoolManager
     }
     // 오브젝트 활성화    
     private void OnGetObject(GameObject obj)
-    {
+    {       
+        if(obj == null)
+        {
+            Debug.Log("error");
+            return;             
+        }
         obj.SetActive(true);
     }
     // 오브젝트 비활성화
@@ -62,9 +67,9 @@ public class ObjectPoolManager
     }
 
     //풀 사이즈를 조절하는데 현재 풀사이즈 유지를 얼마나할지 몰라서 일단 넣어둠
-    private void OnDestoryObject(GameObject obj)
+    private void OnDestroyObject(GameObject obj)
     {
-        GameObject.Destroy(obj);
+        Object.Destroy(obj);
     }
 
     // 오브젝트 스폰 (풀에서 오브젝트 가져오기)
@@ -76,6 +81,7 @@ public class ObjectPoolManager
         }
 
         GameObject obj = ObjPools[id].Get();
+
         if (obj != null)
         {
             T component = obj.GetComponent<T>();
@@ -94,9 +100,9 @@ public class ObjectPoolManager
     {
         if (ObjPools.ContainsKey(id))
         {
-#if DEBUG_MODE
-            Debug.Log($"디스폰 호출");
-#endif
+
+            Debug.Log($"id{id}프리팹네임{obj.name} 오브젝트 반환");
+
             ObjPools[id].Release(obj);
         }
     }

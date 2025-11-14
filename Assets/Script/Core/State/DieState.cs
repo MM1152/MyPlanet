@@ -12,26 +12,24 @@ public class DieState : IState
     }
     public void Enter()
     {
-        waveManager = GameObject.FindGameObjectWithTag(TagIds.WaveManager).GetComponent<WaveManager>();   
-       #if DEBUG_MODE
-        Debug.Log("Die State Enter");  
-         #endif
+        enemy.IsDead = true;
+        var exp = ObjectPoolManager.Instance.SpawnObject<Exp>(2, enemy.expPrefab);
+        exp.transform.position = enemy.transform.position;
+        exp.exp = enemy.enemyData.EXP;
+
+        enemy.waveManager.currentWave.EnemyDefeated();
+        ObjectPoolManager.Instance.Despawn(1, enemy.gameObject);
     }
 
     public void Execute()
     {
-        var exp = ObjectPoolManager.Instance.SpawnObject<Exp>(2, enemy.expPrefab);   
-        exp.transform.position = enemy.transform.position;
-        exp.exp = enemy.enemyData.EXP;
-        ObjectPoolManager.Instance.Despawn(1, enemy.gameObject);  
-        waveManager.currentWave.EnemyDefeated();                  
-        enemy.IsDead = true;
+        
     }
 
     public void Exit()
     {
-       #if DEBUG_MODE
+#if DEBUG_MODE
         Debug.Log("Die State Exit");  
-         #endif
+#endif
     }
 }

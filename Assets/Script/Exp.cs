@@ -1,6 +1,7 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
+using NUnit.Framework.Constraints;
 
 public class Exp : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class Exp : MonoBehaviour
     {
         if (isWaiting || defenseTower == null)
         {
-            return;
+            defenseTower = GameObject.FindGameObjectWithTag(TagIds.DefenseTowerTag);
         }
     }
 

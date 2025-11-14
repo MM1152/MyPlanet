@@ -7,13 +7,5 @@ public class WaveTestet : MonoBehaviour
 
     private void Update()
     {
-        if(Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            var enemy = enemySpawnManager.SpawnEnemy(1);
-            if(enemy != null)
-            {
-
-            }
-        }
     }
 }

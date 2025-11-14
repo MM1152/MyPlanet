@@ -3,9 +3,7 @@ using System;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageAble
-{  
-    private static readonly string TargetTag = "Player";
-    
+{       
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     public GameObject expPrefab;
@@ -24,10 +22,13 @@ public class Enemy : MonoBehaviour, IDamageAble
 
     private TypeEffectiveness typeEffectiveness;
 
+    public WaveManager waveManager;
+
     public event Action<Enemy> OnDie;
     private void Awake()
     {
         stateMachine = new StateMachine(this);
+        waveManager = GameObject.FindGameObjectWithTag(TagIds.WaveManager).GetComponent<WaveManager>(); 
     }
 
     public virtual void Initallized(EnemyData.Data data)
@@ -38,7 +39,7 @@ public class Enemy : MonoBehaviour, IDamageAble
         speed = enemyData.Speed;
         attackrange = enemyData.AttackRange;
 
-        target = GameObject.FindGameObjectWithTag(TargetTag);
+        target = GameObject.FindGameObjectWithTag(TagIds.PlayerTag);
         stateMachine.Init(stateMachine.idleState);
         typeEffectiveness = new TypeEffectiveness();
         typeEffectiveness.Init(ElementType);
@@ -63,7 +64,7 @@ public class Enemy : MonoBehaviour, IDamageAble
         }
         if( target == null)
         {            
-            target = GameObject.FindGameObjectWithTag(TargetTag);
+            target = GameObject.FindGameObjectWithTag(TagIds.PlayerTag);
             return;
         }
         // 거리 계산
@@ -95,6 +96,7 @@ public class Enemy : MonoBehaviour, IDamageAble
     // 상태 실행
     private void Update()
     {
+        if(IsDead) return;
         // 현재 상태 실행
         stateMachine.currentState.Execute();
         // 상태 전환 체크

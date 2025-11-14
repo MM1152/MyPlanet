@@ -26,11 +26,12 @@ public static class Variable
 
 public static class TagIds
 {
+    public readonly static string PlayerTag = "Player";
     public readonly static string DefenseTowerTag = "DefenseTower";
     public readonly static string TowerManagerTag = "TowerManager";
     public readonly static string WindowManagerTag = "WindowManager";
     public readonly static string EnemySpawnManager = "EnemySpawnManager";
-       public readonly static string WaveManager = "WaveManager";
+    public readonly static string WaveManager = "WaveManager";
 }
 
 public static class DataTableIds
