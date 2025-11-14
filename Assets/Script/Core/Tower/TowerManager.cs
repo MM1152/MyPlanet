@@ -9,6 +9,7 @@ public class TowerManager : MonoBehaviour
     [SerializeField] private Enemy testTarget;
     [SerializeField] private GameObject tower;
     [SerializeField] private EnemySpawnManager enemySpawnManager;
+    [SerializeField] private SliderValue expSlider;
 
     private List<Tower> towers = new List<Tower>();
     public List<Tower> Towers => towers;
@@ -22,7 +23,7 @@ public class TowerManager : MonoBehaviour
     private bool isLevelUp = false;
 
     private WindowManager windowManager;
-
+    
 #if DEBUG_MODE
     [Header("DEBUG")]
     public bool stopAttack;
@@ -32,6 +33,7 @@ public class TowerManager : MonoBehaviour
     {
         await DataTableManager.WaitForInitalizeAsync();
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
+        expSlider.UpdateSlider(0, levelUpExp);
     }
 
     public void LateUpdate()
@@ -133,6 +135,7 @@ public class TowerManager : MonoBehaviour
 #endif
             LevelUp();
         }
+        expSlider.UpdateSlider(sumExp, levelUpExp);
     }
 
     private void LevelUp()

@@ -44,18 +44,21 @@ public class Laser : ProjectTile
     protected override void Update()
     {
         // 레이저 크기 줄이기
-        currentDuration += Time.deltaTime;
-        currentSize -= decreaseAmount;
-        transform.localScale = new Vector3(
-            transform.localScale.x,
-            currentSize,
-            1f
-            );
-
-        if (currentDuration >= laserDurtaionTime)
+        if(Time.timeScale > 0)
         {
-            Destroy(gameObject);
-            return;
+            currentDuration += Time.deltaTime;
+            currentSize -= decreaseAmount;
+            transform.localScale = new Vector3(
+                transform.localScale.x,
+                currentSize,
+                1f
+                );
+
+            if (currentDuration >= laserDurtaionTime)
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
     }
 
