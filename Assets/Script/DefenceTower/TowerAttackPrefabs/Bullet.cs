@@ -8,9 +8,9 @@ public class Bullet : ProjectTile
         poolsId = PoolsId.Bullet;
     }
 
-    protected override void HitTarget()
+    protected override void HitTarget(Collider2D collision)
     {
-        base.HitTarget();
+        base.HitTarget(collision);
         Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         //Destroy(gameObject);
     }

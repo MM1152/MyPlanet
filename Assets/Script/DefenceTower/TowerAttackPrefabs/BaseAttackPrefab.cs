@@ -40,13 +40,13 @@ public abstract class BaseAttackPrefab : MonoBehaviour
         targetDamageAble = target.GetComponent<IDamageAble>();
     }
 
-    protected abstract void HitTarget();
+    protected abstract void HitTarget(Collider2D collision);
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if( collision.CompareTag("Enemy"))
         {
-            HitTarget();
+            HitTarget(collision);
         }
     }
 }

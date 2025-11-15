@@ -21,7 +21,7 @@ public class VolcanoLauncher : MissileTower
                 if (targets == null || targets.Count <= i)
                     break;
 
-                target = targets[i].transform;
+                Target = targets[i].transform;
 
                 if (target == null)
                     break;

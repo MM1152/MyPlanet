@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ProjectTile : BaseAttackPrefab
 {
-    [SerializeField] private float speed = 5f;
+    [SerializeField] protected float speed = 5f;
 
     protected Vector3 dir;
     
@@ -34,9 +34,9 @@ public class ProjectTile : BaseAttackPrefab
         transform.position += dir * speed * Time.deltaTime;
     }
 
-    protected override void HitTarget()
+    protected override void HitTarget(Collider2D collision)
     {
-        var find = target.GetComponent<IDamageAble>();
+        var find = collision.GetComponent<IDamageAble>();
         if (find != null)
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
