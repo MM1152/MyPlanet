@@ -1,16 +1,22 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlaceTowerWindow : Window
 {
     [SerializeField] private int selectTowerUICount;
+
+    [Header ("Drag To Inspector")]
     [SerializeField] private SelectTowerUI selectTowerUI;
     [SerializeField] private Transform selectTowerUIRoot;
     [SerializeField] private TowerManager towerManager;
-    
-    private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
+    [SerializeField] private TextMeshProUGUI titleText;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private Button selectTowerButton;
 
+    private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
+    private int selectTowerIndex = -1;
 #if DEBUG_MODE
     public Button testButton;
     [Header("뽑고 싶은 타워 ID 값 넣기")]
@@ -24,26 +30,36 @@ public class PlaceTowerWindow : Window
         for (int i = 0; i < selectTowerUICount; i++)
         {
             SelectTowerUI obj = Instantiate(selectTowerUI, selectTowerUIRoot);
+            obj.Initalized(i , (value) => selectTowerIndex = value);
             selectTowerUIs.Add(obj);
-            Button objButton = obj.GetComponent<Button>();
-            objButton.onClick.AddListener(() =>
-            {
-                towerManager.PlaceTower(obj.GetTowerData());
-                manager.Close();
-            });
         }
+
 #if DEBUG_MODE
         testButton.gameObject.SetActive(true);
         testButton.onClick.AddListener(() => manager.Open(WindowIds.PlaceTowerWindow));
 #endif
         windowId = (int)WindowIds.PlaceTowerWindow;
-
-        
+        selectTowerButton.onClick.AddListener(OnClickSelectTowerButton);
     }
 
-    public async override void Open()
+    private void OnClickSelectTowerButton()
     {
-        await DataTableManager.WaitForInitalizeAsync();
+        if (selectTowerIndex == -1) return;
+
+        var towerData = selectTowerUIs[selectTowerIndex].GetTowerData();
+        towerManager.PlaceTower(towerData);
+        manager.Close();
+    }
+
+    public override void Open()
+    {
+        if(selectTowerIndex != -1)
+        {
+            selectTowerUIs[selectTowerIndex].ResetOutline();
+            selectTowerIndex = -1;
+        }
+
+        levelText.text = $"Lv. {towerManager.CurrentLevel}";
 
         for (int i = 0; i < selectTowerUICount; i++)
         {

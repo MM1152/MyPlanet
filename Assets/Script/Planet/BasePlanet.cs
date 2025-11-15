@@ -34,7 +34,7 @@ public class BasePlanet : MonoBehaviour , IDamageAble
 
     private void Start()
     {
-        slider.UpdateSlider(hp, maxHp);
+        slider.UpdateSlider(hp, maxHp , hp / maxHp * 100, hp , maxHp);
     }
 
     public virtual void Init()
@@ -68,7 +68,7 @@ public class BasePlanet : MonoBehaviour , IDamageAble
 
     public void OnChanageHP()
     {
-        slider.UpdateSlider(hp, maxHp);
+        slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
     }
     
 }

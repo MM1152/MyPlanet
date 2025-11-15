@@ -9,7 +9,7 @@ public class WindowManager : MonoBehaviour
     [SerializeField] private Window cureentWindow;
     
     private Dictionary<int, Window> windowTable = new Dictionary<int, Window>();
-
+    
 
     private void Start()
     {

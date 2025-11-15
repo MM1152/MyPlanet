@@ -2,9 +2,9 @@
 
 public class HellFireGunTower : MuchineGunTower
 {
-    public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data)
+    public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data , int slotIndex)
     {
-        base.Init(tower, manager, data);
+        base.Init(tower, manager, data , slotIndex);
         minNoise = -0.05f;
         maxNoise = 0.05f;
 

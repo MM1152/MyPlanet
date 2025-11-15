@@ -46,13 +46,15 @@ public abstract class Tower
     
     protected string attackPrefabPath;
     protected IStatusEffect statusEffect;
-
-    public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data)
+    protected int slotIndex = -1;
+    public int SlotIndex => slotIndex;
+    public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data , int slotIndex)
     {
         statusEffect = null;
         this.manager = manager;
         this.towerData = data;
         this.tower = tower;
+        this.slotIndex = slotIndex;
         typeEffectiveness.Init((ElementType)this.towerData.Attribute);
         SetRandomOption();
         Debug.Log("Tower Inital");

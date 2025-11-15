@@ -17,6 +17,7 @@ public class TowerManager : MonoBehaviour
 
     private int totalExp = 0;
     private int currentLevel = 1;
+    public int CurrentLevel => currentLevel;
     private int maxLevel = 10;
     public int levelUpExp => currentLevel * 100;
 
@@ -39,13 +40,13 @@ public class TowerManager : MonoBehaviour
             int towerId = presetData.towerIds[i];
             var data = DataTableManager.TowerTable.Get(towerId);
 
-            AddTower(data);
+            AddTower(data , i + 1);
         }
     }
 
     private void Start()
     {
-        expSlider.UpdateSlider(0, levelUpExp);
+        expSlider.UpdateSlider(0, levelUpExp , currentLevel , levelUpExp - totalExp);
     }
 
     public void LateUpdate()
@@ -72,11 +73,11 @@ public class TowerManager : MonoBehaviour
         return enemySpawnManager.GetEnemyData(tower.transform.position);
     }
 
-    public void AddTower(TowerTable.Data data)
+    public void AddTower(TowerTable.Data data , int slotIndex)
     {
         Tower instanceTower = towerFactory.CreateInstance(data.ID);
         towers.Add(instanceTower);
-        instanceTower.Init(tower, this, data);
+        instanceTower.Init(tower, this, data , slotIndex);
     }
 
     public void PlaceTower(TowerTable.Data towerData)
@@ -147,7 +148,7 @@ public class TowerManager : MonoBehaviour
 #endif
             LevelUp();
         }
-        expSlider.UpdateSlider(sumExp, levelUpExp);
+        expSlider.UpdateSlider(totalExp, levelUpExp, currentLevel, levelUpExp - totalExp);
     }
 
     private void LevelUp()
