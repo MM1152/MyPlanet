@@ -4,9 +4,9 @@ public class VolcanoLauncher : MissileTower
 {
     public int attackCount = 5;
 
-    public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data)
+    public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data , int slotIndex)
     {
-        base.Init(tower, manager, data);
+        base.Init(tower, manager, data , slotIndex);
         minNoise = -90f;
         maxNoise = 90f;
     }
