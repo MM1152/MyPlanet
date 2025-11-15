@@ -45,6 +45,7 @@ public enum PoolsId
     Bullet = 200,
     Missile = 201,
     Laser = 202,
+    SniperBullet = 203,
 
     Exp = 300,
 }
@@ -56,6 +57,7 @@ public static class AddressableNames
         { "Enemy", PoolsId.Enemy },
         { "Bullet", PoolsId.Bullet },
         { "Missile", PoolsId.Missile },
+        { "SniperBullet", PoolsId.SniperBullet },
         { "Laser", PoolsId.Laser },
         { "Exp", PoolsId.Exp },
     };

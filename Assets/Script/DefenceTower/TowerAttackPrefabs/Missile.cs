@@ -54,9 +54,9 @@ public class Missile : ProjectTile
         transform.eulerAngles = new Vector3(0f , 0f , currentAngle);
     }
 
-    protected override void HitTarget()
+    protected override void HitTarget(Collider2D collision)
     {
-        base.HitTarget();
+        base.HitTarget(collision);
         Managers.ObjectPoolManager.Despawn(PoolsId.Missile, this.gameObject);
         //Destroy(gameObject);
     }

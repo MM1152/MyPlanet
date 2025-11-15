@@ -76,6 +76,7 @@ public class ObjectPoolManager : MonoBehaviour
         if (obj != null)
         {
             T component = obj.GetComponent<T>();
+            Debug.Log(component.ToString() + " 생성");
             return component;
         }
         return default;

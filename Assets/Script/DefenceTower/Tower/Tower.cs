@@ -11,20 +11,33 @@ public abstract class Tower
 
     public TowerTable.Data TowerData => towerData;
 
-
     protected GameObject projectTile;
     protected float attackInterval = 2f;
     protected float currentAttackInterval;
 
     protected GameObject tower;
+    protected Transform Target
+    {
+        set
+        {
+            target = value;
+
+            if(target != null)
+            {
+                targetDamageAble = target.GetComponent<IDamageAble>();
+            }
+            else
+            {
+                targetDamageAble = null;
+            }
+        }
+    }
     protected Transform target;
     protected IDamageAble targetDamageAble;
     protected bool attackAble;
 
     protected TowerManager manager;
     protected TowerTable.Data towerData;
-    protected GameObject attackprefab;
-    protected bool init = false;
     
     protected float minNoise = 0f;
     protected float maxNoise = 0f;
@@ -60,11 +73,6 @@ public abstract class Tower
         Debug.Log("Tower Inital");
     }
 
-    public void SetLoadAttackPrefab(string path)
-    {
-        LoadProjectTileAsync(path).Forget();
-    }
-
     private void SetRandomOption()
     {
         //Option Value Change �Ǹ� ���缭 Update ����߉�
@@ -91,14 +99,11 @@ public abstract class Tower
 
     public virtual void Update(float deltaTime)
     {
-        if (!useAble)
-            return;
-
         currentAttackInterval += deltaTime * bonusAttackSpeed;
 
         if(target != null && !targetDamageAble.IsDead)
         {
-            target = null;
+            Target = null;
         }
 
         if(currentAttackInterval > towerData.Fire_Rate)
@@ -108,16 +113,8 @@ public abstract class Tower
         }
     }
 
-    private async UniTaskVoid LoadProjectTileAsync(string path)
-    {
-        attackprefab = await Addressables.LoadAssetAsync<GameObject>(path).ToUniTask();
-        init = true;
-    }
-
     public virtual bool Attack()
     {
-        if (!init) return false;
-
         if (attackAble)
         {
             if (target == null) 
@@ -141,14 +138,6 @@ public abstract class Tower
         }
 
         return false;
-    }
-
-    public virtual void Release()
-    {
-        if(attackprefab != null)
-        {
-            Addressables.Release(attackprefab);
-        }
     }
 
     public virtual void LevelUp()
