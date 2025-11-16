@@ -12,7 +12,7 @@ public class DieState : IState
     public void Enter()
     {
        #if DEBUG_MODE
-        Debug.Log("Die State Enter");  
+        //Debug.Log("Die State Enter");  
          #endif
     }
 
@@ -29,7 +29,7 @@ public class DieState : IState
     public void Exit()
     {
        #if DEBUG_MODE
-        Debug.Log("Die State Exit");  
+        //Debug.Log("Die State Exit");  
          #endif
     }
 }

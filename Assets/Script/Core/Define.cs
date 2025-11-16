@@ -46,6 +46,8 @@ public enum PoolsId
     Missile = 201,
     Laser = 202,
     SniperBullet = 203,
+    MagmaBoomBullet = 204,
+    FragmentBullet = 205,
 
     Exp = 300,
 }
@@ -60,6 +62,8 @@ public static class AddressableNames
         { "SniperBullet", PoolsId.SniperBullet },
         { "Laser", PoolsId.Laser },
         { "Exp", PoolsId.Exp },
+        { "MagmaBoomBullet", PoolsId.MagmaBoomBullet },
+        { "FragmentBullet", PoolsId.FragmentBullet },
     };
 
     public static PoolsId GetPoolsId(string name)

@@ -99,6 +99,7 @@ public abstract class Tower
 
     public virtual void Update(float deltaTime)
     {
+        if (!useAble) return;
         currentAttackInterval += deltaTime * bonusAttackSpeed;
 
         if(target != null && !targetDamageAble.IsDead)
@@ -119,7 +120,6 @@ public abstract class Tower
         {
             if (target == null) 
                 return false;
-            targetDamageAble = target.GetComponent<IDamageAble>();
 
             if (Vector3.Distance(target.position, tower.transform.position) > towerData.Range)
             {
@@ -129,6 +129,8 @@ public abstract class Tower
 
             attackAble = false;
             currentAttackInterval = 0;
+
+            Debug.Log($"Tower Attack ");
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = tower.transform.position;
