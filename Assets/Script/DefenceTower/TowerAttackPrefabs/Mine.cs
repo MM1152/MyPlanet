@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Mine : BaseAttackPrefab
 {
@@ -25,13 +25,13 @@ public class Mine : BaseAttackPrefab
     {
         base.SetTarget(target, minNoise, maxNoise);
         noise = Random.Range(minNoise , maxNoise);
-        // Å¸¿ö¿¡¼­ Dir °ªÀ¸·Î targetÀ» ³Ñ°ÜÁÖµç, ¹æÇâ »ÌÀ»¶ó¸é ½ÇÁ¦ °øÀüÁßÀÎ Å¸¿ö¸¦ ³Ñ±âµç ÇØ¾ß‰Î
-        // Å¸¿ö¿¡¼­ dir°ªÀ» ³Ñ°ÜÁÖ´Â Çü½ÄÀ¸·Î »Ì¾Æ³»´Â °É·Î
+        // íƒ€ì›Œì—ì„œ Dir ê°’ìœ¼ë¡œ targetì„ ë„˜ê²¨ì£¼ë“ , ë°©í–¥ ë½‘ì„ë¼ë©´ ì‹¤ì œ ê³µì „ì¤‘ì¸ íƒ€ì›Œë¥¼ ë„˜ê¸°ë“  í•´ì•¼ëŒ
+        // íƒ€ì›Œì—ì„œ dirê°’ì„ ë„˜ê²¨ì£¼ëŠ” í˜•ì‹ìœ¼ë¡œ ë½‘ì•„ë‚´ëŠ” ê±¸ë¡œ
     }
 
     public virtual void SetDir(Vector3 dir)
     {
-        // ³Ñ°Ü ¹ŞÀº dir °ªÀº Á¤±ÔÈ­ µÈ °ªÀÌ¾î¾ß ÇÔ    
+        // ë„˜ê²¨ ë°›ì€ dir ê°’ì€ ì •ê·œí™” ëœ ê°’ì´ì–´ì•¼ í•¨    
         this.angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         angle += noise;
         this.dir = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad) , Mathf.Sin(angle * Mathf.Deg2Rad)).normalized;
