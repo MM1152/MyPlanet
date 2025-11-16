@@ -11,6 +11,8 @@ public class TowerManager : MonoBehaviour
     [SerializeField] private EnemySpawnManager enemySpawnManager;
     [SerializeField] private SliderValue expSlider;
 
+    public GameObject basePlanet;
+
     private List<Tower> towers = new List<Tower>();
     public List<Tower> Towers => towers;
     private TowerFactory towerFactory = new TowerFactory();

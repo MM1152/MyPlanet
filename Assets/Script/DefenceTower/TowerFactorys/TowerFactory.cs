@@ -5,18 +5,18 @@ public class TowerFactory : BaseFactory<Tower>
 {
     private Dictionary<int, ITowerCreateor> towerCreator = new Dictionary<int, ITowerCreateor>()
     {
-        { 1,  new MagmaTowerCreator() },
-        { 2,  new MagmaTowerCreator() },
-        { 3,  new MagmaTowerCreator() },
-        { 4,  new MagmaTowerCreator() },
-        { 5,  new MagmaTowerCreator() },
-        { 6,  new MagmaTowerCreator() },
-        { 7,  new MagmaTowerCreator() },
-        { 8,  new MagmaTowerCreator() },
-        { 9,  new MagmaTowerCreator() },
-        { 10,  new MagmaTowerCreator() },
-        { 11,  new MagmaTowerCreator() },
-        { 12,  new MagmaTowerCreator() },
+        { 1,  new IronMineTowerCreator() },
+        { 2,  new IronMineTowerCreator() },
+        { 3,  new IronMineTowerCreator() },
+        { 4,  new IronMineTowerCreator() },
+        { 5,  new IronMineTowerCreator() },
+        { 6,  new IronMineTowerCreator() },
+        { 7,  new IronMineTowerCreator() },
+        { 8,  new IronMineTowerCreator() },
+        { 9,  new IronMineTowerCreator() },
+        { 10,  new IronMineTowerCreator() },
+        { 11,  new IronMineTowerCreator() },
+        { 12,  new IronMineTowerCreator() },
     };
 
     public override Tower CreateInstance(int id)
@@ -67,5 +67,14 @@ public class MagmaTowerCreator : ITowerCreateor
     {
         var magmaTower = new MagmaBoomerTower();
         return magmaTower;
+    }
+}
+
+public class IronMineTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var ironMineTower = new IRonMineTower();
+        return ironMineTower;
     }
 }
