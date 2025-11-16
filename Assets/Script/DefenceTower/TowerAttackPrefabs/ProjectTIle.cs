@@ -51,7 +51,7 @@ public class ProjectTile : BaseAttackPrefab
         if (find != null)
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
-            find.OnDamage((int)(towerData.Damage * percent));
+            find.OnDamage((int)(towerData.FullDamage * percent));
             find.StatusEffect.Apply(effect, find);
         }
     }

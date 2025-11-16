@@ -123,7 +123,7 @@ public class TowerManager : MonoBehaviour
         {
             int leftPointer = Utils.ClampIndex(target - i, towers.Count);
             int rightPointer = Utils.ClampIndex(target + i, towers.Count);
-            Debug.Log($"leftPointer : {leftPointer} , rightPointer : {rightPointer}");
+            Debug.Log($"leftPointer : {leftPointer + 1} , rightPointer : {rightPointer + 1}");
             targetedTowres.Add(towers[leftPointer]);
             targetedTowres.Add(towers[rightPointer]);
         }

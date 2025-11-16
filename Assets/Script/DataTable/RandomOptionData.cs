@@ -17,6 +17,7 @@ public class RandomOptionData
         optionTable.Add(1 , new Data() {id = 1, description = "양옆 {0}칸 타워의 공격력 {1}% 만큼 증가"  , option = new TowerDamageUpgradeInRange()});
         optionTable.Add(2 , new Data() {id = 2, description = "전체 타워 공격력 {0}% 만큼 증가"  , option = new AllTowerDamageUpgradeOption()});
         optionTable.Add(3 , new Data() {id = 3, description = "행성 최대체력의 {0}% 만큼 3초마다 회복"  , option = new RepairBasePlanetOption()});
+        optionTable.Add(4 , new Data() {id = 4, description = "양옆 {0}칸 타워의 공격속도 {1}% 만큼 증가"  , option = new TowerAttackSpeedUpgradeInRange()});
     }
 
     public Data GetData(int id)

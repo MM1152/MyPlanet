@@ -33,8 +33,8 @@ public class TowerInfomationPopup : Popup
     public void UpdateTexts(Tower tower)
     {
         towerNameText.text = string.Format(towerName, tower.ID);
-        towerDamageText.text = string.Format(towerDamage, tower.Damage); 
-        towerAttackSpeedText.text = string.Format(towerAttackSpeed, tower.AttackSpeed);
+        towerDamageText.text = string.Format(towerDamage, tower.FullDamage); 
+        towerAttackSpeedText.text = string.Format(towerAttackSpeed, tower.FullAttackSpeed);
         towerAttackRangeText.text = string.Format(towerAttackRange, tower.AttackRange);
         towerRandomOptionText.text = string.Format(towerRandomOption, tower.Option.GetOptionStringFormatting());
     }

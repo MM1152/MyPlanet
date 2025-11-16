@@ -4,10 +4,13 @@ using UnityEngine.UI;
 
 public class WindowManager : MonoBehaviour
 {
+    [Header("Window Settings")]
     [SerializeField] private List<Window> windows;
     [SerializeField] private WindowIds startWindow;
     [SerializeField] private Window cureentWindow;
-    
+    [Header("Button Settings")]
+    [SerializeField] private Button openStatusViewButton;
+
     private Dictionary<int, Window> windowTable = new Dictionary<int, Window>();
     
 
@@ -25,6 +28,8 @@ public class WindowManager : MonoBehaviour
             Open(startWindow);
             cureentWindow = windowTable[(int)startWindow];
         }
+
+        openStatusViewButton.onClick.AddListener(() => Open(WindowIds.StatusWindow));
     }
 
     public void Open(WindowIds id)

@@ -7,7 +7,8 @@ using UnityEngine;
 public enum WindowIds
 {
     None = -1,
-    PlaceTowerWindow = 0
+    PlaceTowerWindow = 0,
+    StatusWindow = 1,
 }
 
 public enum PopupIds

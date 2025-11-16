@@ -13,7 +13,7 @@ public class HellFireGunTower : Tower
 
     public override bool Attack()
     {
-        target = manager.FindTarget()?.transform;
+        Target = manager.FindTarget()?.transform;
         return base.Attack();
     }
 
