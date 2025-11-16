@@ -21,6 +21,12 @@ public class ProjectTile : BaseAttackPrefab
         float noise = Random.Range(minNoise , maxNoise);
         return dir.normalized + new Vector3(noise , 0f , 0f);
     }
+
+    public void SetDir(Vector3 dir)
+    {
+        float noise = Random.Range(minNoise , maxNoise);
+        this.dir = dir + new Vector3(noise, 0f, 0f);
+    }
     
     protected virtual void Update()
     {
@@ -31,6 +37,11 @@ public class ProjectTile : BaseAttackPrefab
             return;
         }
 
+        Move();
+    }
+
+    protected void Move()
+    {
         transform.position += dir * speed * Time.deltaTime;
     }
 

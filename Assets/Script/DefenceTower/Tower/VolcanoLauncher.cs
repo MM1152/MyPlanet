@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class VolcanoLauncher : MissileTower
+public class VolcanoLauncher : Tower
 {
     public int attackCount = 5;
 
@@ -41,5 +41,12 @@ public class VolcanoLauncher : MissileTower
         base.LevelUp();
         minNoise -= 20f;
         maxNoise += 20f;
+    }
+
+    protected override BaseAttackPrefab CreateAttackPrefab()
+    {
+        Missile missile = Managers.ObjectPoolManager.SpawnObject<Missile>(PoolsId.Missile);
+        //GameObject.Instantiate(attackprefab).GetComponent<Missile>();
+        return missile;
     }
 }

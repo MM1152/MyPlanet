@@ -29,6 +29,7 @@ public class TowerManager : MonoBehaviour
 #if DEBUG_MODE
     [Header("DEBUG")]
     public bool stopAttack;
+    public bool disAbleLevelUp;
 #endif
 
     private void Awake()
@@ -136,6 +137,9 @@ public class TowerManager : MonoBehaviour
 
     public void AddExp(int exp)
     {
+#if DEBUG_MODE
+        if (!disAbleLevelUp) return;
+#endif
         var sumExp = Mathf.Min(totalExp += exp, levelUpExp);
 
 #if DEBUG_MODE

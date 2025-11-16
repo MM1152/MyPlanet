@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class HellFireGunTower : MuchineGunTower
+public class HellFireGunTower : Tower
 {
     public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data , int slotIndex)
     {
@@ -21,5 +21,12 @@ public class HellFireGunTower : MuchineGunTower
     {
         base.LevelUp();
         bonusAttackSpeed += 0.1f;
+    }
+
+    protected override BaseAttackPrefab CreateAttackPrefab()
+    {
+        Bullet projectile = Managers.ObjectPoolManager.SpawnObject<Bullet>(PoolsId.Bullet);
+        //Bullet projectile = GameObject.Instantiate(attackprefab).GetComponent<Bullet>();
+        return projectile;
     }
 }

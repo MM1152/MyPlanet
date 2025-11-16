@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SteelReaperTower : SniperTower
+public class SteelReaperTower : Tower
 {
     public override bool Attack()
     {
@@ -13,4 +13,9 @@ public class SteelReaperTower : SniperTower
         base.LevelUp();
     }
 
+    protected override BaseAttackPrefab CreateAttackPrefab()
+    {
+        SniperBullet sniperBullet = Managers.ObjectPoolManager.SpawnObject<SniperBullet>(PoolsId.SniperBullet);
+        return sniperBullet;
+    }
 }

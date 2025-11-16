@@ -76,7 +76,7 @@ public class ObjectPoolManager : MonoBehaviour
         if (obj != null)
         {
             T component = obj.GetComponent<T>();
-            Debug.Log(component.ToString() + " 생성");
+            //  Debug.Log(component.ToString() + " 생성");
             return component;
         }
         return default;
@@ -86,7 +86,7 @@ public class ObjectPoolManager : MonoBehaviour
         if (ObjPools.ContainsKey(id))
         {
 #if DEBUG_MODE
-            Debug.Log($"디스폰 호출");
+            //Debug.Log($"디스폰 호출");
 #endif
             ObjPools[id].Release(obj);
         }
@@ -97,7 +97,7 @@ public class ObjectPoolManager : MonoBehaviour
         if (ObjPools.ContainsKey(id))
         {
 #if DEBUG_MODE
-            Debug.Log($"클리어 호출");
+            //Debug.Log($"클리어 호출");
 #endif
             ObjPools[id].Clear();
             ObjPools.Remove(id);
