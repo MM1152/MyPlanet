@@ -54,7 +54,6 @@ public class TouchManager : MonoBehaviour
     private void OnTouchStart(InputAction.CallbackContext context)
     {
         startTouchTime = Time.unscaledTime;
-        Debug.Log("Touch Start");
     }
 
     private void OnTouchEnd(InputAction.CallbackContext context)
@@ -62,12 +61,10 @@ public class TouchManager : MonoBehaviour
         if(Time.unscaledTime - startTouchTime > longTabTime)
         {
             touchTypes = TouchTypes.LongTab;
-            Debug.Log("Long Tab");
         }
         else
         {
             touchTypes = TouchTypes.Tab;
-            Debug.Log("Tab");
         }
     }
 

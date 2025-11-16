@@ -37,7 +37,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
         this.target = target;
         this.minNoise = minNoise;
         this.maxNoise = maxNoise;
-        targetDamageAble = target.GetComponent<IDamageAble>();
+        targetDamageAble = target?.GetComponent<IDamageAble>();
     }
 
     protected abstract void HitTarget(Collider2D collision);
