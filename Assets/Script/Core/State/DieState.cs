@@ -18,6 +18,7 @@ public class DieState : IState
 
     public void Execute()
     {
+        enemy.WaveManager.totalEnemyCount--;
         var exp = Managers.ObjectPoolManager.SpawnObject<Exp>(PoolsId.Exp, enemy.expPrefab);   
         exp.transform.position = enemy.transform.position;
         exp.exp = enemy.enemyData.EXP;

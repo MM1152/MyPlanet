@@ -18,7 +18,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     private async UniTaskVoid InitalizedAsync()
     {
-        //FIX: µ¥ÀÌÅÍ Å×ÀÌºí ÃÊ±âÈ­ ¾È±â´Ù¸±²¨ÀÓ
+        //FIX: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½Ê±ï¿½È­ ï¿½È±ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½ï¿½
         await DataTableManager.WaitForInitalizeAsync();
         var enemy = await Addressables.LoadAssetAsync<GameObject>("Enemy").ToUniTask();
         enemyPrefab = enemy.GetComponent<Enemy>();
@@ -54,8 +54,8 @@ public class EnemySpawnManager : MonoBehaviour
         {
             var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy , enemyPrefab.gameObject);
             spawnEnemy.Initallized(data);
-            //FIX : ½ºÆù À§Ä¡ ÀÓ½Ã ÁöÁ¤
-            spawnEnemy.transform.position = new Vector3(Random.Range(-5,5) , 5f , 0f);
+            //FIX : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            // spawnEnemy.transform.position = new Vector3(Random.Range(-5,5) , 5f , 0f);
             spawnEnemy.OnDie += CheckDieEnemy;
             spawnEnemys.Add(spawnEnemy);
 
@@ -70,7 +70,7 @@ public class EnemySpawnManager : MonoBehaviour
         spawnEnemys.Remove(enemy);
     }
 
-    // targetÀ¸·ÎºÎÅÍ °Å¸®°¡ °¡Àå ÂªÀº Å¸°Ù µ¹·ÁÁÖ±â
+    // targetï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Âªï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½
     public List<Enemy> GetEnemyDatas(Vector3 position)
     {
         if (spawnEnemys.Count == 0) return null;

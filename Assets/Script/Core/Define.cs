@@ -75,6 +75,8 @@ public static class TagIds
     public readonly static string DefenseTowerTag = "DefenseTower";
     public readonly static string TowerManagerTag = "TowerManager";
     public readonly static string WindowManagerTag = "WindowManager";
+    public readonly static string EnemySpawnManagerTag = "EnemySpawnManager";
+    public readonly static string WaveManagerTag = "WaveManager";
 }
 
 public static class DataTableIds
@@ -82,6 +84,7 @@ public static class DataTableIds
     public static readonly string EnemyTable = "EnemyTable";
     public static readonly string CrewRankTable = "CrewRankTable";
     public static readonly string TowerTable = "TowerTable";
+    public static readonly string WaveTable = "WaveTable";
 
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
