@@ -1,22 +1,22 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 
 public class TowerFactory : BaseFactory<Tower>
 {
     private Dictionary<int, ITowerCreateor> towerCreator = new Dictionary<int, ITowerCreateor>()
     {
-        { 1,  new HellFireTowerCreator() },
-        { 2,  new HellFireTowerCreator() },
-        { 3,  new HellFireTowerCreator() },
-        { 4,  new HellFireTowerCreator() },
-        { 5,  new HellFireTowerCreator() },
-        { 6,  new HellFireTowerCreator() },
-        { 7,  new HellFireTowerCreator() },
-        { 8,  new HellFireTowerCreator() },
-        { 9,  new HellFireTowerCreator() },
-        { 10,  new HellFireTowerCreator() },
-        { 11,  new HellFireTowerCreator() },
-        { 12,  new HellFireTowerCreator() },
+        { 1,  new GravityControlTowerCreator() },
+        { 2,  new GravityControlTowerCreator() },
+        { 3,  new GravityControlTowerCreator() },
+        { 4,  new GravityControlTowerCreator() },
+        { 5,  new GravityControlTowerCreator() },
+        { 6,  new GravityControlTowerCreator() },
+        { 7,  new GravityControlTowerCreator() },
+        { 8,  new GravityControlTowerCreator() },
+        { 9,  new GravityControlTowerCreator() },
+        { 10,  new GravityControlTowerCreator() },
+        { 11,  new GravityControlTowerCreator() },
+        { 12,  new GravityControlTowerCreator() },
     };
 
     public override Tower CreateInstance(int id)
@@ -76,5 +76,14 @@ public class IronMineTowerCreator : ITowerCreateor
     {
         var ironMineTower = new IRonMineTower();
         return ironMineTower;
+    }
+}
+
+public class GravityControlTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var gravityTower = new GravityControlTower();
+        return gravityTower;
     }
 }

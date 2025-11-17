@@ -1,4 +1,4 @@
-using NUnit.Framework.Constraints;
+﻿using NUnit.Framework.Constraints;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -50,6 +50,7 @@ public enum PoolsId
     MagmaBoomBullet = 204,
     FragmentBullet = 205,
     Mine = 206,
+    GravityControl = 207,
 
     Exp = 300,
 }
@@ -67,6 +68,7 @@ public static class AddressableNames
         { "MagmaBoomBullet", PoolsId.MagmaBoomBullet },
         { "FragmentBullet", PoolsId.FragmentBullet },
         { "Mine", PoolsId.Mine },
+        { "GravityControl", PoolsId.GravityControl },
     };
 
     public static PoolsId GetPoolsId(string name)
