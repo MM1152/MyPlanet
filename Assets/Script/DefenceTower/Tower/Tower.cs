@@ -4,9 +4,16 @@ using UnityEngine.AddressableAssets;
 
 public abstract class Tower
 {
-    public int Damage => towerData.ATK + bonusDamage;
+    public int FullDamage => towerData.ATK + bonusDamage;
+    public int BaseDamage => towerData.ATK;
+    public int BonusDamage => bonusDamage;
+
+    public float FullAttackSpeed => towerData.Fire_Rate + bonusAttackSpeed;
+    public float BaseAttackSpeed => towerData.Fire_Rate;
+    public float BonusAttackSpeed => bonusAttackSpeed;
+
     public int ID => towerData.ID;
-    public int AttackSpeed => towerData.Fire_Rate;
+
     public int AttackRange => towerData.Range;
 
     public TowerTable.Data TowerData => towerData;
@@ -44,7 +51,7 @@ public abstract class Tower
 
     public int bonusDamage = 0;
 
-    protected float bonusAttackSpeed = 1f;
+    protected float bonusAttackSpeed = 0f;
 
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
     private bool useAble = false;
@@ -79,14 +86,14 @@ public abstract class Tower
         if(towerData.Option == 0)
         {
             optionData = randomOptionData.GetRandomOption();
-            baseRandomOption = randomOptionData.GetRandomOptionBase(optionData.id);
+            baseRandomOption = randomOptionData.GetRandomOptionBase(4);
             baseRandomOption.Init(manager , towerData, optionData);
             towerData.Option = optionData.id;
         }
         else
         {
             optionData = randomOptionData.GetData(towerData.Option);
-            baseRandomOption = randomOptionData.GetRandomOptionBase(optionData.id);
+            baseRandomOption = randomOptionData.GetRandomOptionBase(4);
             baseRandomOption.Init(manager , towerData, optionData);
         }
     }
@@ -101,13 +108,13 @@ public abstract class Tower
     {
         if (!useAble) return;
         currentAttackInterval += deltaTime * bonusAttackSpeed;
-
+        
         if(target != null && !targetDamageAble.IsDead)
         {
             Target = null;
         }
 
-        if(currentAttackInterval > towerData.Fire_Rate)
+        if(currentAttackInterval > 1f / FullAttackSpeed)
         {
             attackAble = true;
             Attack();
@@ -123,7 +130,7 @@ public abstract class Tower
 
             if (Vector3.Distance(target.position, tower.transform.position) > towerData.Range)
             {
-                target = null;
+                Target = null;
                 return false;
             }
 
@@ -151,7 +158,11 @@ public abstract class Tower
     {
         bonusDamage += damage;
     }
-
+    
+    /// <summary>
+    /// 보너스 스피드값 설정
+    /// </summary>
+    /// <param name="speed"> 0 ~ 1 사이의 값 설정 </param>
     public void AddBonusAttackSpeed(float speed)
     {
         bonusAttackSpeed += speed;
