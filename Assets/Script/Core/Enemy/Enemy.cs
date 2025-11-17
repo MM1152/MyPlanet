@@ -19,9 +19,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public ElementType ElementType => (ElementType)enemyData.Attribute;
     public StatusEffect StatusEffect => statusEffect;
 
-    public bool IsStun { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public bool IsStun { get => isStun; set => isStun = value; }
+    private bool isStun;
 
-    public float BaseSpeed => speed;
+    public float BaseSpeed => enemyData.Speed;
     public float CurrentSpeed { get => speed; set => speed = value; }
 
     public float speed;
@@ -120,7 +121,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         return target;
     }
-    // 데미지 처리
+    // 데미지 처리s
     public void OnDamage(int damage)
     {
         currentHP -= damage;

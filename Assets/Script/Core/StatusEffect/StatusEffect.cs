@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 
 [Flags] 
@@ -32,7 +32,7 @@ public class StatusEffect
     {
         if (status == null) return;
 
-        // ÀÌ¹Ì °É¸° »óÅÂÀÌ»óÀÎÁö °Ë»ç
+        // ì´ë¯¸ ê±¸ë¦° ìƒíƒœì´ìƒì¸ì§€ ê²€ì‚¬
         if ((effectTypes & status.EffectType) != 0)
         {
             for(int i = 0; i < this.status.Count; i++)
@@ -52,12 +52,15 @@ public class StatusEffect
         }
     }
 
-    // LateUpdate¿¡¼­ ½ÇÇàÇØ¾ßµÊ
+    // LateUpdateì—ì„œ ì‹¤í–‰í•´ì•¼ë¨
     public void Update(float deltaTime)
     {
         foreach(var statu in status)
         {
-            statu.Update(deltaTime);
+            if(!removeStatus.Contains(statu))
+            {
+                statu.Update(deltaTime);
+            }
         }
         
         if(removeStatus.Count > 0)
@@ -72,6 +75,7 @@ public class StatusEffect
 
         if(clearAllStatus)
         {
+            effectTypes = StatusEffectType.None;
             status.Clear();
         }
     }

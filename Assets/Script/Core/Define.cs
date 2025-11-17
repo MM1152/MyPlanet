@@ -51,6 +51,8 @@ public enum PoolsId
     FragmentBullet = 205,
     Mine = 206,
     GravityControl = 207,
+    ShockWaveBullet = 208,
+    ShockWave = 209,
 
     Exp = 300,
 }
@@ -69,6 +71,8 @@ public static class AddressableNames
         { "FragmentBullet", PoolsId.FragmentBullet },
         { "Mine", PoolsId.Mine },
         { "GravityControl", PoolsId.GravityControl },
+        { "ShockWaveBullet", PoolsId.ShockWaveBullet },
+        { "ShockWave", PoolsId.ShockWave },
     };
 
     public static PoolsId GetPoolsId(string name)

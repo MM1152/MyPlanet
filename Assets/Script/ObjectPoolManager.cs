@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Pool;
 using Cysharp.Threading.Tasks;
@@ -38,7 +38,7 @@ public class ObjectPoolManager : MonoBehaviour
           actionOnDestroy: OnDestoryObject,
           collectionCheck: false,
           defaultCapacity: 10,
-          maxSize: 100
+          maxSize: 1000
         );
 
         ObjPools.Add(id, newPool);
