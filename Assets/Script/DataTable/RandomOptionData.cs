@@ -19,6 +19,7 @@ public class RandomOptionData
         optionTable.Add(3 , new Data() {id = 3, description = "행성 최대체력의 {0}% 만큼 3초마다 회복"  , option = new RepairBasePlanetOption()});
         optionTable.Add(4 , new Data() {id = 4, description = "양옆 {0}칸 타워의 공격속도 {1}% 만큼 증가"  , option = new TowerAttackSpeedUpgradeInRange()});
         optionTable.Add(5 , new Data() {id = 5, description = "행성 최대체력 {0} 만큼 증가"  , option = new BasePlanetUpgradeMaxHp()});
+        optionTable.Add(6 , new Data() {id = 6, description = "전체 타워 공격속도 {0}% 만큼 증가"  , option = new AllTowerAttackSpeedUpgrade()});
     }
 
     public Data GetData(int id)
