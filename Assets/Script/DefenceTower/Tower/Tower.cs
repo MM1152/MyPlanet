@@ -114,7 +114,7 @@ public abstract class Tower
             Target = null;
         }
 
-        if(currentAttackInterval > 1f / FullAttackSpeed)
+        if(currentAttackInterval > 60f / FullAttackSpeed)
         {
             attackAble = true;
             Attack();

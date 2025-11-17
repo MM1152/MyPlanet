@@ -1,25 +1,18 @@
 ﻿using UnityEngine;
 
-public class SlowStatusEffect : IStatusEffect
+public class StunStatusEffect : IStatusEffect
 {
     public StatusEffectType EffectType => effectType;
-    private StatusEffectType effectType = StatusEffectType.Slow;
+    private StatusEffectType effectType = StatusEffectType.Stun;
 
     private IDamageAble target;
     private IMoveAble moveAble;
-    private float duration;
-    private float timer;
-    private float slowPercent;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="duration">지속 시간 파라미터</param>
-    /// <param name="slowPercent">0 ~ 1 사이로 정규화된 값 넣어줘야함</param>
-    public SlowStatusEffect(float duration, float slowPercent)
+    private float duration;
+    private float curDuration;
+    public StunStatusEffect(float duration)
     {
         this.duration = duration;
-        this.slowPercent = slowPercent;
     }
 
     public void Apply(IDamageAble target)
@@ -28,30 +21,35 @@ public class SlowStatusEffect : IStatusEffect
         {
             this.target = target;
             this.moveAble = moveAble;
-            this.moveAble.CurrentSpeed = moveAble.BaseSpeed * (1 - slowPercent);
+            this.moveAble.CurrentSpeed = 0;
+            this.moveAble.IsStun = true;
+            curDuration = duration;
         }
     }
 
     public IStatusEffect DeepCopy()
     {
-        return new SlowStatusEffect(duration, slowPercent);
+        return new StunStatusEffect(duration);
     }
 
     public void Remove()
     {
         this.moveAble.CurrentSpeed = moveAble.BaseSpeed;
+        Debug.Log("Stun 해제");
+        this.moveAble.IsStun = false;
         target.StatusEffect.Remove(this);
     }
 
     public void ResetStatusEffect()
     {
-        timer = 0;
+        curDuration = duration;
     }
 
     public void Update(float deltaTime)
     {
-        timer += deltaTime;
-        if(timer >= duration)
+        curDuration -= deltaTime;
+
+        if(curDuration <= 0)
         {
             Remove();
         }
