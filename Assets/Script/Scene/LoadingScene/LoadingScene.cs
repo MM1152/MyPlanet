@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 public class LoadingScene : MonoBehaviour
 {
     public TextMeshProUGUI currentProgress;
-    public static string sceneId = "GameScene";
+    public static string sceneId = "TitleScene";
     public async UniTaskVoid Start()
     {
         if(string.IsNullOrEmpty(sceneId))

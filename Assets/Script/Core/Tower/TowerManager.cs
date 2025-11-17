@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
 using Cysharp.Threading.Tasks;
@@ -26,8 +26,8 @@ public class TowerManager : MonoBehaviour
     private bool isLevelUp = false;
 
     private WindowManager windowManager;
-    //Fix : �ӽÿ���
-    private PresetData presetData = new PresetData();
+    //Fix : 임시용임
+    private PresetTable presetData = new PresetTable();
 #if DEBUG_MODE
     [Header("DEBUG")]
     public bool stopAttack;
@@ -38,9 +38,10 @@ public class TowerManager : MonoBehaviour
     {
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
 
-        for(int i = 0; i < presetData.towerIds.Count; i++)
+        for(int i = 0; i < 3; i++)
         {
-            int towerId = presetData.towerIds[i];
+            //Fix : 임시용 프리셋 데이터로 적용 필요함
+            int towerId = 1;
             var data = DataTableManager.TowerTable.Get(towerId);
 
             AddTower(data , i + 1);

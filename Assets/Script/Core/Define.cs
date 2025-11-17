@@ -9,6 +9,10 @@ public enum WindowIds
     None = -1,
     PlaceTowerWindow = 0,
     StatusWindow = 1,
+    TitleMainWindow = 2,
+    TitleStageSelectedWindow = 3,
+    TitlePresetWindow = 4,
+    TitleTowerPlaceEditWindow = 5,
 }
 
 public enum PopupIds
@@ -100,6 +104,7 @@ public static class DataTableIds
     public static readonly string CrewRankTable = "CrewRankTable";
     public static readonly string TowerTable = "TowerTable";
     public static readonly string WaveTable = "WaveTable";
+    public static readonly string PresetTable = "PresetTable";
 
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
