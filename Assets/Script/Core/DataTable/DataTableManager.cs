@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 
@@ -13,6 +13,7 @@ public static class DataTableManager
 
     public static EnemyData EnemyTable => Get<EnemyData>(DataTableIds.EnemyTable); 
     public static TowerTable TowerTable => Get<TowerTable>(DataTableIds.TowerTable); 
+    public static WaveData WaveTable => Get<WaveData>(DataTableIds.WaveTable);
 
 
     static DataTableManager()
@@ -25,10 +26,12 @@ public static class DataTableManager
     {
         var enemyDatatable = new EnemyData();
         var towerTable = new TowerTable();
+        var waveTable = new WaveData();    
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
             enemyDatatable.LoadAsync(DataTableIds.EnemyTable),
             towerTable.LoadAsync(DataTableIds.TowerTable),
+            waveTable.LoadAsync(DataTableIds.WaveTable),   
         };
 
         var datas = await UniTask.WhenAll(tasks);

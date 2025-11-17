@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -107,7 +107,7 @@ public abstract class Tower
     public virtual void Update(float deltaTime)
     {
         if (!useAble) return;
-        currentAttackInterval += deltaTime * bonusAttackSpeed;
+        currentAttackInterval += deltaTime;
         
         if(target != null && !targetDamageAble.IsDead)
         {

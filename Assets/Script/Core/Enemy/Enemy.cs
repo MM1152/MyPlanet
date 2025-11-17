@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
@@ -8,6 +8,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
+    private WaveManager waveManager;
+    public WaveManager WaveManager => waveManager;
+
     public GameObject expPrefab;
     public EnemyData.Data enemyData;
     public StateMachine stateMachine;
@@ -33,6 +36,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private void Awake()
     {
         stateMachine = new StateMachine(this);
+        waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag).GetComponent<WaveManager>();
     }
 
     public virtual void Initallized(EnemyData.Data data)

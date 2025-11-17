@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SlowStatusEffect : IStatusEffect
 {
@@ -24,7 +24,6 @@ public class SlowStatusEffect : IStatusEffect
             this.target = target;
             this.moveAble = moveAble;
             this.moveAble.CurrentSpeed = moveAble.BaseSpeed * (1 - slowPercent);
-            Debug.Log("Slow");
         }
     }
 
@@ -36,7 +35,6 @@ public class SlowStatusEffect : IStatusEffect
     public void Remove()
     {
         this.moveAble.CurrentSpeed = moveAble.BaseSpeed;
-        Debug.Log("EndSlow");
         target.StatusEffect.Remove(this);
     }
 
