@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 public class RandomOptionData
 {
@@ -14,10 +14,11 @@ public class RandomOptionData
 
     public RandomOptionData()
     {
-        optionTable.Add(1 , new Data() {id = 1, description = "¾ç¿· {0}Ä­ Å¸¿öÀÇ °ø°İ·Â {1}% ¸¸Å­ Áõ°¡"  , option = new TowerDamageUpgradeInRange()});
-        optionTable.Add(2 , new Data() {id = 2, description = "ÀüÃ¼ Å¸¿ö °ø°İ·Â {0}% ¸¸Å­ Áõ°¡"  , option = new AllTowerDamageUpgradeOption()});
-        optionTable.Add(3 , new Data() {id = 3, description = "Çà¼º ÃÖ´ëÃ¼·ÂÀÇ {0}% ¸¸Å­ 3ÃÊ¸¶´Ù È¸º¹"  , option = new RepairBasePlanetOption()});
-        optionTable.Add(4 , new Data() {id = 4, description = "¾ç¿· {0}Ä­ Å¸¿öÀÇ °ø°İ¼Óµµ {1}% ¸¸Å­ Áõ°¡"  , option = new TowerAttackSpeedUpgradeInRange()});
+        optionTable.Add(1 , new Data() {id = 1, description = "ì–‘ì˜† {0}ì¹¸ íƒ€ì›Œì˜ ê³µê²©ë ¥ {1}% ë§Œí¼ ì¦ê°€"  , option = new TowerDamageUpgradeInRange()});
+        optionTable.Add(2 , new Data() {id = 2, description = "ì „ì²´ íƒ€ì›Œ ê³µê²©ë ¥ {0}% ë§Œí¼ ì¦ê°€"  , option = new AllTowerDamageUpgradeOption()});
+        optionTable.Add(3 , new Data() {id = 3, description = "í–‰ì„± ìµœëŒ€ì²´ë ¥ì˜ {0}% ë§Œí¼ 3ì´ˆë§ˆë‹¤ íšŒë³µ"  , option = new RepairBasePlanetOption()});
+        optionTable.Add(4 , new Data() {id = 4, description = "ì–‘ì˜† {0}ì¹¸ íƒ€ì›Œì˜ ê³µê²©ì†ë„ {1}% ë§Œí¼ ì¦ê°€"  , option = new TowerAttackSpeedUpgradeInRange()});
+        optionTable.Add(5 , new Data() {id = 5, description = "í–‰ì„± ìµœëŒ€ì²´ë ¥ {0} ë§Œí¼ ì¦ê°€"  , option = new BasePlanetUpgradeMaxHp()});
     }
 
     public Data GetData(int id)
