@@ -6,7 +6,6 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 {
     private static readonly string TargetTag = "Player";
-
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
@@ -23,7 +22,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public float speed;
     public int atk;
     public float attackrange;
-    private float attackCooldownTimer = 0f;
     public EnemyType enemyType => (EnemyType)enemyData.Type;
     public EnemyTier enemyTier => (EnemyTier)enemyData.Tier;
     [SerializeField] private int currentHP;
@@ -33,10 +31,14 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private AttackManager attackManager;
     public IAttack attack;
 
+#if DEBUG_MODE
+    private TextSpawnManager textSpawnManager;
+#endif
     private void Awake()
     {
         stateMachine = new StateMachine(this);
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag).GetComponent<WaveManager>();
+        textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>();
     }
 
     public virtual void Initallized(EnemyData.Data data)
@@ -96,6 +98,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public void OnDamage(int damage)
     {
         currentHP -= damage;
+        textSpawnManager.SpawnTextUI(damage.ToString(), this.transform.position);
         if (currentHP <= 0)
         {
             OnDead();

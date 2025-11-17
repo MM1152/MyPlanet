@@ -50,8 +50,8 @@ public enum PoolsId
     MagmaBoomBullet = 204,
     FragmentBullet = 205,
     Mine = 206,
-
     Exp = 300,
+    TextUI = 400,
 }
 
 public enum EnemyType
@@ -97,6 +97,7 @@ public static class AddressableNames
         { "MagmaBoomBullet", PoolsId.MagmaBoomBullet },
         { "FragmentBullet", PoolsId.FragmentBullet },
         { "Mine", PoolsId.Mine },
+        { "TextUI", PoolsId.TextUI },
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -115,7 +116,8 @@ public static class TagIds
     public readonly static string TowerManagerTag = "TowerManager";
     public readonly static string WindowManagerTag = "WindowManager";
     public readonly static string EnemySpawnManagerTag = "EnemySpawnManager";
-    public readonly static string WaveManagerTag = "WaveManager";
+    public readonly static string WaveManagerTag = "WaveManager";  
+    public readonly static string TextUISpawnManagerTag = "TextUISpawnManager"; 
 }
 
 public static class DataTableIds
