@@ -86,14 +86,14 @@ public abstract class Tower
         if(towerData.Option == 0)
         {
             optionData = randomOptionData.GetRandomOption();
-            baseRandomOption = randomOptionData.GetRandomOptionBase(4);
+            baseRandomOption = randomOptionData.GetRandomOptionBase(5);
             baseRandomOption.Init(manager , towerData, optionData);
             towerData.Option = optionData.id;
         }
         else
         {
             optionData = randomOptionData.GetData(towerData.Option);
-            baseRandomOption = randomOptionData.GetRandomOptionBase(4);
+            baseRandomOption = randomOptionData.GetRandomOptionBase(5);
             baseRandomOption.Init(manager , towerData, optionData);
         }
     }

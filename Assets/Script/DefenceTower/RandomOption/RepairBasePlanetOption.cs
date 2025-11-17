@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class RepairBasePlanetOption : RandomOptionBase
 {
@@ -36,7 +36,7 @@ public class RepairBasePlanetOption : RandomOptionBase
 
         if(currentCoolDown <= 0)
         {
-            int repairAmount = Mathf.CeilToInt(planet.maxHp * 0.01f); // ÃÖ´ë Ã¼·ÂÀÇ 1% È¸º¹
+            int repairAmount = Mathf.CeilToInt(planet.maxHp * 0.01f); // ìµœëŒ€ ì²´ë ¥ì˜ 1% íšŒë³µ
             planet.hp = Mathf.Min(planet.hp + repairAmount, planet.maxHp);
             currentCoolDown = coolDown;
 

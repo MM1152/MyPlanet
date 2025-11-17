@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+ï»¿using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -13,13 +13,13 @@ public class LoadingScene : MonoBehaviour
         {
             return;
         } 
-        currentProgress.text = "Firebase ÃÊ±âÈ­ Áß";
-        await FirebaseManager.Instance.WaitForInitalizedAsync();
-        currentProgress.text = "Managers ÃÊ±âÈ­ Áß";
+        //currentProgress.text = "Firebase ì´ˆê¸°í™” ì¤‘";
+        //await FirebaseManager.Instance.WaitForInitalizedAsync();
+        currentProgress.text = "Managers ì´ˆê¸°í™” ì¤‘";
         await Managers.Instance.WaitForManagerInitalizedAsync();
-        currentProgress.text = "Å×ÀÌºí ºÒ·¯¿À´Â Áß";
+        currentProgress.text = "í…Œì´ë¸” ë¶ˆëŸ¬ì˜¤ëŠ” ì¤‘";
         await DataTableManager.WaitForInitalizeAsync();
-        currentProgress.text = "Scene ÃÊ±âÈ­ Áß";
+        currentProgress.text = "Scene ì´ˆê¸°í™” ì¤‘";
         await Addressables.LoadSceneAsync(sceneId).ToUniTask();
     } 
 
