@@ -11,29 +11,27 @@ public class WalkState : IState
 
     public void Enter()
     {
-#if DEBUG_MODE
-        //Debug.Log("Walk State Enter");
-#endif
         target = enemy.GetTarget();
         enemy.speed = enemy.CurrentSpeed;
     }
-    
-
 
     public void Execute()
     {
         if(target == null)
         {           
-            return;
+            enemy.stateMachine.ChangeState(enemy.stateMachine.idleState);
+            return; 
         }
 
         enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target.transform.position, enemy.CurrentSpeed * Time.deltaTime);
+       var distance = Vector3.Distance(enemy.transform.position, target.transform.position);
+        if(distance <= enemy.attackrange)
+        {
+            enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
+        }   
     }
 
     public void Exit()
-    {
-       #if DEBUG_MODE
-        //Debug.Log("Walk State Exit");  
-         #endif     
+    {   
     }
 }

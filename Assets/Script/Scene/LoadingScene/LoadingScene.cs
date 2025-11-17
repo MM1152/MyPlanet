@@ -13,13 +13,13 @@ public class LoadingScene : MonoBehaviour
         {
             return;
         } 
-        currentProgress.text = "Firebase ÃÊ±âÈ­ Áß";
-        await FirebaseManager.Instance.WaitForInitalizedAsync();
-        currentProgress.text = "Managers ÃÊ±âÈ­ Áß";
+        // currentProgress.text = "Firebase ï¿½Ê±ï¿½È­ ï¿½ï¿½";
+        // await FirebaseManager.Instance.WaitForInitalizedAsync();
+        currentProgress.text = "Managers ï¿½Ê±ï¿½È­ ï¿½ï¿½";
         await Managers.Instance.WaitForManagerInitalizedAsync();
-        currentProgress.text = "Å×ÀÌºí ºÒ·¯¿À´Â Áß";
+        currentProgress.text = "ï¿½ï¿½ï¿½Ìºï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½";
         await DataTableManager.WaitForInitalizeAsync();
-        currentProgress.text = "Scene ÃÊ±âÈ­ Áß";
+        currentProgress.text = "Scene ï¿½Ê±ï¿½È­ ï¿½ï¿½";
         await Addressables.LoadSceneAsync(sceneId).ToUniTask();
     } 
 

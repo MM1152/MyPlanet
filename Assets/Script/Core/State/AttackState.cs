@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using UnityEngine;
 
 public class AttackState : IState
@@ -11,23 +10,15 @@ public class AttackState : IState
     }
 
     public void Enter()
-    {
-#if DEBUG_MODE
-       // Debug.Log("Attack State Enter");  
-#endif
-
+    { 
     }
 
     public void Execute()
     {
-        var target = enemy.GetTarget();
-        target.GetComponent<IDamageAble>().OnDamage(enemy.enemyData.ATK);
+        enemy.attack.Attack(enemy); 
     }
 
     public void Exit()
     {
-#if DEBUG_MODE
-       // Debug.Log("Attack State Exit");  
-#endif
     }
 }

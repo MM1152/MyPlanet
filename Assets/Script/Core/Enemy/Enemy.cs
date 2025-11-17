@@ -1,38 +1,38 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
-{  
+{
     private static readonly string TargetTag = "Player";
-    
+
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
     public WaveManager WaveManager => waveManager;
-
     public GameObject expPrefab;
     public EnemyData.Data enemyData;
     public StateMachine stateMachine;
     public bool IsDead { get; set; }
-    
     public ElementType ElementType => (ElementType)enemyData.Attribute;
     public StatusEffect StatusEffect => statusEffect;
-
     public bool IsStun { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
     public float BaseSpeed => speed;
     public float CurrentSpeed { get => speed; set => speed = value; }
-
     public float speed;
     public int atk;
     public float attackrange;
     private float attackCooldownTimer = 0f;
+    public EnemyType enemyType => (EnemyType)enemyData.Type;
+    public EnemyTier enemyTier => (EnemyTier)enemyData.Tier;
     [SerializeField] private int currentHP;
-
-    private TypeEffectiveness typeEffectiveness;
-
+    public TypeEffectiveness typeEffectiveness;
     public event Action<Enemy> OnDie;
+    private EnemyAttackKey attackKey;
+    private AttackManager attackManager;
+    public IAttack attack;
+
     private void Awake()
     {
         stateMachine = new StateMachine(this);
@@ -47,67 +47,40 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         speed = enemyData.Speed;
         attackrange = enemyData.AttackRange;
 
+
         target = GameObject.FindGameObjectWithTag(TargetTag);
         stateMachine.Init(stateMachine.idleState);
         typeEffectiveness = new TypeEffectiveness();
         typeEffectiveness.Init(ElementType);
         statusEffect.Init();
+        attackKey = new EnemyAttackKey(enemyType, ElementType, enemyTier);
+        attackManager = new AttackManager(attackKey, out attack);
 
         IsDead = false;
     }
 
-    // 상태 확인
-    private void CheckState()
-    {   // 사망 체크
-        if( target == null )
-        {
-            stateMachine.ChangeState(stateMachine.idleState);
-            return;
-        }
-
-        if (currentHP <= 0)
-        {
-            stateMachine.ChangeState(stateMachine.dieState);
-            return;
-        }
-        if( target == null)
-        {            
-            target = GameObject.FindGameObjectWithTag(TargetTag);
-            return;
-        }
-        // 거리 계산
-        var distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-
-
-        // 상태 전환 로직 범위 안에 들어와있는 상태에서 공격 쿨타임이 완료되었을 때 공격 상태로 전환
-        if (distanceToTarget <= enemyData.AttackRange && enemyData.AttackInterval <= attackCooldownTimer)
-        {
-            stateMachine.ChangeState(stateMachine.attackState);
-            attackCooldownTimer = 0f;         
-            return;
-        }
-        
-
-        // 이동 상태로 전환        
-        if (distanceToTarget > enemyData.AttackRange)
-        {
-            stateMachine.ChangeState(stateMachine.walkState);
-        } 
-        else
-        {
-            stateMachine.ChangeState(stateMachine.idleState);
-        }
-
-        attackCooldownTimer += Time.deltaTime;
+    public void SetState(IState newState)
+    {
+        stateMachine.ChangeState(newState);
     }
 
-    // 상태 실행
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!attack.isAttackColliderOn) return;
+
+        if (collision.CompareTag(TargetTag))
+        {
+#if DEBUG_MODE
+            Debug.Log("콜라이더 충돌 들어옴");
+#endif
+            SetState(stateMachine.attackState);
+        }
+        return;
+    }
+
     private void Update()
     {
-        // 현재 상태 실행
         stateMachine.currentState.Execute();
-        // 상태 전환 체크
-        CheckState();
     }
 
     private void LateUpdate()
@@ -115,12 +88,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         statusEffect.Update(Time.deltaTime);
     }
 
-    // 타겟 반환
     public GameObject GetTarget()
     {
         return target;
     }
-    // 데미지 처리
+
     public void OnDamage(int damage)
     {
         currentHP -= damage;
@@ -129,7 +101,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             OnDead();
         }
     }
-    // 사망 처리    
+
     public void OnDead()
     {
         stateMachine.ChangeState(stateMachine.dieState);

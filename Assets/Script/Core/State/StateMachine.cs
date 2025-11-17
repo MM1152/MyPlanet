@@ -17,13 +17,13 @@ public class StateMachine
         attackState = new AttackState(enemy);   
         dieState = new DieState(enemy);
     }
-    // 초기 상태 설정
+
     public void Init(IState startingState)
     {
         ChangeState(startingState);
         startingState.Enter();
     }
-    // 상태 전환
+
     public void ChangeState(IState newState)
     {
         if (currentState != null)
@@ -38,7 +38,7 @@ public class StateMachine
             currentState.Enter();
         }
     }
-    // 매 프레임 상태 실행
+
     private void ExecuteCurrentState()
     {
         if (currentState != null)
