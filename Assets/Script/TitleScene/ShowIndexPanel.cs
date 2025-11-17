@@ -6,14 +6,15 @@ public class ShowIndexPanel : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
-    private int index = -1;
+    public int index = -1;
     public int Index => index;
 
     public event Action<int> OnTab;
-
-    private void OnDestroy()
+    private TowerInfomation towerInfoMation;
+    
+    public void Init(TowerInfomation towerInfoMation)
     {
-        OnTab = null;
+        this.towerInfoMation = towerInfoMation;
     }
 
     public void UpdatePlace(int index)
@@ -22,20 +23,22 @@ public class ShowIndexPanel : MonoBehaviour
         {
             gameObject.SetActive(false);
             this.index = -1;
+            towerInfoMation.DisableTouch = false;
         }
         else
         {
             text.text = index.ToString();
             gameObject.SetActive(true);
             this.index = index;
+            towerInfoMation.DisableTouch = true;
         }
     }
 
     private void Update()
     {
-        if(index != -1 && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(this.gameObject))
+        if(Index != -1 && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(this.gameObject))
         {
-            OnTab?.Invoke(index - 1);   
-        }   
+            OnTab?.Invoke(Index - 1);   
+        }
     }
 }

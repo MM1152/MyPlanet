@@ -11,7 +11,7 @@ public class TowerPlaceHold : MonoBehaviour
 
     public Button button;
 
-    private int index;
+    public int index;
     public int Index => index;
 
     private TowerTable.Data towerData = null;

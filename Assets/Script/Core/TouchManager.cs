@@ -1,3 +1,4 @@
+using Mono.Cecil.Cil;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -73,7 +74,7 @@ public class TouchManager : MonoBehaviour
         touchTypes = TouchTypes.None;
     }
 
-    public bool OnTargetUI(GameObject targetUI)
+    private List<RaycastResult> FindUi()
     {
         var result = new List<RaycastResult>();
         var pointerEventData = new PointerEventData(EventSystem.current)
@@ -82,6 +83,12 @@ public class TouchManager : MonoBehaviour
         };
 
         EventSystem.current.RaycastAll(pointerEventData, result);
+        return result;
+    }
+
+    public bool OnTargetUI(GameObject targetUI)
+    {
+        var result = FindUi();
 
         foreach(var go in result)
         {

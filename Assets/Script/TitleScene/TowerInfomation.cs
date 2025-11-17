@@ -12,7 +12,7 @@ public class TowerInfomation : MonoBehaviour
     private TowerTable.Data data;
 
     public event Action<TowerTable.Data> OnTab;
-
+    public bool DisableTouch { get; set; } = false;
     public void Init(int towerId)
     {
         data = DataTableManager.TowerTable.Get(towerId);
@@ -26,7 +26,7 @@ public class TowerInfomation : MonoBehaviour
 
     private void Update()
     {
-        if(Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(this.gameObject))
+        if(!DisableTouch && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(this.gameObject))
         {
             OnTab?.Invoke(data);
         }

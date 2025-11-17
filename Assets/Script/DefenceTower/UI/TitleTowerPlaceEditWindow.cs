@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using UnityEditor;
+using System.Linq;
 
 public class TitleTowerPlaceEditWindow : Window
 {
@@ -11,6 +13,8 @@ public class TitleTowerPlaceEditWindow : Window
     [SerializeField] private Image circle;
     [SerializeField] private TowerPlaceHold towerPlaceObject;
     [SerializeField] private ShowIndexPanel showIndexPanel;
+    [SerializeField] private Button saveButton;
+    [SerializeField] private Button closeButton;
 
     private Vector2 circleSize;
     private int placeCount = 10;
@@ -22,7 +26,7 @@ public class TitleTowerPlaceEditWindow : Window
     private bool isRotate = false;
     private PresetTable.Data presetData;
 
-    public static int index = -1;
+    public static int currentPresetIndex = -1; // 몇번 째 프리셋에 접근했는지에 대한 인덱스
     public override void Close()
     {
         base.Close();
@@ -37,15 +41,22 @@ public class TitleTowerPlaceEditWindow : Window
         Canvas.ForceUpdateCanvases();
         circleSize = new Vector3(circle.rectTransform.rect.width , circle.rectTransform.rect.height);
 
+        closeButton.onClick.AddListener(() => manager.Open(WindowIds.TitlePresetWindow));
+        saveButton.onClick.AddListener(() =>
+        {
+            presetData.TowerId = placeHolds.Select(x => x.TowerData == null ? -1 : x.TowerData.ID).ToList();
+            DataTableManager.PresetTable.Save().Forget();
+        });
     }
 
     public override void Open()
     {
-        presetData = DataTableManager.PresetTable.Get(index);
+        presetData = DataTableManager.PresetTable.Get(currentPresetIndex);
+
+        circle.transform.eulerAngles = Vector3.zero;
 
         UpdateTowerHold();
         UpdateTowerList();
-
         RotateCircle(0);
 
         base.Open();
@@ -64,6 +75,7 @@ public class TitleTowerPlaceEditWindow : Window
             Destroy(towerInfos[i].gameObject);
         }
         towerInfos.Clear();
+        showIndexPanels.Clear();
     }
 
     private void UpdateTowerList()
@@ -77,24 +89,27 @@ public class TitleTowerPlaceEditWindow : Window
             var showIndexPanel = Instantiate(this.showIndexPanel, towerInfo.transform);
             showIndexPanel.OnTab += UnPlace;
 
-            towerInfo.Init(i + 1);
+            towerInfo.Init(towerList[i].ID);
             towerInfos.Add(towerInfo);
 
-            int index = ContainPresetList(i + 1);
-            showIndexPanel.UpdatePlace(index);
+            int curIdx = ContainPresetList(towerList[i].ID);
+            showIndexPanel.Init(towerInfo);
+            showIndexPanel.UpdatePlace(curIdx);
 
             showIndexPanels.Add(towerList[i].ID, showIndexPanel);
         }
     }
 
-    private void UnPlace(int index)
+    private void UnPlace(int idx)
     {
-        showIndexPanels[placeHolds[index].TowerData.ID].UpdatePlace(-1);
-        placeHolds[index].PlaceTower(null);
+        if (isRotate) return;
+        showIndexPanels[placeHolds[idx].TowerData.ID].UpdatePlace(-1);
+        placeHolds[idx].PlaceTower(null);
     }
 
     private void Place(TowerTable.Data data)
     {
+        if (isRotate) return;
         if (!placeHolds[selectIndex].Placed())
         {
             placeHolds[selectIndex].PlaceTower(data);
@@ -140,23 +155,23 @@ public class TitleTowerPlaceEditWindow : Window
             var towerData = DataTableManager.TowerTable.Get(presetData.TowerId[i]);
             placeHold.PlaceTower(towerData);
 
-
-            placeHold.button.onClick.AddListener(() => RotateCircle(placeHold.Index));
+            int idx = i;
+            placeHold.button.onClick.AddListener(() => RotateCircle(idx));
         }
     }
 
-    private void RotateCircle(int index)
+    private void RotateCircle(int idx)
     {
         if (isRotate) return;
 
         placeHolds[selectIndex].transform.localScale = Vector3.one;
         placeHolds[selectIndex].CancelSelect();
 
-        float rotateAngle = angle * index;
+        float rotateAngle = angle * idx;
         float currentAngle = angle * selectIndex;
         RotateAsync(currentAngle , rotateAngle , 0.2f).Forget();
         isRotate = true;
-        selectIndex = index;
+        selectIndex = idx;
 
         placeHolds[selectIndex].transform.localScale = Vector3.one * 1.5f;
         placeHolds[selectIndex].Select();
@@ -166,8 +181,6 @@ public class TitleTowerPlaceEditWindow : Window
     {
         float delta = Mathf.DeltaAngle(to, from);
         float speed = delta / duration;
-        Debug.Log($"To : {to} From : {from}");
-        Debug.Log($"Delta : {delta}");
         for (float i = 0; i <= duration; i += Time.deltaTime)
         {
             circle.transform.eulerAngles += new Vector3(0f, 0f, speed * Time.deltaTime);

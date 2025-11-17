@@ -25,7 +25,7 @@ public class PresetViewer : MonoBehaviour
 
         editButton.onClick.AddListener(() =>
         {
-            TitleTowerPlaceEditWindow.index = this.index;
+            TitleTowerPlaceEditWindow.currentPresetIndex = this.index;
             manager.Open(WindowIds.TitleTowerPlaceEditWindow);
         });
     }

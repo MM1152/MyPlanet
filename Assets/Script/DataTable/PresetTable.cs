@@ -10,7 +10,7 @@ using UnityEngine.AddressableAssets;
 public class PresetTable : DataTable
 {
     private List<Data> towerIds;
-
+    public event Action OnChangeDatas;
     [Serializable]
     public class Data : JsonSerialized
     {
@@ -34,12 +34,22 @@ public class PresetTable : DataTable
 
     public async UniTask Save()
     {
-        string path = Application.dataPath + "/DataTable/PresetTable.json";
+        string path = Application.dataPath + "/DataTables/PresetTable.json";
         if (File.Exists(path))
         {
             var json = JsonConvert.SerializeObject(towerIds, Formatting.Indented);
             File.WriteAllText(path, json);
+            for(int i = 0; i < towerIds[0].TowerId.Count; i++)
+            {
+                Debug.Log(towerIds[0].TowerId[i]);
+            }
             await LoadAsync(DataTableIds.PresetTable);
+            Debug.Log("Save 이후");
+            for (int i = 0; i < towerIds[0].TowerId.Count; i++)
+            {
+                Debug.Log(towerIds[0].TowerId[i]);
+            }
+            OnChangeDatas?.Invoke();
         }
     }
 
