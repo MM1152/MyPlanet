@@ -36,7 +36,7 @@ public class TextUI : MonoBehaviour
         SetColor(Color.white);
     }
 
-    private void SetColor(Color color)
+    public void SetColor(Color color)
     {
         damageText.color = color;
     }

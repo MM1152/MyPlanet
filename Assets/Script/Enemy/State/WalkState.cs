@@ -25,7 +25,7 @@ public class WalkState : IState
 
         enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target.transform.position, enemy.CurrentSpeed * Time.deltaTime);
        var distance = Vector3.Distance(enemy.transform.position, target.transform.position);
-        if(distance <= enemy.attackrange)
+        if(distance <= enemy.attackrange&&enemy.enemyType!=EnemyType.Melee)
         {
             enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
         }   
