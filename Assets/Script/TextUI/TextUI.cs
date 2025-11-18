@@ -20,7 +20,7 @@ public class TextUI : MonoBehaviour
     private void Update()
     {
         transform.position += Vector3.up * Time.deltaTime;
-        if (0f >= timer)
+        if (timer <= currentTime)
         {
             Reset();
             Managers.ObjectPoolManager.Despawn(PoolsId.TextUI, this.gameObject);            
@@ -36,7 +36,7 @@ public class TextUI : MonoBehaviour
         SetColor(Color.white);
     }
 
-    private void SetColor(Color color)
+    public void SetColor(Color color)
     {
         damageText.color = color;
     }

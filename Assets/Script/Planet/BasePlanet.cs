@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class BasePlanet : MonoBehaviour , IDamageAble
+public class BasePlanet : MonoBehaviour, IDamageAble
 {
     private StatusEffect statusEffect = new StatusEffect();
 
@@ -25,16 +25,18 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public ElementType elementType;
     public int maxHp;
     public int hp;
+    private TextSpawnManager textSpawnManager;
 
     private void Awake()
     {
         Init();
         OnChangeHp += OnChanageHP;
+        textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>(); 
     }
 
     private void Start()
     {
-        slider.UpdateSlider(hp, maxHp , hp / maxHp * 100, hp , maxHp);
+        slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
     }
 
     public virtual void Init()
@@ -42,10 +44,11 @@ public class BasePlanet : MonoBehaviour , IDamageAble
         typeEffectiveness.Init(elementType);
         hp = maxHp;
     }
-        
+
     public void OnDamage(int damage)
     {
         hp -= damage;
+        textSpawnManager.SpawnTextUI(damage.ToString(), transform.position).SetColor(Color.yellow);
         OnChangeHp?.Invoke();
         if (hp <= 0 && !isDead)
         {
@@ -70,5 +73,5 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     {
         slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
     }
-    
+
 }

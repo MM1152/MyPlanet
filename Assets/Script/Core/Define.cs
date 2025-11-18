@@ -20,11 +20,12 @@ public enum PopupIds
 public enum ElementType
 {
     None = -1,
-    Fire = 0,
-    Steel = 1,
-    Water = 2,
-    Light = 3,
-    Dark = 4
+    Normal = 0,
+    Fire = 1,
+    Steel = 2,
+    Water = 3,
+    Light = 4,
+    Dark = 5
 }
 
 public static class Variable
@@ -50,8 +51,9 @@ public enum PoolsId
     MagmaBoomBullet = 204,
     FragmentBullet = 205,
     Mine = 206,
-    Exp = 300,
-    TextUI = 400,
+    SimpleBullet = 301,
+    Exp = 400,
+    TextUI = 600,
 }
 
 public enum EnemyType
@@ -72,16 +74,16 @@ public struct EnemyAttackKey
 {
     //근접,원거리
     public EnemyType enemyType;
-  
-    public ElementType elementType; 
-   
+
+    public ElementType elementType;
+
     public EnemyTier tier;
     public EnemyAttackKey(EnemyType enemyType, ElementType elementType, EnemyTier tier)
     {
         this.enemyType = enemyType;
         this.elementType = elementType;
         this.tier = tier;
-    }   
+    }
 }
 
 public static class AddressableNames
@@ -89,6 +91,7 @@ public static class AddressableNames
     private static readonly Dictionary<string, PoolsId> PoolsName = new()
     {
         { "Enemy", PoolsId.Enemy },
+        { "SimpleBullet", PoolsId.SimpleBullet },
         { "Bullet", PoolsId.Bullet },
         { "Missile", PoolsId.Missile },
         { "SniperBullet", PoolsId.SniperBullet },
@@ -116,8 +119,8 @@ public static class TagIds
     public readonly static string TowerManagerTag = "TowerManager";
     public readonly static string WindowManagerTag = "WindowManager";
     public readonly static string EnemySpawnManagerTag = "EnemySpawnManager";
-    public readonly static string WaveManagerTag = "WaveManager";  
-    public readonly static string TextUISpawnManagerTag = "TextUISpawnManager"; 
+    public readonly static string WaveManagerTag = "WaveManager";
+    public readonly static string TextUISpawnManagerTag = "TextUISpawnManager";
 }
 
 public static class DataTableIds
