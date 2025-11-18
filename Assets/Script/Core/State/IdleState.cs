@@ -8,25 +8,20 @@ public class IdleState : IState
     {
         this.enemy = enemy;
     }
-    // 진입 애니메이션 
+
      public void Enter()
     {
-       #if DEBUG_MODE
-        //Debug.Log("Idle State Enter");  
-         #endif
     }
 
     public void Execute()
     {
-        
-    }
-    // 애니메이션 종료 
-    public void Exit()
-    {    
-        #if DEBUG_MODE
-        //Debug.Log("Idle State Exit");  
-         #endif
-           
+        if(enemy.GetTarget() != null)
+        {
+            enemy.stateMachine.ChangeState(enemy.stateMachine.walkState);
+        }   
     }
 
+    public void Exit()
+    {           
+    }
 }

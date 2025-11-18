@@ -25,13 +25,10 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public int maxHp;
     public int hp;
 
-    private void Awake()
-    {
-        Init();
-    }
-
+  
     private void Start()
     {
+        Init();
         slider.UpdateSlider(hp, maxHp , hp / maxHp * 100, hp , maxHp);
     }
 

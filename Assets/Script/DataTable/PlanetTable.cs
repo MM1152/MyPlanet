@@ -6,9 +6,8 @@ using UnityEngine.AddressableAssets;
 
 public class PlanetTable : DataTable
 {
-    private Dictionary<int , Data> planetTable = new Dictionary<int, Data>();
-
-    public class Data 
+    private Dictionary<int, Data> planetTable = new Dictionary<int, Data>();
+    public class Data
     {
         public int ID { get; set; }
         public int Name { get; set; }
