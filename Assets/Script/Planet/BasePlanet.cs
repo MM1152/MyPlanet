@@ -37,13 +37,12 @@ public class BasePlanet : MonoBehaviour , IDamageAble
 
     public virtual void Init()
     {
-        planetData = DataTableManager.PlanetTable.Get(1001);
+        planetData = DataTableManager.PlanetTable.Get(1002);
         typeEffectiveness.Init((ElementType)planetData.Attribute);
         passiveSystem.Init(planetData , towerManager , this);
 
         maxHp = planetData.HP;
-        hp = (int)(maxHp * 0.4f);
-
+        hp = maxHp;
     }
 
     public void RepairHp(int amount)

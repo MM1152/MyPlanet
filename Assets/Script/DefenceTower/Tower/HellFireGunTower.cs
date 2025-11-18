@@ -7,8 +7,6 @@ public class HellFireGunTower : Tower
         base.Init(tower, manager, data , slotIndex);
         minNoise = -0.05f;
         maxNoise = 0.05f;
-
-        statusEffect = new SlowStatusEffect(3f, 0.5f);
     }
 
     public override bool Attack()

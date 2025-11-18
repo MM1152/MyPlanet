@@ -163,5 +163,15 @@ public abstract class Tower
         baseRandomOption.SetRandomOption();
     }
 
+    public ElementType GetElementType()
+    {
+        return typeEffectiveness.Type;
+    }
+
+    public void SetStatusEffect(IStatusEffect statusEffect)
+    {
+        this.statusEffect = statusEffect;
+    }
+
     protected abstract BaseAttackPrefab CreateAttackPrefab();
 }

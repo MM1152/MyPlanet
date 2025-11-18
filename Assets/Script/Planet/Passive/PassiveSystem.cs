@@ -14,6 +14,7 @@ public class PassiveSystem
     private readonly Dictionary<int, IPassive> passiveMap = new Dictionary<int, IPassive>()
     {
         { 1001 , new EarthPassive() },
+        { 1002 , new MarsPassive() },
     };
 
     public void Init(PlanetTable.Data planetData , TowerManager towerManager , BasePlanet planet)

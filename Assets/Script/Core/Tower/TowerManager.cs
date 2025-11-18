@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 public class TowerManager : MonoBehaviour
 {
@@ -230,5 +232,11 @@ public class TowerManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    public List<Tower> GetTowerToAttribute(ElementType elementType)
+    {
+        var elementTower = towers.Where(x => x.GetElementType() == elementType).ToList();
+        return elementTower;
     }
 }
