@@ -10,7 +10,11 @@ public class EnemyData : DataTable
     {
         public int ID { get; set; }
         //적의속성이저장되어있는열입니다
-        public int Attribute { get; set; } = -1;    
+        public int Attribute { get; set; } = -1;
+        // 공격 타입 (근거리,원거리)
+        public int Type { get; set; }   
+        // 티어 (3,2,1,보스?)
+        public int Tier { get; set; }
         public int Speed { get; set; }
         public int HP { get; set; }
         public int ATK { get; set; }

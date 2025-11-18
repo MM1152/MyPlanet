@@ -1,4 +1,4 @@
-public class MagmaBoomerTower : Tower
+﻿public class MagmaBoomerTower : Tower
 {
     protected override BaseAttackPrefab CreateAttackPrefab()
     {

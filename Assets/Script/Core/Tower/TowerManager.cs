@@ -41,7 +41,11 @@ public class TowerManager : MonoBehaviour
         for(int i = 0; i < presetTowerIds.Count; i++)
         {
             int towerId = presetTowerIds[i];
-            if (towerId == -1) continue;
+            if (towerId == -1)
+            {
+                AddTower(null, i + 1);
+                continue;
+            }
 
             var data = DataTableManager.TowerTable.Get(towerId);
             AddTower(data , i + 1);
@@ -63,7 +67,7 @@ public class TowerManager : MonoBehaviour
 #endif
         foreach(var tower in towers)
         {
-            tower.Update(Time.deltaTime);
+            tower?.Update(Time.deltaTime);
         }
     }
 
@@ -106,6 +110,7 @@ public class TowerManager : MonoBehaviour
     {
         for (int i = 0; i < towers.Count; i++)
         {
+            if (towers[i] == null) continue;
             if (towers[i].ID == towerData.ID)
             {
                 return i;
@@ -174,8 +179,14 @@ public class TowerManager : MonoBehaviour
 
     public Tower GetRandomTower()
     {
-        int rand = UnityEngine.Random.Range(0, towers.Count);
-        return towers[rand];
+        Tower tower = null;
+        do
+        {
+            int rand = UnityEngine.Random.Range(0, towers.Count);
+            tower = towers[rand];
+        } while (tower == null);
+
+        return tower;
     }
 
     public void AddExp(int exp)

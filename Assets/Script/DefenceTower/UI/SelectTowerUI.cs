@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,9 +41,9 @@ public class SelectTowerUI : MonoBehaviour
     {
         this.towerData = data.TowerData;
         towerNameText.text = data.ID.ToString() + "\n";
-        towerTypeText.text = "ÀÓ½Ã À¯Çü";
-        slotIndexText.text = data.SlotIndex + "¹ø ½½¸©";
-        towerDescriptionText.text = "´ëÃæ ÀÌ·± Å¸¿öÀÔ´Ï´Ù~";
+        towerTypeText.text = "ì„ì‹œ ìœ í˜•";
+        slotIndexText.text = data.SlotIndex + "ë²ˆ ìŠ¬ë¦‡";
+        towerDescriptionText.text = "ëŒ€ì¶© ì´ëŸ° íƒ€ì›Œì…ë‹ˆë‹¤~";
     }
 
     public TowerTable.Data GetTowerData()

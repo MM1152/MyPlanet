@@ -11,7 +11,6 @@ public class EnemySpawnManager : MonoBehaviour
     private Enemy enemyPrefab;
     private List<Enemy> spawnEnemys = new List<Enemy>();
     private bool init = false;
-
 #if DEBUG_MODE
     public Button testButton;
 #endif
@@ -29,11 +28,10 @@ public class EnemySpawnManager : MonoBehaviour
         testButton.onClick.AddListener(() => SpawnEnemy(1));
 #endif
     }
-
     private void Awake()
     {
-        poolManager = Managers.ObjectPoolManager;
-        InitalizedAsync().Forget();
+        poolManager = Managers.ObjectPoolManager;   
+        InitalizedAsync().Forget();   
     }
 
     private void Update()
