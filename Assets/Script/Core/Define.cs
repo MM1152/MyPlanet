@@ -112,7 +112,7 @@ public static class DataTableIds
     public static readonly string TowerTable = "TowerTable";
     public static readonly string WaveTable = "WaveTable";
     public static readonly string PresetTable = "PresetTable";
-
+    public static readonly string PlanetTable = "PlanetTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

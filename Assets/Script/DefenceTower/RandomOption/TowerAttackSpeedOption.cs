@@ -7,7 +7,7 @@ public class TowerAttackSpeedOption : RandomOptionBase
         return string.Empty;
     }
 
-    public override void Init(TowerManager towerManagr, TowerTable.Data baseTowerData, RandomOptionData.Data optionData)
+    public override void Init(TowerManager towerManager, TowerTable.Data baseTowerData, RandomOptionData.Data optionData)
     {
         base.Init(towerManager, baseTowerData, optionData);
     }
