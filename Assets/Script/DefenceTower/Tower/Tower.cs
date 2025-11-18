@@ -82,20 +82,9 @@ public abstract class Tower
 
     private void SetRandomOption()
     {
-        //Option Value Change �Ǹ� ���缭 Update ����߉�
-        if(towerData.Option == 0)
-        {
-            optionData = randomOptionData.GetRandomOption();
-            baseRandomOption = randomOptionData.GetRandomOptionBase(5);
-            baseRandomOption.Init(manager , towerData, optionData);
-            towerData.Option = optionData.id;
-        }
-        else
-        {
-            optionData = randomOptionData.GetData(towerData.Option);
-            baseRandomOption = randomOptionData.GetRandomOptionBase(5);
-            baseRandomOption.Init(manager , towerData, optionData);
-        }
+        optionData = randomOptionData.GetData(towerData.Option);
+        baseRandomOption = randomOptionData.GetRandomOptionBase(towerData.Option);
+        baseRandomOption.Init(manager , towerData, optionData);
     }
 
     public void ResetRandomOption()
