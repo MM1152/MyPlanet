@@ -14,7 +14,7 @@ public class TitlePresetWindow : Window
         windowId = (int)WindowIds.TitlePresetWindow;
         backButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
 
-        DataTableManager.PresetTable.OnChangeDatas += UpdatePreset;
+        DataTableManager.PresetTable.OnChangeDatas += ChangePresetData;
         UpdatePreset();
     }
 
@@ -30,7 +30,7 @@ public class TitlePresetWindow : Window
 
     private void OnDestroy()
     {
-        DataTableManager.PresetTable.OnChangeDatas -= UpdatePreset;
+        DataTableManager.PresetTable.OnChangeDatas -= ChangePresetData;
     }
 
     private void UpdatePreset()
@@ -47,5 +47,12 @@ public class TitlePresetWindow : Window
             presetViewer.Init(DataTableManager.PresetTable.Get(i), i, manager);
             presetViewers.Add(presetViewer);
         }
+    }
+
+    private void ChangePresetData()
+    {
+        Debug.Log("Preset ChangeData Call");
+        int changeIdx = TitleTowerPlaceEditWindow.currentPresetIndex;
+        presetViewers[changeIdx].UpdatePreset(DataTableManager.PresetTable.Get(changeIdx));
     }
 }

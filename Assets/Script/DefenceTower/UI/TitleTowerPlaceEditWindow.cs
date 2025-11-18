@@ -46,13 +46,14 @@ public class TitleTowerPlaceEditWindow : Window
         {
             presetData.TowerId = placeHolds.Select(x => x.TowerData == null ? -1 : x.TowerData.ID).ToList();
             DataTableManager.PresetTable.Save().Forget();
+            manager.Open(WindowIds.TitlePresetWindow);
         });
     }
 
     public override void Open()
     {
         presetData = DataTableManager.PresetTable.Get(currentPresetIndex);
-
+        selectIndex = 0;
         circle.transform.eulerAngles = Vector3.zero;
 
         UpdateTowerHold();

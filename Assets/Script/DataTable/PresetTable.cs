@@ -32,25 +32,20 @@ public class PresetTable : DataTable
         return towerIds[index];
     }
 
-    public async UniTask Save()
+    public async UniTask<(bool sucess , string msg)> Save()
     {
         string path = Application.dataPath + "/DataTables/PresetTable.json";
         if (File.Exists(path))
         {
             var json = JsonConvert.SerializeObject(towerIds, Formatting.Indented);
             File.WriteAllText(path, json);
-            for(int i = 0; i < towerIds[0].TowerId.Count; i++)
-            {
-                Debug.Log(towerIds[0].TowerId[i]);
-            }
+            UnityEditor.AssetDatabase.Refresh();
             await LoadAsync(DataTableIds.PresetTable);
-            Debug.Log("Save 이후");
-            for (int i = 0; i < towerIds[0].TowerId.Count; i++)
-            {
-                Debug.Log(towerIds[0].TowerId[i]);
-            }
             OnChangeDatas?.Invoke();
+
+            return (true, "성공적으로 저장완료");
         }
+        return (false, "파일이 존재하지 않음");
     }
 
     public int Count()
