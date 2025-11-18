@@ -10,7 +10,10 @@ using UnityEngine.AddressableAssets;
 public class PresetTable : DataTable
 {
     private List<Data> towerIds;
+    private List<int> inGameTowers;
+
     public event Action OnChangeDatas;
+
     [Serializable]
     public class Data : JsonSerialized
     {
@@ -19,12 +22,24 @@ public class PresetTable : DataTable
         public List<int> TowerId;
     }
 
+
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
     {
+        // 추후에 파이어 베이스 연동으로 변경
         var textAsset = await Addressables.LoadAssetAsync<TextAsset>(string.Format(FormatPath, filename)).ToUniTask();
         towerIds = JsonConvert.DeserializeObject<List<Data>>(textAsset.text);
         
         return (filename, this as DataTable);
+    }
+
+    public void SetInGameTowers(List<int> inGameTowers)
+    {
+        this.inGameTowers = inGameTowers;
+    } 
+
+    public List<int> GetInGameTowers()
+    {
+        return inGameTowers;
     }
 
     public Data Get(int index)
@@ -34,6 +49,7 @@ public class PresetTable : DataTable
 
     public async UniTask<(bool sucess , string msg)> Save()
     {
+        // 추후에 파이어 베이스 연동으로 변경
         string path = Application.dataPath + "/DataTables/PresetTable.json";
         if (File.Exists(path))
         {

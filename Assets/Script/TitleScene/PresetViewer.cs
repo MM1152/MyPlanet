@@ -1,23 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class PresetViewer : MonoBehaviour
 {
     [SerializeField] private TowerInfomation towerInfomation;
     [SerializeField] private Transform towerInfomationRoot;
     [SerializeField] private Button editButton;
+    [SerializeField] private Button selectPresetButton;
     
     private List<TowerInfomation> towerInfos = new List<TowerInfomation>();
     private PresetTable.Data presetData;
+    public PresetTable.Data PresetData => presetData;
+    private Action<int> OnChangeIndex;
     private int index;
     
-    public void Init(PresetTable.Data presetData , int index , WindowManager manager)
+    public void Init(PresetTable.Data presetData , int index , WindowManager manager , Action<int> OnChangeIndex)
     {
         this.presetData = presetData;
         this.index = index;
-
-        for(int i = 0; i < presetData.TowerId.Count; i++)
+        this.OnChangeIndex = OnChangeIndex;
+        for (int i = 0; i < presetData.TowerId.Count; i++)
         {
             if (presetData.TowerId[i] == -1) continue;
 
@@ -30,6 +34,11 @@ public class PresetViewer : MonoBehaviour
         {
             TitleTowerPlaceEditWindow.currentPresetIndex = this.index;
             manager.Open(WindowIds.TitleTowerPlaceEditWindow);
+        });
+
+        selectPresetButton.onClick.AddListener(() =>
+        {
+            OnChangeIndex?.Invoke(index);
         });
     }
 
@@ -54,5 +63,24 @@ public class PresetViewer : MonoBehaviour
         }
     }
 
+    public void UpdateSelectButton(bool active)
+    {
+        if(active)
+        {
+            var image = selectPresetButton.GetComponent<Image>();
+            if(image != null)
+            {
+                image.color = Color.yellow;
+            }
+        }
+        else
+        {
+            var image = selectPresetButton.GetComponent<Image>();
+            if (image != null)
+            {
+                image.color = Color.white;
+            }
+        }
+    }
 }
     

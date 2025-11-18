@@ -5,18 +5,14 @@ public class TowerFactory : BaseFactory<Tower>
 {
     private Dictionary<int, ITowerCreateor> towerCreator = new Dictionary<int, ITowerCreateor>()
     {
-        { 1,  new ShockWaveTowerCreator() },
-        { 2,  new ShockWaveTowerCreator() },
-        { 3,  new ShockWaveTowerCreator() },
-        { 4,  new ShockWaveTowerCreator() },
-        { 5,  new ShockWaveTowerCreator() },
-        { 6,  new ShockWaveTowerCreator() },
-        { 7,  new ShockWaveTowerCreator() },
+        { 1,  new HellFireTowerCreator() },
+        { 2,  new LaserTowerCreator() },
+        { 3,  new VolcanoTowerCreator() },
+        { 4,  new SteelReaperTowerCreator() },
+        { 5,  new MagmaTowerCreator() },
+        { 6,  new IronMineTowerCreator() },
+        { 7,  new GravityControlTowerCreator() },
         { 8,  new ShockWaveTowerCreator() },
-        { 9,  new ShockWaveTowerCreator() },
-        { 10,  new ShockWaveTowerCreator() },
-        { 11,  new ShockWaveTowerCreator() },
-        { 12,  new ShockWaveTowerCreator() },
     };
 
     public override Tower CreateInstance(int id)

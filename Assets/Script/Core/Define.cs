@@ -21,6 +21,13 @@ public enum PopupIds
     TowerInfomationPopup = 0
 }
 
+public static class SceneIds
+{
+    public static readonly string TitleScene = "TitleScene";
+    public static readonly string GameScene = "GameScene";
+    public static readonly string LoadingScene = "LoadingScene";
+}
+
 public enum ElementType
 {
     None = -1,
