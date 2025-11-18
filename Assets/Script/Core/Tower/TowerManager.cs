@@ -79,6 +79,12 @@ public class TowerManager : MonoBehaviour
 
     public void AddTower(TowerTable.Data data , int slotIndex)
     {
+        if(data == null)
+        {
+            towers.Add(null);
+            return;
+        }
+
         Tower instanceTower = towerFactory.CreateInstance(data.ID);
         towers.Add(instanceTower);
         instanceTower.Init(tower, this, data , slotIndex);
@@ -106,6 +112,40 @@ public class TowerManager : MonoBehaviour
             }
         }
         return -1;
+    }
+
+    public List<Tower> GetRightTower(TowerTable.Data towerData, int radius)
+    {
+        int target = FindTowerPlaceIndex(towerData);
+        if (target == -1)
+        {
+            return null;
+        }
+        List<Tower> returnTowers = new List<Tower>();
+        Tower tower = towers[Utils.ClampIndex(target + radius, towers.Count)];
+
+        if (tower != null)
+        {
+            returnTowers.Add(tower);
+        }
+        return returnTowers;
+    }
+
+    public List<Tower> GetLeftTower(TowerTable.Data towerData, int radius)
+    {
+        int target = FindTowerPlaceIndex(towerData);
+        if (target == -1)
+        {
+            return null;
+        }
+        List<Tower> returnTowers = new List<Tower>();
+        Tower tower = towers[Utils.ClampIndex(target - radius, towers.Count)];
+
+        if( tower != null )
+        {
+            returnTowers.Add(tower);
+        }
+        return returnTowers;
     }
 
     public List<Tower> GetAroundTower(TowerTable.Data towerData, int radius)

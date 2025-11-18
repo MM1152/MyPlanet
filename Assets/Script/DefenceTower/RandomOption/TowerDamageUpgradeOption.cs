@@ -1,18 +1,12 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-public class TowerDamageUpgradeInRange : RandomOptionBase
+public class TowerDamageUpgradeOption : RandomOptionBase
 {
-    private List<Tower> towers;
-
     public override void Init(TowerManager towerManager, TowerTable.Data baseTowerData, RandomOptionData.Data optionData)
     {
         base.Init(towerManager, baseTowerData , optionData);
-    }
 
-    private void GetApplyOptionTowers()
-    {
-        towers = towerManager.GetAroundTower(baseTowerData, baseTowerData.Option_Range);
     }
 
     public override void ResetRandomOption()
@@ -40,14 +34,14 @@ public class TowerDamageUpgradeInRange : RandomOptionBase
 
     protected override RandomOptionBase CreateInstance()
     {
-        return new TowerDamageUpgradeInRange();
+        return new TowerDamageUpgradeOption();
     }
 
     public override string GetOptionStringFormatting()
     {
         if (optionData.id == 1)
-            return string.Format(optionData.description, baseTowerData.Option_Range, baseTowerData.optionValue);
+            return string.Empty;
         else
-            return string.Format(optionData.description, baseTowerData.optionValue);
+            return string.Empty;
     }
 }

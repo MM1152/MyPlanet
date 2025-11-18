@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+Ôªøusing System.Collections.Generic;
 using UnityEngine;
 
 public abstract class RandomOptionBase
@@ -7,7 +7,8 @@ public abstract class RandomOptionBase
     protected TowerManager towerManager;
     protected TowerTable.Data baseTowerData;
     protected RandomOptionData.Data optionData;
-    // Deep Copy µ» ¥ÎªÛø°º≠ ªÁøÎ«œ±‚
+    protected List<Tower> towers;
+    // Deep Copy Îêú ÎåÄÏÉÅÏóêÏÑú ÏÇ¨Ïö©ÌïòÍ∏∞
     public virtual void Init(TowerManager towerManager, TowerTable.Data baseTowerData , RandomOptionData.Data optionData)
     {
         this.optionData = optionData;
@@ -20,6 +21,24 @@ public abstract class RandomOptionBase
     {
         RandomOptionBase copyRandomOption = CreateInstance();
         return copyRandomOption;
+    }
+
+    protected void GetApplyOptionTowers()
+    {
+        int side = baseTowerData.Option_Type;
+
+        if (side == 0)
+        {
+            towers = towerManager.GetAroundTower(baseTowerData, baseTowerData.Option_Range);
+        }
+        else if (side == 1)
+        {
+            towers = towerManager.GetLeftTower(baseTowerData, baseTowerData.Option_Range);
+        }
+        else if (side == 2)
+        {
+            towers = towerManager.GetLeftTower(baseTowerData, baseTowerData.Option_Range);
+        }
     }
 
     protected abstract RandomOptionBase CreateInstance();
