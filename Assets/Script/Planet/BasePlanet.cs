@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class BasePlanet : MonoBehaviour , IDamageAble
+public class BasePlanet : MonoBehaviour, IDamageAble
 {
     public bool IsDead => isDead;
     public ElementType ElementType => elementType;
@@ -22,9 +22,17 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public ElementType elementType;
     public int maxHp;
     public int hp;
+    private TextSpawnManager textSpawnManager;
+
+    private void Awake()
+    {
+        textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>(); 
+    }
+
   
     private void Start()
     {
+        slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
         Init();
         slider.UpdateSlider(hp, maxHp , hp / maxHp * 100, hp , maxHp);
     }
@@ -39,6 +47,7 @@ public class BasePlanet : MonoBehaviour , IDamageAble
         hp = maxHp;
     }
 
+
     public void RepairHp(int amount)
     {
         hp += amount;
@@ -49,6 +58,7 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public void OnDamage(int damage)
     {
         hp -= damage;
+        textSpawnManager.SpawnTextUI(damage.ToString(), transform.position).SetColor(Color.yellow);
         OnChanageHP();
         if (hp <= 0 && !isDead)
         {
@@ -71,5 +81,5 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     {
         slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
     }
-    
+
 }

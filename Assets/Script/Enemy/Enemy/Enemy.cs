@@ -25,6 +25,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public float speed;
     public int atk;
     public float attackrange;
+    public float attackInterval;
     public EnemyType enemyType => (EnemyType)enemyData.Type;
     public EnemyTier enemyTier => (EnemyTier)enemyData.Tier;
     [SerializeField] private int currentHP;
@@ -33,6 +34,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private EnemyAttackKey attackKey;
     private AttackManager attackManager;
     public IAttack attack;
+
+    public bool isKilledByPlayer { get; private set; }
 
 #if DEBUG_MODE
     private TextSpawnManager textSpawnManager;
@@ -60,7 +63,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         statusEffect.Init();
         attackKey = new EnemyAttackKey(enemyType, ElementType, enemyTier);
         attackManager = new AttackManager(attackKey, out attack);
-
+        isKilledByPlayer = true;   
         IsDead = false;
     }
 
@@ -78,6 +81,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #if DEBUG_MODE
             Debug.Log("콜라이더 충돌 들어옴");
 #endif
+            isKilledByPlayer = false;
             SetState(stateMachine.attackState);
         }
         return;
