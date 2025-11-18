@@ -29,7 +29,7 @@ public class TowerManager : MonoBehaviour
 
     private WindowManager windowManager;
     //Fix : 임시용임
-    private List<int> presetTowerIds;
+    private PresetTable.Data presetGameData;
 #if DEBUG_MODE
     [Header("DEBUG")]
     public bool stopAttack;
@@ -39,10 +39,10 @@ public class TowerManager : MonoBehaviour
     private void Awake()
     {
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
-        presetTowerIds = DataTableManager.PresetTable.GetInGameTowers();
-        for(int i = 0; i < presetTowerIds.Count; i++)
+        presetGameData = DataTableManager.PresetTable.GetGameData();
+        for(int i = 0; i < presetGameData.TowerId.Count; i++)
         {
-            int towerId = presetTowerIds[i];
+            int towerId = presetGameData.TowerId[i];
             if (towerId == -1)
             {
                 AddTower(null, i + 1);

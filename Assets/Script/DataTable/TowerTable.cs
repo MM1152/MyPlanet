@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using CsvHelper.Configuration.Attributes;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -10,23 +11,39 @@ public class TowerTable : DataTable
     public class Data
     {
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Explanation { get; set; }
-        public string Grade { get; set; }
+        [Name("Name")]
+        public int name { get; set; }
+        public int Type { get; set; }
+        public int ATK_Type { get; set; }
+        public int Option_type { get; set; }
+        public int Option_Range { get; set; }
         public int Attribute { get; set; }
         public int ATK { get; set; }
-        public int Range { get; set; }
-        public string Bullet_Path { get; set; }
-        public string Image_Path { get; set; }
-        public int Fire_Rate { get; set; }
+        public float Fire_Rate { get; set; }
+        public string Image_path { get; set; }
+        public string Bullet_path { get; set; }
         public int Option { get; set; }
-        public int Min_Value { get; set; }
-        public int Max_Value { get; set; }
-        public int Option_Type { get; set; }
-        public int Option_Range { get; set; }
+        public float Min_Value { get; set; }
+        public float Max_Value { get; set; }
+        public float Attack_Range { get; set; }
 
         [CsvHelper.Configuration.Attributes.Ignore]
-        public int optionValue;
+        public string Name => DataTableManager.StringTable.Get(name);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public string AttackType => ATK_Type switch
+        {
+            1 => "레이저",
+            2 => "기관총",
+            3 => "샷건",
+            4 => "미사일",
+            5 => "저격",
+            6 => "폭탄",
+            7 => "기뢰",
+            8 => "방전",
+            _ => "정의되지 않음"
+        };
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public float optionValue;
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)

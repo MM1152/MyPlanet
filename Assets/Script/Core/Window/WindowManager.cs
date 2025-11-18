@@ -33,12 +33,14 @@ public class WindowManager : MonoBehaviour
             openStatusViewButton.onClick.AddListener(() => Open(WindowIds.StatusWindow));
     }
 
-    public void Open(WindowIds id)
+    public Window Open(WindowIds id)
     {
         Variable.IsJoyStickActive = false;
         cureentWindow?.Close();
         cureentWindow = windowTable[(int)id];
         cureentWindow.Open();
+
+        return cureentWindow;
     }
 
     public void Close()

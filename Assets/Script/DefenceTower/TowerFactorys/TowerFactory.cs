@@ -5,15 +5,20 @@ public class TowerFactory : BaseFactory<Tower>
 {
     private Dictionary<int, ITowerCreateor> towerCreator = new Dictionary<int, ITowerCreateor>()
     {
-        { 1,  new HellFireTowerCreator() },
-        { 2,  new LaserTowerCreator() },
-        { 3,  new VolcanoTowerCreator() },
-        { 4,  new SteelReaperTowerCreator() },
-        { 5,  new MagmaTowerCreator() },
-        { 6,  new IronMineTowerCreator() },
-        { 7,  new GravityControlTowerCreator() },
-        { 8,  new ShockWaveTowerCreator() },
+        { 2003,  new HellFireTowerCreator() },
+        { 2001,  new LaserTowerCreator() },
+        { 2007,  new VolcanoTowerCreator() },
+        { 2010,  new SteelReaperTowerCreator() },
+        { 2011,  new MagmaTowerCreator() },
+        { 2013,  new IronMineTowerCreator() },
+        //{ 7,  new GravityControlTowerCreator() },
+        //{ 8,  new ShockWaveTowerCreator() },
     };
+
+    public bool ContainTower(int id)
+    {
+        return towerCreator.ContainsKey(id);
+    }
 
     public override Tower CreateInstance(int id)
     {

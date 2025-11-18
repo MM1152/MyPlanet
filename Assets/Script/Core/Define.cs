@@ -13,6 +13,7 @@ public enum WindowIds
     TitleStageSelectedWindow = 3,
     TitlePresetWindow = 4,
     TitleTowerPlaceEditWindow = 5,
+    TitleSelectPlanetWindow = 6,
 }
 
 public enum PopupIds
@@ -68,7 +69,7 @@ public enum PoolsId
     
     SimpleBullet = 301,
     Exp = 400,
-    TextUI = 600,
+    DamageText = 600,
 
 
 }
@@ -120,7 +121,7 @@ public static class AddressableNames
         { "GravityControl", PoolsId.GravityControl },
         { "ShockWaveBullet", PoolsId.ShockWaveBullet },
         { "ShockWave", PoolsId.ShockWave },
-        { "TextUI", PoolsId.TextUI },
+        { "DamageText", PoolsId.DamageText },
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -151,6 +152,7 @@ public static class DataTableIds
     public static readonly string WaveTable = "WaveTable";
     public static readonly string PresetTable = "PresetTable";
     public static readonly string PlanetTable = "PlanetTable";
+    public static readonly string StringTable = "StringTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

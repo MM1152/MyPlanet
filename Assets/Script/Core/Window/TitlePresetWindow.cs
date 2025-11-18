@@ -20,7 +20,7 @@ public class TitlePresetWindow : Window
         windowId = (int)WindowIds.TitlePresetWindow;
         backButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
 
-        DataTableManager.PresetTable.OnChangeDatas += ChangePresetData;
+        DataTableManager.PresetTable.OnChangePresetData += ChangePresetData;
         UpdatePreset();
 
         gameStartButton.onClick.AddListener(() =>
@@ -30,7 +30,7 @@ public class TitlePresetWindow : Window
 
             LoadingScene.sceneId = SceneIds.GameScene;
             var presetData = presetViewers[currentSelectPresetIndex].PresetData;
-            DataTableManager.PresetTable.SetInGameTowers(presetData.TowerId);
+            DataTableManager.PresetTable.SetGameData(presetData);
             SceneManager.LoadScene(SceneIds.LoadingScene);
         });
     }
@@ -43,7 +43,6 @@ public class TitlePresetWindow : Window
         }
         currentSelectPresetIndex = changeIdx;
         presetViewers[currentSelectPresetIndex].UpdateSelectButton(true);
-
     }
 
     public override void Open()
@@ -58,7 +57,7 @@ public class TitlePresetWindow : Window
 
     private void OnDestroy()
     {
-        DataTableManager.PresetTable.OnChangeDatas -= ChangePresetData;
+        DataTableManager.PresetTable.OnChangePresetData -= ChangePresetData;
     }
 
     private void UpdatePreset()
@@ -77,10 +76,10 @@ public class TitlePresetWindow : Window
         }
     }
 
-    private void ChangePresetData()
+    private void ChangePresetData(int index)
     {
         Debug.Log("Preset ChangeData Call");
-        int changeIdx = TitleTowerPlaceEditWindow.currentPresetIndex;
-        presetViewers[changeIdx].UpdatePreset(DataTableManager.PresetTable.Get(changeIdx));
+        var presetData = DataTableManager.PresetTable.Get(index);
+        presetViewers[index].UpdatePreset(presetData);
     }
 }

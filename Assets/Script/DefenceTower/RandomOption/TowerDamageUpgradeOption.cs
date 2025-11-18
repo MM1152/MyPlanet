@@ -13,7 +13,7 @@ public class TowerDamageUpgradeOption : RandomOptionBase
     {
         foreach(var tower in towers)
         {
-            tower.AddBonusDamage(-baseTowerData.optionValue);
+            tower.AddBonusDamage((int)-baseTowerData.optionValue);
         }
     }
 
@@ -25,7 +25,7 @@ public class TowerDamageUpgradeOption : RandomOptionBase
 #if DEBUG_MODE
             //Debug.Log($"Before Damage Amount Apply : {tower.Damage} towerID : {tower.ID}");
 #endif
-            tower.AddBonusDamage(baseTowerData.optionValue);
+            tower.AddBonusDamage((int)baseTowerData.optionValue);
 #if DEBUG_MODE
             //Debug.Log($"After Damage Amount Apply : {tower.Damage} towerID : {tower.ID}");
 #endif

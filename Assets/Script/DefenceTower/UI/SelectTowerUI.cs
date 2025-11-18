@@ -40,8 +40,8 @@ public class SelectTowerUI : MonoBehaviour
     public void SetTowerData(Tower data)
     {
         this.towerData = data.TowerData;
-        towerNameText.text = data.ID.ToString() + "\n";
-        towerTypeText.text = "임시 유형";
+        towerNameText.text = towerData.Name;
+        towerTypeText.text = towerData.AttackType;
         slotIndexText.text = data.SlotIndex + "번 슬릇";
         towerDescriptionText.text = "대충 이런 타워입니다~";
     }

@@ -14,7 +14,7 @@ public class TextSpawnManager : MonoBehaviour
 
     public TextUI SpawnTextUI(string content, Vector2 position)
     {
-        var textUI = poolManager.SpawnObject<TextUI>(PoolsId.TextUI);
+        var textUI = poolManager.SpawnObject<TextUI>(PoolsId.DamageText);
         textUI.Init(content, position);
         return textUI;
     }   

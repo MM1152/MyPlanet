@@ -25,7 +25,7 @@ public abstract class RandomOptionBase
 
     protected void GetApplyOptionTowers()
     {
-        int side = baseTowerData.Option_Type;
+        int side = baseTowerData.Option_type;
 
         if (side == 0)
         {

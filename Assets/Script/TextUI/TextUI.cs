@@ -23,7 +23,7 @@ public class TextUI : MonoBehaviour
         if (timer <= currentTime)
         {
             Reset();
-            Managers.ObjectPoolManager.Despawn(PoolsId.TextUI, this.gameObject);            
+            Managers.ObjectPoolManager.Despawn(PoolsId.DamageText, this.gameObject);            
         }
         currentTime += Time.deltaTime;
     }

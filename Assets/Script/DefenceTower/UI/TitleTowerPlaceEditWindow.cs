@@ -18,17 +18,25 @@ public class TitleTowerPlaceEditWindow : Window
 
     private Vector2 circleSize;
     private int placeCount = 10;
+
     private List<TowerPlaceHold> placeHolds = new List<TowerPlaceHold>();
     private Dictionary<int,ShowIndexPanel> showIndexPanels = new Dictionary<int, ShowIndexPanel>();
     private List<TowerInfomation> towerInfos = new List<TowerInfomation>();
+
     private float angle;
     private int selectIndex = 0;
     private bool isRotate = false;
-    private PresetTable.Data presetData;
 
-    public static int currentPresetIndex = -1; // 몇번 째 프리셋에 접근했는지에 대한 인덱스
+    private TowerFactory towerFactory = new TowerFactory();
+    private PresetTable.Data presetData;
+    private int presetIndex;
+
     public override void Close()
     {
+        if(presetData != null)
+        {
+            presetData.TowerId = placeHolds.Select(x => x.TowerData != null ? x.TowerData.ID : -1).ToList();
+        }
         base.Close();
         Release();
     }
@@ -41,26 +49,31 @@ public class TitleTowerPlaceEditWindow : Window
         Canvas.ForceUpdateCanvases();
         circleSize = new Vector3(circle.rectTransform.rect.width , circle.rectTransform.rect.height);
 
-        closeButton.onClick.AddListener(() => manager.Open(WindowIds.TitlePresetWindow));
+        closeButton.onClick.AddListener(() => manager.Open(WindowIds.TitleSelectPlanetWindow));
         saveButton.onClick.AddListener(() =>
         {
-            presetData.TowerId = placeHolds.Select(x => x.TowerData == null ? -1 : x.TowerData.ID).ToList();
-            DataTableManager.PresetTable.Save().Forget();
+            presetData.TowerId = placeHolds.Select(x => x.TowerData != null ? x.TowerData.ID : -1).ToList();
+            DataTableManager.PresetTable.Save(presetData, presetIndex).Forget();
             manager.Open(WindowIds.TitlePresetWindow);
         });
     }
 
     public override void Open()
     {
-        presetData = DataTableManager.PresetTable.Get(currentPresetIndex);
         selectIndex = 0;
         circle.transform.eulerAngles = Vector3.zero;
+
+        base.Open();
+    }
+
+    public void SetPresetData(PresetTable.Data presetData , int presetIndex)
+    {
+        this.presetData = presetData;
+        this.presetIndex = presetIndex;
 
         UpdateTowerHold();
         UpdateTowerList();
         RotateCircle(0);
-
-        base.Open();
     }
 
     private void Release()
@@ -82,8 +95,13 @@ public class TitleTowerPlaceEditWindow : Window
     private void UpdateTowerList()
     {
         var towerList = DataTableManager.TowerTable.GetAll();
-        for(int i = 0; i < towerList.Count; i++)
+        
+        for (int i = 0; i < towerList.Count; i++)
         {
+            // 일단 임시로 막아놓은거임
+            if (!towerFactory.ContainTower(towerList[i].ID))
+                continue;
+
             var towerInfo = Instantiate(towerInfomation, towerInfomationRoot);
             towerInfo.OnTab += Place;
 

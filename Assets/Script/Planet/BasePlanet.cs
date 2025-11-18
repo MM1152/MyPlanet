@@ -32,16 +32,15 @@ public class BasePlanet : MonoBehaviour, IDamageAble
   
     private void Start()
     {
-        slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
         Init();
         slider.UpdateSlider(hp, maxHp , hp / maxHp * 100, hp , maxHp);
     }
 
     public virtual void Init()
     {
-        planetData = DataTableManager.PlanetTable.Get(1003);
+        planetData = DataTableManager.PlanetTable.Get(DataTableManager.PresetTable.GetGameData().PlanetId);
         typeEffectiveness.Init((ElementType)planetData.Attribute);
-        passiveSystem.Init(planetData , towerManager , this);
+        //passiveSystem.Init(planetData , towerManager , this);
 
         maxHp = planetData.HP;
         hp = maxHp;
@@ -74,7 +73,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     private void Update()
     {
-        passiveSystem.Update(Time.deltaTime);
+        //passiveSystem?.Update(Time.deltaTime);
     }
 
     public void OnChanageHP()
