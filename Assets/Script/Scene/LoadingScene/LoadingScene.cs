@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -6,13 +7,18 @@ using UnityEngine.AddressableAssets;
 public class LoadingScene : MonoBehaviour
 {
     public TextMeshProUGUI currentProgress;
-    public static string sceneId = "GameScene";
+    public static string sceneId = "TitleScene";
     public async UniTaskVoid Start()
     {
-        if(string.IsNullOrEmpty(sceneId))
+        await LoadSceneAsync(sceneId);
+    } 
+
+    public async UniTask LoadSceneAsync(string id)
+    {
+        if (string.IsNullOrEmpty(id))
         {
             return;
-        } 
+        }
         //currentProgress.text = "Firebase 초기화 중";
         //await FirebaseManager.Instance.WaitForInitalizedAsync();
         currentProgress.text = "Managers 초기화 중";
@@ -21,7 +27,5 @@ public class LoadingScene : MonoBehaviour
         await DataTableManager.WaitForInitalizeAsync();
         currentProgress.text = "Scene 초기화 중";
         await Addressables.LoadSceneAsync(sceneId).ToUniTask();
-    } 
-
-
+    }
 }

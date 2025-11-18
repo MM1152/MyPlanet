@@ -9,12 +9,23 @@ public enum WindowIds
     None = -1,
     PlaceTowerWindow = 0,
     StatusWindow = 1,
+    TitleMainWindow = 2,
+    TitleStageSelectedWindow = 3,
+    TitlePresetWindow = 4,
+    TitleTowerPlaceEditWindow = 5,
 }
 
 public enum PopupIds
 {
     None = -1,
     TowerInfomationPopup = 0
+}
+
+public static class SceneIds
+{
+    public static readonly string TitleScene = "TitleScene";
+    public static readonly string GameScene = "GameScene";
+    public static readonly string LoadingScene = "LoadingScene";
 }
 
 public enum ElementType
@@ -100,6 +111,7 @@ public static class DataTableIds
     public static readonly string CrewRankTable = "CrewRankTable";
     public static readonly string TowerTable = "TowerTable";
     public static readonly string WaveTable = "WaveTable";
+    public static readonly string PresetTable = "PresetTable";
 
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()

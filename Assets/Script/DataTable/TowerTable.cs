@@ -1,4 +1,4 @@
-using Cysharp.Threading.Tasks;
+ï»¿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -49,11 +49,21 @@ public class TowerTable : DataTable
         if (!towerTable.ContainsKey(id))
         {
 #if DEBUG_MODE
-            throw new System.Exception($"TowerData ¿¡´Â ID {id} °¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+            //throw new System.Exception($"TowerData ì—ëŠ” ID {id} ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 #endif
             return null;
         }
 
         return towerTable[id];
+    }
+
+    public int Count()
+    {
+        return towerTable.Count;
+    }
+
+    public List<Data> GetAll()
+    {
+        return new List<Data>(towerTable.Values);
     }
 }

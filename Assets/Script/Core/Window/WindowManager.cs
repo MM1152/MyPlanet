@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
@@ -29,7 +29,8 @@ public class WindowManager : MonoBehaviour
             cureentWindow = windowTable[(int)startWindow];
         }
 
-        openStatusViewButton.onClick.AddListener(() => Open(WindowIds.StatusWindow));
+        if(openStatusViewButton != null)
+            openStatusViewButton.onClick.AddListener(() => Open(WindowIds.StatusWindow));
     }
 
     public void Open(WindowIds id)
