@@ -15,7 +15,8 @@ public static class DataTableManager
     public static TowerTable TowerTable => Get<TowerTable>(DataTableIds.TowerTable); 
     public static WaveData WaveTable => Get<WaveData>(DataTableIds.WaveTable);
     public static PresetTable PresetTable => Get<PresetTable>(DataTableIds.PresetTable);
-
+    public static PlanetTable PlanetTable => Get<PlanetTable>(DataTableIds.PlanetTable);
+    public static StringTable StringTable => Get<StringTable>(DataTableIds.StringTable);
 
     static DataTableManager()
     {
@@ -28,13 +29,18 @@ public static class DataTableManager
         var enemyDatatable = new EnemyData();
         var towerTable = new TowerTable();
         var waveTable = new WaveData();    
-        var presetTable = new PresetTable();    
+        var presetTable = new PresetTable(); 
+        var planetTable= new PlanetTable();
+        var stringTable = new StringTable();
+
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
             enemyDatatable.LoadAsync(DataTableIds.EnemyTable),
             towerTable.LoadAsync(DataTableIds.TowerTable),
             waveTable.LoadAsync(DataTableIds.WaveTable),  
             presetTable.LoadAsync(DataTableIds.PresetTable),
+            planetTable.LoadAsync(DataTableIds.PlanetTable),
+            stringTable.LoadAsync(DataTableIds.StringTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

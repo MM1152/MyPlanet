@@ -1,25 +1,22 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class BasePlanet : MonoBehaviour, IDamageAble
 {
-    private StatusEffect statusEffect = new StatusEffect();
-
     public bool IsDead => isDead;
     public ElementType ElementType => elementType;
-
     public StatusEffect StatusEffect => statusEffect;
 
-    private bool isDead = false;
+    private StatusEffect statusEffect = new StatusEffect();
     private TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
-
-    public event Action OnDieAction;
-    public event Action OnRandomOption;
-    public event Action OnChangeHp;
+    private PassiveSystem passiveSystem = new PassiveSystem();
+    private PlanetTable.Data planetData;
+    private bool isDead = false;
 
     [Header("On Reference In inspector")]
     [SerializeField] private SliderValue slider;
+    [SerializeField] private TowerManager towerManager;
 
     [Header("Test Datas")]
     public ElementType elementType;
@@ -29,27 +26,39 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     private void Awake()
     {
-        Init();
-        OnChangeHp += OnChanageHP;
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>(); 
     }
 
+  
     private void Start()
     {
-        slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
+        Init();
+        slider.UpdateSlider(hp, maxHp , hp / maxHp * 100, hp , maxHp);
     }
 
     public virtual void Init()
     {
-        typeEffectiveness.Init(elementType);
+        planetData = DataTableManager.PlanetTable.Get(DataTableManager.PresetTable.GetGameData().PlanetId);
+        typeEffectiveness.Init((ElementType)planetData.Attribute);
+        //passiveSystem.Init(planetData , towerManager , this);
+
+        maxHp = planetData.HP;
         hp = maxHp;
     }
 
+
+    public void RepairHp(int amount)
+    {
+        hp += amount;
+        hp = Mathf.Clamp(hp, 0, maxHp);
+        OnChanageHP();
+    }
+        
     public void OnDamage(int damage)
     {
         hp -= damage;
         textSpawnManager.SpawnTextUI(damage.ToString(), transform.position).SetColor(Color.yellow);
-        OnChangeHp?.Invoke();
+        OnChanageHP();
         if (hp <= 0 && !isDead)
         {
             OnDead();
@@ -59,14 +68,12 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public void OnDead()
     {
         isDead = true;
-        OnDieAction?.Invoke();
-
         Destroy(gameObject);
     }
 
     private void Update()
     {
-        OnRandomOption?.Invoke();
+        //passiveSystem?.Update(Time.deltaTime);
     }
 
     public void OnChanageHP()

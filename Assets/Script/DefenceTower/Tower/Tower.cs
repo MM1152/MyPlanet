@@ -14,7 +14,7 @@ public abstract class Tower
 
     public int ID => towerData.ID;
 
-    public int AttackRange => towerData.Range;
+    public float AttackRange => towerData.Attack_Range;
 
     public TowerTable.Data TowerData => towerData;
 
@@ -117,7 +117,7 @@ public abstract class Tower
             if (target == null) 
                 return false;
 
-            if (Vector3.Distance(target.position, tower.transform.position) > towerData.Range)
+            if (Vector3.Distance(target.position, tower.transform.position) > towerData.Attack_Range)
             {
                 Target = null;
                 return false;
@@ -161,6 +161,16 @@ public abstract class Tower
     {
         useAble = true;
         baseRandomOption.SetRandomOption();
+    }
+
+    public ElementType GetElementType()
+    {
+        return typeEffectiveness.Type;
+    }
+
+    public void SetStatusEffect(IStatusEffect statusEffect)
+    {
+        this.statusEffect = statusEffect;
     }
 
     protected abstract BaseAttackPrefab CreateAttackPrefab();

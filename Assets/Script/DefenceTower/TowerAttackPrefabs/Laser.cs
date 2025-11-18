@@ -19,6 +19,7 @@ public class Laser : ProjectTile
     {
         base.Init(data, typeEffectiveness, effect);
         poolsId = PoolsId.Laser;
+        gameObject.transform.localScale = new Vector3(0.3f, 0.3f, 1f);
     }
 
     public override void SetTarget(Transform target , float minNoise , float maxNoise)

@@ -10,9 +10,9 @@ using UnityEngine.AddressableAssets;
 public class PresetTable : DataTable
 {
     private List<Data> towerIds;
-    private List<int> inGameTowers;
+    private Data inGameData;
 
-    public event Action OnChangeDatas;
+    public event Action<int> OnChangePresetData;
 
     [Serializable]
     public class Data : JsonSerialized
@@ -32,24 +32,32 @@ public class PresetTable : DataTable
         return (filename, this as DataTable);
     }
 
-    public void SetInGameTowers(List<int> inGameTowers)
+    public void SetGameData(Data InGameData)
     {
-        this.inGameTowers = inGameTowers;
+        this.inGameData = InGameData;
     } 
 
-    public List<int> GetInGameTowers()
+    public Data GetGameData()
     {
-        return inGameTowers;
+        return inGameData;
     }
 
     public Data Get(int index)
     {
-        return towerIds[index];
+        Data copyData = new Data()
+        {
+            PresetName = towerIds[index].PresetName,
+            PlanetId = towerIds[index].PlanetId,
+            TowerId = new List<int>(towerIds[index].TowerId)
+        };
+        return copyData;
     }
 
-    public async UniTask<(bool sucess , string msg)> Save()
+    public async UniTask<(bool sucess , string msg)> Save(Data changedData , int index)
     {
         // 추후에 파이어 베이스 연동으로 변경
+        towerIds[index] = changedData;
+
         string path = Application.dataPath + "/DataTables/PresetTable.json";
         if (File.Exists(path))
         {
@@ -57,7 +65,7 @@ public class PresetTable : DataTable
             File.WriteAllText(path, json);
             UnityEditor.AssetDatabase.Refresh();
             await LoadAsync(DataTableIds.PresetTable);
-            OnChangeDatas?.Invoke();
+            OnChangePresetData?.Invoke(index);
 
             return (true, "성공적으로 저장완료");
         }

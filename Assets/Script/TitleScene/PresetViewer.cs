@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using TMPro;
 
 public class PresetViewer : MonoBehaviour
 {
@@ -9,7 +10,13 @@ public class PresetViewer : MonoBehaviour
     [SerializeField] private Transform towerInfomationRoot;
     [SerializeField] private Button editButton;
     [SerializeField] private Button selectPresetButton;
-    
+
+    [Header("Planet Viewer Reference")]
+    [SerializeField] private TextMeshProUGUI planetgradeText;
+    [SerializeField] private TextMeshProUGUI planetTypeText;
+    [SerializeField] private TextMeshProUGUI planetNameText;
+    [SerializeField] private Image planetImage;
+
     private List<TowerInfomation> towerInfos = new List<TowerInfomation>();
     private PresetTable.Data presetData;
     public PresetTable.Data PresetData => presetData;
@@ -21,19 +28,16 @@ public class PresetViewer : MonoBehaviour
         this.presetData = presetData;
         this.index = index;
         this.OnChangeIndex = OnChangeIndex;
-        for (int i = 0; i < presetData.TowerId.Count; i++)
-        {
-            if (presetData.TowerId[i] == -1) continue;
-
-            var towerInfo = Instantiate(towerInfomation, towerInfomationRoot);
-            towerInfo.Init(presetData.TowerId[i]);
-            towerInfos.Add(towerInfo);
-        }
+        UpdatePreset(presetData);
 
         editButton.onClick.AddListener(() =>
         {
-            TitleTowerPlaceEditWindow.currentPresetIndex = this.index;
-            manager.Open(WindowIds.TitleTowerPlaceEditWindow);
+            var window = manager.Open(WindowIds.TitleSelectPlanetWindow);
+            if(window is TitleSelectPlanetWindow planetWindow)
+            {
+                var presetData = DataTableManager.PresetTable.Get(index);
+                planetWindow.SetPresetData(presetData , index);
+            }
         });
 
         selectPresetButton.onClick.AddListener(() =>
@@ -51,7 +55,16 @@ public class PresetViewer : MonoBehaviour
         {
             Destroy(towerInfos[i].gameObject);
         }
+
         towerInfos.Clear();
+
+        var planetData = DataTableManager.PlanetTable.Get(presetData.PlanetId);
+        if(planetData != null)
+        {
+            planetgradeText.text = planetData.grade;
+            planetNameText.text = planetData.Name;
+            planetTypeText.text = planetData.PlanetType;
+        }
 
         for (int i = 0; i < presetData.TowerId.Count; i++)
         {

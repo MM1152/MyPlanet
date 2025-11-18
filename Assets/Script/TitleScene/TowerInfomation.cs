@@ -16,7 +16,8 @@ public class TowerInfomation : MonoBehaviour
     public void Init(int towerId)
     {
         data = DataTableManager.TowerTable.Get(towerId);
-        towerNameText.text = data.Name;
+        towerNameText.text = data.Name; 
+        towerTypeText.text= data.AttackType;
     }
 
     public TowerTable.Data GetTowerData()
