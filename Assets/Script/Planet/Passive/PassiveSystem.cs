@@ -15,6 +15,7 @@ public class PassiveSystem
     {
         { 1001 , new EarthPassive() },
         { 1002 , new MarsPassive() },
+        { 1003 , new UranusPassive() },
     };
 
     public void Init(PlanetTable.Data planetData , TowerManager towerManager , BasePlanet planet)

@@ -15,7 +15,7 @@ public class SlowStatusEffect : IStatusEffect
     /// 
     /// </summary>
     /// <param name="duration">지속 시간 파라미터</param>
-    /// <param name="slowPercent">0 ~ 1 사이로 정규화된 값 넣어줘야함</param>
+    /// <param name="slowPercent"> 0 ~ 1 사이로 정규화된 값 넣어줘야함</param>
     public SlowStatusEffect(float duration, float slowPercent)
     {
         this.duration = duration;

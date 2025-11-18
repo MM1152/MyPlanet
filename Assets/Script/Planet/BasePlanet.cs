@@ -4,11 +4,9 @@ using UnityEngine.Rendering;
 
 public class BasePlanet : MonoBehaviour , IDamageAble
 {
-
     public bool IsDead => isDead;
     public ElementType ElementType => elementType;
     public StatusEffect StatusEffect => statusEffect;
-
 
     private StatusEffect statusEffect = new StatusEffect();
     private TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
@@ -24,7 +22,6 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public ElementType elementType;
     public int maxHp;
     public int hp;
-
   
     private void Start()
     {
@@ -34,7 +31,7 @@ public class BasePlanet : MonoBehaviour , IDamageAble
 
     public virtual void Init()
     {
-        planetData = DataTableManager.PlanetTable.Get(1002);
+        planetData = DataTableManager.PlanetTable.Get(1003);
         typeEffectiveness.Init((ElementType)planetData.Attribute);
         passiveSystem.Init(planetData , towerManager , this);
 
@@ -62,8 +59,6 @@ public class BasePlanet : MonoBehaviour , IDamageAble
     public void OnDead()
     {
         isDead = true;
-        
-
         Destroy(gameObject);
     }
 
