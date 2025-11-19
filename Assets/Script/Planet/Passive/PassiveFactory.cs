@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 public class PassiveFacotry : BaseFactory<IPassive>
 {
     private Dictionary<int, IPassive> passiveTable = new Dictionary<int, IPassive>()
@@ -14,6 +16,9 @@ public class PassiveFacotry : BaseFactory<IPassive>
         { 10007 , new SaturnPassive() },
         { 10008 , new UranusPassive() },
         { 10009 , new NeptunePassive() },
+        { 10013 , new ErisPassive() },
+        {10014 , new CeresPassive() },
+        {10015 , new LumicillaPassive() }
     };
     public override IPassive CreateInstance(int id)
     {
@@ -275,5 +280,145 @@ public class NeptunePassive : IPassive
         this.passiveData = passiveData;
         this.effectData = effectData;
         this.passiveSystem = passiveSystem;
+    }
+}
+
+public class ErisPassive : IPassive
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+    private PassiveSystem passiveSystem;
+
+    private float timer = 0f;
+
+    public void ApplyPassive(Tower tower, BasePlanet basePlanet, Enemy enemy)
+    {
+        timer += Time.deltaTime;
+
+        if(timer >= 1f)
+        {
+            timer = 0f;
+            basePlanet.OnDamage(passiveData.Val);
+        }
+
+        if (enemy != null)
+        {
+            if(enemy.IsDead)
+            {
+                basePlanet.RepairHp(passiveData.Val * 2);
+                Debug.Log("에리스 패시브 적용");
+            }
+        }
+    }
+
+    public IPassive CreateInstance()
+    {
+        return new ErisPassive();
+    }
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData, PassiveSystem passiveSystem)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+        this.passiveSystem = passiveSystem;
+    }
+}
+
+public class CeresPassive : IPassive
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+    private PassiveSystem passiveSystem;
+    private TowerManager towerManager;
+
+    private float timer = 0f;
+    public void ApplyPassive(Tower tower, BasePlanet basePlanet, Enemy enemy)
+    {
+        if (tower != null)
+        {
+            var towers = towerManager.GetAllTower();   
+            foreach(var applytower in towers)
+            {
+                if(applytower != null)
+                    applytower.AddBonusAttackSpeedTopercent(passiveData.Val * 0.01f);
+            }
+            UniTask.RunOnThreadPool(() => WaitForSecondAsync(passiveData.Time)).Forget();
+            passiveSystem.isPassiveOn = false;
+            Debug.Log("세레스 패시브 적용");
+        }
+    }
+
+    public IPassive CreateInstance()
+    {
+        return new CeresPassive();
+    }
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData, PassiveSystem passiveSystem)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+        this.passiveSystem = passiveSystem;
+        towerManager = GameObject.FindWithTag(TagIds.TowerManagerTag).GetComponent<TowerManager>();
+    }
+
+    private async UniTask WaitForSecondAsync(float time)
+    {
+        await UniTask.WaitForSeconds(time);
+        var towers = towerManager.GetAllTower();
+        foreach (var applytower in towers)
+        {
+            if (applytower != null)
+                applytower.MinusBonusAttackSpeedTopercent(passiveData.Val * 0.01f);
+        }
+        Debug.Log("세레스 패시브 해제");
+    }
+}
+
+public class LumicillaPassive : IPassive
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+    private PassiveSystem passiveSystem;
+    private TowerManager towerManager;
+
+    public void ApplyPassive(Tower tower, BasePlanet basePlanet, Enemy enemy)
+    {
+        if (tower != null)
+        {
+            var towers = towerManager.GetAllTower();
+            foreach (var applytower in towers)
+            {
+                if (applytower != null)
+                    applytower.AddBonusDamageToPercent(passiveData.Val * 0.01f);
+            }
+            UniTask.RunOnThreadPool(() => WaitForSecondAsync(passiveData.Time)).Forget();
+            passiveSystem.isPassiveOn = false;
+            Debug.Log("루미실라 패시브 적용");
+        }
+    }
+
+    public IPassive CreateInstance()
+    {
+        return new LumicillaPassive();
+    }
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData, PassiveSystem passiveSystem)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+        this.passiveSystem = passiveSystem;
+        towerManager = GameObject.FindWithTag(TagIds.TowerManagerTag).GetComponent<TowerManager>();
+    }
+
+    private async UniTask WaitForSecondAsync(float time)
+    {
+        await UniTask.WaitForSeconds(time);
+        var towers = towerManager.GetAllTower();
+        foreach (var applytower in towers)
+        {
+            if (applytower != null)
+                applytower.MinusBonusDamageToPercent(passiveData.Val * 0.01f);
+        }
+        Debug.Log("루미실라 패시브 해제");
     }
 }

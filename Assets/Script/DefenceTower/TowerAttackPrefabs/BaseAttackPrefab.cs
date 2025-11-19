@@ -52,8 +52,8 @@ public abstract class BaseAttackPrefab : MonoBehaviour
     {
         if( collision.CompareTag("Enemy"))
         {
-            basePlaent.PassiveSystem.CheckUseAblePassive(towerData, null, collision.GetComponent<Enemy>());
             HitTarget(collision);
+            basePlaent.PassiveSystem.CheckUseAblePassive(towerData, null, collision.GetComponent<Enemy>());
         }
     }
 }

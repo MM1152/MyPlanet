@@ -251,4 +251,9 @@ public class TowerManager : MonoBehaviour
         var elementTower = towers.Where(x => x != null &&  x.GetElementType() == elementType).ToList();
         return elementTower;
     }
+
+    public List<Tower> GetAllTower()
+    {
+        return towers;
+    }
 }

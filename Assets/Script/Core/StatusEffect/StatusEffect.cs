@@ -8,6 +8,7 @@ public enum StatusEffectType
     Burn = 1 << 0,
     Stun = 1 << 1,
     Slow = 1 << 2,
+    AttackSpeedUp = 1 << 3,
 }
 
 public class StatusEffect

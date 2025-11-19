@@ -72,6 +72,8 @@ public abstract class Tower
     protected int slotIndex = -1;
     public int SlotIndex => slotIndex;
 
+
+
     public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data , int slotIndex )
     {
         statusEffect = null;
@@ -149,7 +151,17 @@ public abstract class Tower
     {
         bonusDamage += damage;
     }
-    
+
+    public void AddBonusDamageToPercent(float percent)
+    {
+        bonusDamage += (int)(BaseDamage * percent);
+    }
+
+    public void MinusBonusDamageToPercent(float percent)
+    {
+        bonusDamage -= (int)(BaseDamage * percent);
+    }
+
     /// <summary>
     /// 보너스 스피드값 설정
     /// </summary>
@@ -157,6 +169,16 @@ public abstract class Tower
     public void AddBonusAttackSpeed(float speed)
     {
         bonusAttackSpeed += speed;
+    }
+
+    public void AddBonusAttackSpeedTopercent(float percent)
+    {
+        bonusAttackSpeed += BaseAttackSpeed * percent;
+    }
+
+    public void MinusBonusAttackSpeedTopercent(float percent)
+    {
+        bonusAttackSpeed -= BaseAttackSpeed * percent;
     }
 
     public void PlaceTower()
@@ -175,4 +197,14 @@ public abstract class Tower
         this.statusEffect = statusEffect;
     }
     protected abstract BaseAttackPrefab CreateAttackPrefab();
+
+    public void OnDamage(int damage)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnDead()
+    {
+        throw new NotImplementedException();
+    }
 }
