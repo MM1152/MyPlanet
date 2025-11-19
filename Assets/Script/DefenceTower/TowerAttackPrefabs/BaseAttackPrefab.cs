@@ -1,6 +1,5 @@
-﻿using JetBrains.Annotations;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 public abstract class BaseAttackPrefab : MonoBehaviour
 {
@@ -18,18 +17,25 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     protected PoolsId poolsId;
     protected IStatusEffect effect;
-    public virtual void Init(Tower data , TypeEffectiveness typeEffectiveness , IStatusEffect effect)
+
+    private BasePlanet basePlaent;
+
+    private void Awake()
+    {
+        basePlaent = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
+    }
+
+    public virtual void Init(Tower data)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null && sprite != null)
         {
             spriteRenderer.sprite = sprite;
-
         }
 
         this.towerData = data;
-        this.typeEffectiveness = typeEffectiveness;
-        this.effect = effect;
+        this.typeEffectiveness = data.TypeEffectiveness;
+        this.effect = data.StatusEffect?.DeepCopy();
     }
 
     public virtual void SetTarget(Transform target , float minNoise , float maxNoise)
@@ -46,6 +52,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
     {
         if( collision.CompareTag("Enemy"))
         {
+            basePlaent.PassiveSystem.CheckUseAblePassive(towerData, null, collision.GetComponent<Enemy>());
             HitTarget(collision);
         }
     }

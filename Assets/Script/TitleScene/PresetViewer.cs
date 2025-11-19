@@ -50,7 +50,6 @@ public class PresetViewer : MonoBehaviour
     {
         this.presetData = presetData;
 
-        Debug.Log("Current Update Target : ", gameObject);
         for(int i = 0; i < towerInfos.Count; i++)
         {
             Destroy(towerInfos[i].gameObject);

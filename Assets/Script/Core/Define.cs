@@ -142,6 +142,7 @@ public static class TagIds
     public readonly static string EnemySpawnManagerTag = "EnemySpawnManager";
     public readonly static string WaveManagerTag = "WaveManager";
     public readonly static string TextUISpawnManagerTag = "TextUISpawnManager";
+    public readonly static string PlayerTag = "Player";
 }
 
 public static class DataTableIds
@@ -153,6 +154,8 @@ public static class DataTableIds
     public static readonly string PresetTable = "PresetTable";
     public static readonly string PlanetTable = "PlanetTable";
     public static readonly string StringTable = "StringTable";
+    public static readonly string PassiveTable = "PassiveTable";
+    public static readonly string EffectTable = "EffectTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

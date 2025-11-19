@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -11,6 +12,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     private StatusEffect statusEffect = new StatusEffect();
     private TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
     private PassiveSystem passiveSystem = new PassiveSystem();
+    public PassiveSystem PassiveSystem => passiveSystem;
     private PlanetTable.Data planetData;
     private bool isDead = false;
 
@@ -29,7 +31,6 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>(); 
     }
 
-  
     private void Start()
     {
         Init();
@@ -40,12 +41,11 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     {
         planetData = DataTableManager.PlanetTable.Get(DataTableManager.PresetTable.GetGameData().PlanetId);
         typeEffectiveness.Init((ElementType)planetData.Attribute);
-        //passiveSystem.Init(planetData , towerManager , this);
+        passiveSystem.Init(planetData.Skill_ID);
 
         maxHp = planetData.HP;
-        hp = maxHp;
+        hp = (int)(maxHp * 0.3f);
     }
-
 
     public void RepairHp(int amount)
     {
@@ -73,7 +73,8 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     private void Update()
     {
-        //passiveSystem?.Update(Time.deltaTime);
+        passiveSystem?.Update(Time.deltaTime);
+        passiveSystem?.CheckUseAblePassive(null, this, null);
     }
 
     public void OnChanageHP()

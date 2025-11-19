@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
+using System;
 
 public class GravityControl : BaseAttackPrefab
 {
     [SerializeField] private float radius = 6f;
 
     private float duration = 1f;
-    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    
+    public override void Init(Tower data)
     {
-        base.Init(data, typeEffectiveness, effect);
+        base.Init(data);
         poolsId = PoolsId.GravityControl;
         //2D라 생각하고 작업 중 추후에 바껴야 할 수 있음
         transform.localScale = new Vector3(radius, radius, 1f);

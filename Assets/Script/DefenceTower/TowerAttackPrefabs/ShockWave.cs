@@ -1,19 +1,21 @@
 ﻿using UnityEngine;
+using System;
 
 public class ShockWave : BaseAttackPrefab
 {
     public float radius = 2f;
     public float duration = 1f;
-    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    
+    public override void Init(Tower data)
     {
-        base.Init(data, typeEffectiveness, effect);
+        base.Init(data);
         duration = 1f;
         transform.localScale = new Vector3(radius, radius, 1f);
         poolsId = PoolsId.ShockWave;
     }
 
     public override void SetTarget(Transform target, float minNoise, float maxNoise)
-    {
+    {   
         base.SetTarget(target, minNoise, maxNoise);
     }
 

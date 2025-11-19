@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public class ShockWaveBullet : BaseAttackPrefab
 {
@@ -6,9 +7,9 @@ public class ShockWaveBullet : BaseAttackPrefab
     private float speed = 5f;
     private Vector3 dir;
 
-    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    public override void Init(Tower data)
     {
-        base.Init(data, typeEffectiveness, effect);
+        base.Init(data);
         duration = 0.5f;
         poolsId = PoolsId.ShockWaveBullet;
     }
@@ -35,7 +36,7 @@ public class ShockWaveBullet : BaseAttackPrefab
     {
         var shockWave = Managers.ObjectPoolManager.SpawnObject<ShockWave>(PoolsId.ShockWave);
         shockWave.transform.position = transform.position;
-        shockWave.Init(towerData, typeEffectiveness, effect);
+        shockWave.Init(towerData);
         Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
     }
 

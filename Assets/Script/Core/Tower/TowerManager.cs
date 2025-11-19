@@ -30,6 +30,7 @@ public class TowerManager : MonoBehaviour
     private WindowManager windowManager;
     //Fix : 임시용임
     private PresetTable.Data presetGameData;
+    public Action<Tower, Collider2D> OnHitTarget;
 #if DEBUG_MODE
     [Header("DEBUG")]
     public bool stopAttack;
