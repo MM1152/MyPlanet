@@ -8,6 +8,7 @@ public class ConditionFactory : BaseFactory<ICondition>
         {1, new Under50PercentCondition() },
         {2, new Under25PercentCondition() },
         {3, new AttackFireElemetCondition() },
+        {11, new HitLightElementCondition() },
     };
 
     public override ICondition CreateInstance(int id)
@@ -80,6 +81,30 @@ public class AttackFireElemetCondition : ICondition
         if (tower == null) return false;
 
         return tower.GetElementType() == ElementType.Fire;
+    }
+
+    public ICondition CreateInstance()
+    {
+        return new AttackFireElemetCondition();
+    }
+}
+
+public class HitLightElementCondition : ICondition
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+    }
+
+    public bool CheckCondition(Tower tower, BasePlanet planet, Enemy enemy)
+    {
+        if (enemy == null) return false;
+
+        return enemy.ElementType == ElementType.Light;
     }
 
     public ICondition CreateInstance()

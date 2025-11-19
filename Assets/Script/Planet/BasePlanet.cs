@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -8,6 +9,8 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public bool IsDead => isDead;
     public ElementType ElementType => elementType;
     public StatusEffect StatusEffect => statusEffect;
+    public int BonusDEF => bonusDEF;
+    public int FullDEF => planetData.DEF + bonusDEF;
 
     private StatusEffect statusEffect = new StatusEffect();
     private TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
@@ -15,6 +18,9 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public PassiveSystem PassiveSystem => passiveSystem;
     private PlanetTable.Data planetData;
     private bool isDead = false;
+
+    private int bonusDEF = 0;
+    private List<(int value , float duration)> bonusDEFList = new List<(int value, float duration)>();
 
     [Header("On Reference In inspector")]
     [SerializeField] private SliderValue slider;
@@ -75,11 +81,53 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     {
         passiveSystem?.Update(Time.deltaTime);
         passiveSystem?.CheckUseAblePassive(null, this, null);
+
+        if(bonusDEFList.Count > 0)
+        {
+            foreach ( var bonus in bonusDEFList.ToArray())
+            {
+                float newDuration = bonus.duration - Time.deltaTime;
+                if (newDuration <= 0f)
+                {
+                    bonusDEF -= bonus.value;
+                    bonusDEFList.Remove(bonus);
+                }
+                else
+                {
+                    int index = bonusDEFList.IndexOf(bonus);
+                    bonusDEFList[index] = (bonus.value, newDuration);
+                }
+            }
+        }
     }
 
     public void OnChanageHP()
     {
         slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
+    }
+
+    public void AddBonusDEF(int percent , float duration)
+    {
+        bonusDEF += planetData.DEF * percent;
+        bonusDEFList.Add((planetData.DEF * percent, duration));
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag(TagIds.EnemyTag))
+        {
+            if ( collision.GetComponent<Enemy>() is Enemy enemy)
+            {
+                passiveSystem.CheckUseAblePassive(null, this, enemy);
+            }
+        }
+        else if (collision.CompareTag(TagIds.EnemyProjectileTag))
+        {
+            if (collision.GetComponent<SimpleBullet>().Enemy is Enemy enemy)
+            {
+                passiveSystem.CheckUseAblePassive(null, this, enemy);
+            }
+        }
     }
 
 }

@@ -143,6 +143,8 @@ public static class TagIds
     public readonly static string WaveManagerTag = "WaveManager";
     public readonly static string TextUISpawnManagerTag = "TextUISpawnManager";
     public readonly static string PlayerTag = "Player";
+    public readonly static string EnemyTag = "Enemy";
+    public readonly static string EnemyProjectileTag = "EnemyProjectile";
 }
 
 public static class DataTableIds

@@ -45,16 +45,13 @@ public class PassiveSystem
         }
         else
         {
-            if ((coolTimeTimer >= coolTime && condition.CheckCondition(tower, basePlanet, enemy)) || isPassiveOn)
+            if ((coolTimeTimer >= coolTime && condition.CheckCondition(tower, basePlanet, enemy)))
             {
-                if (!isPassiveOn) isPassiveOn = true;
-
                 if (effectCycleTime <= 0f)
                 {
                     effectCycleTime = effectData.Effect_Cycle;
                     passive.ApplyPassive(tower, basePlanet, enemy);
                 }
-                coolTimeTimer = 0f;
             }
         }
 
@@ -71,7 +68,7 @@ public class PassiveSystem
             {
                 durationTimeTimer = 0f;
                 effectCycleTime = 0f;
-                isPassiveOn = false;
+                coolTime = 0f;
                 Debug.Log("Passive 끝남!");
             }
         }
