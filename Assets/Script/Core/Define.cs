@@ -71,7 +71,7 @@ public enum PoolsId
     Exp = 400,
     DamageText = 600,
 
-
+    TestRange = 900,
 }
 
 public enum EnemyType
@@ -122,6 +122,7 @@ public static class AddressableNames
         { "ShockWaveBullet", PoolsId.ShockWaveBullet },
         { "ShockWave", PoolsId.ShockWave },
         { "DamageText", PoolsId.DamageText },
+        { "TestRange", PoolsId.TestRange },
     };
 
     public static PoolsId GetPoolsId(string name)

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3457033007281998279}
   - component: {fileID: -8144497166182082810}
   - component: {fileID: 2161898406493775824}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -106,7 +106,9 @@ MonoBehaviour:
   speed: 0
   atk: 0
   attackrange: 0
+  attackInterval: 0
   currentHP: 0
+  die: {fileID: 0}
 --- !u!58 &-8144497166182082810
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -142,7 +144,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.35
 --- !u!50 &2161898406493775824
 Rigidbody2D:
   serializedVersion: 5

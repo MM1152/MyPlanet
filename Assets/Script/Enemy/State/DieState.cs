@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DieState : IState
@@ -11,6 +12,7 @@ public class DieState : IState
     }
     public void Enter()
     {
+       enemy.die.Init(enemy);   
     }
 
     public void Execute()
@@ -20,11 +22,8 @@ public class DieState : IState
             var exp = Managers.ObjectPoolManager.SpawnObject<Exp>(PoolsId.Exp);
             exp.transform.position = enemy.transform.position;
             exp.exp = enemy.enemyData.EXP;
-        }
-
-        enemy.WaveManager.totalEnemyCount--;
-        enemy.IsDead = true;
-        Managers.ObjectPoolManager.Despawn(PoolsId.Enemy, enemy.gameObject);
+        }        
+        enemy.die.Die(enemy);
     }
 
     public void Exit()
