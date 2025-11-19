@@ -1,4 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 public class SniperBullet : ProjectTile
 {
@@ -6,21 +7,21 @@ public class SniperBullet : ProjectTile
 
     private TrailRenderer trailRenderer;
     private float currentDurationTime;
+
     private void Awake()
     {
         trailRenderer = GetComponent<TrailRenderer>();
     }
 
-    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    public override void Init(Tower data)
     {
-        base.Init(data, typeEffectiveness, effect);
+        base.Init(data);
         poolsId = PoolsId.SniperBullet;
         speed = 15f;
 
         currentDurationTime = durationTime;
         trailRenderer.SetPosition(0 ,transform.position);
     }
-
 
     protected override void Update()
     {
@@ -32,6 +33,4 @@ public class SniperBullet : ProjectTile
             Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
-
-
 }

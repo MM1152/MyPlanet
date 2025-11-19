@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -54,6 +55,7 @@ public abstract class Tower
     protected float bonusAttackSpeed = 0f;
 
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
+    public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     private bool useAble = false;
     public bool UseAble => useAble;
 
@@ -66,18 +68,22 @@ public abstract class Tower
     
     protected string attackPrefabPath;
     protected IStatusEffect statusEffect;
+    public IStatusEffect StatusEffect => statusEffect;
     protected int slotIndex = -1;
     public int SlotIndex => slotIndex;
-    public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data , int slotIndex)
+
+
+
+    public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data , int slotIndex )
     {
         statusEffect = null;
         this.manager = manager;
         this.towerData = data;
         this.tower = tower;
         this.slotIndex = slotIndex;
+
         typeEffectiveness.Init((ElementType)this.towerData.Attribute);
         SetRandomOption();
-        Debug.Log("Tower Inital");
     }
 
     private void SetRandomOption()
@@ -126,11 +132,9 @@ public abstract class Tower
             attackAble = false;
             currentAttackInterval = 0;
 
-            Debug.Log($"Tower Attack ");
-
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = tower.transform.position;
-            attackPrefabs.Init(this, typeEffectiveness, statusEffect?.DeepCopy());
+            attackPrefabs.Init(this);
             attackPrefabs.SetTarget(target , minNoise , maxNoise);
             return true;
         }
@@ -147,7 +151,17 @@ public abstract class Tower
     {
         bonusDamage += damage;
     }
-    
+
+    public void AddBonusDamageToPercent(float percent)
+    {
+        bonusDamage += (int)(BaseDamage * percent);
+    }
+
+    public void MinusBonusDamageToPercent(float percent)
+    {
+        bonusDamage -= (int)(BaseDamage * percent);
+    }
+
     /// <summary>
     /// 보너스 스피드값 설정
     /// </summary>
@@ -155,6 +169,16 @@ public abstract class Tower
     public void AddBonusAttackSpeed(float speed)
     {
         bonusAttackSpeed += speed;
+    }
+
+    public void AddBonusAttackSpeedTopercent(float percent)
+    {
+        bonusAttackSpeed += BaseAttackSpeed * percent;
+    }
+
+    public void MinusBonusAttackSpeedTopercent(float percent)
+    {
+        bonusAttackSpeed -= BaseAttackSpeed * percent;
     }
 
     public void PlaceTower()
@@ -172,6 +196,15 @@ public abstract class Tower
     {
         this.statusEffect = statusEffect;
     }
-
     protected abstract BaseAttackPrefab CreateAttackPrefab();
+
+    public void OnDamage(int damage)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnDead()
+    {
+        throw new NotImplementedException();
+    }
 }

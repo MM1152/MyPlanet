@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class GravityControlTower : Tower
 {
@@ -13,8 +14,9 @@ public class GravityControlTower : Tower
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = manager.basePlanet.transform.position;
-            attackPrefabs.Init(this, typeEffectiveness, statusEffect?.DeepCopy());
+            attackPrefabs.Init(this);
             attackPrefabs.SetTarget(target, minNoise, maxNoise);
+            
             return true;
         }
 

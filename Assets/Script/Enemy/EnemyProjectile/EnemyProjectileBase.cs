@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class EnemyProjectileBase : MonoBehaviour
 {
@@ -7,9 +7,12 @@ public abstract class EnemyProjectileBase : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     protected PoolsId poolsId;
     protected Enemy enemyData;
+    public Enemy Enemy => enemyData;
     protected Transform target;
     protected IDamageAble targetDamageAble;
+
     protected TypeEffectiveness typeEffectiveness;
+    public ElementType ElementType => typeEffectiveness.Type;
 
     public virtual void Init(Enemy data, TypeEffectiveness typeEffectiveness)
     {

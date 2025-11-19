@@ -8,7 +8,6 @@ public static class DataTableManager
 {
     private static readonly Dictionary<string, DataTable> tables = new Dictionary<string, DataTable>();
 
-
     public static bool init = false;
 
     public static EnemyData EnemyTable => Get<EnemyData>(DataTableIds.EnemyTable); 
@@ -17,6 +16,8 @@ public static class DataTableManager
     public static PresetTable PresetTable => Get<PresetTable>(DataTableIds.PresetTable);
     public static PlanetTable PlanetTable => Get<PlanetTable>(DataTableIds.PlanetTable);
     public static StringTable StringTable => Get<StringTable>(DataTableIds.StringTable);
+    public static PassiveTable PassiveTable => Get<PassiveTable>(DataTableIds.PassiveTable);
+    public static EffectTable EffectTable => Get<EffectTable>(DataTableIds.EffectTable);
 
     static DataTableManager()
     {
@@ -32,6 +33,8 @@ public static class DataTableManager
         var presetTable = new PresetTable(); 
         var planetTable= new PlanetTable();
         var stringTable = new StringTable();
+        var skillTable = new PassiveTable();
+        var effectTable = new EffectTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -41,6 +44,8 @@ public static class DataTableManager
             presetTable.LoadAsync(DataTableIds.PresetTable),
             planetTable.LoadAsync(DataTableIds.PlanetTable),
             stringTable.LoadAsync(DataTableIds.StringTable),
+            skillTable.LoadAsync(DataTableIds.PassiveTable),
+            effectTable.LoadAsync(DataTableIds.EffectTable)
         };
 
         var datas = await UniTask.WhenAll(tasks);

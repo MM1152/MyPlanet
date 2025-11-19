@@ -12,13 +12,12 @@ public class Mine : BaseAttackPrefab
 
     private float currentDuration = 0f;
 
-    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    public override void Init(Tower data)
     {
-        base.Init(data, typeEffectiveness, effect);
+        base.Init(data);
         poolsId = PoolsId.Mine;
         moveStopTime = Random.Range(0.2f , 0.4f);
         currentDuration = 0f;
-        poolsId = PoolsId.Mine;
     }
 
     public override void SetTarget(Transform target, float minNoise, float maxNoise)

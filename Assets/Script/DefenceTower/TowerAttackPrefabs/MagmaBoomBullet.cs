@@ -1,4 +1,5 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
+using System;
 
 public class MagmaBoomBullet : ProjectTile
 {
@@ -7,9 +8,9 @@ public class MagmaBoomBullet : ProjectTile
 
     private int spawnFragmentCount = 6;
 
-    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    public override void Init(Tower data)
     {
-        base.Init(data, typeEffectiveness, effect);
+        base.Init(data);
         poolsId = PoolsId.MagmaBoomBullet;
         currentDuration = duration;
     }
@@ -35,8 +36,8 @@ public class MagmaBoomBullet : ProjectTile
 
     private void SpawnFragments()
     {
-        //1 πŸ∂Û∫º πÊ«‚ ¡ˆ¡§
-        //1-1 ∞¢µµ ≥™¥≤º≠ ΩÓ±‚
+        //1 ÎÇ†Îùº Í∞ÄÎäî ÎèôÏûë
+        //1-1 Ï°∞Í∞Å ÏÉùÏÑ±Ìï¥ ÎÇ†Î¶º
 
         float splitAngle = 360f / spawnFragmentCount;
 
@@ -44,7 +45,7 @@ public class MagmaBoomBullet : ProjectTile
         {
             FragmentBullet fragmentObj = Managers.ObjectPoolManager.SpawnObject<FragmentBullet>(PoolsId.FragmentBullet);
             fragmentObj.transform.position = transform.position;
-            fragmentObj.Init(towerData, typeEffectiveness, effect);
+            fragmentObj.Init(towerData);
             float angle = splitAngle * i;
             Vector3 dir = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
             dir.Normalize();

@@ -1,10 +1,12 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class IRonMineTower : Tower
 {
     private int placeCount = 5;
+    
     public override bool Attack()
     {
         if(attackAble)
@@ -13,7 +15,7 @@ public class IRonMineTower : Tower
             {
                 Mine attackPrefabs = CreateAttackPrefab() as Mine;
                 attackPrefabs.transform.position = tower.transform.position;
-                attackPrefabs.Init(this, typeEffectiveness, statusEffect?.DeepCopy());
+                attackPrefabs.Init(this);
                 attackPrefabs.SetTarget(target, minNoise, maxNoise);
                 // Mine 의은 tower 와 basePlanet 사이의 방향으로 설정해서 넘겨줘야함
                 attackPrefabs.SetDir((tower.transform.position - manager.basePlanet.transform.position).normalized);

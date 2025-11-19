@@ -1,40 +1,95 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
+
 public class PassiveSystem
 {
     private IPassive passive;
-    private PlanetTable.Data planetData;
+    private ICondition condition; 
 
-    public Action<float> OnUpdate;
-    public Action OnHit;
-    public Action OnAttack;
-    public Action OnInit;
+    private ConditionFactory conditionFactory = new ConditionFactory();
+    private PassiveFacotry passiveFactory = new PassiveFacotry();
 
-    private readonly Dictionary<int, IPassive> passiveMap = new Dictionary<int, IPassive>()
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+
+    private float durationTime;
+    public float durationTimeTimer;
+    private float coolTime;
+    private float coolTimeTimer;
+    public float effectCycleTime;
+
+    public bool isPassiveOn = false;
+
+    private Tower tower;
+    private BasePlanet basePlanet;
+    private Enemy enemy;
+    public void Init(int passiveId)
     {
-        { 1001 , new EarthPassive() },
-        { 1002 , new MarsPassive() },
-        { 1003 , new UranusPassive() },
-    };
+        passiveData = DataTableManager.PassiveTable.GetData(passiveId);
+        effectData = DataTableManager.EffectTable.Get(passiveData.Effect_Id);
+        
+        this.passive = passiveFactory.CreateInstance(passiveId);
+        this.condition = conditionFactory.CreateInstance(passiveData.Condition);
+        this.passive.Init(passiveData , effectData , this);
+        this.condition.Init(passiveData , effectData);
 
-    public void Init(PlanetTable.Data planetData , TowerManager towerManager , BasePlanet planet)
+        durationTime = passiveData.Time;
+        coolTime = passiveData.Cool_Time;
+
+        durationTimeTimer = 0f;
+        coolTimeTimer = 0f;
+
+        basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
+    }
+
+    public void CheckUseAblePassive(Tower tower , BasePlanet basePlanet , Enemy enemy)
     {
-        this.planetData = planetData;
-        if(passiveMap.ContainsKey(planetData.ID))
+        if(passiveData.Cool_Time == 0)
         {
-            this.passive = passiveMap[planetData.ID];
-            this.passive.Init(towerManager, planet);
-            this.passive.ApplyPassive(this);
+            if (condition.CheckCondition(tower, basePlanet, enemy))
+            {
+                isPassiveOn = true;
+                SettingPassive(tower, basePlanet, enemy);
+            }
         }
         else
         {
-            Debug.Log("해당 행성은 패시브가 존재하지 않습니다.");
+            if ((coolTimeTimer >= coolTime && condition.CheckCondition(tower, basePlanet, enemy)))
+            {
+                isPassiveOn = true;
+                coolTimeTimer = 0;
+                effectCycleTime = 0;
+                SettingPassive(tower, basePlanet, enemy);
+            }
         }
     }
 
     public void Update(float deltaTime)
     {
-        OnUpdate?.Invoke(deltaTime);
+        coolTimeTimer += deltaTime;
+
+        if(isPassiveOn)
+        {
+            durationTimeTimer += deltaTime;
+            effectCycleTime -= deltaTime;
+
+            if(effectCycleTime <= 0)
+            {
+                effectCycleTime = effectData.Effect_Cycle;
+                passive.ApplyPassive(tower, basePlanet, enemy);
+            }
+
+            if (durationTimeTimer >= durationTime)
+            {
+                isPassiveOn = false;
+                durationTimeTimer = 0f;
+            }
+        }
+    }
+
+    public void SettingPassive(Tower tower, BasePlanet basePlanet, Enemy enemy)
+    {
+        this.tower = tower;
+        this.enemy = enemy;
     }
 }

@@ -1,13 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 public class FragmentBullet : ProjectTile
 {
     private float duration = 1f;
     private float currentDuration = 0f;
 
-    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    public override void Init(Tower data)
     {
-        base.Init(data, typeEffectiveness, effect);
+        base.Init(data);
         poolsId = PoolsId.FragmentBullet;
         currentDuration = duration;
     }

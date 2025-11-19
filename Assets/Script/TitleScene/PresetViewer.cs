@@ -10,7 +10,7 @@ public class PresetViewer : MonoBehaviour
     [SerializeField] private Transform towerInfomationRoot;
     [SerializeField] private Button editButton;
     [SerializeField] private Button selectPresetButton;
-
+    
     [Header("Planet Viewer Reference")]
     [SerializeField] private TextMeshProUGUI planetgradeText;
     [SerializeField] private TextMeshProUGUI planetTypeText;
@@ -50,7 +50,6 @@ public class PresetViewer : MonoBehaviour
     {
         this.presetData = presetData;
 
-        Debug.Log("Current Update Target : ", gameObject);
         for(int i = 0; i < towerInfos.Count; i++)
         {
             Destroy(towerInfos[i].gameObject);

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SafeAreaManager : MonoBehaviour
 {
@@ -9,7 +9,6 @@ public class SafeAreaManager : MonoBehaviour
     {
         rect = GetComponent<RectTransform>();
         ApplySafeArea();
-        Debug.Log(percentOffset);
     }
 
     private void ApplySafeArea()

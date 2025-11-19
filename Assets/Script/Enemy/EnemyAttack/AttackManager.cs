@@ -7,7 +7,7 @@ public class AttackManager
     {
         { new EnemyAttackKey(EnemyType.Melee,ElementType.Normal,EnemyTier.Tier3), new OneTimeMeleeAttacker() },
         { new EnemyAttackKey(EnemyType.Melee,ElementType.Light,EnemyTier.Tier2), new OneTimeMeleeAttacker() },
-        { new EnemyAttackKey(EnemyType.Melee,ElementType.Water,EnemyTier.Tier2), new OneTimeMeleeAttacker() },
+        { new EnemyAttackKey(EnemyType.Melee,ElementType.Ice,EnemyTier.Tier2), new OneTimeMeleeAttacker() },
         { new EnemyAttackKey(EnemyType.Ranged,ElementType.Light,EnemyTier.Tier2), new ShotAttack() },
     };
 

@@ -6,6 +6,10 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 {
     private static readonly string TargetTag = "Player";
+
+    public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
+    public int FullDamage => atk;
+
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
@@ -140,6 +144,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public void OnDamage(int damage)
     {
+        damage = damage == 0 ? 1 : damage;
         currentHP -= damage;
 #if DEBUG_MODE
         var text = textSpawnManager.SpawnTextUI(damage.ToString(), this.transform.position);        

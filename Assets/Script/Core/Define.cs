@@ -35,7 +35,7 @@ public enum ElementType
     Normal = 0,
     Fire = 1,
     Steel = 2,
-    Water = 3,
+    Ice = 3,
     Light = 4,
     Dark = 5
 }
@@ -143,6 +143,9 @@ public static class TagIds
     public readonly static string EnemySpawnManagerTag = "EnemySpawnManager";
     public readonly static string WaveManagerTag = "WaveManager";
     public readonly static string TextUISpawnManagerTag = "TextUISpawnManager";
+    public readonly static string PlayerTag = "Player";
+    public readonly static string EnemyTag = "Enemy";
+    public readonly static string EnemyProjectileTag = "EnemyProjectile";
 }
 
 public static class DataTableIds
@@ -154,6 +157,8 @@ public static class DataTableIds
     public static readonly string PresetTable = "PresetTable";
     public static readonly string PlanetTable = "PlanetTable";
     public static readonly string StringTable = "StringTable";
+    public static readonly string PassiveTable = "PassiveTable";
+    public static readonly string EffectTable = "EffectTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

@@ -1,23 +1,24 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using System;
 
 public class Laser : ProjectTile
 {
     
     [Header("Laser Settings")]
-    // ·¹ÀÌÀú Áö¼Ó½Ã°£
+    // ë ˆì´ì € ì§€ì†ì‹œê°„
     [SerializeField] private float laserDurtaionTime = 0.5f;
 
     private CapsuleCollider2D collder;
-    // ·¹ÀÌÀú ÀÛ¾ÆÁö´Â ¾ç
+    // ë ˆì´ì € ì‘ì•„ì§€ëŠ” ê°’
     private float decreaseAmount;
 
-    // ·¹ÀÌÀú ÀÛ¾ÆÁö´Â ÇöÀç Å¸ÀÌ¹Ö
+    // ë ˆì´ì € ì‘ì•„ì§€ëŠ” í˜„ì¬ íƒ€ì´ë°
     private float currentDuration;
     private float currentSize;
 
-    public override void Init(Tower data, TypeEffectiveness typeEffectiveness, IStatusEffect effect)
+    public override void Init(Tower data)
     {
-        base.Init(data, typeEffectiveness, effect);
+        base.Init(data);
         poolsId = PoolsId.Laser;
         gameObject.transform.localScale = new Vector3(0.3f, 0.3f, 1f);
     }
@@ -28,7 +29,7 @@ public class Laser : ProjectTile
 
         collder = GetComponent<CapsuleCollider2D>();
 
-        // ·¹ÀÌÀú ±æÀÌ ¼³Á¤
+        // ë ˆì´ì € í¬ê¸° ì„¤ì •
         Vector3 linear = target.position - transform.position;
         transform.localScale =
             new Vector3(
@@ -39,10 +40,10 @@ public class Laser : ProjectTile
         collder.direction = CapsuleDirection2D.Horizontal;
         collder.size = new Vector2(linear.magnitude, 1f);
 
-        // ·¹ÀÌÀú À§Ä¡ ¼³Á¤
+        // ë ˆì´ì € ìœ„ì¹˜ ì„¤ì •
         transform.position = Vector3.Lerp(transform.position, target.position, 0.5f);
 
-        // ·¹ÀÌÀú Å©±â ÁÙÀÌ´Â ±âº» ¼³Á¤
+        // ë ˆì´ì € í¬ê¸° ì¤„ì´ëŠ” ê¸°ë³¸ ì„¤ì •
         currentSize = gameObject.transform.localScale.y;
         currentDuration = 0f;
         decreaseAmount = currentSize / laserDurtaionTime * Time.deltaTime;
@@ -50,7 +51,7 @@ public class Laser : ProjectTile
 
     protected override void Update()
     {
-        // ·¹ÀÌÀú Å©±â ÁÙÀÌ±â
+        // ë ˆì´ì € í¬ê¸° ì¤„ì´ê¸°
         if(Time.timeScale > 0)
         {
             currentDuration += Time.deltaTime;
