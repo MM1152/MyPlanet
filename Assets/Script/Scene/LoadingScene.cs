@@ -22,10 +22,13 @@ public class LoadingScene : MonoBehaviour
         //currentProgress.text = "Firebase 초기화 중";
         //await FirebaseManager.Instance.WaitForInitalizedAsync();
         currentProgress.text = "Managers 초기화 중";
+        Managers.Instance.Release();
         await Managers.Instance.WaitForManagerInitalizedAsync();
         currentProgress.text = "테이블 불러오는 중";
         await DataTableManager.WaitForInitalizeAsync();
         currentProgress.text = "Scene 초기화 중";
         await Addressables.LoadSceneAsync(sceneId).ToUniTask();
     }
+
+    
 }

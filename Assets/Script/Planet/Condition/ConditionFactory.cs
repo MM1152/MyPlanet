@@ -9,6 +9,8 @@ public class ConditionFactory : BaseFactory<ICondition>
         {2, new Under25PercentCondition() },
         {3, new AttackFireElemetCondition() },
         {11, new HitLightElementCondition() },
+        {13, new ReflectionCondition() },
+        {12, new HitDarkElementCondition() },
     };
 
     public override ICondition CreateInstance(int id)
@@ -109,6 +111,58 @@ public class HitLightElementCondition : ICondition
 
     public ICondition CreateInstance()
     {
-        return new AttackFireElemetCondition();
+        return new HitLightElementCondition();
+    }
+}
+
+public class HitDarkElementCondition : ICondition
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+    }
+
+    public bool CheckCondition(Tower tower, BasePlanet planet, Enemy enemy)
+    {
+        if (enemy == null) return false;
+
+        return enemy.ElementType == ElementType.Dark;
+    }
+
+    public ICondition CreateInstance()
+    {
+        return new HitDarkElementCondition();
+    }
+}
+
+public class ReflectionCondition : ICondition
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+    }
+
+    public bool CheckCondition(Tower tower, BasePlanet planet, Enemy enemy)
+    {
+        if (enemy == null || planet == null) return false;
+
+        float rand = UnityEngine.Random.Range(0f, 1f);
+        if (rand < passiveData.Val * 0.01f)
+            return true;
+
+        return false;
+    }
+
+    public ICondition CreateInstance()
+    {
+        return new ReflectionCondition();
     }
 }

@@ -224,7 +224,7 @@ public class WaveManager : MonoBehaviour
         {
             isFinalWaveEnded = true;
 #if DEBUG_MODE
-            Debug.Log("지금 마지막웨이브 다음으로 넘어갈수없다.");
+            //Debug.Log("지금 마지막웨이브 다음으로 넘어갈수없다.");
 #endif
             return;
         }

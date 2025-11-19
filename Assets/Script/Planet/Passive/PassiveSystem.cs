@@ -51,6 +51,7 @@ public class PassiveSystem
                 {
                     effectCycleTime = effectData.Effect_Cycle;
                     passive.ApplyPassive(tower, basePlanet, enemy);
+                    coolTimeTimer = 0;
                 }
             }
         }
@@ -59,22 +60,7 @@ public class PassiveSystem
 
     public void Update(float deltaTime)
     {
-        if(isPassiveOn)
-        {
-            durationTimeTimer += deltaTime;
-            effectCycleTime -= deltaTime;
-
-            if(durationTime <= durationTimeTimer)
-            {
-                durationTimeTimer = 0f;
-                effectCycleTime = 0f;
-                coolTime = 0f;
-                Debug.Log("Passive 끝남!");
-            }
-        }
-        else
-        {
-            coolTimeTimer += Time.deltaTime;
-        }
+        effectCycleTime -= deltaTime;
+        coolTimeTimer += deltaTime;
     }
 }

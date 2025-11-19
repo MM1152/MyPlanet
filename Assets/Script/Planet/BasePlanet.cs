@@ -9,6 +9,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public bool IsDead => isDead;
     public ElementType ElementType => elementType;
     public StatusEffect StatusEffect => statusEffect;
+    public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     public int BonusDEF => bonusDEF;
     public int FullDEF => planetData.DEF + bonusDEF;
 
@@ -91,6 +92,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
                 {
                     bonusDEF -= bonus.value;
                     bonusDEFList.Remove(bonus);
+                    Debug.Log($"비누스 버프 끝 : 강화된 DEF : {FullDEF}");
                 }
                 else
                 {
@@ -106,10 +108,18 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
     }
 
-    public void AddBonusDEF(int percent , float duration)
+    public void AddBonusDFSPercent(float percent , float duration)
     {
-        bonusDEF += planetData.DEF * percent;
-        bonusDEFList.Add((planetData.DEF * percent, duration));
+        bonusDEF += (int)(planetData.DEF * percent);
+        bonusDEFList.Add(((int)(planetData.DEF * percent), duration));
+        Debug.Log($"강화된 DEF : {FullDEF}");
+    }
+
+    public void AddBonusDEF(int amount, float duration)
+    {
+        bonusDEF += amount;
+        bonusDEFList.Add((amount, duration));
+        Debug.Log($"강화된 DEF : {FullDEF}");
     }
 
     public void OnTriggerEnter2D(Collider2D collision)

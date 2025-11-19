@@ -1,12 +1,12 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackManager
 {   
     public Dictionary<EnemyAttackKey, IAttack> attackTable = new Dictionary<EnemyAttackKey, IAttack>()
     {        
-        { new EnemyAttackKey(EnemyType.Melee,ElementType.Normal,EnemyTier.Tier3), new OneTimeMeleeAttacker() },
-         { new EnemyAttackKey(EnemyType.Ranged,ElementType.Fire,EnemyTier.Tier2), new ShotAttack() },
+        { new EnemyAttackKey(EnemyType.Melee,ElementType.Dark,EnemyTier.Tier3), new OneTimeMeleeAttacker() },
+         { new EnemyAttackKey(EnemyType.Ranged,ElementType.Dark,EnemyTier.Tier2), new ShotAttack() },
     };
 
     public AttackManager(EnemyAttackKey key, out IAttack attack)
