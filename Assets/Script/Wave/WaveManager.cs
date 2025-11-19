@@ -29,7 +29,7 @@ public class WaveManager : MonoBehaviour
     private int rightPointCount = 4;
     private int currentWaveIndex;
     public int CurrentWaveIndex => currentWaveIndex;
-    private float waveDuration = 5f;
+    private float waveDuration = 90f;
     public float WaveDuration => waveDuration;
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;

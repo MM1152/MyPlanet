@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public float speed;
     public int atk;
     public float attackrange;
-    public float attackInterval;
+    public float attackInterval;   
     public EnemyType enemyType => (EnemyType)enemyData.Type;
     public EnemyTier enemyTier => (EnemyTier)enemyData.Tier;
     [SerializeField] private int currentHP;
@@ -33,16 +33,23 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public event Action<Enemy> OnDie;
     private EnemyAttackKey attackKey;
     private AttackManager attackManager;
+    private DieManager dieManager;
     public IAttack attack;
+    public BaseDie die;
 
     public bool isKilledByPlayer { get; private set; }
 
 #if DEBUG_MODE
     private TextSpawnManager textSpawnManager;
 #endif
+#if DEBUG_MODE
+    public SpriteRenderer spriteRenderer { get; private set; }
+#endif
+
     private void Awake()
     {
         stateMachine = new StateMachine(this);
+        spriteRenderer = GetComponent<SpriteRenderer>();
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag).GetComponent<WaveManager>();
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>();
     }
@@ -54,7 +61,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         atk = enemyData.ATK;
         speed = enemyData.Speed;
         attackrange = enemyData.AttackRange;
-
+#if DEBUG_MODE
+        SetColor(enemyData.ID);
+#endif
 
         target = GameObject.FindGameObjectWithTag(TargetTag);
         stateMachine.Init(stateMachine.idleState);
@@ -63,9 +72,36 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         statusEffect.Init();
         attackKey = new EnemyAttackKey(enemyType, ElementType, enemyTier);
         attackManager = new AttackManager(attackKey, out attack);
-        isKilledByPlayer = true;   
+        isKilledByPlayer = true;
         IsDead = false;
+        dieManager = new DieManager(enemyData.ID, out die);
     }
+#if DEBUG_MODE
+    private void SetColor(int id)
+    {
+        switch (id)
+        {
+            case 1:
+                spriteRenderer.color = Color.green;
+                break;
+            case 2:
+                spriteRenderer.color = Color.blue;
+                break;
+            case 3:
+                spriteRenderer.color = Color.red;
+                break;
+            case 4:
+                spriteRenderer.color = Color.yellow;
+                break;
+            case 5:
+                spriteRenderer.color = Color.magenta;
+                break;
+            default:
+                spriteRenderer.color = Color.white;
+                break;
+        }
+    }
+#endif
 
     public void SetState(IState newState)
     {
@@ -101,16 +137,34 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         return target;
     }
-    // 데미지 처리s
 
     public void OnDamage(int damage)
     {
         currentHP -= damage;
-        textSpawnManager.SpawnTextUI(damage.ToString(), this.transform.position);
+#if DEBUG_MODE
+        var text = textSpawnManager.SpawnTextUI(damage.ToString(), this.transform.position);        
+        // Debug.Log($"Damage taken: {damage}, Current HP: {currentHP}");
+        text.SetColor(Color.red);
+#endif
         if (currentHP <= 0)
         {
             OnDead();
         }
+    }
+
+    public void OnHeal(int heal)
+    {
+        int healAmount = Mathf.Min(heal, enemyData.HP - currentHP);
+        currentHP += healAmount;
+// #if DEBUG_MODE
+//         var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
+//         text.SetColor(Color.green);
+// #endif
+        // if (currentHP > enemyData.HP)
+        // {
+        //     currentHP = enemyData.HP;
+        // }
+        // Debug.Log($"치료 받은 후: {currentHP}");
     }
 
     public void OnDead()
