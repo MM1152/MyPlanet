@@ -11,6 +11,9 @@ public class ConditionFactory : BaseFactory<ICondition>
         {11, new HitLightElementCondition() },
         {13, new ReflectionCondition() },
         {12, new HitDarkElementCondition() },
+        {9, new HitIceElementCondition() },
+        {4, new AttackIceElemetCondition() },
+        {7, new AttackDarkElemetCondition() },
     };
 
     public override ICondition CreateInstance(int id)
@@ -128,7 +131,7 @@ public class HitDarkElementCondition : ICondition
 
     public bool CheckCondition(Tower tower, BasePlanet planet, Enemy enemy)
     {
-        if (enemy == null) return false;
+        if (enemy == null || planet == null) return false;
 
         return enemy.ElementType == ElementType.Dark;
     }
@@ -164,5 +167,77 @@ public class ReflectionCondition : ICondition
     public ICondition CreateInstance()
     {
         return new ReflectionCondition();
+    }
+}
+
+public class HitIceElementCondition : ICondition
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+    }
+
+    public bool CheckCondition(Tower tower, BasePlanet planet, Enemy enemy)
+    {
+        if (enemy == null || planet == null) return false;
+
+        return enemy.ElementType == ElementType.Ice;
+    }
+
+    public ICondition CreateInstance()
+    {
+        return new HitIceElementCondition();
+    }
+}
+
+public class AttackIceElemetCondition : ICondition
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+    }
+
+    public bool CheckCondition(Tower tower, BasePlanet planet, Enemy enemy)
+    {
+        if (tower == null) return false;
+
+        return tower.GetElementType() == ElementType.Ice;
+    }
+
+    public ICondition CreateInstance()
+    {
+        return new AttackIceElemetCondition();
+    }
+}
+
+public class AttackDarkElemetCondition : ICondition
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+    }
+
+    public bool CheckCondition(Tower tower, BasePlanet planet, Enemy enemy)
+    {
+        if (tower == null) return false;
+
+        return tower.GetElementType() == ElementType.Dark;
+    }
+
+    public ICondition CreateInstance()
+    {
+        return new AttackDarkElemetCondition();
     }
 }

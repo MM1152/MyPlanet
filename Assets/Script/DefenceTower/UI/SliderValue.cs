@@ -16,8 +16,6 @@ public class SliderValue : MonoBehaviour
 
     public void UpdateSlider(int value , int maxValue , object args1 , object args2)
     {
-
-
         if (text != null)
         {
             text.text = string.Format(FormatingString, args1, args2);

@@ -35,7 +35,7 @@ public enum ElementType
     Normal = 0,
     Fire = 1,
     Steel = 2,
-    Water = 3,
+    Ice = 3,
     Light = 4,
     Dark = 5
 }

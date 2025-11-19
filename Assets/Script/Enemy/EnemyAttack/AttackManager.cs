@@ -5,8 +5,8 @@ public class AttackManager
 {   
     public Dictionary<EnemyAttackKey, IAttack> attackTable = new Dictionary<EnemyAttackKey, IAttack>()
     {        
-        { new EnemyAttackKey(EnemyType.Melee,ElementType.Dark,EnemyTier.Tier3), new OneTimeMeleeAttacker() },
-         { new EnemyAttackKey(EnemyType.Ranged,ElementType.Dark,EnemyTier.Tier2), new ShotAttack() },
+        { new EnemyAttackKey(EnemyType.Melee,ElementType.Ice,EnemyTier.Tier3), new OneTimeMeleeAttacker() },
+         { new EnemyAttackKey(EnemyType.Ranged,ElementType.Ice,EnemyTier.Tier2), new ShotAttack() },
     };
 
     public AttackManager(EnemyAttackKey key, out IAttack attack)

@@ -12,7 +12,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     public int BonusDEF => bonusDEF;
     public int FullDEF => planetData.DEF + bonusDEF;
-
+    public int FullHp => hp + shield;
     private StatusEffect statusEffect = new StatusEffect();
     private TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
     private PassiveSystem passiveSystem = new PassiveSystem();
@@ -24,13 +24,15 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     private List<(int value , float duration)> bonusDEFList = new List<(int value, float duration)>();
 
     [Header("On Reference In inspector")]
-    [SerializeField] private SliderValue slider;
+    [SerializeField] private SliderValue hpSlider;
     [SerializeField] private TowerManager towerManager;
-
+    [SerializeField] private SliderValue shieldSlider;
+    
     [Header("Test Datas")]
     public ElementType elementType;
     public int maxHp;
     public int hp;
+    public int shield;
     private TextSpawnManager textSpawnManager;
 
     private void Awake()
@@ -41,7 +43,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     private void Start()
     {
         Init();
-        slider.UpdateSlider(hp, maxHp , hp / maxHp * 100, hp , maxHp);
+        OnChanageHP();
     }
 
     public virtual void Init()
@@ -60,9 +62,26 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         hp = Mathf.Clamp(hp, 0, maxHp);
         OnChanageHP();
     }
-        
+
+    public void RepairHpToPercent(float percent)
+    {
+        hp += (int)(maxHp * percent);
+        hp = Mathf.Clamp(hp, 0, maxHp);
+        OnChanageHP();
+    }
+
     public void OnDamage(int damage)
     {
+        if(shield > 0)
+        {
+            int damageToShield = shield - damage;
+            shield -= damage;
+            if(damageToShield < 0)
+            {
+                shield = 0;
+                damage = damageToShield;
+            }
+        }
         hp -= damage;
         textSpawnManager.SpawnTextUI(damage.ToString(), transform.position).SetColor(Color.yellow);
         OnChanageHP();
@@ -103,9 +122,16 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         }
     }
 
+    public void AddShield (int amount)
+    {
+        shield += amount;
+        OnChanageHP();
+    }
+
     public void OnChanageHP()
     {
-        slider.UpdateSlider(hp, maxHp, hp / maxHp * 100, hp, maxHp);
+        hpSlider.UpdateSlider(hp, maxHp, FullHp / maxHp * 100, FullHp, maxHp);
+        shieldSlider.UpdateSlider(shield, maxHp, "" , "");
     }
 
     public void AddBonusDFSPercent(float percent , float duration)
