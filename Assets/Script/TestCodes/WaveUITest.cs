@@ -15,7 +15,7 @@ public class WaveUITest : MonoBehaviour
         {
          waveText.text = $"Wave : {waveManager.CurrentWaveIndex+1} "; 
          EnemyCountText.text = $"Count : {waveManager.totalEnemyCount} ";
-         TimerText.text = $"Next :{waveManager.WaveDuration%60:00} \nTime :{waveManager.WaveElapsedTime%60:00}";
+         TimerText.text = $"Next :{waveManager.WaveDuration:00} \nTime :{waveManager.WaveElapsedTime:00}";
         }
     }  
 }

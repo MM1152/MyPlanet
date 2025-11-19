@@ -30,34 +30,30 @@ public class EnemySpawnManager : MonoBehaviour
     }
     private void Awake()
     {
-        poolManager = Managers.ObjectPoolManager;   
-        InitalizedAsync().Forget();   
+        poolManager = Managers.ObjectPoolManager;
+        InitalizedAsync().Forget();
     }
-
-    private void Update()
-    {
-        if(Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            SpawnEnemy(1);
-        }
-    }
-
-    public Enemy SpawnEnemy(int id)
+ 
+    public List<Enemy> SpawnEnemy(int id, int count = 1)
     {
         if (!init) return null;
 
+        var spawnedEnemies = new List<Enemy>();
         var data = DataTableManager.EnemyTable.GetData(id);
 
-        if(data != null)
+        if (data != null)
         {
-            var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy);
-            spawnEnemy.Initallized(data);
-            //FIX : ���� ��ġ �ӽ� ����
-            // spawnEnemy.transform.position = new Vector3(Random.Range(-5,5) , 5f , 0f);
-            spawnEnemy.OnDie += CheckDieEnemy;
-            spawnEnemys.Add(spawnEnemy);
-
-            return spawnEnemy;
+            for (int i = 0; i < count; i++)
+            {
+                var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy);
+                spawnEnemy.Initallized(data);
+                //FIX : ���� ��ġ �ӽ� ����
+                // spawnEnemy.transform.position = new Vector3(Random.Range(-5,5) , 5f , 0f);
+                spawnEnemy.OnDie += CheckDieEnemy;
+                spawnEnemys.Add(spawnEnemy);
+                spawnedEnemies.Add(spawnEnemy); 
+            }
+            return spawnedEnemies;
         }
         return null;
     }
@@ -75,7 +71,7 @@ public class EnemySpawnManager : MonoBehaviour
 
         List<Enemy> copyList = new List<Enemy>(spawnEnemys);
 
-        copyList.Sort((a, b) => 
+        copyList.Sort((a, b) =>
         {
             float distA = Vector3.Distance(a.transform.position, position);
             float distB = Vector3.Distance(b.transform.position, position);
@@ -88,7 +84,7 @@ public class EnemySpawnManager : MonoBehaviour
     public Enemy GetEnemyData(Vector3 position)
     {
         var list = GetEnemyDatas(position);
-        if(list != null && list.Count != 0)
+        if (list != null && list.Count != 0)
         {
             return list[0];
         }

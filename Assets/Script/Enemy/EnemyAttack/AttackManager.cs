@@ -3,20 +3,18 @@ using UnityEngine;
 
 public class AttackManager
 {
-    public Dictionary<EnemyAttackKey, IAttack> attackTable = new Dictionary<EnemyAttackKey, IAttack>()
+    public Dictionary<EnemyType, IAttack> attackTable = new Dictionary<EnemyType, IAttack>()
     {
-        { new EnemyAttackKey(EnemyType.Melee,ElementType.Normal,EnemyTier.Tier3), new OneTimeMeleeAttacker() },
-        { new EnemyAttackKey(EnemyType.Melee,ElementType.Fire,EnemyTier.Tier2), new OneTimeMeleeAttacker() },
-        { new EnemyAttackKey(EnemyType.Melee,ElementType.Water,EnemyTier.Tier2), new OneTimeMeleeAttacker() },
-        { new EnemyAttackKey(EnemyType.Ranged,ElementType.Fire,EnemyTier.Tier2), new ShotAttack() },
+        { EnemyType.Melee, new OneTimeMeleeAttacker() },
+        { EnemyType.Ranged  , new ShotAttack() },
     };
 
-    public AttackManager(EnemyAttackKey key, out IAttack attack)
+    public AttackManager(EnemyType key, out IAttack attack)
     {
         attack = GetAttack(key);
     }
 
-    public IAttack GetAttack(EnemyAttackKey key)
+    public IAttack GetAttack(EnemyType key)
     {
         if (attackTable.ContainsKey(key))
         {
@@ -27,5 +25,4 @@ public class AttackManager
 #endif
         return null;
     }
-
 }
