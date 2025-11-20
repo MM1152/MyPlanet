@@ -20,7 +20,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     private BasePlanet basePlaent;
 
-    private void Awake()
+    private void Start()
     {
         basePlaent = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
     }

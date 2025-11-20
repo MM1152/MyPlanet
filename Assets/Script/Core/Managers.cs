@@ -47,11 +47,11 @@ public class Managers
 
     public void Release()
     {
-        objectPoolManager.Release();
+        objectPoolManager?.Release();
     }
 
     public async UniTask WaitForManagerInitalizedAsync()
     {
         await UniTask.WaitUntil(() => init);
     }
-}
+}   
