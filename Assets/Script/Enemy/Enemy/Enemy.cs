@@ -39,6 +39,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public IAttack attack;
     public BaseDie die;
 
+    public float TestRangeRadius;
+
     public bool isKilledByPlayer { get; private set; }
 
 #if DEBUG_MODE

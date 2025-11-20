@@ -178,6 +178,15 @@ public class WaveManager : MonoBehaviour
         if (!waves.ContainsKey(currentWaveIndex))
         {
 #if DEBUG_MODE
+            currentWaveIndex = 0;   
+            currentWave = waves[currentWaveIndex];
+
+            foreach (var spawnPoint in currentWave)
+        {
+            spawnPoint.timer = 0f;
+            spawnPoint.isStart = false;
+            waveClearCount += spawnPoint.maxSpawnCount;
+        }
             Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
 #endif
             return;

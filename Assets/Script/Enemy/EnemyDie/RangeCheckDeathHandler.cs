@@ -14,8 +14,8 @@ public abstract class RangeCheckDeathHandler : BaseDie
 
     //범위 체크 
     protected void RangeCheck()
-    {
-        targetColliders = Physics2D.OverlapCircleAll(enemy.transform.position, enemy.enemyData.AttackRange, LayerMask.GetMask(targets));
+    {        
+        targetColliders = Physics2D.OverlapCircleAll(enemy.transform.position, enemy.TestRangeRadius, LayerMask.GetMask(targets));
         RangeCheckDelay().Forget();
         if (targetColliders.Length > 0)
         {
@@ -55,7 +55,7 @@ public abstract class RangeCheckDeathHandler : BaseDie
         spr.color = enemy.spriteRenderer.color;
         spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
         
-        float radius = enemy.enemyData.AttackRange;
+        float radius = enemy.TestRangeRadius;
         float visualScale = radius * 2f; 
         rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
         await UniTask.Delay(1000);
