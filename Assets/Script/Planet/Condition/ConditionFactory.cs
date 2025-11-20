@@ -15,7 +15,8 @@ public class ConditionFactory : BaseFactory<ICondition>
         {4, new AttackIceElemetCondition() },
         {7, new AttackDarkElemetCondition() },
         {6, new AttackLightElemetCondition() },
-        {5, new AttackSteelElemetCondition()  }
+        {5, new AttackSteelElemetCondition()  },
+        {14, new OnDamageCondition()  }
     };
 
     public override ICondition CreateInstance(int id)
@@ -311,5 +312,29 @@ public class AttackSteelElemetCondition : ICondition
     public ICondition CreateInstance()
     {
         return new AttackSteelElemetCondition();
+    }
+}
+
+public class OnDamageCondition : ICondition
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+    }
+
+    public bool CheckCondition(Tower tower, BasePlanet planet, Enemy enemy)
+    {
+        if (tower == null || enemy == null) return false;
+
+        return true;
+    }
+
+    public ICondition CreateInstance()
+    {
+        return new OnDamageCondition();
     }
 }

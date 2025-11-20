@@ -16,6 +16,7 @@ public class PassiveFacotry : BaseFactory<IPassive>
         { 10007 , new SaturnPassive() },
         { 10008 , new UranusPassive() },
         { 10009 , new NeptunePassive() },
+        { 10010 , new AmerionPassive() },
         { 10013 , new ErisPassive() },
         {10014 , new CeresPassive() },
         {10015 , new LumicillaPassive() }
@@ -420,5 +421,37 @@ public class LumicillaPassive : IPassive
                 applytower.MinusBonusDamageToPercent(passiveData.Val * 0.01f);
         }
         Debug.Log("루미실라 패시브 해제");
+    }
+}
+
+public class AmerionPassive : IPassive
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+    private PassiveSystem passiveSystem;
+    private TowerManager towerManager;
+
+    public void ApplyPassive(Tower tower, BasePlanet basePlanet, Enemy enemy)
+    {
+        if (tower != null && enemy != null)
+        {
+            float percent = tower.TypeEffectiveness.GetDamagePercent(enemy.ElementType);
+            int damagePerValue = (int)(tower.FullDamage * percent * (passiveData.Val * 0.01f));
+            basePlanet.RepairHp(damagePerValue);
+            Debug.Log("아메리온 패시브 적용");
+        }
+    }
+
+    public IPassive CreateInstance()
+    {
+        return new AmerionPassive();
+    }
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData, PassiveSystem passiveSystem)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+        this.passiveSystem = passiveSystem;
+        towerManager = GameObject.FindWithTag(TagIds.TowerManagerTag).GetComponent<TowerManager>();
     }
 }

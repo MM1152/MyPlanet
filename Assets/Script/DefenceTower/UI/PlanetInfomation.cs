@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +13,8 @@ public class PlanetInfomation : MonoBehaviour
     private PlanetTable.Data data;
     public event Action<PlanetTable.Data , PlanetInfomation> OnClickPlanet;
 
+    private bool isSetting = true;
+    
     private void Awake()
     {
         outline = GetComponent<Outline>();
@@ -21,6 +23,9 @@ public class PlanetInfomation : MonoBehaviour
 
     public void UpdateTexts(PlanetTable.Data data)
     {
+        if (data.ID == 1011 || data.ID == 1012)
+            isSetting = false;
+
         this.data = data;
         planetNameText.text = data.Name;
         planetGradeText.text = data.grade;
@@ -42,7 +47,7 @@ public class PlanetInfomation : MonoBehaviour
 
     private void Update()
     {
-        if(Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(gameObject))
+        if(isSetting && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(gameObject))
         {
             OnClickPlanet?.Invoke(data, this);
         }

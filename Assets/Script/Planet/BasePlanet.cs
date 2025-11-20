@@ -58,6 +58,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     public void RepairHp(int amount)
     {
+        if (amount == 0) amount = 1;
         hp += amount;
         hp = Mathf.Clamp(hp, 0, maxHp);
         OnChanageHP();
