@@ -208,7 +208,6 @@ public class WaveManager : MonoBehaviour
 
             if (spawnPoint.currentSpawnEnemyCount >= spawnPoint.maxSpawnCount)
             {
-                Debug.Log($"SpawnPoint EnemyID {spawnPoint} 소환 완료");
                 continue;
             }
 
@@ -237,7 +236,6 @@ public class WaveManager : MonoBehaviour
                 else
                 {
 #if DEBUG_MODE
-                    Debug.LogError($"Enemy ID {spawnPoint.enemyId} 소환 실패");
                     return;
 #endif
                 }
