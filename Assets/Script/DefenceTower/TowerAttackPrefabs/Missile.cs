@@ -7,7 +7,7 @@ public class Missile : ProjectTile
     [SerializeField] private float roatationSpeed = 50f;
     [SerializeField] private float trackingStrength = 0.5f;
     private float currentAngle;
-    private float lookAngleNoise = 0f;
+    private float rlookAngleNoise = 0f;
 
     public override void Init(Tower data)
     {
