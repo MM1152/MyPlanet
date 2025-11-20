@@ -16,7 +16,7 @@ public abstract class RangeCheckDeathHandler : BaseDie
     protected void RangeCheck()
     {
         targetColliders = Physics2D.OverlapCircleAll(enemy.transform.position, enemy.enemyData.AttackRange, LayerMask.GetMask(targets));
-        RangeCheckDelay().Forget(); 
+        RangeCheckDelay().Forget();
         if (targetColliders.Length > 0)
         {
             AbilltyToTarget(targetColliders);
@@ -46,15 +46,20 @@ public abstract class RangeCheckDeathHandler : BaseDie
         base.Die(enemy);
     }
 
+#if DEBUG_MODE
     private async UniTaskVoid RangeCheckDelay()
     {
         var rangePrefab = Managers.ObjectPoolManager.SpawnObject<TestRange>(PoolsId.TestRange);
         rangePrefab.transform.position = enemy.transform.position;
-        var rangescale = enemy.enemyData.AttackRange * 2f;
-        rangePrefab.GetComponent<SpriteRenderer>().color = enemy.spriteRenderer.color; 
-
-        rangePrefab.transform.localScale =  new Vector3(0.35f * rangescale, 0.35f * rangescale, 1f);
+        var spr = rangePrefab.GetComponent<SpriteRenderer>();
+        spr.color = enemy.spriteRenderer.color;
+        spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
+        
+        float radius = enemy.enemyData.AttackRange;
+        float visualScale = radius * 2f; 
+        rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
         await UniTask.Delay(1000);
-         Managers.ObjectPoolManager.Despawn(PoolsId.TestRange, rangePrefab.gameObject);
+        Managers.ObjectPoolManager.Despawn(PoolsId.TestRange, rangePrefab.gameObject);
     }
+#endif
 }

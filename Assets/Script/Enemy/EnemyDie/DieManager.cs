@@ -24,6 +24,11 @@ public class DieManager
 
     public DieManager(int key, out BaseDie die)
     {
-        die = GetDie(key);
+        if( dieTable.ContainsKey(key))
+        {
+            die = dieTable[key];
+            return;
+        }
+        die = new BaseDie();
     }
 }

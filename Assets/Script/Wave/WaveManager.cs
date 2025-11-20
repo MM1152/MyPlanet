@@ -10,38 +10,51 @@ public class WaveManager : MonoBehaviour
     {
         public Vector2 position;
         public int enemyId;
+        // 한번에 소환할양 
         public int spawnCount;
+        // 최대 소환량
         public int maxSpawnCount;
+        // 시작시간 딜레이
         public float spawnStartDelayTime;
+        // 소환 간격
         public float spawnDelayTime;
         public float timer = 0f;
-        public int currentSpawnEnemyCount = 0;
+        public int currentSpawnEnemyCount;
         public bool isStart = false;
     }
     private Dictionary<int, List<SpawnPoint>> waves = new Dictionary<int, List<SpawnPoint>>();
     private List<SpawnPoint> currentWave = new List<SpawnPoint>();
     private List<Vector2> spawnPoints = new List<Vector2>();
     private Rect screenBounds;
+
     private float spawnOffset = 1.0f;
     private int topPointCount = 3;
     private int leftPointCount = 4;
     private int bottomPointCount = 3;
     private int rightPointCount = 4;
+
     private int currentWaveIndex;
     public int CurrentWaveIndex => currentWaveIndex;
     private float waveDuration = 90f;
     public float WaveDuration => waveDuration;
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;
-    public int totalEnemyCount = 0;
     public bool isFinalWaveEnded = false;
-    private EnemySpawnManager EnemySpawnManager;
 
-    private bool isInitialized = false;
+    public int waveClearCount = 0;
+    public int totalEnemyCount = 0;
+    private EnemySpawnManager EnemySpawnManager;
 
 #if DEBUG_MODE
     public bool UIUpdateTest = false;
 #endif
+
+    private int stageId = 1;
+    public int SetStageId(int id)
+    {
+        stageId = id;
+        return stageId;
+    }
 
     private void Awake()
     {
@@ -52,45 +65,62 @@ public class WaveManager : MonoBehaviour
     {
         InitPoint();
         DataInit();
-        currentWaveIndex = 0;
-        isInitialized = true;
+        ResetWave();
+#if DEBUG_MODE
+        UIUpdateTest = true;
+#endif
+    }
+
+    private void ResetWave()
+    {
         currentWave.Clear();
+        currentWaveIndex = 0;
+        totalEnemyCount = 0;
+        waveElapsedTime = 0f;
+        isFinalWaveEnded = false;
         currentWave = waves[currentWaveIndex];
+        foreach (var spawnPoint in currentWave)
+        {
+            spawnPoint.timer = 0f;
+            spawnPoint.isStart = false;
+            waveClearCount += spawnPoint.maxSpawnCount;
+        }
     }
 
     private void DataInit()
     {
-        var waveData = DataTableManager.WaveTable.GetAllData();
-        foreach (var wave in waveData)
+        waves.Clear();
+        var stageData = DataTableManager.WaveTable.GetStageData(stageId);
+
+        if (stageData == null)
         {
-            int id = wave.Key;
-            WaveData.Data data = wave.Value;
-            int pointIndex = id % 100;
-            int waveNumber = (id / 100) % 1000;
-
-            if (pointIndex < 0 || pointIndex >= spawnPoints.Count)
-            {
-#if DEBUG_MODE                
-                Debug.LogError($"Invalid point index {pointIndex} for Wave ID {id}");
+#if DEBUG_MODE
+            Debug.LogError($"StageData ID {stageId} 데이터를 찾을수없다.");
 #endif
-            }
+            return;
+        }
 
-            var spawnPoint = new SpawnPoint()
+        foreach (var waveGroup in stageData.waveGroups)
+        {
+            var waveNumber = waveGroup.waveIndex;
+            foreach (var data in waveGroup.waveDatas)
             {
-                position = spawnPoints[pointIndex],
-                enemyId = data.Monster_ID,
-                spawnCount = data.Spon,
-                maxSpawnCount = data.Max_Spawn,
-                spawnDelayTime = data.Spon_Time,
-                spawnStartDelayTime = data.Spon_Cycle,
-            };
+                var spawnPoint = new SpawnPoint()
+                {
+                    position = spawnPoints[data.SPON_POINT],
+                    enemyId = data.MON_ID,
+                    spawnCount = data.SPON_COUNT,
+                    maxSpawnCount = data.MAX_SPON,
+                    spawnDelayTime = data.INTERVAL,
+                    spawnStartDelayTime = data.SPON_TIME,
+                };
 
-            if (!waves.ContainsKey(waveNumber))
-            {
-                waves[waveNumber] = new List<SpawnPoint>();
+                if (!waves.ContainsKey(waveNumber))
+                {
+                    waves[waveNumber] = new List<SpawnPoint>();
+                }
+                waves[waveNumber].Add(spawnPoint);
             }
-
-            waves[waveNumber].Add(spawnPoint);
         }
     }
 
@@ -145,12 +175,6 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        if (!isInitialized) return;
-
-#if DEBUG_MODE
-        UIUpdateTest = true;
-#endif
-
         if (!waves.ContainsKey(currentWaveIndex))
         {
 #if DEBUG_MODE
@@ -161,9 +185,11 @@ public class WaveManager : MonoBehaviour
 
         waveElapsedTime += Time.deltaTime;
 
-        if (waveElapsedTime >= waveDuration)
+        StartSpawnWave(Time.deltaTime);
+
+        if (waveElapsedTime >= waveDuration || waveClearCount <= 0)
         {
-            if (isFinalWaveEnded && totalEnemyCount <= 0)
+            if (isFinalWaveEnded)
             {
                 EndGame();
             }
@@ -172,7 +198,6 @@ public class WaveManager : MonoBehaviour
                 NextWave();
             }
         }
-        StartSpawnWave(Time.deltaTime);
     }
 
     private void StartSpawnWave(float deltaTime)
@@ -181,9 +206,9 @@ public class WaveManager : MonoBehaviour
         {
             spawnPoint.timer += deltaTime;
 
-            if (spawnPoint.currentSpawnEnemyCount >= spawnPoint.maxSpawnCount ||
-            spawnPoint.spawnCount <= 0)
+            if (spawnPoint.currentSpawnEnemyCount >= spawnPoint.maxSpawnCount)
             {
+                Debug.Log($"SpawnPoint EnemyID {spawnPoint} 소환 완료");
                 continue;
             }
 
@@ -195,13 +220,18 @@ public class WaveManager : MonoBehaviour
 
             if (spawnPoint.timer >= spawnPoint.spawnDelayTime && spawnPoint.isStart)
             {
-                var enemy = EnemySpawnManager.SpawnEnemy(spawnPoint.enemyId);
-                if (enemy != null)
+                var remainingToSpawn = spawnPoint.maxSpawnCount - spawnPoint.currentSpawnEnemyCount;
+                var minCount = Mathf.Min(spawnPoint.spawnCount, remainingToSpawn);
+                var enemys = EnemySpawnManager.SpawnEnemy(spawnPoint.enemyId, minCount);
+                spawnPoint.currentSpawnEnemyCount += minCount;
+                totalEnemyCount += minCount;
+                if (enemys != null)
                 {
-                    enemy.transform.position = spawnPoint.position;
-                    spawnPoint.spawnCount--;
-                    totalEnemyCount++;
-                    spawnPoint.currentSpawnEnemyCount++;
+                    foreach (var enemy in enemys)
+                    {
+                        var offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+                        enemy.transform.position = spawnPoint.position + offset;
+                    }
                     spawnPoint.timer = 0f;
                 }
                 else
@@ -217,7 +247,6 @@ public class WaveManager : MonoBehaviour
 
     private void NextWave()
     {
-        waveElapsedTime = 0f;
         int nextWaveIndex = currentWaveIndex + 1;
 
         if (!waves.ContainsKey(nextWaveIndex))
@@ -229,44 +258,14 @@ public class WaveManager : MonoBehaviour
             return;
         }
 
-        var nextWave = waves[nextWaveIndex];
+        currentWave.Clear();
+        currentWave = waves[nextWaveIndex];
+        currentWaveIndex = nextWaveIndex;
 
         foreach (var currentPoint in currentWave)
         {
-            if (!currentPoint.isStart || (currentPoint.currentSpawnEnemyCount <= 0 && currentPoint.spawnCount <= 0))
-                continue;
-
-
-            var naxtPoint = nextWave.Find(p => p.position == currentPoint.position);
-
-            if (naxtPoint != null)
-            {
-                naxtPoint.currentSpawnEnemyCount += currentPoint.currentSpawnEnemyCount;
-                naxtPoint.spawnCount += currentPoint.spawnCount;
-            }
-            else
-            {
-                var previousWaveData = new SpawnPoint
-                {
-                    position = currentPoint.position,
-                    enemyId = currentPoint.enemyId,
-                    spawnCount = currentPoint.spawnCount,
-                    maxSpawnCount = currentPoint.maxSpawnCount,
-                    spawnDelayTime = currentPoint.spawnDelayTime,
-                    spawnStartDelayTime = 0f, // 즉시 시작
-                    currentSpawnEnemyCount = currentPoint.currentSpawnEnemyCount,
-                    isStart = true
-                };
-                nextWave.Add(previousWaveData);
-            }
+            waveClearCount += currentPoint.maxSpawnCount;
         }
-
-        currentWave.Clear();
-
-        currentWave = nextWave;
-
-        currentWaveIndex = nextWaveIndex;
-
         waveElapsedTime = 0f;
     }
 
