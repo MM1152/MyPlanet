@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     [SerializeField] private int currentHP;
     public TypeEffectiveness typeEffectiveness;
     public event Action<Enemy> OnDie;
+    public WaveManager.SpawnPoint spawnPoint;
     private AttackManager attackManager;
     private DieManager dieManager;
     public IAttack attack;
@@ -142,9 +143,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         currentHP -= damage;
 #if DEBUG_MODE
-        var text = textSpawnManager.SpawnTextUI(damage.ToString(), this.transform.position);
-        // Debug.Log($"Damage taken: {damage}, Current HP: {currentHP}");
-        text.SetColor(Color.red);
+        if (damage > 0)
+        {
+            var text = textSpawnManager.SpawnTextUI(damage.ToString(), this.transform.position);
+            // Debug.Log($"Damage taken: {damage}, Current HP: {currentHP}");
+            text.SetColor(Color.red);
+        }
 #endif
         if (currentHP <= 0)
         {
@@ -156,8 +160,13 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         int healAmount = Mathf.Min(heal, enemyData.HP - currentHP);
         currentHP += healAmount;
-        var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
-        text.SetColor(Color.green);
+#if DEBUG_MODE
+        if (healAmount > 0)
+        {
+            var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
+            text.SetColor(Color.green);
+        }
+#endif
     }
 
     public void OnDead()

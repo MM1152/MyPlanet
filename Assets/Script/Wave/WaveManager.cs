@@ -19,33 +19,35 @@ public class WaveManager : MonoBehaviour
         // 소환 간격
         public float spawnDelayTime;
         public float timer = 0f;
-        public int currentSpawnEnemyCount = 0;
+        public int currentSpawnEnemyCount => spawnedEnemys.Count;
         public bool isStart = false;
+        public List<Enemy> spawnedEnemys = new List<Enemy>();
     }
     private Dictionary<int, List<SpawnPoint>> waves = new Dictionary<int, List<SpawnPoint>>();
     private List<SpawnPoint> currentWave = new List<SpawnPoint>();
     private List<Vector2> spawnPoints = new List<Vector2>();
     private Rect screenBounds;
+
     private float spawnOffset = 1.0f;
     private int topPointCount = 3;
     private int leftPointCount = 4;
     private int bottomPointCount = 3;
     private int rightPointCount = 4;
+
     private int currentWaveIndex;
     public int CurrentWaveIndex => currentWaveIndex;
-    private float waveDuration = 3f;
+    private float waveDuration = 90f;
     public float WaveDuration => waveDuration;
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;
-    public int totalEnemyCount = 0;
     public bool isFinalWaveEnded = false;
+    public int totalEnemyCount = 0;
     private EnemySpawnManager EnemySpawnManager;
-
-    private bool isInitialized = false;
 
 #if DEBUG_MODE
     public bool UIUpdateTest = false;
 #endif
+
     private int stageId = 1;
     public int SetStageId(int id)
     {
@@ -62,12 +64,22 @@ public class WaveManager : MonoBehaviour
     {
         InitPoint();
         DataInit();
-        currentWaveIndex = 0;
-        isInitialized = true;
+        ResetWave();
+#if DEBUG_MODE
+        UIUpdateTest = true;
+#endif
+    }    
+
+    private void ResetWave()
+    {
         currentWave.Clear();
+        currentWaveIndex = 0;
+        totalEnemyCount = 0;
+        waveElapsedTime = 0f;
+        isFinalWaveEnded = false;
         currentWave = waves[currentWaveIndex];
-    }
-    
+    }   
+
     private void DataInit()
     {
         waves.Clear();
@@ -131,50 +143,47 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < topPointCount; i++)
         {
             var x = screenBounds.xMin + topInterval * (i + 1);
-            var y = screenBounds.yMax + spawnOffset;
+            var y = screenBounds.yMax + spawnOffset;            
             spawnPoints.Add(new Vector2(x, y));
         }
         for (int i = 0; i < rightPointCount; i++)
         {
             var x = screenBounds.xMax + spawnOffset;
-            var y = screenBounds.yMin + rightInterval * (i + 1);
+            var y = screenBounds.yMin + rightInterval * (i + 1);            
             spawnPoints.Add(new Vector2(x, y));
         }
         for (int i = 0; i < bottomPointCount; i++)
         {
             var x = screenBounds.xMin + bottomInterval * (i + 1);
-            var y = screenBounds.yMin - spawnOffset;
+            var y = screenBounds.yMin - spawnOffset;         
             spawnPoints.Add(new Vector2(x, y));
         }
         for (int i = 0; i < leftPointCount; i++)
         {
             var x = screenBounds.xMin - spawnOffset;
             var y = screenBounds.yMin + leftInterval * (i + 1);
+            Debug.Log($"좌측 스폰포인트 {x}, {y}");
             spawnPoints.Add(new Vector2(x, y));
         }
     }
 
     private void Update()
     {
-        if (!isInitialized) return;
-
-#if DEBUG_MODE
-        UIUpdateTest = true;
-#endif
-
         if (!waves.ContainsKey(currentWaveIndex))
         {
 #if DEBUG_MODE
             Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
 #endif
             return;
-        }
-
+        }    
+      
         waveElapsedTime += Time.deltaTime;
 
-        if (waveElapsedTime >= waveDuration)
+        StartSpawnWave(Time.deltaTime);
+
+        if (waveElapsedTime >= waveDuration || (totalEnemyCount <= 0 && EnemiesSpawned()))
         {
-            if (isFinalWaveEnded && totalEnemyCount <= 0)
+            if (isFinalWaveEnded)
             {
                 EndGame();
             }
@@ -183,7 +192,6 @@ public class WaveManager : MonoBehaviour
                 NextWave();
             }
         }
-        StartSpawnWave(Time.deltaTime);
     }
 
     private void StartSpawnWave(float deltaTime)
@@ -194,7 +202,7 @@ public class WaveManager : MonoBehaviour
 
             if (spawnPoint.currentSpawnEnemyCount >= spawnPoint.maxSpawnCount)
             {
-                Debug.Log($"SpawnPoint EnemyID {spawnPoint} 꽉찼아요");    
+                Debug.Log($"SpawnPoint EnemyID {spawnPoint} 꽉찼아요");
                 continue;
             }
 
@@ -206,16 +214,18 @@ public class WaveManager : MonoBehaviour
 
             if (spawnPoint.timer >= spawnPoint.spawnDelayTime && spawnPoint.isStart)
             {
-                var enemys = EnemySpawnManager.SpawnEnemy(spawnPoint.enemyId);
+                var remainingToSpawn = spawnPoint.maxSpawnCount - spawnPoint.currentSpawnEnemyCount;    
+                var enemys = EnemySpawnManager.SpawnEnemy(spawnPoint.enemyId, Mathf.Min(spawnPoint.spawnCount, remainingToSpawn));
+                Debug.Log($"SpawnPoint  {spawnPoint.position} 소환시도");
+                totalEnemyCount += Mathf.Min(spawnPoint.spawnCount, remainingToSpawn);  
                 if (enemys != null)
                 {
                     foreach (var enemy in enemys)
                     {
                         var offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
                         enemy.transform.position = spawnPoint.position + offset;
-                        spawnPoint.spawnCount--;
-                        totalEnemyCount++;
-                        spawnPoint.currentSpawnEnemyCount++;
+                        enemy.spawnPoint = spawnPoint;
+                        spawnPoint.spawnedEnemys.Add(enemy);
                     }
                     spawnPoint.timer = 0f;
                 }
@@ -255,7 +265,11 @@ public class WaveManager : MonoBehaviour
 
             if (naxtPoint != null)
             {
-                naxtPoint.currentSpawnEnemyCount += currentPoint.currentSpawnEnemyCount;
+                foreach (var enemy in currentPoint.spawnedEnemys)
+                {
+                    naxtPoint.spawnedEnemys.Add(enemy);
+                    enemy.spawnPoint = naxtPoint;
+                }
             }
         }
 
@@ -265,11 +279,30 @@ public class WaveManager : MonoBehaviour
 
         currentWaveIndex = nextWaveIndex;
 
-        waveElapsedTime = 0f;
+        waveElapsedTime = 0f;               
     }
 
     private void EndGame()
     {
         // 여기에 게임 종료 로직 추가
+    }
+
+    private bool EnemiesSpawned()
+    {
+        foreach (var spawnPoint in currentWave)
+        {
+            if (spawnPoint.currentSpawnEnemyCount > 0)
+                return true;
+        }
+        return false;
+    }
+
+    public void RemoveEnemyFromSpawnPoint(Enemy enemy)
+    {
+        var spawnPoint = enemy.spawnPoint;
+        if (spawnPoint != null)
+        {
+            spawnPoint.spawnedEnemys.Remove(enemy);
+        }
     }
 }

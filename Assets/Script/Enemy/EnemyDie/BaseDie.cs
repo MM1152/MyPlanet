@@ -12,8 +12,9 @@ public class BaseDie : MonoBehaviour
     }
 
     public virtual void Die(Enemy enemy)
-    {
+    {        
         enemy.WaveManager.totalEnemyCount--;
+        enemy.WaveManager.RemoveEnemyFromSpawnPoint(enemy);
         enemy.IsDead = true;
         Managers.ObjectPoolManager.Despawn(PoolsId.Enemy, enemy.gameObject);
     }
