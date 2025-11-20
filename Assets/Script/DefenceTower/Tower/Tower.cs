@@ -5,32 +5,43 @@ using UnityEngine.AddressableAssets;
 
 public abstract class Tower
 {
-    public int FullDamage => towerData.ATK + bonusDamage;
+    public int FullDamage => towerData.ATK + BonusDamage;
     public int BaseDamage => towerData.ATK;
-    public int BonusDamage => bonusDamage;
-
-    public float FullAttackSpeed => towerData.Fire_Rate + bonusAttackSpeed;
+    public float FullAttackSpeed => towerData.Fire_Rate + BonusAttackSpeed;
     public float BaseAttackSpeed => towerData.Fire_Rate;
-    public float BonusAttackSpeed => bonusAttackSpeed;
 
-    public int ID => towerData.ID;
+    public float BonusAttackSpeed { get; set; }
+    public int BonusDamage { get; set; }
+    public int BonusProjectileCount { get; set; }
+    public int BonusAttackRange { get; set; }
+    public int BonusWidthSize { get; set; }
+    public int BonusDuration { get; set; }
+    public int BonusCoolTime { get; set; }
+    public int BonusFireRate { get; set; }
+    public int BonusPelletCount { get; set; }
+    public int BonusFregmentRange { get; set; }
+    public int BonusFregmentCount { get; set; }
+    public int BonusExplosionRange { get; set; }
+    public int BonusTargetingCount { get; set; }
+    public int BonusSlowPercent { get; set; }
+    public int BonusSlowBulletSpeed { get; set; }
+    public int BonusStopTime { get; set; }
+    public int BonusAngle { get; set; }
+    public int BonusBulletSpeed { get; set; }
 
     public float AttackRange => towerData.Attack_Range;
+    public int SlotIndex => slotIndex;
+    public int ID => towerData.ID;
+    public bool UseAble => useAble;
 
     public TowerTable.Data TowerData => towerData;
-
-    protected GameObject projectTile;
-    protected float attackInterval = 2f;
-    protected float currentAttackInterval;
-
-    protected GameObject tower;
     protected Transform Target
     {
         set
         {
             target = value;
 
-            if(target != null)
+            if (target != null)
             {
                 targetDamageAble = target.GetComponent<IDamageAble>();
             }
@@ -40,41 +51,41 @@ public abstract class Tower
             }
         }
     }
+    public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
+    public RandomOptionData RandomOptionData => randomOptionData;
+    public IStatusEffect StatusEffect => statusEffect;
+    public RandomOptionBase Option => baseRandomOption;
+
+
+    protected GameObject projectTile;
+    protected GameObject tower;
+
     protected Transform target;
     protected IDamageAble targetDamageAble;
-    protected bool attackAble;
-
     protected TowerManager manager;
     protected TowerTable.Data towerData;
-    
-    protected float minNoise = 0f;
-    protected float maxNoise = 0f;
 
-    public int bonusDamage = 0;
-
+    protected float currentAttackInterval;
     protected float bonusAttackSpeed = 0f;
+    protected float maxNoise = 0f;
+    protected float minNoise = 0f;
+
+    protected bool attackAble;
+    private bool useAble = false;
 
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
-    public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
-    private bool useAble = false;
-    public bool UseAble => useAble;
-
     private RandomOptionData randomOptionData = new RandomOptionData();
-    public RandomOptionData RandomOptionData => randomOptionData;
+    private LevelUpTable.Data levelUpData;
 
     protected RandomOptionData.Data optionData;
     protected RandomOptionBase baseRandomOption;
-    public RandomOptionBase Option => baseRandomOption;
-    
+
+    protected int level = 0;
     protected string attackPrefabPath;
     protected IStatusEffect statusEffect;
-    public IStatusEffect StatusEffect => statusEffect;
     protected int slotIndex = -1;
-    public int SlotIndex => slotIndex;
 
-
-
-    public virtual void Init(GameObject tower , TowerManager manager, TowerTable.Data data , int slotIndex )
+    public virtual void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
     {
         statusEffect = null;
         this.manager = manager;
@@ -90,7 +101,7 @@ public abstract class Tower
     {
         optionData = randomOptionData.GetData(towerData.Option);
         baseRandomOption = randomOptionData.GetRandomOptionBase(towerData.Option);
-        baseRandomOption.Init(manager , towerData, optionData);
+        baseRandomOption.Init(manager, towerData, optionData);
     }
 
     public void ResetRandomOption()
@@ -103,13 +114,13 @@ public abstract class Tower
     {
         if (!useAble) return;
         currentAttackInterval += deltaTime;
-        
-        if(target != null && !targetDamageAble.IsDead)
+
+        if (target != null && !targetDamageAble.IsDead)
         {
             Target = null;
         }
 
-        if(currentAttackInterval > 60f / FullAttackSpeed)
+        if (currentAttackInterval > 60f / FullAttackSpeed)
         {
             attackAble = true;
             Attack();
@@ -120,7 +131,7 @@ public abstract class Tower
     {
         if (attackAble)
         {
-            if (target == null) 
+            if (target == null)
                 return false;
 
             if (Vector3.Distance(target.position, tower.transform.position) > towerData.Attack_Range)
@@ -135,31 +146,112 @@ public abstract class Tower
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = tower.transform.position;
             attackPrefabs.Init(this);
-            attackPrefabs.SetTarget(target , minNoise , maxNoise);
+            attackPrefabs.SetTarget(target, minNoise, maxNoise);
             return true;
         }
 
         return false;
     }
 
-    public virtual void LevelUp()
+    public virtual void LevelUp(LevelUpTable.Data levelUpData)
     {
-        Debug.Log("Level Up");
+        var var1 = 0;
+        var var2 = 0;
+        var var3 = 0;
+        var var4 = 0;
+        if (level != 0)
+        {
+            BonusDamage -= this.levelUpData.Damage;
+            var1 = this.levelUpData.Var1;
+            var2 = this.levelUpData.Var2;
+            var3 = this.levelUpData.Var3;
+            var4 = this.levelUpData.Var4;
+            CheckLevelUpVariable(var1, -this.levelUpData.Val1);
+            CheckLevelUpVariable(var2, -this.levelUpData.Val2);
+            CheckLevelUpVariable(var3, -this.levelUpData.Val3);
+            CheckLevelUpVariable(var4, -this.levelUpData.Val4);
+        }
+
+        this.levelUpData = levelUpData;
+        BonusDamage += this.levelUpData.Damage;
+        var1 = this.levelUpData.Var1;
+        var2 = this.levelUpData.Var2;
+        var3 = this.levelUpData.Var3;
+        var4 = this.levelUpData.Var4;
+        CheckLevelUpVariable(var1, this.levelUpData.Val1);
+        CheckLevelUpVariable(var2, this.levelUpData.Val2);
+        CheckLevelUpVariable(var3, this.levelUpData.Val3);
+        CheckLevelUpVariable(var4, this.levelUpData.Val4);
     }
 
+    private void CheckLevelUpVariable(int variable, int value)
+    {
+        switch (variable)
+        {
+            case 1:
+                BonusProjectileCount += value;
+                break;
+            case 2:
+                BonusAttackRange += value;
+                break;
+            case 3:
+                BonusWidthSize += value;
+                break;
+            case 4:
+                BonusDuration += value;
+                break;
+            case 5:
+                BonusCoolTime += value;
+                break;
+            case 6:
+                BonusFireRate += value;
+                break;
+            case 7:
+                BonusPelletCount += value;
+                break;
+            case 8:
+                BonusFregmentRange += value;
+                break;
+            case 9:
+                BonusFregmentCount += value;
+                break;
+            case 10:
+                BonusExplosionRange += value;
+                break;
+            case 11:
+                BonusTargetingCount += value;
+                break;
+            case 12:
+                BonusSlowPercent += value;
+                break;
+            case 13:
+                BonusSlowBulletSpeed += value;
+                break;
+            case 14:
+                BonusStopTime += value;
+                break;
+            case 15:
+                BonusAngle += value;
+                break;
+            case 16:
+                BonusBulletSpeed += value;
+                break;
+        }
+    }
+    
     public void AddBonusDamage(int damage)
     {
-        bonusDamage += damage;
+        BonusDamage += damage;
     }
 
     public void AddBonusDamageToPercent(float percent)
     {
-        bonusDamage += (int)(BaseDamage * percent);
+        BonusDamage += (int)(BaseDamage * percent);
     }
 
     public void MinusBonusDamageToPercent(float percent)
     {
-        bonusDamage -= (int)(BaseDamage * percent);
+        BonusDamage -= (int)(BaseDamage * percent);
     }
 
     /// <summary>
@@ -207,4 +299,5 @@ public abstract class Tower
     {
         throw new NotImplementedException();
     }
+
 }
