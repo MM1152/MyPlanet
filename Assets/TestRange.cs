@@ -4,6 +4,6 @@ public class TestRange : MonoBehaviour
 {    
     private void OnEnable()
     {
-     transform.localScale = Vector2.one; 
+        transform.localScale = Vector2.one; 
     }
 }

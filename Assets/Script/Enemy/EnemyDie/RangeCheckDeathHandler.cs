@@ -49,17 +49,28 @@ public abstract class RangeCheckDeathHandler : BaseDie
 #if DEBUG_MODE
     private async UniTaskVoid RangeCheckDelay()
     {
-        var rangePrefab = Managers.ObjectPoolManager.SpawnObject<TestRange>(PoolsId.TestRange);
-        rangePrefab.transform.position = enemy.transform.position;
-        var spr = rangePrefab.GetComponent<SpriteRenderer>();
-        spr.color = enemy.spriteRenderer.color;
-        spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
-        
-        float radius = enemy.enemyData.AttackRange;
-        float visualScale = radius * 2f; 
-        rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
-        await UniTask.Delay(1000);
-        Managers.ObjectPoolManager.Despawn(PoolsId.TestRange, rangePrefab.gameObject);
+        try
+        {
+            var rangePrefab = Managers.ObjectPoolManager.SpawnObject<TestRange>(PoolsId.TestRange);
+            rangePrefab.transform.position = enemy.transform.position;
+            var spr = rangePrefab.GetComponent<SpriteRenderer>();
+            spr.color = enemy.spriteRenderer.color;
+            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
+
+            float radius = enemy.enemyData.AttackRange;
+            float visualScale = radius * 2f;
+            rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
+            await UniTask.Delay(1000);
+            if(rangePrefab != null)
+            {
+                Managers.ObjectPoolManager.Despawn(PoolsId.TestRange, rangePrefab.gameObject);
+            }
+        }
+        catch
+        {
+            
+        }
+
     }
 #endif
 }

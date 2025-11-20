@@ -23,6 +23,12 @@ public class StatusWindow : Window
 
         for (int i = 0; i < towerManager.Towers.Count; i++)
         {
+            if (towerManager.Towers[i] == null)
+            {
+                statusViewers.Add(null);
+                continue;
+            }  
+
             var statusView = Instantiate(statusViewer, statusViewerRoot).GetComponent<StatusViewer>();
             statusView.Init(towerManager.Towers[i] , basePlanet);
             statusViewers.Add(statusView);
@@ -40,6 +46,7 @@ public class StatusWindow : Window
         statusViewers[0].UpdatePlanetText();
         for(int i = 1; i < towerManager.Towers.Count + 1; i++)
         {
+            if (statusViewers[i] == null) continue;
             statusViewers[i].UpdateStatus();
         }
     }
