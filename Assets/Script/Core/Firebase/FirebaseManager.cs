@@ -51,11 +51,6 @@ public class FirebaseManager
         auth.Init();
         Debug.Log("Firebase Auth Initalized");
 
-        await UniTask.WaitUntil(() => UserId != string.Empty);
-
-        await FindUserDataInDatabase();
-        await PresetData.Load();
-
         initialize = true;
     }
     

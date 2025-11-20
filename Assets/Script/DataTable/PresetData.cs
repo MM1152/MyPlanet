@@ -9,6 +9,7 @@ using UnityEngine.AddressableAssets;
 
 public class PresetData
 {
+    public bool Init { get; set; }
     private List<Data> presetDatas = new List<Data>();
     private Data inGameData;
     public event Action<int> OnChangePresetData;
@@ -64,6 +65,7 @@ public class PresetData
             {
                 presetDatas.Add(data);
             }
+            Init = true;
             return (true, "프리셋 데이터 로드 완료");
         }
         else
@@ -76,6 +78,7 @@ public class PresetData
             {
                 Debug.Log("초기 프리셋 데이터 만들기 완료");
             }
+            Init = true;
             return (true, "프리셋 데이터 로드 성공");
         }
     }

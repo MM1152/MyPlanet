@@ -47,7 +47,7 @@ public class LoadingScene : MonoBehaviour
 
         Managers.Instance.Release();
 
-        currentProgress.text = "유저 데이터 불러오는 중";
+        currentProgress.text = "Firebase 초기화 중";
         await FirebaseManager.Instance.WaitForInitalizedAsync();
 
         //Firebase Auth 로그인 정보가 존재할때 다음 작업 진행가능하도록 기다림
@@ -57,6 +57,17 @@ public class LoadingScene : MonoBehaviour
             currentProgress.text = "로그인 대기 중";
         }
         await UniTask.WaitUntil(() => FirebaseManager.Instance.UserId != string.Empty);
+
+        currentProgress.text = "유저 데이터 불러오는 중";
+        if (FirebaseManager.Instance.UserData == null)
+        {
+            await FirebaseManager.Instance.FindUserDataInDatabase();    
+        }
+
+        if (!FirebaseManager.Instance.PresetData.Init)
+        {
+            await FirebaseManager.Instance.PresetData.Load();
+        }
 
         currentProgress.text = "Managers 초기화 중";
         await Managers.Instance.WaitForManagerInitalizedAsync();
