@@ -21,8 +21,8 @@ public class AttackManager
             return attackTable[key];
         }
 #if DEBUG_MODE
-        Debug.LogError("Enemy에 해당하는 공격방식이 없음 ");
+        Debug.LogError("Enemy 타입에 해당하는 공격방식이 없지만 기본 근접공격 넣어드려요");
 #endif
-        return null;
+        return attackTable[EnemyType.Melee];
     }
 }

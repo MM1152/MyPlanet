@@ -30,7 +30,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     [SerializeField] private int currentHP;
     public TypeEffectiveness typeEffectiveness;
     public event Action<Enemy> OnDie;
-    public WaveManager.SpawnPoint spawnPoint;
     private AttackManager attackManager;
     private DieManager dieManager;
     public IAttack attack;
