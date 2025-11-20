@@ -39,6 +39,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public IAttack attack;
     public BaseDie die;
 
+    public float TestRangeRadius;
+
     public bool isKilledByPlayer { get; private set; }
 
 #if DEBUG_MODE
@@ -175,6 +177,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public void OnDead()
     {
+        IsDead = true;
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnDie?.Invoke(this);

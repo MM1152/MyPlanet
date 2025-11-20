@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using TMPro;
-using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
@@ -178,6 +175,15 @@ public class WaveManager : MonoBehaviour
         if (!waves.ContainsKey(currentWaveIndex))
         {
 #if DEBUG_MODE
+            currentWaveIndex = 0;   
+            currentWave = waves[currentWaveIndex];
+
+            foreach (var spawnPoint in currentWave)
+        {
+            spawnPoint.timer = 0f;
+            spawnPoint.isStart = false;
+            waveClearCount += spawnPoint.maxSpawnCount;
+        }
             Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
 #endif
             return;
@@ -249,7 +255,19 @@ public class WaveManager : MonoBehaviour
 
         if (!waves.ContainsKey(nextWaveIndex))
         {
-            isFinalWaveEnded = true;
+#if DEBUG_MODE
+            currentWaveIndex = 0;
+            currentWave = waves[currentWaveIndex];
+
+            foreach (var spawnPoint in currentWave)
+            {
+                spawnPoint.timer = 0f;
+                spawnPoint.isStart = false;
+                waveClearCount += spawnPoint.maxSpawnCount;
+            }
+            Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
+#endif
+            //isFinalWaveEnded = true;
 #if DEBUG_MODE
             //Debug.Log("지금 마지막웨이브 다음으로 넘어갈수없다.");
 #endif

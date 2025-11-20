@@ -20,7 +20,7 @@ public class TitlePresetWindow : Window
         windowId = (int)WindowIds.TitlePresetWindow;
         backButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
 
-        DataTableManager.PresetTable.OnChangePresetData += ChangePresetData;
+        FirebaseManager.Instance.PresetData.OnChangePresetData += ChangePresetData;
         UpdatePreset();
 
         gameStartButton.onClick.AddListener(() =>
@@ -30,7 +30,7 @@ public class TitlePresetWindow : Window
 
             LoadingScene.sceneId = SceneIds.GameScene;
             var presetData = presetViewers[currentSelectPresetIndex].PresetData;
-            DataTableManager.PresetTable.SetGameData(presetData);
+            FirebaseManager.Instance.PresetData.SetGameData(presetData);
             SceneManager.LoadScene(SceneIds.LoadingScene);
         });
     }
@@ -57,7 +57,7 @@ public class TitlePresetWindow : Window
 
     private void OnDestroy()
     {
-        DataTableManager.PresetTable.OnChangePresetData -= ChangePresetData;
+        FirebaseManager.Instance.PresetData.OnChangePresetData -= ChangePresetData;
     }
 
     private void UpdatePreset()
@@ -68,10 +68,10 @@ public class TitlePresetWindow : Window
         }
         presetViewers.Clear();
 
-        for (int i = 0; i < DataTableManager.PresetTable.Count(); i++)
+        for (int i = 0; i < FirebaseManager.Instance.PresetData.Count(); i++)
         {
             var presetViewer = Instantiate(this.presetViewer, presetDataRoot);
-            presetViewer.Init(DataTableManager.PresetTable.Get(i), i, manager , ChangeSelectPresetIndex);
+            presetViewer.Init(FirebaseManager.Instance.PresetData.Get(i), i, manager , ChangeSelectPresetIndex);
             presetViewers.Add(presetViewer);
         }
     }
@@ -79,7 +79,7 @@ public class TitlePresetWindow : Window
     private void ChangePresetData(int index)
     {
         Debug.Log("Preset ChangeData Call");
-        var presetData = DataTableManager.PresetTable.Get(index);
+        var presetData = FirebaseManager.Instance.PresetData.Get(index);
         presetViewers[index].UpdatePreset(presetData);
     }
 }

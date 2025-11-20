@@ -29,7 +29,7 @@ public class TowerManager : MonoBehaviour
 
     private WindowManager windowManager;
     //Fix : 임시용임
-    private PresetTable.Data presetGameData;
+    private PresetData.Data presetGameData;
     public Action<Tower, Collider2D> OnHitTarget;
 #if DEBUG_MODE
     [Header("DEBUG")]
@@ -40,7 +40,7 @@ public class TowerManager : MonoBehaviour
     private void Awake()
     {
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
-        presetGameData = DataTableManager.PresetTable.GetGameData();
+        presetGameData = FirebaseManager.Instance.PresetData.GetGameData();
         for(int i = 0; i < presetGameData.TowerId.Count; i++)
         {
             int towerId = presetGameData.TowerId[i];

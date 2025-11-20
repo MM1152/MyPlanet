@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BaseDie : MonoBehaviour
+public class BaseDie
 {
     protected Enemy enemy;
     protected TypeEffectiveness typeEffectiveness;
@@ -15,7 +15,6 @@ public class BaseDie : MonoBehaviour
     {        
         enemy.WaveManager.totalEnemyCount--;    
         enemy.WaveManager.waveClearCount--;        
-        enemy.IsDead = true;
         Managers.ObjectPoolManager.Despawn(PoolsId.Enemy, enemy.gameObject);
     }
 }

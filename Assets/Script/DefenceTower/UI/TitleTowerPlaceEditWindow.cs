@@ -17,7 +17,7 @@ public class TitleTowerPlaceEditWindow : Window
     [SerializeField] private Button closeButton;
 
     private Vector2 circleSize;
-    private int placeCount = 10;
+    private int placeCount;
 
     private List<TowerPlaceHold> placeHolds = new List<TowerPlaceHold>();
     private Dictionary<int,ShowIndexPanel> showIndexPanels = new Dictionary<int, ShowIndexPanel>();
@@ -28,7 +28,7 @@ public class TitleTowerPlaceEditWindow : Window
     private bool isRotate = false;
 
     private TowerFactory towerFactory = new TowerFactory();
-    private PresetTable.Data presetData;
+    private PresetData.Data presetData;
     private int presetIndex;
 
     public override void Close()
@@ -52,10 +52,17 @@ public class TitleTowerPlaceEditWindow : Window
         closeButton.onClick.AddListener(() => manager.Open(WindowIds.TitleSelectPlanetWindow));
         saveButton.onClick.AddListener(() =>
         {
-            presetData.TowerId = placeHolds.Select(x => x.TowerData != null ? x.TowerData.ID : -1).ToList();
-            DataTableManager.PresetTable.Save(presetData, presetIndex).Forget();
-            manager.Open(WindowIds.TitlePresetWindow);
+            saveButton.interactable = false;
+            WaitForSaveAsync().Forget();
         });
+    }
+
+    private async UniTaskVoid WaitForSaveAsync()
+    {
+        presetData.TowerId = placeHolds.Select(x => x.TowerData != null ? x.TowerData.ID : -1).ToList();
+        await FirebaseManager.Instance.PresetData.Save(presetData, presetIndex);
+        saveButton.interactable = true;
+        manager.Open(WindowIds.TitlePresetWindow);
     }
 
     public override void Open()
@@ -66,10 +73,11 @@ public class TitleTowerPlaceEditWindow : Window
         base.Open();
     }
 
-    public void SetPresetData(PresetTable.Data presetData , int presetIndex)
+    public void SetPresetData(PresetData.Data presetData , int presetIndex)
     {
         this.presetData = presetData;
         this.presetIndex = presetIndex;
+        placeCount = presetData.TowerId.Count;
 
         UpdateTowerHold();
         UpdateTowerList();

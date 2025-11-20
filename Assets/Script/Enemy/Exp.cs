@@ -26,7 +26,7 @@ public class Exp : MonoBehaviour
 
     private async UniTask AwaitMove()
     {
-        await UniTask.Delay(1000);
+        await UniTask.Delay(1000 , cancellationToken : this.gameObject.GetCancellationTokenOnDestroy());
         isWaiting = false;
     }
 

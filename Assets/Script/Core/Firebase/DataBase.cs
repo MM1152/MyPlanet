@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class DataBase 
 {
+
     private FirebaseDatabase database;
     private DatabaseReference root;
 
@@ -31,6 +32,7 @@ public class DataBase
                 throw new System.Exception($"Empty Value in Firebase database : {path}");
 
             data = JsonSerialized.FromJson<T>(snapshot.GetRawJsonValue());
+            data.PushId = snapshot.Key;
             return (data, true);
         }       
         catch (System.Exception ex)
@@ -60,8 +62,10 @@ public class DataBase
                 throw new System.Exception($"Empty Value in Firebase database : {path}");
 
             foreach(var snapshotChild in snapshot.Children) 
-            { 
-                data.Add(JsonSerialized.FromJson<T>(snapshotChild.GetRawJsonValue()));
+            {
+                var inputData = JsonSerialized.FromJson<T>(snapshotChild.GetRawJsonValue());
+                inputData.PushId = snapshotChild.Key;
+                data.Add(inputData);
             }
             return (data, true);
         }
@@ -83,7 +87,8 @@ public class DataBase
 
         try
         {
-            await newReference.SetRawJsonValueAsync(json.ToJson()).AsUniTask();
+            Debug.Log(json.ToJson());
+            await newReference.SetRawJsonValueAsync(json.ToJson()).AsUniTask(); 
             return true;
         }
         catch (System.Exception ex)
