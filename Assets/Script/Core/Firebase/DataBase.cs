@@ -110,6 +110,7 @@ public class DataBase
         try
         {
             var childRef = newReference.Push();
+            json.PushId = childRef.Key;
             await childRef.SetRawJsonValueAsync(json.ToJson()).AsUniTask();
             return true;
         }
