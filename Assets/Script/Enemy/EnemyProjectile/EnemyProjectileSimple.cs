@@ -1,9 +1,7 @@
 using UnityEngine;
 
 public class EnemyProjectileSimple : EnemyProjectileBase
-{
-    [SerializeField] protected float speed = 1.5f;
-
+{ 
      Vector3 dir;
     public override void SetTarget(Transform target)
     {
@@ -34,7 +32,7 @@ public class EnemyProjectileSimple : EnemyProjectileBase
 
     protected void Move()
     {
-        transform.position += dir * speed * Time.deltaTime;
+        transform.position += dir * enemyData.bulletSpeed * Time.deltaTime;
     }
 
     protected override void BlockedHit(Collider2D collision)

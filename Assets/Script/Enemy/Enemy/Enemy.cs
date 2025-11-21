@@ -26,11 +26,18 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public float BaseSpeed => enemyData.Speed;
     public float CurrentSpeed { get => speed; set => speed = value; }
+    
+    public EnemyType enemyType => enemyData.Range > 0 ? EnemyType.Ranged : EnemyType.Melee;
+   
     public float speed;
     public int atk;
     public float attackrange;
+
+    public float bulletSpeed => enemyData.Bullet_Speed; 
+    
+    public float fireInterval  => 60f / enemyData.Fire_Rate;
     public float attackInterval;
-    public EnemyType enemyType => (EnemyType)enemyData.Type;
+    
     [SerializeField] private int currentHP;
     public TypeEffectiveness typeEffectiveness;
     public event Action<Enemy> OnDie;
@@ -64,7 +71,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         currentHP = enemyData.HP;
         atk = enemyData.ATK;
         speed = enemyData.Speed;
-        attackrange = enemyData.AttackRange;
+        attackrange = enemyData.Range;
 #if DEBUG_MODE
         SetColor(enemyData.Attribute);
 #endif
@@ -74,10 +81,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         typeEffectiveness = new TypeEffectiveness();
         typeEffectiveness.Init(ElementType);
         statusEffect.Init();
-        attackManager = new AttackManager(enemyType, out attack);
         isKilledByPlayer = true;
         IsDead = false;
         dieManager = new DieManager(enemyData.ID, out die);
+
+        // 수정 필요 
+        attackManager = new AttackManager(enemyType, out attack);
     }
 #if DEBUG_MODE
     private void SetColor(int typeEffectiveness)

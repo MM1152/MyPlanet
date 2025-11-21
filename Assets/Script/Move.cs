@@ -15,6 +15,8 @@ public class Move : MonoBehaviour
     private float orbitRadius;
     // 이동 속도 (도/초)   
     public float rotaspeed = 90f; // 초당 90도 회전
+   //기본 이동속도 배속
+   public float speed = 2f;
     //자전 속도
     public float selfRotaspeed = 10f;
     //조이스틱 입력값 저장할 변수 
@@ -80,7 +82,7 @@ public class Move : MonoBehaviour
             {
                 // 일정한 속도로 회전 (거리에 관계없이 동일한 속도)
                 float moveDirection = Mathf.Sign(angleDifference);
-                float deltaAngle = rotaspeed * Time.deltaTime;
+                float deltaAngle = rotaspeed * speed * Time.deltaTime;
 
                 // 목표 각도를 넘어서지 않도록 제한
                 if (deltaAngle > Mathf.Abs(angleDifference))

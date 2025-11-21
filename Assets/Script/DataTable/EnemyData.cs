@@ -9,14 +9,14 @@ public class EnemyData : DataTable
     public class Data
     {
         public int ID { get; set; }        
-        public int Attribute { get; set; } = -1;    
-        public int Type { get; set; }               
+        public int Attribute { get; set; } = -1;                   
         public int Speed { get; set; }
         public int HP { get; set; }
         public int ATK { get; set; }
-        public int AttackInterval { get; set; }
-        public float AttackRange { get; set; }
         public int EXP { get; set; }
+        public int Fire_Rate { get; set; }
+        public float Range { get; set; }
+        public int Bullet_Speed { get; set; }
         public string Image_Path { get; set; }
         public string Bullet_Path { get; set; }
     }
