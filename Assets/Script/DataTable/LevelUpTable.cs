@@ -65,6 +65,10 @@ public class LevelUpTable : DataTable
     public Data Get(int towerId , int level)
     {
         int id = tableId + towerId * 100 + level;
-        return levelUpTable[id];
+        if(levelUpTable.TryGetValue(id, out var data))
+        {
+            return data;
+        }
+        return null;
     }
 }

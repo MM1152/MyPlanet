@@ -6,7 +6,6 @@ public class TowerFactory : BaseFactory<Tower>
     private Dictionary<int, ITowerCreateor> towerCreator = new Dictionary<int, ITowerCreateor>()
     {
         { 2003,  new HellFireTowerCreator() },
-        { 2001,  new LaserTowerCreator() },
         { 2007,  new VolcanoTowerCreator() },
         { 2010,  new SteelReaperTowerCreator() },
         { 2011,  new MagmaTowerCreator() },
@@ -23,15 +22,6 @@ public class TowerFactory : BaseFactory<Tower>
     public override Tower CreateInstance(int id)
     {
         return towerCreator[id].CreateTower();
-    }
-}
-
-public class LaserTowerCreator : ITowerCreateor
-{
-    public Tower CreateTower()
-    {
-        var laser = new LaserTower();
-        return laser;
     }
 }
 

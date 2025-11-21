@@ -7,8 +7,14 @@ public abstract class Tower
 {
     public int FullDamage => towerData.ATK + BonusDamage;
     public int BaseDamage => towerData.ATK;
+
     public float FullAttackSpeed => towerData.Fire_Rate + BonusAttackSpeed;
     public float BaseAttackSpeed => towerData.Fire_Rate;
+
+    public float FullAttackRange => towerData.Attack_Range + BonusAttackRange;
+    public float BaseAttackRange => towerData.Attack_Range;
+
+    public float FullNoise => noise + BonuseNoise;
 
     public float BonusAttackSpeed { get; set; }
     public int BonusDamage { get; set; }
@@ -26,13 +32,14 @@ public abstract class Tower
     public int BonusSlowPercent { get; set; }
     public int BonusSlowBulletSpeed { get; set; }
     public int BonusStopTime { get; set; }
-    public int BonusAngle { get; set; }
+    public int BonuseNoise { get; set; }
     public int BonusBulletSpeed { get; set; }
 
     public float AttackRange => towerData.Attack_Range;
     public int SlotIndex => slotIndex;
     public int ID => towerData.ID;
     public bool UseAble => useAble;
+    public int Level => level;
 
     public TowerTable.Data TowerData => towerData;
     protected Transform Target
@@ -67,8 +74,7 @@ public abstract class Tower
 
     protected float currentAttackInterval;
     protected float bonusAttackSpeed = 0f;
-    protected float maxNoise = 0f;
-    protected float minNoise = 0f;
+    protected float noise = 0f;
 
     protected bool attackAble;
     private bool useAble = false;
@@ -134,7 +140,7 @@ public abstract class Tower
             if (target == null)
                 return false;
 
-            if (Vector3.Distance(target.position, tower.transform.position) > towerData.Attack_Range)
+            if (Vector3.Distance(target.position, tower.transform.position) > FullAttackRange)
             {
                 Target = null;
                 return false;
@@ -146,7 +152,7 @@ public abstract class Tower
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = tower.transform.position;
             attackPrefabs.Init(this);
-            attackPrefabs.SetTarget(target, minNoise, maxNoise);
+            attackPrefabs.SetTarget(target, FullNoise);
             return true;
         }
 
@@ -172,6 +178,7 @@ public abstract class Tower
             CheckLevelUpVariable(var4, -this.levelUpData.Val4);
         }
 
+        level++;
         this.levelUpData = levelUpData;
         BonusDamage += this.levelUpData.Damage;
         var1 = this.levelUpData.Var1;
@@ -231,7 +238,7 @@ public abstract class Tower
                 BonusStopTime += value;
                 break;
             case 15:
-                BonusAngle += value;
+                BonuseNoise += value;
                 break;
             case 16:
                 BonusBulletSpeed += value;

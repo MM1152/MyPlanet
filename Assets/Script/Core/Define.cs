@@ -66,6 +66,7 @@ public enum PoolsId
     GravityControl = 207,
     ShockWaveBullet = 208,
     ShockWave = 209,
+    Explosion = 210,
     
     SimpleBullet = 301,
     Exp = 400,
@@ -99,6 +100,7 @@ public static class AddressableNames
         { "ShockWave", PoolsId.ShockWave },
         { "DamageText", PoolsId.DamageText },
         { "TestRange", PoolsId.TestRange },
+        { "Explosion", PoolsId.Explosion },
     };
 
     public static PoolsId GetPoolsId(string name)

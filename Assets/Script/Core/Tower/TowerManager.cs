@@ -22,7 +22,7 @@ public class TowerManager : MonoBehaviour
     private int totalExp = 0;
     private int currentLevel = 1;
     public int CurrentLevel => currentLevel;
-    private int maxLevel = 10;
+    private int maxLevel = 5;
     public int levelUpExp => currentLevel * 100;
 
     private bool isLevelUp = false;
@@ -84,6 +84,19 @@ public class TowerManager : MonoBehaviour
         return enemySpawnManager.GetEnemyData(tower.transform.position);
     }
 
+    public Enemy FindTargetInRange(Vector3 targetPosition , float distance)
+    {
+        var targets = FindTargets();
+        if(targets == null)
+            return null;
+
+        var inRangeTargets = targets.Where(x => Vector3.Distance(x.transform.position, targetPosition) <= distance).ToList();
+        if(inRangeTargets.Count == 0)
+            return null;
+        int rand = UnityEngine.Random.Range(0, inRangeTargets.Count);
+        return inRangeTargets[rand];
+    }
+
     public void AddTower(TowerTable.Data data , int slotIndex)
     {
         if(data == null)
@@ -100,12 +113,17 @@ public class TowerManager : MonoBehaviour
     public void PlaceTower(TowerTable.Data towerData)
     {
         int index = FindTowerPlaceIndex(towerData);
+        var levelUpData = DataTableManager.LevelUpTable.Get(towerData.ID, towers[index].Level + 1);
 
         if (towers[index].UseAble)
         {
-            towers[index].LevelUp();
+            if(levelUpData != null)
+            {
+                towers[index].LevelUp(levelUpData);
+            }
             return;
         }
+        towers[index].LevelUp(levelUpData);
         towers[index].PlaceTower();
     }
 

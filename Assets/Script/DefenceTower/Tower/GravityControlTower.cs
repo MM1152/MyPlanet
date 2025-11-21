@@ -15,7 +15,7 @@ public class GravityControlTower : Tower
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = manager.basePlanet.transform.position;
             attackPrefabs.Init(this);
-            attackPrefabs.SetTarget(target, minNoise, maxNoise);
+            attackPrefabs.SetTarget(target, noise);
             
             return true;
         }
@@ -29,11 +29,6 @@ public class GravityControlTower : Tower
 
         //Fix : 임시값이라 변경 필요
         statusEffect = new SlowStatusEffect(2f, 0.5f);
-    }
-
-    public override void LevelUp()
-    {
-        base.LevelUp();
     }
 
     public override void Update(float deltaTime)

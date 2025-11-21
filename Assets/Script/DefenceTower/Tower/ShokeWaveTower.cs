@@ -15,11 +15,6 @@ public class ShockWaveTower : Tower
         statusEffect = new StunStatusEffect(0.5f);
     }
 
-    public override void LevelUp()
-    {
-        base.LevelUp();
-    }
-
     public override void Update(float deltaTime)
     {
         base.Update(deltaTime);

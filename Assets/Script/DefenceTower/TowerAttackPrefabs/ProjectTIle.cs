@@ -3,12 +3,13 @@ using UnityEngine;
 public class ProjectTile : BaseAttackPrefab
 {
     [SerializeField] protected float speed = 5f;
+    public float FullBulletSpeed => speed + tower.BonusBulletSpeed;
 
     protected Vector3 dir;
     
-    public override void SetTarget(Transform target , float minNoise , float maxNoise)
+    public override void SetTarget(Transform target , float noise)
     {
-        base.SetTarget(target , minNoise , maxNoise);
+        base.SetTarget(target , noise);
         dir = SetDir();
 
         float rad = Mathf.Atan2(dir.y, dir.x);
@@ -18,13 +19,11 @@ public class ProjectTile : BaseAttackPrefab
     protected virtual Vector3 SetDir()
     {
         dir = target.transform.position - transform.position;
-        float noise = Random.Range(minNoise , maxNoise);
         return dir.normalized + new Vector3(noise , 0f , 0f);
     }
 
     public void SetDir(Vector3 dir)
     {
-        float noise = Random.Range(minNoise , maxNoise);
         this.dir = dir + new Vector3(noise, 0f, 0f);
     }
     
@@ -42,7 +41,7 @@ public class ProjectTile : BaseAttackPrefab
 
     protected void Move()
     {
-        transform.position += dir * speed * Time.deltaTime;
+        transform.position += dir * FullBulletSpeed * Time.deltaTime;
     }
 
     protected override void HitTarget(Collider2D collision)
@@ -51,7 +50,7 @@ public class ProjectTile : BaseAttackPrefab
         if (find != null)
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
-            find.OnDamage((int)(towerData.FullDamage * percent));
+            find.OnDamage((int)(tower.FullDamage * percent));
             find.StatusEffect.Apply(effect, find);
         }
     }

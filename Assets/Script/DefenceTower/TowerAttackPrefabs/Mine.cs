@@ -20,14 +20,6 @@ public class Mine : BaseAttackPrefab
         currentDuration = 0f;
     }
 
-    public override void SetTarget(Transform target, float minNoise, float maxNoise)
-    {
-        base.SetTarget(target, minNoise, maxNoise);
-        noise = Random.Range(minNoise , maxNoise);
-        // 타워에서 Dir 값으로 target을 넘겨주든, 방향 뽑을라면 실제 공전중인 타워를 넘기든 해야됌
-        // 타워에서 dir값을 넘겨주는 형식으로 뽑아내는 걸로
-    }
-
     public virtual void SetDir(Vector3 dir)
     {
         // 넘겨 받은 dir 값은 정규화 된 값이어야 함    
@@ -60,7 +52,7 @@ public class Mine : BaseAttackPrefab
         if (find != null)
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
-            find.OnDamage((int)(towerData.FullDamage * percent));
+            find.OnDamage((int)(tower.FullDamage * percent));
             find.StatusEffect.Apply(effect, find);
             Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }

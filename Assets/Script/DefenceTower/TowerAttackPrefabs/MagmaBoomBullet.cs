@@ -45,7 +45,7 @@ public class MagmaBoomBullet : ProjectTile
         {
             FragmentBullet fragmentObj = Managers.ObjectPoolManager.SpawnObject<FragmentBullet>(PoolsId.FragmentBullet);
             fragmentObj.transform.position = transform.position;
-            fragmentObj.Init(towerData);
+            fragmentObj.Init(tower);
             float angle = splitAngle * i;
             Vector3 dir = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
             dir.Normalize();

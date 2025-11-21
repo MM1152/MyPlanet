@@ -16,7 +16,7 @@ public class IRonMineTower : Tower
                 Mine attackPrefabs = CreateAttackPrefab() as Mine;
                 attackPrefabs.transform.position = tower.transform.position;
                 attackPrefabs.Init(this);
-                attackPrefabs.SetTarget(target, minNoise, maxNoise);
+                attackPrefabs.SetTarget(target, noise);
                 // Mine 의은 tower 와 basePlanet 사이의 방향으로 설정해서 넘겨줘야함
                 attackPrefabs.SetDir((tower.transform.position - manager.basePlanet.transform.position).normalized);
             }
@@ -33,13 +33,7 @@ public class IRonMineTower : Tower
     public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
     {
         base.Init(tower, manager, data, slotIndex);
-        minNoise = -45f;
-        maxNoise = 45f;
-    }
-
-    public override void LevelUp()
-    {
-        base.LevelUp();
+        noise = 45f;
     }
 
     public override void Update(float deltaTime)
