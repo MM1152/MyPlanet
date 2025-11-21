@@ -5,6 +5,8 @@ public class TowerFactory : BaseFactory<Tower>
 {
     private Dictionary<int, ITowerCreateor> towerCreator = new Dictionary<int, ITowerCreateor>()
     {
+        { 2001, new SolarLaserTowerCreator() },
+        { 2002, new DarkLaserTowerCreator() },
         { 2003,  new HellFireTowerCreator() },
         { 2007,  new VolcanoTowerCreator() },
         { 2010,  new SteelReaperTowerCreator() },
@@ -87,3 +89,22 @@ public class ShockWaveTowerCreator : ITowerCreateor
         return shockWaveTower;
     }
 }
+
+public class SolarLaserTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new SolarLaserTower();
+        return tower;
+    }
+}
+
+public class DarkLaserTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new DarkLaserTower();
+        return tower;
+    }
+}
+

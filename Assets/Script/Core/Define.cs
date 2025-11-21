@@ -58,7 +58,7 @@ public enum PoolsId
 
     Bullet = 200,
     Missile = 201,
-    Laser = 202,
+    SolarLaser = 202,
     SniperBullet = 203,
     MagmaBoomBullet = 204,
     FragmentBullet = 205,
@@ -67,7 +67,9 @@ public enum PoolsId
     ShockWaveBullet = 208,
     ShockWave = 209,
     Explosion = 210,
-    
+    DarkLaser = 211,
+
+
     SimpleBullet = 301,
     Exp = 400,
     DamageText = 600,
@@ -90,7 +92,7 @@ public static class AddressableNames
         { "Bullet", PoolsId.Bullet },
         { "Missile", PoolsId.Missile },
         { "SniperBullet", PoolsId.SniperBullet },
-        { "Laser", PoolsId.Laser },
+        { "SolarLaser", PoolsId.SolarLaser },
         { "Exp", PoolsId.Exp },
         { "MagmaBoomBullet", PoolsId.MagmaBoomBullet },
         { "FragmentBullet", PoolsId.FragmentBullet },
@@ -101,6 +103,7 @@ public static class AddressableNames
         { "DamageText", PoolsId.DamageText },
         { "TestRange", PoolsId.TestRange },
         { "Explosion", PoolsId.Explosion },
+        { "DarkLaser", PoolsId.DarkLaser },
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -158,6 +161,6 @@ public static class DataTableIds
 
 public static class DataBasePaths
 {
-    public static string UserPath = "/users/";
-    public static string PresetPath = "/preset/";
+    public static string UserPath = "users/";
+    public static string PresetPath = "preset/";
 }

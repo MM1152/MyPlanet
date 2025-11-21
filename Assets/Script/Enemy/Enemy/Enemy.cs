@@ -121,7 +121,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (collision.CompareTag(TargetTag))
         {
 #if DEBUG_MODE
-            Debug.Log("콜라이더 충돌 들어옴");
 #endif
             isKilledByPlayer = false;
             SetState(stateMachine.attackState);

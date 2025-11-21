@@ -41,6 +41,7 @@ public abstract class Tower
     public bool UseAble => useAble;
     public int Level => level;
 
+    public GameObject TowerGameObject => tower;
     public TowerTable.Data TowerData => towerData;
     protected Transform Target
     {
@@ -62,7 +63,6 @@ public abstract class Tower
     public RandomOptionData RandomOptionData => randomOptionData;
     public IStatusEffect StatusEffect => statusEffect;
     public RandomOptionBase Option => baseRandomOption;
-
 
     protected GameObject projectTile;
     protected GameObject tower;
