@@ -13,7 +13,6 @@ public static class DataTableManager
     public static EnemyData EnemyTable => Get<EnemyData>(DataTableIds.EnemyTable); 
     public static TowerTable TowerTable => Get<TowerTable>(DataTableIds.TowerTable); 
     public static WaveData WaveTable => Get<WaveData>(DataTableIds.WaveTable);
-    public static PresetTable PresetTable => Get<PresetTable>(DataTableIds.PresetTable);
     public static PlanetTable PlanetTable => Get<PlanetTable>(DataTableIds.PlanetTable);
     public static StringTable StringTable => Get<StringTable>(DataTableIds.StringTable);
     public static PassiveTable PassiveTable => Get<PassiveTable>(DataTableIds.PassiveTable);
@@ -31,7 +30,7 @@ public static class DataTableManager
         var enemyDatatable = new EnemyData();
         var towerTable = new TowerTable();
         var waveTable = new WaveData();    
-        var presetTable = new PresetTable(); 
+        var presetTable = new PresetData(); 
         var planetTable= new PlanetTable();
         var stringTable = new StringTable();
         var skillTable = new PassiveTable();
@@ -43,7 +42,6 @@ public static class DataTableManager
             enemyDatatable.LoadAsync(DataTableIds.EnemyTable),
             towerTable.LoadAsync(DataTableIds.TowerTable),
             waveTable.LoadAsync(DataTableIds.WaveTable),  
-            presetTable.LoadAsync(DataTableIds.PresetTable),
             planetTable.LoadAsync(DataTableIds.PlanetTable),
             stringTable.LoadAsync(DataTableIds.StringTable),
             skillTable.LoadAsync(DataTableIds.PassiveTable),

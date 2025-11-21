@@ -48,12 +48,12 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     public virtual void Init()
     {
-        planetData = DataTableManager.PlanetTable.Get(DataTableManager.PresetTable.GetGameData().PlanetId);
+        planetData = DataTableManager.PlanetTable.Get(FirebaseManager.Instance.PresetData.GetGameData().PlanetId);
         typeEffectiveness.Init((ElementType)planetData.Attribute);
         passiveSystem.Init(planetData.Skill_ID);
 
         maxHp = planetData.HP;
-        hp = (int)(maxHp * 0.3f);
+        hp = (int)(maxHp);
     }
 
     public void RepairHp(int amount)

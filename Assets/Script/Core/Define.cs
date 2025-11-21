@@ -77,31 +77,7 @@ public enum PoolsId
 public enum EnemyType
 {
     Melee = 0,
-    Ranged = 1,
-}
-
-public enum EnemyTier
-{
-    Tier3 = 3,
-    Tier2 = 2,
-    Tier1 = 1,
-    Boss = 0,
-}
-
-public struct EnemyAttackKey
-{
-    //근접,원거리
-    public EnemyType enemyType;
-
-    public ElementType elementType;
-
-    public EnemyTier tier;
-    public EnemyAttackKey(EnemyType enemyType, ElementType elementType, EnemyTier tier)
-    {
-        this.enemyType = enemyType;
-        this.elementType = elementType;
-        this.tier = tier;
-    }
+    Ranged = 1,    
 }
 
 public static class AddressableNames
@@ -176,4 +152,10 @@ public static class DataTableIds
         return AllIds;
     }
 
+}
+
+public static class DataBasePaths
+{
+    public static string UserPath = "/users/";
+    public static string PresetPath = "/preset/";
 }

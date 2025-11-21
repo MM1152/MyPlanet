@@ -18,12 +18,12 @@ public class PresetViewer : MonoBehaviour
     [SerializeField] private Image planetImage;
 
     private List<TowerInfomation> towerInfos = new List<TowerInfomation>();
-    private PresetTable.Data presetData;
-    public PresetTable.Data PresetData => presetData;
+    private PresetData.Data presetData;
+    public PresetData.Data PresetData => presetData;
     private Action<int> OnChangeIndex;
     private int index;
     
-    public void Init(PresetTable.Data presetData , int index , WindowManager manager , Action<int> OnChangeIndex)
+    public void Init(PresetData.Data presetData , int index , WindowManager manager , Action<int> OnChangeIndex)
     {
         this.presetData = presetData;
         this.index = index;
@@ -35,7 +35,7 @@ public class PresetViewer : MonoBehaviour
             var window = manager.Open(WindowIds.TitleSelectPlanetWindow);
             if(window is TitleSelectPlanetWindow planetWindow)
             {
-                var presetData = DataTableManager.PresetTable.Get(index);
+                var presetData = FirebaseManager.Instance.PresetData.Get(index);
                 planetWindow.SetPresetData(presetData , index);
             }
         });
@@ -46,7 +46,7 @@ public class PresetViewer : MonoBehaviour
         });
     }
 
-    public void UpdatePreset(PresetTable.Data presetData)
+    public void UpdatePreset(PresetData.Data presetData)
     {
         this.presetData = presetData;
 

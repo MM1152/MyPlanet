@@ -18,7 +18,7 @@ public class TitleSelectPlanetWindow : Window
     [SerializeField] private TextMeshProUGUI descriptionText;
 
     private PlanetTable.Data planetData;
-    private PresetTable.Data presetData;
+    private PresetData.Data presetData;
     private PlanetInfomation currentSelectInfomation;
     private List<PlanetInfomation> planetInfomations = new List<PlanetInfomation>();
 
@@ -82,7 +82,7 @@ public class TitleSelectPlanetWindow : Window
         descriptionText.text = planetData.Explanation;
     }
 
-    public void SetPresetData(PresetTable.Data presetData , int presetIndex)
+    public void SetPresetData(PresetData.Data presetData , int presetIndex)
     {
         this.presetData = presetData;
         this.presetIndex = presetIndex;

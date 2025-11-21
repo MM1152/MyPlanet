@@ -29,17 +29,17 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public float speed;
     public int atk;
     public float attackrange;
-    public float attackInterval;   
+    public float attackInterval;
     public EnemyType enemyType => (EnemyType)enemyData.Type;
-    public EnemyTier enemyTier => (EnemyTier)enemyData.Tier;
     [SerializeField] private int currentHP;
     public TypeEffectiveness typeEffectiveness;
     public event Action<Enemy> OnDie;
-    private EnemyAttackKey attackKey;
     private AttackManager attackManager;
     private DieManager dieManager;
     public IAttack attack;
     public BaseDie die;
+
+    public float TestRangeRadius;
 
     public bool isKilledByPlayer { get; private set; }
 
@@ -66,7 +66,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         speed = enemyData.Speed;
         attackrange = enemyData.AttackRange;
 #if DEBUG_MODE
-        SetColor(enemyData.ID);
+        SetColor(enemyData.Attribute);
 #endif
 
         target = GameObject.FindGameObjectWithTag(TargetTag);
@@ -74,31 +74,33 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         typeEffectiveness = new TypeEffectiveness();
         typeEffectiveness.Init(ElementType);
         statusEffect.Init();
-        attackKey = new EnemyAttackKey(enemyType, ElementType, enemyTier);
-        attackManager = new AttackManager(attackKey, out attack);
+        attackManager = new AttackManager(enemyType, out attack);
         isKilledByPlayer = true;
         IsDead = false;
         dieManager = new DieManager(enemyData.ID, out die);
     }
 #if DEBUG_MODE
-    private void SetColor(int id)
+    private void SetColor(int typeEffectiveness)
     {
-        switch (id)
+        switch (typeEffectiveness)
         {
+            case 0:
+                spriteRenderer.color = Color.white;
+                break;
             case 1:
-                spriteRenderer.color = Color.green;
+                spriteRenderer.color = Color.red;
                 break;
             case 2:
-                spriteRenderer.color = Color.blue;
+                spriteRenderer.color = Color.gray;
                 break;
             case 3:
-                spriteRenderer.color = Color.red;
+                spriteRenderer.color = Color.blue;
                 break;
             case 4:
                 spriteRenderer.color = Color.yellow;
                 break;
             case 5:
-                spriteRenderer.color = Color.magenta;
+                spriteRenderer.color = Color.cyan;
                 break;
             default:
                 spriteRenderer.color = Color.white;
@@ -147,9 +149,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         damage = damage == 0 ? 1 : damage;
         currentHP -= damage;
 #if DEBUG_MODE
-        var text = textSpawnManager.SpawnTextUI(damage.ToString(), this.transform.position);        
-        // Debug.Log($"Damage taken: {damage}, Current HP: {currentHP}");
-        text.SetColor(Color.red);
+        if (damage > 0)
+        {
+            var text = textSpawnManager.SpawnTextUI(damage.ToString(), this.transform.position);
+            // Debug.Log($"Damage taken: {damage}, Current HP: {currentHP}");
+            text.SetColor(Color.red);
+        }
 #endif
         if (currentHP <= 0)
         {
@@ -161,19 +166,18 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         int healAmount = Mathf.Min(heal, enemyData.HP - currentHP);
         currentHP += healAmount;
-// #if DEBUG_MODE
-//         var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
-//         text.SetColor(Color.green);
-// #endif
-        // if (currentHP > enemyData.HP)
-        // {
-        //     currentHP = enemyData.HP;
-        // }
-        // Debug.Log($"치료 받은 후: {currentHP}");
+#if DEBUG_MODE
+        if (healAmount > 0)
+        {
+            var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
+            text.SetColor(Color.green);
+        }
+#endif
     }
 
     public void OnDead()
     {
+        IsDead = true;
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnDie?.Invoke(this);
