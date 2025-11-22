@@ -24,7 +24,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
         basePlaent = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
     }
 
-    public virtual void Init(Tower data)
+    public virtual void     Init(Tower data)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null && sprite != null)

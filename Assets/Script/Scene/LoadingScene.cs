@@ -76,6 +76,4 @@ public class LoadingScene : MonoBehaviour
         currentProgress.text = "Scene 초기화 중";
         await Addressables.LoadSceneAsync(sceneId).ToUniTask();
     }
-
-
 }

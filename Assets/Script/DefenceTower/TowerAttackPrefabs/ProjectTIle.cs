@@ -29,9 +29,14 @@ public class ProjectTile : BaseAttackPrefab
         return dir.normalized;
     }
 
-    public void SetDir(Vector3 dir)
+    public void SetDirWithNoise(Vector3 dir)
     {
         this.dir = dir + new Vector3(noise, 0f, 0f);
+    }
+
+    public void SetDirNoNoise(Vector3 dir)
+    {
+        this.dir = dir;
     }
     
     protected virtual void Update()

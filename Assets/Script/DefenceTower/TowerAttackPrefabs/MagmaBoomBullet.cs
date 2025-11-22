@@ -49,7 +49,7 @@ public class MagmaBoomBullet : ProjectTile
             float angle = splitAngle * i;
             Vector3 dir = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
             dir.Normalize();
-            fragmentObj.SetDir(dir);
+            fragmentObj.SetDirWithNoise(dir);
         }
     }
 }

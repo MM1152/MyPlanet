@@ -43,7 +43,7 @@ public class ShadowBursterBullet : Bullet
                 fregment.transform.position = transform.position;
                 float radAngle = angle * i * Mathf.Deg2Rad;
                 Vector3 dir = new Vector3(Mathf.Cos(radAngle) , Mathf.Sin(radAngle));
-                fregment.SetDir(dir);
+                fregment.SetDirWithNoise(dir);
             }
             Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
             timer = 0;

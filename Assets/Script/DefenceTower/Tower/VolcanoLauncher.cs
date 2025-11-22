@@ -13,8 +13,7 @@ public class VolcanoLauncher : Tower
     public override bool Attack()
     {
         Target = manager.FindTargetInRange(tower.transform.position, FullAttackRange)?.transform;
-        base.Attack();
-        return true;
+        return base.Attack();
     }
 
     protected override BaseAttackPrefab CreateAttackPrefab()
