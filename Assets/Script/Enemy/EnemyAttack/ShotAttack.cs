@@ -10,7 +10,7 @@ public class ShotAttack : IAttack
         { ElementType.Normal, new NormalStrategy() },
         { ElementType.Fire, new HomingShot() },
         { ElementType.Steel, new NormalStrategy() },
-        { ElementType.Ice, new NormalStrategy() },
+        { ElementType.Ice, new SpreadShot() },
         { ElementType.Light, new NormalStrategy() },
         { ElementType.Dark, new NormalStrategy() },
     };

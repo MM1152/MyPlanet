@@ -17,11 +17,6 @@ public class HomingBullet : EnemyProjectileSimple
         AwaitMove().Forget();
     }
 
-    public override void SetTarget(Transform target)
-    {
-        base.SetTarget(target);
-    }
-
     protected override void HitTarget(Collider2D collision)
     {
         base.HitTarget(collision);
@@ -45,7 +40,7 @@ public class HomingBullet : EnemyProjectileSimple
         while (Vector3.Distance(transform.position, offsetTarget) > 0.01f)
         {
             transform.position = Vector3.MoveTowards(transform.position, offsetTarget, enemyData.bulletSpeed * Time.deltaTime);
-            await UniTask.Yield();
+            await UniTask.Yield(this.gameObject.GetCancellationTokenOnDestroy());
         }
         await UniTask.Delay(500, cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
         isWaiting = false;

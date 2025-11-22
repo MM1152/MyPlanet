@@ -160,7 +160,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         }
         else if (collision.CompareTag(TagIds.EnemyProjectileTag))
         {
-            if (collision.GetComponent<SimpleBullet>().Enemy is Enemy enemy)
+            if (collision.GetComponent<EnemyProjectileSimple>().Enemy is Enemy enemy)
             {
                 passiveSystem.CheckUseAblePassive(null, this, enemy);
             }

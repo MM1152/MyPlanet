@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ExplosionDie : RangeCheckDeathHandler
 {
-    protected override string[] targets => new string[] { "Player", "Enemy" };
+    protected override string[] targets => new string[] { "Player"};
 
     protected override void DieAbility(Collider2D collider)
     {        

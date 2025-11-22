@@ -2,15 +2,6 @@ using UnityEngine;
 
 public class EnemyProjectileSimple : EnemyProjectileBase
 {
-    Vector3 dir;
-
-    float angle;
-
-    public override void SetTarget(Transform target)
-    {
-        base.SetTarget(target);
-        dir = (target.transform.position - transform.position).normalized;
-    }
 
     protected override void HitTarget(Collider2D collision)
     {
@@ -35,6 +26,7 @@ public class EnemyProjectileSimple : EnemyProjectileBase
 
     protected virtual void Move()
     {
+        Vector3 dir = (target.transform.position - transform.position).normalized;  
         transform.position += dir * enemyData.bulletSpeed * Time.deltaTime;
     }
 
