@@ -8,6 +8,9 @@ public class TowerFactory : BaseFactory<Tower>
         { 2001, new SolarLaserTowerCreator() },
         { 2002, new DarkLaserTowerCreator() },
         { 2003,  new HellFireTowerCreator() },
+        { 2004, new FrostRepeaterTowerCreator() },
+        { 2005,  new BurstBladeTowerCreator() },
+        { 2006, new ShadowBursterTowerCreator() },
         { 2007,  new VolcanoTowerCreator() },
         { 2010,  new SteelReaperTowerCreator() },
         { 2011,  new MagmaTowerCreator() },
@@ -108,3 +111,29 @@ public class DarkLaserTowerCreator : ITowerCreateor
     }
 }
 
+public class FrostRepeaterTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new FrostRepeaterTower();
+        return tower;
+    }
+}
+
+public class BurstBladeTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new BurstBlasterTower();
+        return tower;
+    }
+}
+
+public class ShadowBursterTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new ShadowBusterTower();
+        return tower;
+    }
+}

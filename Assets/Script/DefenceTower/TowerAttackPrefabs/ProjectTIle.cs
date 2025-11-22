@@ -19,7 +19,14 @@ public class ProjectTile : BaseAttackPrefab
     protected virtual Vector3 SetDir()
     {
         dir = target.transform.position - transform.position;
-        return dir.normalized + new Vector3(noise , 0f , 0f);
+        if (noise != 0)
+        {
+            float currentAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            currentAngle += noise;
+            float radAngle = currentAngle * Mathf.Deg2Rad;
+            dir = new Vector3(Mathf.Cos(radAngle), Mathf.Sin(radAngle), 0f);
+        }
+        return dir.normalized;
     }
 
     public void SetDir(Vector3 dir)

@@ -68,6 +68,7 @@ public enum PoolsId
     ShockWave = 209,
     Explosion = 210,
     DarkLaser = 211,
+    ShadowBursterBullet = 212,
 
 
     SimpleBullet = 301,
@@ -104,6 +105,7 @@ public static class AddressableNames
         { "TestRange", PoolsId.TestRange },
         { "Explosion", PoolsId.Explosion },
         { "DarkLaser", PoolsId.DarkLaser },
+        { "ShadowBursterBullet" , PoolsId.ShadowBursterBullet },
     };
 
     public static PoolsId GetPoolsId(string name)

@@ -3,14 +3,13 @@ using System;
 
 public class FragmentBullet : ProjectTile
 {
-    private float duration = 1f;
     private float currentDuration = 0f;
 
     public override void Init(Tower data)
     {
         base.Init(data);
         poolsId = PoolsId.FragmentBullet;
-        currentDuration = duration;
+        currentDuration = tower.BonusFregmentRange / speed;
     }
 
     protected override void Update()

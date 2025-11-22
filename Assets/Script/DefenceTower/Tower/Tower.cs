@@ -296,15 +296,4 @@ public abstract class Tower
         this.statusEffect = statusEffect;
     }
     protected abstract BaseAttackPrefab CreateAttackPrefab();
-
-    public void OnDamage(int damage)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void OnDead()
-    {
-        throw new NotImplementedException();
-    }
-
 }

@@ -20,11 +20,13 @@ public class TowerDamageUpgradeOption : RandomOptionBase
     public override void SetRandomOption()
     {
         GetApplyOptionTowers();
+
         foreach (var tower in towers)
         {
 #if DEBUG_MODE
             //Debug.Log($"Before Damage Amount Apply : {tower.Damage} towerID : {tower.ID}");
 #endif
+            if (tower == null) continue;
             tower.AddBonusDamage((int)baseTowerData.optionValue);
 #if DEBUG_MODE
             //Debug.Log($"After Damage Amount Apply : {tower.Damage} towerID : {tower.ID}");

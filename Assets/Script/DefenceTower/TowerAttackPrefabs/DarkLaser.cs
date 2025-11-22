@@ -7,11 +7,12 @@ public class DarkLaser : BaseAttackPrefab
     private float attackIntervalTimer;
     private float timer;
     private Rect screenRect;
+    private Vector2 baseScale;
     private void Awake()
     {
         basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
         screenRect = Screen.safeArea;
-
+        baseScale = transform.localScale;
     }
 
     public override void Init(Tower data)
@@ -36,6 +37,7 @@ public class DarkLaser : BaseAttackPrefab
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation *= Quaternion.Euler(0f, 0f, angle);
 
+        transform.localScale = new Vector3(tower.BonusWidthSize * baseScale.x, baseScale.y, 1f);
         poolsId = PoolsId.DarkLaser;
     }
 
