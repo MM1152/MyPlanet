@@ -68,6 +68,7 @@ public enum PoolsId
     ShockWave = 209,
     
     SimpleBullet = 301,
+    HomingBullet = 300,
     Exp = 400,
     DamageText = 600,
 
@@ -86,6 +87,7 @@ public static class AddressableNames
     {
         { "Enemy", PoolsId.Enemy },
         { "SimpleBullet", PoolsId.SimpleBullet },
+        { "HomingBullet", PoolsId.HomingBullet },
         { "Bullet", PoolsId.Bullet },
         { "Missile", PoolsId.Missile },
         { "SniperBullet", PoolsId.SniperBullet },

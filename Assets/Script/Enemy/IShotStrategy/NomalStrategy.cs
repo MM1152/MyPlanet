@@ -1,21 +1,19 @@
 using UnityEngine;
 
-public class HomingShot : IShotStrategy
+public class NormalStrategy : IShotStrategy
 {
     public void Shot(Enemy enemy, GameObject target)
-    { 
-        var Bullet = CreateProjectile(PoolsId.HomingBullet);
+    {
+        var Bullet = CreateProjectile(PoolsId.SimpleBullet);
         Bullet.transform.position = enemy.transform.position;
         Bullet.Init(enemy, enemy.typeEffectiveness);
         Bullet.SetTarget(target.transform);
-        Debug.Log("HomingShot");
     }
- 
+
     private EnemyProjectileBase CreateProjectile(PoolsId poolsId)
     {
         var projectileObj = Managers.ObjectPoolManager.SpawnObject<EnemyProjectileBase>(poolsId);
         EnemyProjectileBase projectile = projectileObj.GetComponent<EnemyProjectileBase>();
-        Debug.Log("Create Homing Bullet");
         return projectile;
     }
 }
