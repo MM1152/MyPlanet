@@ -71,6 +71,7 @@ public enum PoolsId
     ShadowBursterBullet = 212,
     IceRangerMissile = 213,
     LuminaSniperBullet = 214,
+    MagmaBoomFregment = 215,
 
     SimpleBullet = 301,
     Exp = 400,
@@ -109,6 +110,7 @@ public static class AddressableNames
         { "ShadowBursterBullet" , PoolsId.ShadowBursterBullet },
         { "IceRangerMissile" , PoolsId.IceRangerMissile },
         { "LuminaSniperBullet" , PoolsId.LuminaSniperBullet },
+        { "MagmaBoomFregment" , PoolsId.MagmaBoomFregment },
     };
 
     public static PoolsId GetPoolsId(string name)
