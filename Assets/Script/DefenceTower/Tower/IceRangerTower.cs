@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class IceRangerTower : Tower
 {
-    public override bool Attack()
+    public override bool Attack(bool useTarget = true)
     {
         Target = manager.FindTarget()?.transform;
-        return base.Attack();
+        return base.Attack(useTarget);
     }
+    
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         var missile = Managers.ObjectPoolManager.SpawnObject<IceRangerMissile>(PoolsId.IceRangerMissile);

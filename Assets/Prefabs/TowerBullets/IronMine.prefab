@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 567413617129298466}
   - component: {fileID: 8051712723154666204}
   - component: {fileID: -2870926493854624173}
-  - component: {fileID: 5261703842934765031}
+  - component: {fileID: -740884814004143250}
   m_Layer: 0
-  m_Name: Mine
-  m_TagString: Untagged
+  m_Name: IronMine
+  m_TagString: IronMine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,7 +125,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &5261703842934765031
+--- !u!114 &-740884814004143250
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,8 +134,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4389979587362728574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef54445f9f7a5c046a236b6803fa1432, type: 3}
+  m_Script: {fileID: 11500000, guid: aaf0665a5d6c1ad469f9221f31550549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 0}
-  duration: 2
+  duration: 10

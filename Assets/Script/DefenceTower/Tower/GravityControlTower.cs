@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GravityControlTower : Tower
 {
-    public override bool Attack()
+    public override bool Attack(bool useTarget = true)
     {
         if (attackAble)
         {

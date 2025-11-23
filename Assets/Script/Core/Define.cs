@@ -72,6 +72,8 @@ public enum PoolsId
     IceRangerMissile = 213,
     LuminaSniperBullet = 214,
     MagmaBoomFregment = 215,
+    IronMine = 216,
+    IronMineExplosion = 217,
 
     SimpleBullet = 301,
     Exp = 400,
@@ -111,6 +113,8 @@ public static class AddressableNames
         { "IceRangerMissile" , PoolsId.IceRangerMissile },
         { "LuminaSniperBullet" , PoolsId.LuminaSniperBullet },
         { "MagmaBoomFregment" , PoolsId.MagmaBoomFregment },
+        { "IronMine" , PoolsId.IronMine },
+        { "IronMineExplosion" , PoolsId.IronMineExplosion },
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -134,6 +138,7 @@ public static class TagIds
     public readonly static string PlayerTag = "Player";
     public readonly static string EnemyTag = "Enemy";
     public readonly static string EnemyProjectileTag = "EnemyProjectile";
+    public readonly static string IronMineTag = "IronMine";
 }
 
 public static class DataTableIds

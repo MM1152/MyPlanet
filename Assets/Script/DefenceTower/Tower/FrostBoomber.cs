@@ -1,18 +1,21 @@
-﻿using UnityEngine;
-using System;
+using JetBrains.Annotations;
+using UnityEngine;
 
-public class ShockWaveTower : Tower
+public class FrostBoomberTower : Tower
 {
     public override bool Attack(bool useTarget = true)
     {
-        Target = manager.FindTarget()?.transform;
-        return base.Attack(useTarget);
+        return base.Attack(false);
     }
 
     public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
     {
         base.Init(tower, manager, data, slotIndex);
-        statusEffect = new StunStatusEffect(0.5f);
+    }
+
+    public override void LevelUp(LevelUpTable.Data levelUpData)
+    {
+        base.LevelUp(levelUpData);
     }
 
     public override void Update(float deltaTime)
@@ -22,6 +25,7 @@ public class ShockWaveTower : Tower
 
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
-        return Managers.ObjectPoolManager.SpawnObject<ShockWaveBullet>(PoolsId.ShockWaveBullet);
+        var projectile = Managers.ObjectPoolManager.SpawnObject<MagmaBoomFregment>(PoolsId.MagmaBoomFregment);
+        return projectile;
     }
 }

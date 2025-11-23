@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class FrostRepeaterTower : Tower
 {
-    public override bool Attack()
+    public override bool Attack(bool useTarget = true)
     {
         Target = manager.FindTarget()?.transform;
-        return base.Attack();
+        return base.Attack(useTarget);
     }
 
     public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)

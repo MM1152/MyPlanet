@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BurstBlasterTower : Tower
 {
-    public override bool Attack()
+    public override bool Attack(bool useTarget = true)
     {
         Target = manager.FindTarget()?.transform;
         if( attackAble && target != null )

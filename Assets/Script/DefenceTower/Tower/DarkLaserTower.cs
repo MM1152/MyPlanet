@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DarkLaserTower : Tower
 {
-    public override bool Attack()
+    public override bool Attack(bool useTarget = true)
     {
         CreateAttackPrefab();
         return true;

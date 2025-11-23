@@ -2,10 +2,9 @@
 
 public class Mine : BaseAttackPrefab
 {
-    [SerializeField] protected float duration = 2f;
+    [SerializeField] protected float duration = 10f;
 
     protected Vector3 dir;
-    protected float noise;
     protected float angle;
     protected float speed = 5f;
     protected float moveStopTime;
@@ -32,7 +31,7 @@ public class Mine : BaseAttackPrefab
     {
         if(moveStopTime >= 0)
         {
-            transform.position += dir * speed * Time.deltaTime;
+            transform.position += dir * (speed + tower.BonusBulletSpeed) * Time.deltaTime;
         }
 
         if(currentDuration >= duration)
@@ -55,6 +54,15 @@ public class Mine : BaseAttackPrefab
             find.OnDamage((int)(tower.FullDamage * percent));
             find.StatusEffect.Apply(effect, find);
             Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+
+            var explosion = CreateExplosion();
+            explosion.Init(tower);
+            explosion.transform.position = this.transform.position;
         }
+    }
+
+    protected virtual Explosion CreateExplosion()
+    {
+        return Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);
     }
 }
