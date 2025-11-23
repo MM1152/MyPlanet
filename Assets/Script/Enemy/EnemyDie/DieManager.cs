@@ -6,7 +6,8 @@ public class DieManager
     public Dictionary<int, BaseDie> dieTable = new Dictionary<int, BaseDie>()
     {
          { 3, new ExplosionDie() },
-         {4, new HealDie()}
+         {4, new HealDie()},
+         {5, new SpawnDie()},
     };
 
     public BaseDie GetDie(int key)

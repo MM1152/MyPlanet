@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public float fireInterval  => 60f / enemyData.Fire_Rate;
     public float attackInterval;
     
-    [SerializeField] private int currentHP;
+    [SerializeField] public int currentHP;
     public TypeEffectiveness typeEffectiveness;
     public event Action<Enemy> OnDie;
     private AttackManager attackManager;
