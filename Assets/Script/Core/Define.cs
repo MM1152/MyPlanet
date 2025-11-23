@@ -66,6 +66,7 @@ public enum PoolsId
     GravityControl = 207,
     ShockWaveBullet = 208,
     ShockWave = 209,
+    Explosion = 210,
     
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -103,6 +104,7 @@ public static class AddressableNames
         { "ShockWave", PoolsId.ShockWave },
         { "DamageText", PoolsId.DamageText },
         { "TestRange", PoolsId.TestRange },
+        { "Explosion", PoolsId.Explosion },
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -139,6 +141,7 @@ public static class DataTableIds
     public static readonly string StringTable = "StringTable";
     public static readonly string PassiveTable = "PassiveTable";
     public static readonly string EffectTable = "EffectTable";
+    public static readonly string LevelUpTable = "LevelUpTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

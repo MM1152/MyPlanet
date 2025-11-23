@@ -10,10 +10,9 @@ public abstract class BaseAttackPrefab : MonoBehaviour
     protected TypeEffectiveness typeEffectiveness;
     protected Transform target;
     protected IDamageAble targetDamageAble;
-    protected Tower towerData;
+    protected Tower tower;
 
-    protected float minNoise;
-    protected float maxNoise;
+    protected float noise;
 
     protected PoolsId poolsId;
     protected IStatusEffect effect;
@@ -33,16 +32,15 @@ public abstract class BaseAttackPrefab : MonoBehaviour
             spriteRenderer.sprite = sprite;
         }
 
-        this.towerData = data;
+        this.tower = data;
         this.typeEffectiveness = data.TypeEffectiveness;
         this.effect = data.StatusEffect?.DeepCopy();
     }
 
-    public virtual void SetTarget(Transform target , float minNoise , float maxNoise)
+    public virtual void SetTarget(Transform target , float noise)
     {
         this.target = target;
-        this.minNoise = minNoise;
-        this.maxNoise = maxNoise;
+        this.noise = UnityEngine.Random.Range(-noise , noise);
         targetDamageAble = target?.GetComponent<IDamageAble>();
     }
 
@@ -53,7 +51,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
         if( collision.CompareTag("Enemy"))
         {
             HitTarget(collision);
-            basePlaent.PassiveSystem.CheckUseAblePassive(towerData, null, collision.GetComponent<Enemy>());
+            basePlaent.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
         }
     }
 }

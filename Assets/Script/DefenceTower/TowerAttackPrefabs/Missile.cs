@@ -7,7 +7,7 @@ public class Missile : ProjectTile
     [SerializeField] private float roatationSpeed = 50f;
     [SerializeField] private float trackingStrength = 0.5f;
     private float currentAngle;
-    private float lookAngleNoise = 0f;
+    private float rlookAngleNoise = 0f;
 
     public override void Init(Tower data)
     {
@@ -15,14 +15,13 @@ public class Missile : ProjectTile
         poolsId = PoolsId.Missile;
     }
 
-    public override void SetTarget(Transform target, float minNoise , float maxNoise)
+    public override void SetTarget(Transform target, float noise)
     {
-        base.SetTarget(target, minNoise , maxNoise);
+        base.SetTarget(target, noise);
 
 
         Vector3 dir = target.position - transform.position;
-        float noise = UnityEngine.Random.Range(minNoise , maxNoise);
-        float lookAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + UnityEngine.Random.Range(-noise, noise);
+        float lookAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + this.noise;
         transform.eulerAngles = new Vector3(0f, 0f, lookAngle);
             
         currentAngle = transform.eulerAngles.z;
@@ -58,6 +57,9 @@ public class Missile : ProjectTile
     {
         base.HitTarget(collision);
         Managers.ObjectPoolManager.Despawn(PoolsId.Missile, this.gameObject);
+        var explosion = Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);
+        explosion.Init(tower);
+        explosion.transform.position = this.transform.position;
         //Destroy(gameObject);
     }
 }

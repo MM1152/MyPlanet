@@ -8,11 +8,6 @@ public class SteelReaperTower : Tower
         return base.Attack();
     }
 
-    public override void LevelUp()
-    {
-        base.LevelUp();
-    }
-
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         SniperBullet sniperBullet = Managers.ObjectPoolManager.SpawnObject<SniperBullet>(PoolsId.SniperBullet);

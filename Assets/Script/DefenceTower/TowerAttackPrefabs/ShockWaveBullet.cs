@@ -14,9 +14,9 @@ public class ShockWaveBullet : BaseAttackPrefab
         poolsId = PoolsId.ShockWaveBullet;
     }
 
-    public override void SetTarget(Transform target, float minNoise, float maxNoise)
+    public override void SetTarget(Transform target, float noise)
     {
-        base.SetTarget(target, minNoise, maxNoise);
+        base.SetTarget(target, noise);
 
         dir = (target.position - transform.position).normalized;
     }
@@ -36,7 +36,7 @@ public class ShockWaveBullet : BaseAttackPrefab
     {
         var shockWave = Managers.ObjectPoolManager.SpawnObject<ShockWave>(PoolsId.ShockWave);
         shockWave.transform.position = transform.position;
-        shockWave.Init(towerData);
+        shockWave.Init(tower);
         Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
     }
 

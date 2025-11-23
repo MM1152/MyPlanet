@@ -16,11 +16,6 @@ public class GravityControl : BaseAttackPrefab
         duration = 1f;
     }
 
-    public override void SetTarget(Transform target, float minNoise, float maxNoise)
-    {
-        base.SetTarget(target, minNoise, maxNoise);
-    }
-
     private void Update()
     {
         duration -= Time.deltaTime;

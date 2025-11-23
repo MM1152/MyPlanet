@@ -32,7 +32,6 @@ public abstract class RangeCheckDeathHandler : BaseDie
                 continue;
             }
 #if DEBUG_MODE
-            Debug.Log($"오브젝트 이름 {collider.gameObject.name}");
 #endif            
             DieAbility(collider);
         }
