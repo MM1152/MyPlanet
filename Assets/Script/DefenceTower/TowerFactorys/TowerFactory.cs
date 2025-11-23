@@ -13,6 +13,7 @@ public class TowerFactory : BaseFactory<Tower>
         { 2006, new ShadowBursterTowerCreator() },
         { 2007,  new VolcanoTowerCreator() },   
         { 2008,  new IceRangerTowerCreator() },   
+        { 2009,  new LuminaSniperTowerCreator() },   
         { 2010,  new SteelReaperTowerCreator() },
         { 2011,  new MagmaTowerCreator() },
         { 2013,  new IronMineTowerCreator() },
@@ -144,6 +145,15 @@ public class IceRangerTowerCreator : ITowerCreateor
     public Tower CreateTower()
     {
         var tower = new IceRangerTower();
+        return tower;
+    }
+}
+
+public class LuminaSniperTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new LuminaSniperTower();
         return tower;
     }
 }

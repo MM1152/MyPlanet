@@ -43,6 +43,7 @@ public abstract class Tower
 
     public GameObject TowerGameObject => tower;
     public TowerTable.Data TowerData => towerData;
+    public TowerManager towerManager => manager;
     protected Transform Target
     {
         set
