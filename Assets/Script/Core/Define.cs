@@ -75,6 +75,8 @@ public enum PoolsId
     IronMine = 216,
     IronMineExplosion = 217,
     Surge = 218,
+    BlackMineBullet = 219,
+    ShadowSurge = 220,
 
     SimpleBullet = 301,
     Exp = 400,
@@ -117,6 +119,8 @@ public static class AddressableNames
         { "IronMine" , PoolsId.IronMine },
         { "IronMineExplosion" , PoolsId.IronMineExplosion },
         { "Surge" , PoolsId.Surge },
+        { "BlackMineBullet" , PoolsId.BlackMineBullet },
+        { "ShadowSurge" , PoolsId.ShadowSurge },
     };
 
     public static PoolsId GetPoolsId(string name)
