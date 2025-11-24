@@ -25,7 +25,7 @@ public class PresetData
         {
             PresetName = "프리셋";
             PlanetId = 1001;
-            TowerId = new List<int>() { -1, -1, -1, -1, -1 , -1 , -1 ,-1 , -1};
+            TowerId = new List<int>() { -1, -1, -1, -1, -1 , -1 , -1 ,-1 , -1, -1 ,-1 ,-1};
         }
     }
 
@@ -51,9 +51,9 @@ public class PresetData
         return copyData;
     }
 
-    public async UniTask<(bool sucess , string msg)> Load()
+    public async UniTask<(bool sucess , string msg)> LoadAsync()
     {
-        if(FirebaseManager.Instance.UserId == string.Empty) return (false, "유저 아이디가 없습니다.");
+        await UniTask.WaitUntil(() => FirebaseManager.Instance.UserId != string.Empty);
 
         var path = DataBasePaths.PresetPath + FirebaseManager.Instance.UserId;
         var result = await FirebaseManager.Instance.Database.GetDatas<Data>(path);
@@ -71,13 +71,17 @@ public class PresetData
         else
         {
             // 처음 로그인해서 프리셋 데이터가 없는 경우
-            Data newPresetData = new Data();
-            presetDatas.Add(newPresetData);
-            var success = await FirebaseManager.Instance.Database.PushWirteJsonData(path, newPresetData);
-            if(success)
+            for(int i = 0; i < 10; i++)
             {
-                Debug.Log("초기 프리셋 데이터 만들기 완료");
+                Data newPresetData = new Data();
+                presetDatas.Add(newPresetData);
+                var success = await FirebaseManager.Instance.Database.PushWirteJsonData(path, newPresetData);
+                if (success)
+                {
+                    Debug.Log("초기 프리셋 데이터 만들기 완료");
+                }
             }
+            
             Init = true;
             return (true, "프리셋 데이터 로드 성공");
         }
@@ -101,6 +105,18 @@ public class PresetData
     public int Count()
     {
         return presetDatas.Count;
+    }
+
+    public async UniTask WaitForInitalizeAsync()
+    {
+        await UniTask.WaitUntil(() => Init);
+    }
+
+    public void Release()
+    {
+        presetDatas.Clear();
+        inGameData = null;
+        Init = false;
     }
 }
 

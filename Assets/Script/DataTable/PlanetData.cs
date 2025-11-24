@@ -1,31 +1,129 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
-
+using UnityEngine;
+//Firebase 저장용 데이터
 public class PlanetData
 {
-    public class Data
+    private bool init;
+    private Dictionary<int, Data> planetsTable = new Dictionary<int, Data>();
+    
+    [Serializable]
+    public class Data : JsonSerialized
     {
-        public int ID;
-        public int Name; 
-        public int Explanation;
-        public string Rescoce_ID;
-        public char Grade; // 등급 표시
-        public int Planet_type; // 행성 타입 (1 : 암석 , 2 : 가스 , 3 : 왜소)
-        public int Attribute; // 속성 ( 불 , 물 , 빛 , 어둠 , 강철 )
-        public int HP; 
-        public int ATK;
-        public int DEF;
+        public int id;
+        public int level;
+        public int count;
+        // -1 : 닫혀있음 , 0 : 열려있음
+        public List<int> openSlot;
+
+        public Data(int id)
+        {
+            this.id = id;
+            level = 0;
+            count = 0;
+            openSlot = new List<int>();
+
+            var grade = DataTableManager.PlanetTable.Get(id).grade;
+            var cnt = 0;
+
+            if (grade == "S") cnt = 7;
+            else if (grade == "A") cnt = 6;
+            else if (grade == "B") cnt = 5;
+            else if (grade == "C") cnt = 4;
+
+            for(int i = 0; i < 12; i++)
+            {
+                openSlot.Add(-1);
+                if(cnt > 0)
+                {
+                    openSlot[i] = 0;
+                    cnt--;
+                }
+            }
+        }
     }
 
-    private Dictionary<int, Data> dataDictionary = new Dictionary<int, Data>();
-
-    public PlanetData()
+    public Data GetDeepCopy(int id)
     {
-        Data data1 = new Data() { ID = 123, Name = 1 , HP = 100000 , Planet_type =  (int)ElementType.Fire};    
-        dataDictionary.Add(data1.ID, data1);
+        var copyData = new Data(id);
+        return copyData;
     }
 
-    public Data Get(int id)
+    public Data GetOrigin(int id)
     {
-        return dataDictionary[id];
+        return planetsTable[id];
+    }
+
+    public async UniTask LoadAllDataAsync()
+    {
+        await UniTask.WaitUntil(() => FirebaseManager.Instance.UserId != string.Empty);
+
+        var path = DataBasePaths.PlentPath + FirebaseManager.Instance.UserId + "/";
+        var success = await FirebaseManager.Instance.Database.GetDatas<Data>(path);
+
+        if(success.success)
+        {
+            // 데이터가 있다면
+            for(int i = 0; i < success.data.Count; i++)
+            {
+                if(!planetsTable.ContainsKey(success.data[i].id))
+                {
+                    planetsTable.Add(success.data[i].id, success.data[i]);
+                }
+                else
+                {
+                    planetsTable[success.data[i].id] = success.data[i];
+                }
+            }
+        }
+        else
+        {
+            // 데이터가 없다면
+            var planets = DataTableManager.PlanetTable.GetAllData();
+            for (int i = 0; i < planets.Count; i++)
+            {
+                await SaveAsync(planets[i].ID);
+            }
+        }
+
+        init = true;
+    }
+
+    public async UniTask SaveAsync(int planetId)
+    {
+        var path = DataBasePaths.PlentPath + FirebaseManager.Instance.UserId + $"/{planetId}";
+        var saveData = new Data(planetId);
+        var success = await FirebaseManager.Instance.Database.OverwriteJsonData(path, saveData);
+
+        if(success)
+        {
+            // 저장 성공
+            Debug.Log ("Planet Data Save Success");
+            if(!planetsTable.ContainsKey(planetId))
+            {
+                planetsTable.Add(planetId, saveData);
+            }
+            else
+            {
+                planetsTable[planetId] = saveData;
+            }
+        }
+        else
+        {
+            // 저장 실패
+            Debug.Log("Planet Data Save Fail");
+        }
+    }
+
+    public async UniTask WaitForInitalizeAsync()
+    {
+        await UniTask.WaitUntil(() => init);
+    }
+
+    public void Release()
+    {
+        planetsTable.Clear();
+        init = false;
     }
 }

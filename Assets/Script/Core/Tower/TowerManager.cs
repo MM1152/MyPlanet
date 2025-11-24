@@ -197,9 +197,7 @@ public class TowerManager : MonoBehaviour
         }
 
         List<Tower> targetedTowres = new List<Tower>();
-#if DEBUG_MODE
-        //Debug.Log($"targetIndex : {target} , range : {radius}");
-#endif
+
         for (int i = 1; i <= radius; i++)
         {
             int leftPointer = Utils.ClampIndex(target - i, towers.Count);

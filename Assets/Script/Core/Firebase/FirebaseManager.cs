@@ -1,8 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Runtime.Serialization;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FirebaseManager
 {
@@ -10,11 +9,13 @@ public class FirebaseManager
     private DataBase database = new DataBase();
     private Auth auth = new Auth();
     private PresetData presetData = new PresetData();
+    private PlanetData planetData = new PlanetData();
     private UserData userData;
 
     public string UserId => auth.UserId;
     public UserData UserData => userData;
     public PresetData PresetData => presetData;
+    public PlanetData PlanetData => planetData;
 
     private bool initialize = false;
 
@@ -50,6 +51,9 @@ public class FirebaseManager
         Debug.Log("Firebase Database Initalized");
         auth.Init();
         Debug.Log("Firebase Auth Initalized");
+
+        planetData.LoadAllDataAsync().Forget();
+        presetData.LoadAsync().Forget();
 
         initialize = true;
     }
@@ -95,13 +99,24 @@ public class FirebaseManager
             }
         }
     }
+
+    public void Logout()
+    {
+        auth.Logout();
+        userData = null;
+        presetData.Release();
+        planetData.Release();
+        InitAsync().Forget();
+
+        LoadingScene.sceneId = SceneIds.TitleScene;
+        SceneManager.LoadScene(SceneIds.LoadingScene);
+    }
 }
 
 [Serializable]
 public class UserData : JsonSerialized
 {
     public string nickName;
-
     public UserData()
     {
         nickName = "NoName-" + UnityEngine.Random.Range(10000, 50000);

@@ -1,19 +1,16 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TowerInfomationPopup : Popup
 {
-    private readonly string towerName = "타워 이름 : {0}";
-    private readonly string towerDamage = "타워 공격력 : {0}";
-    private readonly string towerAttackSpeed = "타워 공격속도 : {0}";
-    private readonly string towerAttackRange = "타워 공격거리 : {0}";
-    private readonly string towerRandomOption = "타워 랜덤옵션 : {0}";
-
     [SerializeField] private TextMeshProUGUI towerNameText;
-    [SerializeField] private TextMeshProUGUI towerDamageText;
-    [SerializeField] private TextMeshProUGUI towerAttackSpeedText;
-    [SerializeField] private TextMeshProUGUI towerAttackRangeText;
-    [SerializeField] private TextMeshProUGUI towerRandomOptionText;
+    [SerializeField] private TextMeshProUGUI towerGradeText;
+    [SerializeField] private TextMeshProUGUI towerTypeText;
+    [SerializeField] private TextMeshProUGUI towerElementText;
+    [SerializeField] private TextMeshProUGUI towerDescriptionText;
+
+    [SerializeField] private Image towerImage;
 
     public override bool Close()
     {
@@ -23,6 +20,7 @@ public class TowerInfomationPopup : Popup
     public override void Init(PopupManager manager)
     {
         base.Init(manager);
+        popupId = (int)PopupIds.TowerInfomationPopup;
     }
 
     public override void Open()
@@ -30,12 +28,12 @@ public class TowerInfomationPopup : Popup
         base.Open();
     }
 
-    public void UpdateTexts(Tower tower)
+    public void UpdateTexts(TowerTable.Data towerData)
     {
-        towerNameText.text = string.Format(towerName, tower.ID);
-        towerDamageText.text = string.Format(towerDamage, tower.FullDamage); 
-        towerAttackSpeedText.text = string.Format(towerAttackSpeed, tower.FullAttackSpeed);
-        towerAttackRangeText.text = string.Format(towerAttackRange, tower.AttackRange);
-        towerRandomOptionText.text = string.Format(towerRandomOption, tower.Option.GetOptionStringFormatting());
+        towerNameText.text = towerData.Name;
+        //towerGradeText.text = towerData.grade ??
+        towerTypeText.text = towerData.AttackType;
+        towerElementText.text = ((ElementType)towerData.Attribute).ToString();
+        //towerDescriptionText.text = towerData. ??
     }
 }
