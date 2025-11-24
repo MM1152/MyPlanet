@@ -3,10 +3,10 @@ using UnityEngine;
 public class LaserShot : IShotStrategy
 {
     private bool isInitialized = false;
-    float offset = 0.1f;
-    LineRenderer lineRenderer;
-    RaycastHit2D hit;
-    LayerMask obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
+    private float offset = 0.1f;
+    private LineRenderer lineRenderer;
+    private RaycastHit2D hit;
+    private LayerMask obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
     public void Shot(Enemy enemy, GameObject target)
     {
         if (target == null || hit.collider == null)

@@ -57,6 +57,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #if DEBUG_MODE
     public SpriteRenderer spriteRenderer { get; private set; }
 #endif
+    public ZoneSearch zone;
+    public Action abilityAction;
 
     private void Awake()
     {
@@ -86,6 +88,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         IsDead = false;
         dieManager = new DieManager(enemyData.ID, out die);
         abilityManager = new AbilityManager(enemyData.ID, out ability);
+        zone = GetComponentInChildren<ZoneSearch>();
+        zone?.Init(this);   
         ability?.SetEnemy(this);
 
         attackManager = new AttackManager(enemyType, out attack);
@@ -138,10 +142,17 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
         return;
     }
-
+    // 이벤트 활성화 
     private void Update()
     {
         stateMachine.currentState.Execute();
+
+        attackInterval += Time.deltaTime;
+        if (ability.abilityType == AbilityType.OnUpdate && abilityAction != null && attackInterval >= fireInterval)
+        {
+            abilityAction?.Invoke();
+            attackInterval = 0f;
+        }
     }
 
     private void LateUpdate()
@@ -160,17 +171,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         {
             damage = ability.OnDamage(damage);
         }
-        #if DEBUG_MODE
-        Debug.Log("Damage taken: " + damage);
-        #endif
+
         if (damage <= 0) return;
-        #if DEBUG_MODE
-        Debug.Log("hp before damage: " + currentHP);    
-        #endif
+
         currentHP -= damage;
-        #if DEBUG_MODE
-        Debug.Log("hp after damage: " + currentHP);
-        #endif  
+
 #if DEBUG_MODE
         if (damage > 0)
         {
@@ -189,11 +194,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         int healAmount = Mathf.Min(heal, enemyData.HP - currentHP);
         currentHP += healAmount;
 #if DEBUG_MODE
-        if (healAmount > 0)
-        {
+         if (healAmount > 0)
+         {
             var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
             text.SetColor(Color.green);
-        }
+         }
 #endif
     }
 

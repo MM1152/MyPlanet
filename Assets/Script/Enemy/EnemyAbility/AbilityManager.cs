@@ -5,7 +5,8 @@ public class AbilityManager
 {
     public Dictionary<int, BaseAbility> abilityTable = new Dictionary<int, BaseAbility>()
     {
-         { 3, new BarrierAbility() },               
+         { 3, new BarrierAbility() },   
+         { 7, new HealZoneAbility() },            
     };
 
     public BaseAbility GetAbility(int key)
