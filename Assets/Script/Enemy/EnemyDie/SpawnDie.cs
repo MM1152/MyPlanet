@@ -1,0 +1,25 @@
+using UnityEngine;
+
+public class SpawnDie : BaseDie
+{
+    public int spawnCount { get; set; } = 3;
+    public override void Die(Enemy enemy)
+    {
+        if (enemy.currentHP <= 0)
+        {      
+            var waveManager = enemy.WaveManager;
+            var enemySpawnManager = waveManager.EnemySpawnManager;
+
+            var spawnEnemys = enemySpawnManager.SpawnEnemy(1, spawnCount);
+            foreach (var spawnEnemy in spawnEnemys)
+            {
+                var offset = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f));
+                spawnEnemy.transform.position = enemy.transform.position + offset;
+                waveManager.totalEnemyCount++;
+                waveManager.waveClearCount++;
+            }
+        }
+
+        base.Die(enemy);
+    }
+}

@@ -4,22 +4,26 @@ using UnityEngine;
 public class ShotAttack : IAttack
 {
     public bool isAttackColliderOn => false;
-    
-    Dictionary<ElementType,IShotStrategy> shotStrategies = new Dictionary<ElementType, IShotStrategy>()
+
+    Dictionary<ElementType, IShotStrategy> shotStrategies = new Dictionary<ElementType, IShotStrategy>()
     {
         { ElementType.Normal, new NormalStrategy() },
         { ElementType.Fire, new HomingShot() },
         { ElementType.Steel, new NormalStrategy() },
         { ElementType.Ice, new SpreadShot() },
-        { ElementType.Light, new NormalStrategy() },
+        { ElementType.Light, new LaserShot() },
         { ElementType.Dark, new NormalStrategy() },
     };
     //동일 
     public void Attack(Enemy enemy)
     {
         enemy.attackInterval += Time.deltaTime;
-  Debug.Log("Shot Attack");
-  Debug.Log($"Attack Interval: {enemy.attackInterval}, Fire Interval: {enemy.fireInterval}");
+
+        if (shotStrategies[enemy.ElementType] is LaserShot laserShot)
+        {
+            laserShot.laserUpdate(enemy, enemy.GetTarget());
+        }
+
         if (enemy.attackInterval >= enemy.fireInterval)
         {
             shotStrategies[enemy.ElementType].Shot(enemy, enemy.GetTarget());
@@ -40,5 +44,5 @@ public class ShotAttack : IAttack
         var projectileObj = Managers.ObjectPoolManager.SpawnObject<EnemyProjectileBase>(poolsId);
         EnemyProjectileBase projectile = projectileObj.GetComponent<EnemyProjectileBase>();
         return projectile;
-    }   
+    }
 }

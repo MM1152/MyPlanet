@@ -10,7 +10,7 @@ public class HomingBullet : EnemyProjectileSimple
     public override void Init(Enemy data, TypeEffectiveness typeEffectiveness)
     {
         base.Init(data, typeEffectiveness);
-        poolsId = PoolsId.SimpleBullet;
+        poolsId = PoolsId.HomingBullet;
         isWaiting = true;
 
 
@@ -27,6 +27,11 @@ public class HomingBullet : EnemyProjectileSimple
     {
         if (!isWaiting)
         {
+            if (target == null || targetDamageAble.IsDead)
+            {
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+                return;
+            }
             transform.position = Vector2.MoveTowards(transform.position, target.position, enemyData.bulletSpeed * Time.deltaTime);
         }
     }

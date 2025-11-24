@@ -40,7 +40,8 @@ public class WaveManager : MonoBehaviour
 
     public int waveClearCount = 0;
     public int totalEnemyCount = 0;
-    private EnemySpawnManager EnemySpawnManager;
+    private EnemySpawnManager enemySpawnManager;
+    public EnemySpawnManager EnemySpawnManager => enemySpawnManager;
 
 #if DEBUG_MODE
     public bool UIUpdateTest = false;
@@ -55,7 +56,7 @@ public class WaveManager : MonoBehaviour
 
     private void Awake()
     {
-        EnemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag).GetComponent<EnemySpawnManager>();
+        enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag).GetComponent<EnemySpawnManager>();
     }
 
     private void Start()
@@ -227,7 +228,7 @@ public class WaveManager : MonoBehaviour
             {
                 var remainingToSpawn = spawnPoint.maxSpawnCount - spawnPoint.currentSpawnEnemyCount;
                 var minCount = Mathf.Min(spawnPoint.spawnCount, remainingToSpawn);
-                var enemys = EnemySpawnManager.SpawnEnemy(spawnPoint.enemyId, minCount);
+                var enemys = enemySpawnManager.SpawnEnemy(spawnPoint.enemyId, minCount);
                 spawnPoint.currentSpawnEnemyCount += minCount;
                 totalEnemyCount += minCount;
                 if (enemys != null)
