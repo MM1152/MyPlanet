@@ -25,25 +25,27 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public float BaseSpeed => enemyData.Speed;
     public float CurrentSpeed { get => speed; set => speed = value; }
-    
+
     public EnemyType enemyType => enemyData.Range > 0 ? EnemyType.Ranged : EnemyType.Melee;
-   
+
     public float speed;
     public int atk;
     public float attackrange;
 
-    public float bulletSpeed => enemyData.Bullet_Speed; 
-    
-    public float fireInterval  => 60f / enemyData.Fire_Rate;
+    public float bulletSpeed => enemyData.Bullet_Speed;
+
+    public float fireInterval => 60f / enemyData.Fire_Rate;
     public float attackInterval;
-    
-    public int currentHP;                                                                                                                                    
+
+    public int currentHP;
     public TypeEffectiveness typeEffectiveness;
     public event Action<Enemy> OnDie;
     private AttackManager attackManager;
     private DieManager dieManager;
+    private AbilityManager abilityManager;
     public IAttack attack;
     public BaseDie die;
+    public BaseAbility ability;
 
     public float TestRangeRadius;
 
@@ -83,8 +85,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         isKilledByPlayer = true;
         IsDead = false;
         dieManager = new DieManager(enemyData.ID, out die);
+        abilityManager = new AbilityManager(enemyData.ID, out ability);
+        ability?.SetEnemy(this);
 
-        // 수정 필요 
         attackManager = new AttackManager(enemyType, out attack);
     }
 #if DEBUG_MODE
@@ -153,13 +156,25 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public void OnDamage(int damage)
     {
-        damage = damage == 0 ? 1 : damage;
+        if (ability != null && ability.abilityType == AbilityType.OnDamage && ability.isActive)
+        {
+            damage = ability.OnDamage(damage);
+        }
+        #if DEBUG_MODE
+        Debug.Log("Damage taken: " + damage);
+        #endif
+        if (damage <= 0) return;
+        #if DEBUG_MODE
+        Debug.Log("hp before damage: " + currentHP);    
+        #endif
         currentHP -= damage;
+        #if DEBUG_MODE
+        Debug.Log("hp after damage: " + currentHP);
+        #endif  
 #if DEBUG_MODE
         if (damage > 0)
         {
             var text = textSpawnManager.SpawnTextUI(damage.ToString(), this.transform.position);
-            // Debug.Log($"Damage taken: {damage}, Current HP: {currentHP}");
             text.SetColor(Color.red);
         }
 #endif
