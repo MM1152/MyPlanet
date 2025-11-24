@@ -148,7 +148,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         stateMachine.currentState.Execute();
 
         attackInterval += Time.deltaTime;
-        if (ability.abilityType == AbilityType.OnUpdate && abilityAction != null && attackInterval >= fireInterval)
+        if (ability != null && ability.abilityType == AbilityType.OnUpdate && abilityAction != null && attackInterval >= fireInterval)
         {
             abilityAction?.Invoke();
             attackInterval = 0f;
@@ -193,13 +193,14 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         int healAmount = Mathf.Min(heal, enemyData.HP - currentHP);
         currentHP += healAmount;
-#if DEBUG_MODE
-         if (healAmount > 0)
-         {
+// #if DEBUG_MODE
+//          if (healAmount > 0)
+//          {
+Debug.Log($"해당 적 이름 및 타입 : {this.name}, {this.ElementType} - Heal Amount: {healAmount}");
             var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
             text.SetColor(Color.green);
-         }
-#endif
+//          }
+// #endif
     }
 
     public void OnDead()

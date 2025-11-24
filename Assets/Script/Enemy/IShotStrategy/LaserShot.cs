@@ -16,8 +16,7 @@ public class LaserShot : IShotStrategy
         }
 
         if (hit.collider.gameObject.layer == target.layer)
-        {
-            Debug.Log("Laser Hit Player");
+        {          
             var find = hit.collider.GetComponent<IDamageAble>();
             if (find != null)
             {

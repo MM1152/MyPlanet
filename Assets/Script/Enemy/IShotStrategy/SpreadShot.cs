@@ -22,20 +22,14 @@ public class SpreadShot : IShotStrategy
             Bullet.transform.position = enemy.transform.position;
             Bullet.Init(enemy, enemy.typeEffectiveness);
             Bullet.SetTarget(target.transform);
-            Bullet.SetDirection(spreadAngles[i]); 
-            #if DEBUG_MODE
-            Debug.Log("SpreadShot");
-            #endif
+            Bullet.SetDirection(spreadAngles[i]);             
         }
     }
 
     private SpreadBullet CreateProjectile(PoolsId poolsId)
     {
         var projectileObj = Managers.ObjectPoolManager.SpawnObject<SpreadBullet>(poolsId);
-        SpreadBullet projectile = projectileObj.GetComponent<SpreadBullet>();
-        #if DEBUG_MODE
-        Debug.Log("Create Spread Bullet");
-        #endif
+        SpreadBullet projectile = projectileObj.GetComponent<SpreadBullet>();        
         return projectile;
     }
 
