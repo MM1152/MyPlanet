@@ -47,6 +47,9 @@ public class LoadingScene : MonoBehaviour
 
         Managers.Instance.Release();
 
+        currentProgress.text = "테이블 불러오는 중";
+        await DataTableManager.WaitForInitalizeAsync();
+
         currentProgress.text = "Firebase 초기화 중";
         await FirebaseManager.Instance.WaitForInitalizedAsync();
 
@@ -63,16 +66,12 @@ public class LoadingScene : MonoBehaviour
         {
             await FirebaseManager.Instance.FindUserDataInDatabase();    
         }
-
-        if (!FirebaseManager.Instance.PresetData.Init)
-        {
-            await FirebaseManager.Instance.PresetData.Load();
-        }
+        await FirebaseManager.Instance.PresetData.WaitForInitalizeAsync();
+        await FirebaseManager.Instance.PlanetData.WaitForInitalizeAsync();
 
         currentProgress.text = "Managers 초기화 중";
         await Managers.Instance.WaitForManagerInitalizedAsync();
-        currentProgress.text = "테이블 불러오는 중";
-        await DataTableManager.WaitForInitalizeAsync();
+
         currentProgress.text = "Scene 초기화 중";
         await Addressables.LoadSceneAsync(sceneId).ToUniTask();
     }

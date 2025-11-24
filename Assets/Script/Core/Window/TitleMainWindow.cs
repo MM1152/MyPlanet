@@ -6,7 +6,7 @@ public class TitleMainWindow : Window
 {
     [Header("Buttons")]
     [SerializeField] private Button selectStageButton;
-
+    [SerializeField] private Button logoutButton;
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI userNickNameText;
     
@@ -22,6 +22,10 @@ public class TitleMainWindow : Window
 
         selectStageButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
         userNickNameText.text = FirebaseManager.Instance.UserData.nickName;
+        logoutButton.onClick.AddListener(() =>
+        {
+            FirebaseManager.Instance.Logout();
+        });
     }
 
     public override void Open()

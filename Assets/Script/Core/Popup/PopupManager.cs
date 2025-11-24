@@ -6,10 +6,13 @@ public class PopupManager : MonoBehaviour
 {
     public List<Popup> popups = new List<Popup>();
     public GameObject popupBackGroundPanel;
+    public GameObject clickToCloseUI;
     private Dictionary<int, Popup> popupTable = new Dictionary<int, Popup>();
 
     private Stack<Popup> popupStack = new Stack<Popup>();
 
+    private bool interactable = true;
+    public bool Interactable => interactable;
     private void Awake()
     {
         foreach (var popup in popups)
@@ -18,14 +21,15 @@ public class PopupManager : MonoBehaviour
             popup.Init(this);
             popup.ForcingClose();
         }
-        UpdateBackGroundPanel();
+        UpdateBackGroundPanel().Forget();
     }
 
     public T Open<T>(PopupIds id) where T : Popup
     {
         WaitForPushEndFrameAsync(popupTable[(int)id]).Forget();
         popupTable[(int)id].Open();
-        UpdateBackGroundPanel();
+        UpdateBackGroundPanel().Forget();
+        interactable = false;
         return popupTable[(int)id] as T;
     }
 
@@ -45,7 +49,7 @@ public class PopupManager : MonoBehaviour
         if (popupStack.Count == 0) return;
 
         var closePopup = popupStack.Peek();
-        if(Managers.TouchManager.TouchType == TouchTypes.Tab && !Managers.TouchManager.OnTargetUI(closePopup.gameObject) && closePopup.Close())
+        if(Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(clickToCloseUI) && closePopup.Close())
         {
             popupStack.Pop();
         }
@@ -58,11 +62,12 @@ public class PopupManager : MonoBehaviour
         {
             Variable.IsJoyStickActive = true;
         }
-        UpdateBackGroundPanel();
+        UpdateBackGroundPanel().Forget();
     }
 
-    private void UpdateBackGroundPanel()
+    private async UniTaskVoid UpdateBackGroundPanel()
     {
+        await UniTask.Yield();
 
         if (popupStack.Count > 0)
         {
@@ -71,6 +76,9 @@ public class PopupManager : MonoBehaviour
         else
         {
             popupBackGroundPanel.SetActive(false);
+            interactable = true;
         }
+
+        
     }
 }

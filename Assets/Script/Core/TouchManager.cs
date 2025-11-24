@@ -8,6 +8,7 @@ public enum TouchTypes
     None,
     Tab,
     LongTab,
+    LongPress,
 }
 
 public class TouchManager : MonoBehaviour
@@ -23,6 +24,7 @@ public class TouchManager : MonoBehaviour
 
     public InputAction touchAction;
     public InputAction touchPositionAction;
+    private bool isPressed = false;
     public void Init()
     {
         touchAction = new InputAction
@@ -46,6 +48,17 @@ public class TouchManager : MonoBehaviour
         touchAction.Enable();
     }
 
+    private void Update()
+    {
+        if(isPressed)
+        {
+            if(Time.unscaledTime - startTouchTime > longTabTime)
+            {
+                touchTypes = TouchTypes.LongPress;
+            }
+        }
+    }
+
     private void OnTouchPosition(InputAction.CallbackContext context)
     {
         startTouchPosition = context.ReadValue<Vector2>();
@@ -54,6 +67,7 @@ public class TouchManager : MonoBehaviour
     private void OnTouchStart(InputAction.CallbackContext context)
     {
         startTouchTime = Time.unscaledTime;
+        isPressed = true;
     }
 
     private void OnTouchEnd(InputAction.CallbackContext context)
@@ -66,6 +80,7 @@ public class TouchManager : MonoBehaviour
         {
             touchTypes = TouchTypes.Tab;
         }
+        isPressed = false;
     }
 
     private void LateUpdate()

@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class TitleTowerPlaceEditWindow : Window
 {
@@ -15,6 +16,7 @@ public class TitleTowerPlaceEditWindow : Window
     [SerializeField] private ShowIndexPanel showIndexPanel;
     [SerializeField] private Button saveButton;
     [SerializeField] private Button closeButton;
+    [SerializeField] private PopupManager popupManager;
 
     private Vector2 circleSize;
     private int placeCount;
@@ -29,7 +31,9 @@ public class TitleTowerPlaceEditWindow : Window
 
     private TowerFactory towerFactory = new TowerFactory();
     private PresetData.Data presetData;
+    private PlanetData.Data planetData;
     private int presetIndex;
+    private (int left, int right) prevApplyOptionSlots = (-1, -1);
 
     public override void Close()
     {
@@ -77,6 +81,7 @@ public class TitleTowerPlaceEditWindow : Window
     {
         this.presetData = presetData;
         this.presetIndex = presetIndex;
+        this.planetData = FirebaseManager.Instance.PlanetData.GetDeepCopy(this.presetData.PlanetId);
         placeCount = presetData.TowerId.Count;
 
         UpdateTowerHold();
@@ -112,6 +117,7 @@ public class TitleTowerPlaceEditWindow : Window
 
             var towerInfo = Instantiate(towerInfomation, towerInfomationRoot);
             towerInfo.OnTab += Place;
+            towerInfo.OnLongTab += ShowInfomationTower;
 
             var showIndexPanel = Instantiate(this.showIndexPanel, towerInfo.transform);
             showIndexPanel.OnTab += UnPlace;
@@ -127,20 +133,33 @@ public class TitleTowerPlaceEditWindow : Window
         }
     }
 
+    private void ShowInfomationTower(TowerTable.Data towerData)
+    {
+        var popup = popupManager.Open<TowerInfomationPopup>(PopupIds.TowerInfomationPopup);
+        if(popup != null)
+        {
+            popup.UpdateTexts(towerData);
+        }
+    }
+
     private void UnPlace(int idx)
     {
         if (isRotate) return;
+        if (!popupManager.Interactable) return;
         showIndexPanels[placeHolds[idx].TowerData.ID].UpdatePlace(-1);
         placeHolds[idx].PlaceTower(null);
+        FindOptionApplyTower(null);
     }
 
     private void Place(TowerTable.Data data)
     {
         if (isRotate) return;
+        if (!popupManager.Interactable) return;
         if (!placeHolds[selectIndex].Placed())
         {
             placeHolds[selectIndex].PlaceTower(data);
             showIndexPanels[data.ID].UpdatePlace(selectIndex + 1);
+            FindOptionApplyTower(data);
         }
     }
 
@@ -166,6 +185,7 @@ public class TitleTowerPlaceEditWindow : Window
 
             placeHold.Init();
             placeHold.UpdateText(i);
+            placeHold.UpdateSlot(planetData.openSlot[i]);
 
             RectTransform rect = placeHold.GetComponent<RectTransform>();
 
@@ -183,7 +203,11 @@ public class TitleTowerPlaceEditWindow : Window
             placeHold.PlaceTower(towerData);
 
             int idx = i;
-            placeHold.button.onClick.AddListener(() => RotateCircle(idx));
+            placeHold.button.onClick.AddListener(() => {
+                if (placeHold.DisAble) return;
+                RotateCircle(idx);
+                FindOptionApplyTower(placeHolds[idx].TowerData);
+            });
         }
     }
 
@@ -202,6 +226,8 @@ public class TitleTowerPlaceEditWindow : Window
 
         placeHolds[selectIndex].transform.localScale = Vector3.one * 1.5f;
         placeHolds[selectIndex].Select();
+
+        
     }
 
     private async UniTaskVoid RotateAsync(float from , float to , float duration)
@@ -216,5 +242,52 @@ public class TitleTowerPlaceEditWindow : Window
 
         circle.transform.eulerAngles = new Vector3(0f, 0f, -to);
         isRotate = false;
+    }
+
+    private void FindOptionApplyTower(TowerTable.Data towerData) 
+    {
+        if (prevApplyOptionSlots.left != -1)
+        {
+            placeHolds[prevApplyOptionSlots.left].CancelSelect();
+        }
+        if (prevApplyOptionSlots.right != -1)
+        {
+            placeHolds[prevApplyOptionSlots.right].CancelSelect();
+        }
+
+        prevApplyOptionSlots = (-1, -1);
+        if (towerData == null) return;
+        int targetIndex = towerData.Option_Range;
+
+        if (towerData.Option_type == 0) prevApplyOptionSlots = GetBothSideSlots(selectIndex, targetIndex); 
+        else if (towerData.Option_type == 1) prevApplyOptionSlots = (GetLeftSlots(selectIndex, targetIndex) , -1); 
+        else if (towerData.Option_type == 2) prevApplyOptionSlots = (-1 , GetRightSlots(selectIndex, targetIndex));
+
+        if (prevApplyOptionSlots.left != -1)
+        {
+            placeHolds[prevApplyOptionSlots.left].Select();
+        }
+        if (prevApplyOptionSlots.right != -1)
+        {
+            placeHolds[prevApplyOptionSlots.right].Select();
+        }
+    }
+
+    private int GetLeftSlots(int index , int targetIndex )
+    {
+        return Utils.ClampIndex(index - targetIndex , placeHolds.Count);
+    }
+
+    private int GetRightSlots(int index , int targetIndex)
+    {
+        return Utils.ClampIndex(index + targetIndex, placeHolds.Count);
+    }
+
+    private (int left , int right) GetBothSideSlots(int index , int targetIndex)
+    {
+        int left = GetLeftSlots(index , targetIndex);
+        int right = GetRightSlots(index , targetIndex);
+
+        return (left, right);
     }
 }
