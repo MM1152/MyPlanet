@@ -19,7 +19,6 @@ public class Missile : ProjectTile
     {
         base.SetTarget(target, noise);
 
-
         Vector3 dir = target.position - transform.position;
         float lookAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + this.noise;
         transform.eulerAngles = new Vector3(0f, 0f, lookAngle);

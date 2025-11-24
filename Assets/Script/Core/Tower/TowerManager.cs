@@ -79,9 +79,23 @@ public class TowerManager : MonoBehaviour
         return enemySpawnManager.GetEnemyDatas(tower.transform.position);
     }
 
+    public List<Enemy> FindTargets(Vector3 pos)
+    {
+        return enemySpawnManager.GetEnemyDatas(pos);
+    }
+
     public Enemy FindTarget()
     {
         return enemySpawnManager.GetEnemyData(tower.transform.position);
+    }
+
+    public Enemy FindTargetLast()
+    {
+        var enemys = enemySpawnManager.GetEnemyDatas(tower.transform.position);
+        if(enemys != null) 
+            return enemys[enemys.Count - 1];
+
+        return null;
     }
 
     public Enemy FindTargetInRange(Vector3 targetPosition , float distance)

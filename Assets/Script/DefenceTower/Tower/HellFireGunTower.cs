@@ -8,10 +8,10 @@ public class HellFireGunTower : Tower
         base.Init(tower, manager, data , slotIndex);
     }
 
-    public override bool Attack()
+    public override bool Attack(bool useTarget = true)
     {
         Target = manager.FindTarget()?.transform;
-        return base.Attack();
+        return base.Attack(useTarget);
     }
 
     protected override BaseAttackPrefab CreateAttackPrefab()

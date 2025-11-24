@@ -8,6 +8,11 @@ public class Bullet : ProjectTile
         poolsId = PoolsId.Bullet;
     }
 
+    protected override void Update()
+    {
+        Move();
+    }
+
     protected override void HitTarget(Collider2D collision)
     {
         base.HitTarget(collision);

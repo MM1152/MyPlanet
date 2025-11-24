@@ -5,11 +5,22 @@ public class TowerFactory : BaseFactory<Tower>
 {
     private Dictionary<int, ITowerCreateor> towerCreator = new Dictionary<int, ITowerCreateor>()
     {
+        { 2001, new SolarLaserTowerCreator() },
+        { 2002, new DarkLaserTowerCreator() },
         { 2003,  new HellFireTowerCreator() },
-        { 2007,  new VolcanoTowerCreator() },
+        { 2004, new FrostRepeaterTowerCreator() },
+        { 2005,  new BurstBladeTowerCreator() },
+        { 2006, new ShadowBursterTowerCreator() },
+        { 2007,  new VolcanoTowerCreator() },   
+        { 2008,  new IceRangerTowerCreator() },   
+        { 2009,  new LuminaSniperTowerCreator() },   
         { 2010,  new SteelReaperTowerCreator() },
         { 2011,  new MagmaTowerCreator() },
+        { 2012,  new FrostBoomberTowerCreator() },
         { 2013,  new IronMineTowerCreator() },
+        { 2014,  new BlackMineTowerCreator() },
+        { 2015,  new SurgeTowerCreator() },
+        { 2016,  new ShadowSurgeTowerCreator() },
         //{ 7,  new GravityControlTowerCreator() },
         //{ 8,  new ShockWaveTowerCreator() },
     };
@@ -85,5 +96,104 @@ public class ShockWaveTowerCreator : ITowerCreateor
     {
         var shockWaveTower = new ShockWaveTower();
         return shockWaveTower;
+    }
+}
+
+public class SolarLaserTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new SolarLaserTower();
+        return tower;
+    }
+}
+
+public class DarkLaserTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new DarkLaserTower();
+        return tower;
+    }
+}
+
+public class FrostRepeaterTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new FrostRepeaterTower();
+        return tower;
+    }
+}
+
+public class BurstBladeTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new BurstBlasterTower();
+        return tower;
+    }
+}
+
+public class ShadowBursterTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new ShadowBusterTower();
+        return tower;
+    }
+}
+
+public class IceRangerTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new IceRangerTower();
+        return tower;
+    }
+}
+
+public class LuminaSniperTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new LuminaSniperTower();
+        return tower;
+    }
+}
+
+public class FrostBoomberTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new FrostBoomberTower();
+        return tower;
+    }
+}
+
+public class SurgeTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new SurgeArresterTower();
+        return tower;
+    }
+}
+
+public class BlackMineTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new BlackMineTower();
+        return tower;
+    }
+}
+
+public class ShadowSurgeTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new ShadowSurgeTower();
+        return tower;
     }
 }

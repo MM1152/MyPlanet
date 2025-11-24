@@ -26,7 +26,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     public virtual void Init(Tower data)
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer ??= GetComponent<SpriteRenderer>();
         if (spriteRenderer != null && sprite != null)
         {
             spriteRenderer.sprite = sprite;
@@ -46,7 +46,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     protected abstract void HitTarget(Collider2D collision);
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if( collision.CompareTag("Enemy"))
         {

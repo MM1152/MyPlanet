@@ -6,9 +6,9 @@
         return bullet;
     }
 
-    public override bool Attack()
+    public override bool Attack(bool useTarget = true)
     {
         Target = manager.FindTarget()?.transform;
-        return base.Attack();
+        return base.Attack(useTarget);
     }
 }

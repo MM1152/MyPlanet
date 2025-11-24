@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Explosion : BaseAttackPrefab
 {
-    private float duration = 0.3f;
+    private float duration = 0.1f;
     private float timer = 0f;
     private float explosionSize;
     public override void Init(Tower data)

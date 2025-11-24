@@ -58,7 +58,7 @@ public enum PoolsId
 
     Bullet = 200,
     Missile = 201,
-    Laser = 202,
+    SolarLaser = 202,
     SniperBullet = 203,
     MagmaBoomBullet = 204,
     FragmentBullet = 205,
@@ -67,10 +67,21 @@ public enum PoolsId
     ShockWaveBullet = 208,
     ShockWave = 209,
     Explosion = 210,
-    
+    DarkLaser = 211,
+    ShadowBursterBullet = 212,
+    IceRangerMissile = 213,
+    LuminaSniperBullet = 214,
+    MagmaBoomFregment = 215,
+    IronMine = 216,
+    IronMineExplosion = 217,
+    Surge = 218,
+    BlackMineBullet = 219,
+    ShadowSurge = 220,
+
     SimpleBullet = 300,
     HomingBullet = 301,
     SpreadBullet = 302,
+
     Exp = 400,
     DamageText = 600,
 
@@ -94,7 +105,7 @@ public static class AddressableNames
         { "Bullet", PoolsId.Bullet },
         { "Missile", PoolsId.Missile },
         { "SniperBullet", PoolsId.SniperBullet },
-        { "Laser", PoolsId.Laser },
+        { "SolarLaser", PoolsId.SolarLaser },
         { "Exp", PoolsId.Exp },
         { "MagmaBoomBullet", PoolsId.MagmaBoomBullet },
         { "FragmentBullet", PoolsId.FragmentBullet },
@@ -105,6 +116,16 @@ public static class AddressableNames
         { "DamageText", PoolsId.DamageText },
         { "TestRange", PoolsId.TestRange },
         { "Explosion", PoolsId.Explosion },
+        { "DarkLaser", PoolsId.DarkLaser },
+        { "ShadowBursterBullet" , PoolsId.ShadowBursterBullet },
+        { "IceRangerMissile" , PoolsId.IceRangerMissile },
+        { "LuminaSniperBullet" , PoolsId.LuminaSniperBullet },
+        { "MagmaBoomFregment" , PoolsId.MagmaBoomFregment },
+        { "IronMine" , PoolsId.IronMine },
+        { "IronMineExplosion" , PoolsId.IronMineExplosion },
+        { "Surge" , PoolsId.Surge },
+        { "BlackMineBullet" , PoolsId.BlackMineBullet },
+        { "ShadowSurge" , PoolsId.ShadowSurge },
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -128,6 +149,7 @@ public static class TagIds
     public readonly static string PlayerTag = "Player";
     public readonly static string EnemyTag = "Enemy";
     public readonly static string EnemyProjectileTag = "EnemyProjectile";
+    public readonly static string IronMineTag = "IronMine";
 }
 
 public static class DataTableIds
@@ -162,6 +184,6 @@ public static class DataTableIds
 
 public static class DataBasePaths
 {
-    public static string UserPath = "/users/";
-    public static string PresetPath = "/preset/";
+    public static string UserPath = "users/";
+    public static string PresetPath = "preset/";
 }

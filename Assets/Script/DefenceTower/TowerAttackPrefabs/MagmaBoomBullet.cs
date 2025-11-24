@@ -20,6 +20,9 @@ public class MagmaBoomBullet : ProjectTile
         base.HitTarget(collision);
         SpawnFragments();
         Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
+        var explosion = Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);
+        explosion.Init(tower);
+        explosion.transform.position = transform.position;
     }
 
     protected override void Update()
@@ -43,13 +46,13 @@ public class MagmaBoomBullet : ProjectTile
 
         for(int i = 0; i < spawnFragmentCount; i++)
         {
-            FragmentBullet fragmentObj = Managers.ObjectPoolManager.SpawnObject<FragmentBullet>(PoolsId.FragmentBullet);
+            FragmentBullet fragmentObj = Managers.ObjectPoolManager.SpawnObject<MagmaBoomFregment>(PoolsId.MagmaBoomFregment);
             fragmentObj.transform.position = transform.position;
             fragmentObj.Init(tower);
             float angle = splitAngle * i;
             Vector3 dir = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad), 0f);
             dir.Normalize();
-            fragmentObj.SetDir(dir);
+            fragmentObj.SetDirWithNoise(dir);
         }
     }
 }

@@ -10,11 +10,11 @@ public class VolcanoLauncher : Tower
         base.Init(tower, manager, data , slotIndex);
         noise = 90f;
     }
-    public override bool Attack()
+    
+    public override bool Attack(bool useTarget = true)
     {
         Target = manager.FindTargetInRange(tower.transform.position, FullAttackRange)?.transform;
-        base.Attack();
-        return true;
+        return base.Attack(useTarget);
     }
 
     protected override BaseAttackPrefab CreateAttackPrefab()

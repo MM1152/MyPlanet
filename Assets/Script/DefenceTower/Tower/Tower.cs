@@ -41,7 +41,9 @@ public abstract class Tower
     public bool UseAble => useAble;
     public int Level => level;
 
+    public GameObject TowerGameObject => tower;
     public TowerTable.Data TowerData => towerData;
+    public TowerManager towerManager => manager;
     protected Transform Target
     {
         set
@@ -62,7 +64,6 @@ public abstract class Tower
     public RandomOptionData RandomOptionData => randomOptionData;
     public IStatusEffect StatusEffect => statusEffect;
     public RandomOptionBase Option => baseRandomOption;
-
 
     protected GameObject projectTile;
     protected GameObject tower;
@@ -133,17 +134,20 @@ public abstract class Tower
         }
     }
 
-    public virtual bool Attack()
+    public virtual bool Attack(bool useTarget = true)
     {
         if (attackAble)
         {
-            if (target == null)
-                return false;
-
-            if (Vector3.Distance(target.position, tower.transform.position) > FullAttackRange)
+            if(useTarget)
             {
-                Target = null;
-                return false;
+                if (target == null)
+                    return false;
+
+                if (Vector3.Distance(target.position, tower.transform.position) > FullAttackRange)
+                {
+                    Target = null;
+                    return false;
+                }
             }
 
             attackAble = false;
@@ -152,7 +156,8 @@ public abstract class Tower
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
             attackPrefabs.transform.position = tower.transform.position;
             attackPrefabs.Init(this);
-            attackPrefabs.SetTarget(target, FullNoise);
+            if (target != null)
+                attackPrefabs.SetTarget(target , FullNoise);
             return true;
         }
 
@@ -296,15 +301,4 @@ public abstract class Tower
         this.statusEffect = statusEffect;
     }
     protected abstract BaseAttackPrefab CreateAttackPrefab();
-
-    public void OnDamage(int damage)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void OnDead()
-    {
-        throw new NotImplementedException();
-    }
-
 }
