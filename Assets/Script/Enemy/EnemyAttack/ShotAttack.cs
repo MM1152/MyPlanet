@@ -5,7 +5,7 @@ public class ShotAttack : IAttack
 {
     public bool isAttackColliderOn => false;
 
-    Dictionary<ElementType, IShotStrategy> shotStrategies = new Dictionary<ElementType, IShotStrategy>()
+    public Dictionary<ElementType, IShotStrategy> shotStrategies = new Dictionary<ElementType, IShotStrategy>()
     {
         { ElementType.Normal, new NormalStrategy() },
         { ElementType.Fire, new HomingShot() },

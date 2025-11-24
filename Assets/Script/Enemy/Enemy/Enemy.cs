@@ -52,13 +52,15 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public bool isKilledByPlayer { get; private set; }
 
 #if DEBUG_MODE
-    private TextSpawnManager textSpawnManager;
+    public TextSpawnManager textSpawnManager;
 #endif
 #if DEBUG_MODE
     public SpriteRenderer spriteRenderer { get; private set; }
 #endif
     public ZoneSearch zone;
     public Action abilityAction;
+
+    public Action OnBuffRemoved;
 
     private void Awake()
     {
@@ -208,6 +210,7 @@ Debug.Log($"해당 적 이름 및 타입 : {this.name}, {this.ElementType} - Hea
         IsDead = true;
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
+        OnBuffRemoved?.Invoke();
         OnDie?.Invoke(this);
     }
 }

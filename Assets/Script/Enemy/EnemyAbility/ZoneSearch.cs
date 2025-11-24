@@ -30,8 +30,7 @@ public class ZoneSearch : MonoBehaviour
     {
         Enemy enemy = collision.GetComponent<Enemy>();
         if (enemy != null && !enemiesInZone.Contains(enemy))
-        {
-            Debug.Log($"ZoneSearch: Enemy {enemy.name} entered the zone.");
+        {           
             enemiesInZone.Add(enemy);
         }
     }
@@ -40,8 +39,7 @@ public class ZoneSearch : MonoBehaviour
     {
         Enemy enemy = collision.GetComponent<Enemy>();
         if (enemy != null && enemiesInZone.Contains(enemy))
-        {
-            Debug.Log($"ZoneSearch: Enemy {enemy.name} exited the zone.");
+        {   
             enemiesInZone.Remove(enemy);
         }
     }
