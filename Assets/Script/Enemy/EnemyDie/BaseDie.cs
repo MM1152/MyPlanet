@@ -5,6 +5,8 @@ public class BaseDie
     protected Enemy enemy;
     protected TypeEffectiveness typeEffectiveness;
 
+    public virtual bool active { get; set; } = true;
+
     public virtual void Init(Enemy enemy)
     {
         this.enemy = enemy;

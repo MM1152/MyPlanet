@@ -8,6 +8,7 @@ public class DieManager
          { 2, new ExplosionDie() },
          {4, new HealDie()},
          {6, new SpawnDie()},
+          {11, new SplitbornDie()},   
     };
 
     public BaseDie GetDie(int key)

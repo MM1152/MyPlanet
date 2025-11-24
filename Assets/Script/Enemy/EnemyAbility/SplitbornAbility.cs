@@ -3,15 +3,12 @@ using UnityEngine;
 public class SplitbornAbility : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnDamage;
-
-    public bool active = true;
-
     public int spawnCount = 1;
 
     public override bool isActive
     {
-        get { return active; }
-        set { active = value; }
+        get;
+        set;
     }
 
     public override int OnDamage(int damage)
@@ -22,10 +19,10 @@ public class SplitbornAbility : BaseAbility
 
         return damage;
     }
-
+    
     private void Split()
     {
-        active = false;
+        isActive = false;
         var waveManager = enemy.WaveManager;
         var enemySpawnManager = waveManager.EnemySpawnManager;
 
