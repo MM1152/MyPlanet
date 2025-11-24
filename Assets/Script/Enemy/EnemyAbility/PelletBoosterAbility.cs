@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class PelletBoosterAbility : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnUpdate;
-    public int refillAmount = 2;
+    public int boostPellet = 2;
 
     private ZoneSearch zoneSearch;
 
@@ -30,7 +30,7 @@ public class PelletBoosterAbility : BaseAbility
 
                 if (shotAttack.shotStrategies[elementType] is SpreadShot spreadShot)
                 {
-                    spreadShot.SetBonusPellet(refillAmount);
+                    spreadShot.SetBonusPellet(boostPellet);
                 }
             }
         }    

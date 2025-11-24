@@ -15,7 +15,7 @@ public class SpreadBullet : EnemyProjectileSimple
         base.Init(data, typeEffectiveness);
         poolsId = PoolsId.SpreadBullet;
         isDespawned = false;
-        range = data.attackrange;    
+        range = data.attackRange;    
         // DelayDespawn().Forget();    
     }
     

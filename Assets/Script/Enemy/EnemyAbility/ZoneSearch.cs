@@ -18,7 +18,7 @@ public class ZoneSearch : MonoBehaviour
         if (circleCollider == null) return;
 
         float scale = transform.lossyScale.x;  
-        circleCollider.radius = enemy.attackrange / scale;
+        circleCollider.radius = enemy.attackRange / scale;
     }
 
     private void OnEnable()

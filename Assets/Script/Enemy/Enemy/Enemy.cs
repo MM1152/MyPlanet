@@ -30,7 +30,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public float speed;
     public int atk;
-    public float attackrange;
+    [SerializeField]
+    public float attackRange;
+
+    private float baseRange;
+    private bool bonusApplied = false;
 
     public float bulletSpeed => enemyData.Bullet_Speed;
 
@@ -76,7 +80,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         currentHP = enemyData.HP;
         atk = enemyData.ATK;
         speed = enemyData.Speed;
-        attackrange = enemyData.Range;
+        attackRange = baseRange = enemyData.Range;
 #if DEBUG_MODE
         SetColor(enemyData.Attribute);
 #endif
@@ -91,7 +95,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         dieManager = new DieManager(enemyData.ID, out die);
         abilityManager = new AbilityManager(enemyData.ID, out ability);
         zone = GetComponentInChildren<ZoneSearch>();
-        zone?.Init(this);   
+        zone?.Init(this);
         ability?.SetEnemy(this);
 
         attackManager = new AttackManager(enemyType, out attack);
@@ -195,14 +199,14 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         int healAmount = Mathf.Min(heal, enemyData.HP - currentHP);
         currentHP += healAmount;
-// #if DEBUG_MODE
-//          if (healAmount > 0)
-//          {
-Debug.Log($"해당 적 이름 및 타입 : {this.name}, {this.ElementType} - Heal Amount: {healAmount}");
-            var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
-            text.SetColor(Color.green);
-//          }
-// #endif
+        // #if DEBUG_MODE
+        //          if (healAmount > 0)
+        //          {
+        Debug.Log($"해당 적 이름 및 타입 : {this.name}, {this.ElementType} - Heal Amount: {healAmount}");
+        var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
+        text.SetColor(Color.green);
+        //          }
+        // #endif
     }
 
     public void OnDead()
@@ -212,5 +216,19 @@ Debug.Log($"해당 적 이름 및 타입 : {this.name}, {this.ElementType} - Hea
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();
         OnDie?.Invoke(this);
+    }
+
+    public void SetBonusRange(int bonus)
+    {
+        if (bonusApplied) return;
+
+        attackRange = baseRange + bonus;
+        bonusApplied = true;
+    }
+
+    public void ResetRange()
+    {
+        attackRange = baseRange;
+        bonusApplied = false;
     }
 }

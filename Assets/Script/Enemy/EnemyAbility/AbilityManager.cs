@@ -9,6 +9,8 @@ public class AbilityManager
          { 12, new HealZoneAbility() },
          {13,new BarrierRefillAbility() },
          {14,new  PelletBoosterAbility() },
+         {15,new  RangeBoostAbility() },
+
     };
 
     public BaseAbility GetAbility(int key)

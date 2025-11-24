@@ -30,7 +30,7 @@ public class WalkState : IState
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-        if (distance <= enemy.attackrange && enemy.enemyType != EnemyType.Melee)
+        if (distance <= enemy.attackRange && enemy.enemyType != EnemyType.Melee)
         {
             enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
         }

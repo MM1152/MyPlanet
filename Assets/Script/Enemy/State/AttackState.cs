@@ -15,6 +15,12 @@ public class AttackState : IState
 
     public void Execute()
     {
+       if(Vector2.Distance(enemy.transform.position, enemy.GetTarget().transform.position) > enemy.attackRange)
+        {
+            enemy.stateMachine.ChangeState(enemy.stateMachine.walkState);
+            return;
+        }
+
         enemy.attack.Attack(enemy); 
     }
 
