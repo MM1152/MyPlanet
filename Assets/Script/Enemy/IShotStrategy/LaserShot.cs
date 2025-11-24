@@ -3,13 +3,17 @@ using UnityEngine;
 public class LaserShot : IShotStrategy
 {
     private bool isInitialized = false;
-    float offset = 0.3f;
+    float offset = 0.1f;
     LineRenderer lineRenderer;
     RaycastHit2D hit;
     LayerMask obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
     public void Shot(Enemy enemy, GameObject target)
     {
-        if (target == null) return;
+        if (target == null || hit.collider == null)
+        {
+            lineRenderer.enabled = false;
+            return;
+        }
 
         if (hit.collider.gameObject.layer == target.layer)
         {
@@ -25,14 +29,18 @@ public class LaserShot : IShotStrategy
 
     public void laserUpdate(Enemy enemy, GameObject target)
     {
-        if (target == null) return;
+        if (target == null || target.transform == null)
+        {
+            lineRenderer.enabled = false;
+            return;
+        }
 
         if (!isInitialized)
         {
             lineRenderer = enemy.GetComponent<LineRenderer>();
             lineRenderer.enabled = true;
-            lineRenderer.startWidth = enemy.transform.localScale.y * 0.5f;
-            lineRenderer.endWidth = enemy.transform.localScale.y * 0.5f;
+            lineRenderer.startWidth = enemy.transform.localScale.y * 0.3f;
+            lineRenderer.endWidth = enemy.transform.localScale.y * 0.3f;
             lineRenderer.positionCount = 2;
             isInitialized = true;
         }

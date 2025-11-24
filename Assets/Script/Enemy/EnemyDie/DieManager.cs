@@ -5,9 +5,9 @@ public class DieManager
 {
     public Dictionary<int, BaseDie> dieTable = new Dictionary<int, BaseDie>()
     {
-         { 3, new ExplosionDie() },
+         { 2, new ExplosionDie() },
          {4, new HealDie()},
-         {5, new SpawnDie()},
+         {6, new SpawnDie()},
     };
 
     public BaseDie GetDie(int key)
@@ -25,7 +25,7 @@ public class DieManager
 
     public DieManager(int key, out BaseDie die)
     {
-        if( dieTable.ContainsKey(key))
+        if (dieTable.ContainsKey(key))
         {
             die = dieTable[key];
             return;

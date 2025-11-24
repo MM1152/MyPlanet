@@ -21,7 +21,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     private void Start()
     {
-        basePlaent = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
+        basePlaent = GameObject.FindWithTag(TagIds.PlayerTag)?.GetComponent<BasePlanet>();
     }
 
     public virtual void Init(Tower data)
@@ -48,7 +48,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     public virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if( collision.CompareTag("Enemy"))
+        if(collision.CompareTag("Enemy"))
         {
             HitTarget(collision);
             basePlaent.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());

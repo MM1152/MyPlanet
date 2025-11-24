@@ -9,7 +9,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     public int FullDamage => atk;
-
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
@@ -38,7 +37,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public float fireInterval  => 60f / enemyData.Fire_Rate;
     public float attackInterval;
     
-    [SerializeField] public int currentHP;
+    public int currentHP;                                                                                                                                    
     public TypeEffectiveness typeEffectiveness;
     public event Action<Enemy> OnDie;
     private AttackManager attackManager;
