@@ -19,4 +19,7 @@ public class BaseDie
         enemy.WaveManager.waveClearCount--;        
         Managers.ObjectPoolManager.Despawn(PoolsId.Enemy, enemy.gameObject);
     }
+
+    public virtual void SetBonusCount(int count) {}   
+    public virtual void ResetCount() {} 
 }

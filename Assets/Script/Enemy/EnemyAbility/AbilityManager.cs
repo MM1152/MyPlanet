@@ -10,6 +10,7 @@ public class AbilityManager
          {13,new BarrierRefillAbility() },
          {14,new  PelletBoosterAbility() },
          {15,new  RangeBoostAbility() },
+         {16,new  PlayerKillSplitAbility() },
 
     };
 

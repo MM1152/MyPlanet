@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class SplitbornDie : BaseDie
 {
+    private bool bonusApplied = false;
+    private int baseCount = 2;  
     public int spawnCount { get; set; } = 2;
 
     public override void Die(Enemy enemy)
@@ -23,5 +25,16 @@ public class SplitbornDie : BaseDie
             active = false;            
         }
         base.Die(enemy);
+    }
+    public override void SetBonusCount(int count)
+    {
+        if (bonusApplied) return;
+        spawnCount = baseCount + count;
+        bonusApplied = true;
+    }
+    public override void ResetCount()
+    {
+        spawnCount = baseCount;
+        bonusApplied = false;
     }
 }

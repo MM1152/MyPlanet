@@ -10,18 +10,18 @@ public class AttackState : IState
     }
 
     public void Enter()
-    { 
+    {
     }
 
     public void Execute()
     {
-       if(Vector2.Distance(enemy.transform.position, enemy.GetTarget().transform.position) > enemy.attackRange)
+        if (enemy.attackRange <= 0 || Vector2.Distance(enemy.transform.position, enemy.GetTarget().transform.position) <= enemy.attackRange)
         {
-            enemy.stateMachine.ChangeState(enemy.stateMachine.walkState);
+            enemy.attack.Attack(enemy);
             return;
         }
 
-        enemy.attack.Attack(enemy); 
+        enemy.stateMachine.ChangeState(enemy.stateMachine.walkState);
     }
 
     public void Exit()
