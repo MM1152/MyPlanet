@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,6 +19,12 @@ public class FirebaseManager
     public PlanetData PlanetData => planetData;
 
     private bool initialize = false;
+
+    private bool changeVersion = false;
+    public bool ChangeVersion => changeVersion;
+
+    private int version;
+    public int Version => version;
 
     private static FirebaseManager instance;
     public static FirebaseManager Instance
@@ -46,16 +53,18 @@ public class FirebaseManager
     private async UniTask InitAsync()
     {
         await initalizer.InitAsync();
-        Debug.Log("Firebase Initalized");
         database.Init();
-        Debug.Log("Firebase Database Initalized");
         auth.Init();
-        Debug.Log("Firebase Auth Initalized");
 
-        planetData.LoadAllDataAsync().Forget();
-        presetData.LoadAsync().Forget();
+        var result = await database.GetVersion();
+        if(result.success)
+        {
+            version = result.version;
+            planetData.LoadAllDataAsync().Forget();
+            presetData.LoadAsync().Forget();
 
-        initialize = true;
+            initialize = true;
+        }
     }
     
     /// <summary>
@@ -76,6 +85,18 @@ public class FirebaseManager
         {
             // 현재 유저데이터가 존재한다면
             var data =  await database.GetData<UserData>(userPath);
+
+            if(data.data.version != Version)
+            {
+                changeVersion = true;
+                data.data.version = Version;
+                bool success = await Database.OverwriteJsonData<UserData>(userPath, data.data);
+                if(success)
+                {
+                    Debug.Log("Update UserData Success");
+                }
+            }
+
             if(data.success)
             {
                 userData = data.data;
@@ -118,11 +139,12 @@ public class UserData : JsonSerialized
 {
     public string nickName;
     public int gold;
-
+    public int version;
     public UserData()
     {
         nickName = "NoName-" + UnityEngine.Random.Range(10000, 50000);
         gold = 0;
+        version = FirebaseManager.Instance.Version;
     }
 }
 
