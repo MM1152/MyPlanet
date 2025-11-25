@@ -48,6 +48,9 @@ public static class Variable
 public static class AddressableLabelIds
 {
     public readonly static string PoolsIds = "Pools";
+    public readonly static string TypeIds = "Type";
+    public readonly static string ElementTypeIds = "Element";
+    public readonly static string AttackTypeIds = "AttackType";
 }
 
 public enum PoolsId
@@ -164,6 +167,9 @@ public static class DataTableIds
     public static readonly string PassiveTable = "PassiveTable";
     public static readonly string EffectTable = "EffectTable";
     public static readonly string LevelUpTable = "LevelUpTable";
+    public static readonly string TypeSpriteTable = "TypeSpriteTable";
+    public static readonly string ElementSpriteTable = "ElementSpriteTable";
+    public static readonly string AttackTypeSpriteTable = "AttackTypeSpriteTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
