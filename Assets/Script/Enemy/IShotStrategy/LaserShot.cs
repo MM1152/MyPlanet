@@ -16,7 +16,7 @@ public class LaserShot : IShotStrategy
         }
 
         if (hit.collider.gameObject.layer == target.layer)
-        {          
+        {
             var find = hit.collider.GetComponent<IDamageAble>();
             if (find != null)
             {
@@ -28,11 +28,8 @@ public class LaserShot : IShotStrategy
 
     public void laserUpdate(Enemy enemy, GameObject target)
     {
-        if (target == null || target.transform == null)
-        {
-            lineRenderer.enabled = false;
-            return;
-        }
+        if (target == null || target.transform == null)return;
+        
 
         if (!isInitialized)
         {
@@ -54,6 +51,16 @@ public class LaserShot : IShotStrategy
             Vector2 offsetPoint = hit.point + dir * offset;
             lineRenderer.SetPosition(1, offsetPoint);
         }
+    }
+
+    public void LaserReset()
+    {
+         if (lineRenderer != null)
+            {
+                lineRenderer.enabled = false;
+                lineRenderer.positionCount = 0;
+            }
+            isInitialized = false;
     }
 }
 

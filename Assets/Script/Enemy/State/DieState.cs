@@ -16,13 +16,7 @@ public class DieState : IState
     }
 
     public void Execute()
-    {
-        if (enemy.isKilledByPlayer)
-        {
-            var exp = Managers.ObjectPoolManager.SpawnObject<Exp>(PoolsId.Exp);
-            exp.transform.position = enemy.transform.position;
-            exp.exp = enemy.enemyData.EXP;
-        }        
+    {    
         enemy.die.Die(enemy);
     }
 

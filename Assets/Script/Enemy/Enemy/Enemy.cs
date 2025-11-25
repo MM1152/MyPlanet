@@ -72,33 +72,42 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         spriteRenderer = GetComponent<SpriteRenderer>();
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag).GetComponent<WaveManager>();
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>();
+        zone = GetComponentInChildren<ZoneSearch>();
+        typeEffectiveness = new TypeEffectiveness();
+        dieManager = new DieManager();
+        abilityManager = new AbilityManager();
+        attackManager = new AttackManager();
     }
 
-    public virtual void Initallized(EnemyData.Data data)
+    public void Initallized(EnemyData.Data data)
     {
         this.enemyData = data;
         currentHP = enemyData.HP;
         atk = enemyData.ATK;
         speed = enemyData.Speed;
-        attackRange = baseRange = enemyData.Range;
+        baseRange = enemyData.Range;
+        attackRange = baseRange;
 #if DEBUG_MODE
         SetColor(enemyData.Attribute);
 #endif
-
         target = GameObject.FindGameObjectWithTag(TargetTag);
         stateMachine.Init(stateMachine.idleState);
-        typeEffectiveness = new TypeEffectiveness();
         typeEffectiveness.Init(ElementType);
         statusEffect.Init();
         isKilledByPlayer = true;
         IsDead = false;
-        dieManager = new DieManager(enemyData.ID, out die);
-        abilityManager = new AbilityManager(enemyData.ID, out ability);
-        zone = GetComponentInChildren<ZoneSearch>();
+        attack = attackManager.GetAttack(enemyType);    
+        die = dieManager.GetDie(enemyData.ID);
+        ability = abilityManager.GetAbility(enemyData.ID);
         zone?.Init(this);
+        ResetActions();
         ability?.SetEnemy(this);
+    }
 
-        attackManager = new AttackManager(enemyType, out attack);
+    private void ResetActions()
+    {
+        abilityAction = null;
+        OnBuffRemoved = null;
     }
 #if DEBUG_MODE
     private void SetColor(int typeEffectiveness)

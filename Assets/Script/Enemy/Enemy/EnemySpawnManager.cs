@@ -46,9 +46,7 @@ public class EnemySpawnManager : MonoBehaviour
             for (int i = 0; i < count; i++)
             {
                 var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy);
-                spawnEnemy.Initallized(data);
-                //FIX : ���� ��ġ �ӽ� ����
-                // spawnEnemy.transform.position = new Vector3(Random.Range(-5,5) , 5f , 0f);
+                spawnEnemy.Initallized(data);      
                 spawnEnemy.OnDie += CheckDieEnemy;
                 spawnEnemys.Add(spawnEnemy);
                 spawnedEnemies.Add(spawnEnemy); 

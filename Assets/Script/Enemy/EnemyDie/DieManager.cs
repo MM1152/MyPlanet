@@ -5,10 +5,11 @@ public class DieManager
 {
     public Dictionary<int, BaseDie> dieTable = new Dictionary<int, BaseDie>()
     {
-         { 2, new ExplosionDie() },
-         {4, new HealDie()},
-         {6, new SpawnDie()},
-          {11, new SplitbornDie()},   
+         { 0, new BaseDie() },
+         { 3006, new ExplosionDie() },
+         { 3007, new HealDie()},
+         { 3010, new SpawnDie()},
+         { 3015, new SplitbornDie()},
     };
 
     public BaseDie GetDie(int key)
@@ -17,20 +18,6 @@ public class DieManager
         {
             return dieTable[key];
         }
-#if DEBUG_MODE
-        Debug.LogError("Enemy에 해당하는 죽음방식이 없음 ");
-#endif
-        return null;
-    }
-
-
-    public DieManager(int key, out BaseDie die)
-    {
-        if (dieTable.ContainsKey(key))
-        {
-            die = dieTable[key];
-            return;
-        }
-        die = new BaseDie();
+        return dieTable[0];
     }
 }

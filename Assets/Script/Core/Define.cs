@@ -34,8 +34,8 @@ public enum ElementType
     None = -1,
     Normal = 0,
     Fire = 1,
-    Steel = 2,
-    Ice = 3,
+    Ice = 2,
+    Steel = 3,
     Light = 4,
     Dark = 5
 }
@@ -91,7 +91,7 @@ public enum PoolsId
 public enum EnemyType
 {
     Melee = 0,
-    Ranged = 1,    
+    Ranged = 1,
 }
 
 public static class AddressableNames

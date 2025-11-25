@@ -28,7 +28,7 @@ public class ShotAttack : IAttack
         {
             shotStrategies[enemy.ElementType].Shot(enemy, enemy.GetTarget());
             enemy.attackInterval = 0f;
-        }
+        }        
     }
 
     private void Shot(Enemy enemy, GameObject target)

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SpawnDie : BaseDie
 {
+    private int spawnEnemyID = 3005;    
     private bool bonusApplied = false;  
     private int baseCount = 3;
     public int spawnCount { get; set; } = 3;
@@ -12,7 +13,7 @@ public class SpawnDie : BaseDie
             var waveManager = enemy.WaveManager;
             var enemySpawnManager = waveManager.EnemySpawnManager;
 
-            var spawnEnemys = enemySpawnManager.SpawnEnemy(1, spawnCount);
+            var spawnEnemys = enemySpawnManager.SpawnEnemy(spawnEnemyID, spawnCount);
             foreach (var spawnEnemy in spawnEnemys)
             {
                 var offset = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f));

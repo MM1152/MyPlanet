@@ -5,13 +5,12 @@ public class AbilityManager
 {
     public Dictionary<int, BaseAbility> abilityTable = new Dictionary<int, BaseAbility>()
     {
-         { 3, new BarrierAbility() },
-         { 12, new HealZoneAbility() },
-         {13,new BarrierRefillAbility() },
-         {14,new  PelletBoosterAbility() },
-         {15,new  RangeBoostAbility() },
-         {16,new  PlayerKillSplitAbility() },
-
+         { 3008, new BarrierAbility() },
+         { 3021, new HealZoneAbility() },
+         { 3022, new  PelletBoosterAbility() },
+         { 3023, new BarrierRefillAbility() },
+         { 3024, new  RangeBoostAbility() },
+         { 3025, new  PlayerKillSplitAbility() },
     };
 
     public BaseAbility GetAbility(int key)
@@ -21,14 +20,5 @@ public class AbilityManager
             return abilityTable[key];
         }
         return null;
-    }
-    public AbilityManager(int key, out BaseAbility ability)
-    {
-        if (abilityTable.ContainsKey(key))
-        {
-            ability = abilityTable[key];
-            return;
-        }
-        ability = null;
     }
 }
