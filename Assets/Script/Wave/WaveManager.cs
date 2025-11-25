@@ -23,6 +23,7 @@ public class WaveManager : MonoBehaviour
     private List<SpawnPoint> currentWave = new List<SpawnPoint>();
     private List<Vector2> spawnPoints = new List<Vector2>();
     private Rect screenBounds;
+    public Rect ScreenBounds => screenBounds;   
 
     private float spawnOffset = 1.0f;
     private int topPointCount = 3;
@@ -32,7 +33,7 @@ public class WaveManager : MonoBehaviour
 
     private int currentWaveIndex;
     public int CurrentWaveIndex => currentWaveIndex;
-    private float waveDuration = 10f;
+    private float waveDuration = 90f;
     public float WaveDuration => waveDuration;
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;

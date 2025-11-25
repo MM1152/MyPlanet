@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class ShotAttack : BaseShotAttack
+public class EliteMonsterAttack : BaseShotAttack
 {
-    public ShotAttack()
+    public EliteMonsterAttack()
     {
         shotStrategies = new Dictionary<ElementType, IShotStrategy>()
     {
