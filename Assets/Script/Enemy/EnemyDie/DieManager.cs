@@ -7,7 +7,7 @@ public class DieManager
     {
          { 0, new BaseDie() },
          { 3006, new ExplosionDie() },
-         { 3007, new HealDie()},
+         { 3008, new HealDie()},
          { 3010, new SpawnDie()},
          { 3015, new SplitbornDie()},
     };
