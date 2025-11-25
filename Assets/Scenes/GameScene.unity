@@ -714,7 +714,7 @@ GameObject:
   m_Component:
   - component: {fileID: 157417671}
   - component: {fileID: 157417670}
-  - component: {fileID: 157417669}
+  - component: {fileID: 157417672}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -722,29 +722,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &157417669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 157417668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4532f4ca5669d70478051ba9cdb3415b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lobbyButton: {fileID: 941315123}
-  joyStick: {fileID: 860115782}
-  action:
-    m_Name: Action
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: cd38e67b-4d50-40b6-896d-2cd7159d893a
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
 --- !u!114 &157417670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -776,7 +753,7 @@ MonoBehaviour:
     m_ActionName: Player/Move
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 157417669}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: TouchJoyStick
         m_Mode: 0
@@ -810,6 +787,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 907943357}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &157417672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157417668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad3bb67e8ec4f2147b70254cb868ac2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lobbyButton: {fileID: 941315123}
+  joyStick: {fileID: 860115782}
+  action:
+    m_Name: Action
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 44c7953e-2055-48e1-8cf8-ec0c6013d399
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!1 &163866714
 GameObject:
   m_ObjectHideFlags: 0
@@ -2904,10 +2904,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerNameText: {fileID: 1291085195}
-  towerDamageText: {fileID: 1961173899}
-  towerAttackSpeedText: {fileID: 1184040658}
-  towerAttackRangeText: {fileID: 1255778493}
-  towerRandomOptionText: {fileID: 224598118}
+  towerGradeText: {fileID: 0}
+  towerTypeText: {fileID: 0}
+  towerElementText: {fileID: 0}
+  towerDescriptionText: {fileID: 0}
+  towerImage: {fileID: 0}
 --- !u!1 &604963419
 GameObject:
   m_ObjectHideFlags: 0
@@ -7959,6 +7960,7 @@ MonoBehaviour:
   popups:
   - {fileID: 585749136}
   popupBackGroundPanel: {fileID: 1211155009}
+  clickToCloseUI: {fileID: 0}
 --- !u!4 &1956071653
 Transform:
   m_ObjectHideFlags: 0
