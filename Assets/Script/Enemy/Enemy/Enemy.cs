@@ -121,10 +121,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
                 spriteRenderer.color = Color.red;
                 break;
             case 2:
-                spriteRenderer.color = Color.gray;
+                spriteRenderer.color = Color.blue;
                 break;
             case 3:
-                spriteRenderer.color = Color.blue;
+                spriteRenderer.color = Color.gray;
                 break;
             case 4:
                 spriteRenderer.color = Color.yellow;
