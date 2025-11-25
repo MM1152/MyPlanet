@@ -30,7 +30,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public float speed;
     public int atk;
-    public float attackrange;
+    [SerializeField]
+    public float attackRange;
+
+    private float baseRange;
+    private bool bonusApplied = false;
 
     public float bulletSpeed => enemyData.Bullet_Speed;
 
@@ -52,11 +56,15 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public bool isKilledByPlayer { get; private set; }
 
 #if DEBUG_MODE
-    private TextSpawnManager textSpawnManager;
+    public TextSpawnManager textSpawnManager;
 #endif
 #if DEBUG_MODE
     public SpriteRenderer spriteRenderer { get; private set; }
 #endif
+    public ZoneSearch zone;
+    public Action abilityAction;
+
+    public Action OnBuffRemoved;
 
     private void Awake()
     {
@@ -64,31 +72,42 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         spriteRenderer = GetComponent<SpriteRenderer>();
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag).GetComponent<WaveManager>();
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>();
+        zone = GetComponentInChildren<ZoneSearch>();
+        typeEffectiveness = new TypeEffectiveness();
+        dieManager = new DieManager();
+        abilityManager = new AbilityManager();
+        attackManager = new AttackManager();
     }
 
-    public virtual void Initallized(EnemyData.Data data)
+    public void Initallized(EnemyData.Data data)
     {
         this.enemyData = data;
         currentHP = enemyData.HP;
         atk = enemyData.ATK;
         speed = enemyData.Speed;
-        attackrange = enemyData.Range;
+        baseRange = enemyData.Range;
+        attackRange = baseRange;
 #if DEBUG_MODE
         SetColor(enemyData.Attribute);
 #endif
-
         target = GameObject.FindGameObjectWithTag(TargetTag);
         stateMachine.Init(stateMachine.idleState);
-        typeEffectiveness = new TypeEffectiveness();
         typeEffectiveness.Init(ElementType);
         statusEffect.Init();
         isKilledByPlayer = true;
         IsDead = false;
-        dieManager = new DieManager(enemyData.ID, out die);
-        abilityManager = new AbilityManager(enemyData.ID, out ability);
+        attack = attackManager.GetAttack(enemyType);    
+        die = dieManager.GetDie(enemyData.ID);
+        ability = abilityManager.GetAbility(enemyData.ID);
+        zone?.Init(this);
+        ResetActions();
         ability?.SetEnemy(this);
+    }
 
-        attackManager = new AttackManager(enemyType, out attack);
+    private void ResetActions()
+    {
+        abilityAction = null;
+        OnBuffRemoved = null;
     }
 #if DEBUG_MODE
     private void SetColor(int typeEffectiveness)
@@ -102,10 +121,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
                 spriteRenderer.color = Color.red;
                 break;
             case 2:
-                spriteRenderer.color = Color.gray;
+                spriteRenderer.color = Color.blue;
                 break;
             case 3:
-                spriteRenderer.color = Color.blue;
+                spriteRenderer.color = Color.gray;
                 break;
             case 4:
                 spriteRenderer.color = Color.yellow;
@@ -138,10 +157,17 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
         return;
     }
-
+    // 이벤트 활성화 
     private void Update()
     {
         stateMachine.currentState.Execute();
+
+        attackInterval += Time.deltaTime;
+        if (ability != null && ability.abilityType == AbilityType.OnUpdate && abilityAction != null && attackInterval >= fireInterval)
+        {
+            abilityAction?.Invoke();
+            attackInterval = 0f;
+        }
     }
 
     private void LateUpdate()
@@ -160,17 +186,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         {
             damage = ability.OnDamage(damage);
         }
-        #if DEBUG_MODE
-        Debug.Log("Damage taken: " + damage);
-        #endif
+
         if (damage <= 0) return;
-        #if DEBUG_MODE
-        Debug.Log("hp before damage: " + currentHP);    
-        #endif
+
         currentHP -= damage;
-        #if DEBUG_MODE
-        Debug.Log("hp after damage: " + currentHP);
-        #endif  
+
 #if DEBUG_MODE
         if (damage > 0)
         {
@@ -188,13 +208,14 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         int healAmount = Mathf.Min(heal, enemyData.HP - currentHP);
         currentHP += healAmount;
-#if DEBUG_MODE
-        if (healAmount > 0)
-        {
-            var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
-            text.SetColor(Color.green);
-        }
-#endif
+        // #if DEBUG_MODE
+        //          if (healAmount > 0)
+        //          {
+        Debug.Log($"해당 적 이름 및 타입 : {this.name}, {this.ElementType} - Heal Amount: {healAmount}");
+        var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
+        text.SetColor(Color.green);
+        //          }
+        // #endif
     }
 
     public void OnDead()
@@ -202,6 +223,21 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         IsDead = true;
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
+        OnBuffRemoved?.Invoke();
         OnDie?.Invoke(this);
+    }
+
+    public void SetBonusRange(int bonus)
+    {
+        if (bonusApplied) return;
+
+        attackRange = baseRange + bonus;
+        bonusApplied = true;
+    }
+
+    public void ResetRange()
+    {
+        attackRange = baseRange;
+        bonusApplied = false;
     }
 }

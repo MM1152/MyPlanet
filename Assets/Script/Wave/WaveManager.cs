@@ -7,13 +7,13 @@ public class WaveManager : MonoBehaviour
     {
         public Vector2 position;
         public int enemyId;
-        // 한번에 소환할양 
+      
         public int spawnCount;
-        // 최대 소환량
+
         public int maxSpawnCount;
-        // 시작시간 딜레이
+     
         public float spawnStartDelayTime;
-        // 소환 간격
+  
         public float spawnDelayTime;
         public float timer = 0f;
         public int currentSpawnEnemyCount;
@@ -32,7 +32,7 @@ public class WaveManager : MonoBehaviour
 
     private int currentWaveIndex;
     public int CurrentWaveIndex => currentWaveIndex;
-    private float waveDuration = 90f;
+    private float waveDuration = 10f;
     public float WaveDuration => waveDuration;
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;
@@ -215,6 +215,7 @@ public class WaveManager : MonoBehaviour
 
             if (spawnPoint.currentSpawnEnemyCount >= spawnPoint.maxSpawnCount)
             {
+                Debug.Log($"여기{spawnPoint} 얘들 {spawnPoint.enemyId}다참");
                 continue;
             }
 
@@ -226,6 +227,7 @@ public class WaveManager : MonoBehaviour
 
             if (spawnPoint.timer >= spawnPoint.spawnDelayTime && spawnPoint.isStart)
             {
+                Debug.Log($"Spawn Enemy ID : {spawnPoint.enemyId} Count : {spawnPoint.spawnCount}");
                 var remainingToSpawn = spawnPoint.maxSpawnCount - spawnPoint.currentSpawnEnemyCount;
                 var minCount = Mathf.Min(spawnPoint.spawnCount, remainingToSpawn);
                 var enemys = enemySpawnManager.SpawnEnemy(spawnPoint.enemyId, minCount);

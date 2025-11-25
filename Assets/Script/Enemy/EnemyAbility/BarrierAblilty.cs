@@ -4,6 +4,7 @@ public class BarrierAbility : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnDamage;
 
+    public int maxBarrierAmount = 100;
     public int barrierAmount = 100;
 
     private bool active = true;
@@ -53,5 +54,23 @@ public class BarrierAbility : BaseAbility
             return overflowDamage;
         }
         return 0;
+    }
+
+    public void RefillBarrier(int amount)
+    {
+        barrierAmount += amount;
+#if DEBUG_MODE
+        var text = enemy.textSpawnManager.SpawnTextUI(amount.ToString(), enemy.transform.position);
+        text.SetColor(Color.green);
+        Debug.Log($"베리어 리필이요{amount}");
+#endif
+        if (barrierAmount > maxBarrierAmount)
+        {
+#if DEBUG_MODE
+            Debug.Log("배리어 꽉참");
+#endif
+            barrierAmount = maxBarrierAmount;
+        }
+        active = true;
     }
 }

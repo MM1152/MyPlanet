@@ -8,12 +8,7 @@ public class AttackManager
         { EnemyType.Melee, new OneTimeMeleeAttacker() },
         { EnemyType.Ranged  , new ShotAttack() },
     };
-
-    public AttackManager(EnemyType key, out IAttack attack)
-    {
-        attack = GetAttack(key);
-    }
-
+   
     public IAttack GetAttack(EnemyType key)
     {
         if (attackTable.ContainsKey(key))

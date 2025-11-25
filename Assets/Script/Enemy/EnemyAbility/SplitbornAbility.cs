@@ -36,4 +36,5 @@ public class SplitbornAbility : BaseAbility
             spawnEnemy.ability.isActive = false;
         }
     }
+
 }

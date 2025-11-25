@@ -1,13 +1,16 @@
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SpreadShot : IShotStrategy
 {
+    private Enemy body;
+    private int baseProjectiles = 3;
+    public int numberOfProjectiles = 3;
 
-    Enemy body;
-    int numberOfProjectiles = 3;
+    private float baseAngle = 90f;
 
-    float baseAngle = 90f;
+    private bool bonusApplied = false;
 
     List<Vector3> spreadAngles = new List<Vector3>();
 
@@ -22,10 +25,7 @@ public class SpreadShot : IShotStrategy
             Bullet.transform.position = enemy.transform.position;
             Bullet.Init(enemy, enemy.typeEffectiveness);
             Bullet.SetTarget(target.transform);
-            Bullet.SetDirection(spreadAngles[i]); 
-            #if DEBUG_MODE
-            Debug.Log("SpreadShot");
-            #endif
+            Bullet.SetDirection(spreadAngles[i]);
         }
     }
 
@@ -33,9 +33,6 @@ public class SpreadShot : IShotStrategy
     {
         var projectileObj = Managers.ObjectPoolManager.SpawnObject<SpreadBullet>(poolsId);
         SpreadBullet projectile = projectileObj.GetComponent<SpreadBullet>();
-        #if DEBUG_MODE
-        Debug.Log("Create Spread Bullet");
-        #endif
         return projectile;
     }
 
@@ -54,5 +51,19 @@ public class SpreadShot : IShotStrategy
             Vector3 rotatedDirection = rotation * angle;
             spreadAngles.Add(rotatedDirection.normalized);
         }
+    }
+
+    public void SetBonusPellet(int bonus)
+    {
+        if (bonusApplied) return;
+
+        numberOfProjectiles = baseProjectiles + bonus;
+        bonusApplied = true;
+    }
+
+    public void ResetPellet()
+    {
+        numberOfProjectiles = baseProjectiles;
+        bonusApplied = false;
     }
 }

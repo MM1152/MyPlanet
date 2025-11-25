@@ -3,10 +3,10 @@ using UnityEngine;
 public class LaserShot : IShotStrategy
 {
     private bool isInitialized = false;
-    float offset = 0.1f;
-    LineRenderer lineRenderer;
-    RaycastHit2D hit;
-    LayerMask obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
+    private float offset = 0.1f;
+    private LineRenderer lineRenderer;
+    private RaycastHit2D hit;
+    private LayerMask obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
     public void Shot(Enemy enemy, GameObject target)
     {
         if (target == null || hit.collider == null)
@@ -17,7 +17,6 @@ public class LaserShot : IShotStrategy
 
         if (hit.collider.gameObject.layer == target.layer)
         {
-            Debug.Log("Laser Hit Player");
             var find = hit.collider.GetComponent<IDamageAble>();
             if (find != null)
             {
@@ -29,11 +28,8 @@ public class LaserShot : IShotStrategy
 
     public void laserUpdate(Enemy enemy, GameObject target)
     {
-        if (target == null || target.transform == null)
-        {
-            lineRenderer.enabled = false;
-            return;
-        }
+        if (target == null || target.transform == null)return;
+        
 
         if (!isInitialized)
         {
@@ -55,6 +51,16 @@ public class LaserShot : IShotStrategy
             Vector2 offsetPoint = hit.point + dir * offset;
             lineRenderer.SetPosition(1, offsetPoint);
         }
+    }
+
+    public void LaserReset()
+    {
+         if (lineRenderer != null)
+            {
+                lineRenderer.enabled = false;
+                lineRenderer.positionCount = 0;
+            }
+            isInitialized = false;
     }
 }
 

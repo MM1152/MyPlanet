@@ -37,10 +37,10 @@ public abstract class BaseAttackPrefab : MonoBehaviour
         this.effect = data.StatusEffect?.DeepCopy();
     }
 
-    public virtual void SetTarget(Transform target , float noise)
+    public virtual void SetTarget(Transform target, float noise)
     {
         this.target = target;
-        this.noise = UnityEngine.Random.Range(-noise , noise);
+        this.noise = UnityEngine.Random.Range(-noise, noise);
         targetDamageAble = target?.GetComponent<IDamageAble>();
     }
 
@@ -48,10 +48,13 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     public virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy"))
         {
             HitTarget(collision);
-            basePlaent.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
+            if (basePlaent != null)
+            {
+                basePlaent.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
+            }
         }
     }
 }

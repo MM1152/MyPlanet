@@ -5,7 +5,7 @@ public class ShotAttack : IAttack
 {
     public bool isAttackColliderOn => false;
 
-    Dictionary<ElementType, IShotStrategy> shotStrategies = new Dictionary<ElementType, IShotStrategy>()
+    public Dictionary<ElementType, IShotStrategy> shotStrategies = new Dictionary<ElementType, IShotStrategy>()
     {
         { ElementType.Normal, new NormalStrategy() },
         { ElementType.Fire, new HomingShot() },
@@ -28,7 +28,7 @@ public class ShotAttack : IAttack
         {
             shotStrategies[enemy.ElementType].Shot(enemy, enemy.GetTarget());
             enemy.attackInterval = 0f;
-        }
+        }        
     }
 
     private void Shot(Enemy enemy, GameObject target)

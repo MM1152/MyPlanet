@@ -15,8 +15,17 @@ public class BaseDie
 
     public virtual void Die(Enemy enemy)
     {        
+        if (enemy.isKilledByPlayer)
+        {
+            var exp = Managers.ObjectPoolManager.SpawnObject<Exp>(PoolsId.Exp);
+            exp.transform.position = enemy.transform.position;
+            exp.exp = enemy.enemyData.EXP;
+        }       
         enemy.WaveManager.totalEnemyCount--;    
         enemy.WaveManager.waveClearCount--;        
         Managers.ObjectPoolManager.Despawn(PoolsId.Enemy, enemy.gameObject);
     }
+
+    public virtual void SetBonusCount(int count) {}   
+    public virtual void ResetCount() {} 
 }

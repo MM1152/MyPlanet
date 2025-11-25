@@ -7,17 +7,17 @@ public enum AbilityType
     OnUpdate = 1,
 }
 
-public abstract class BaseAbility
+public class BaseAbility
 {
     protected Enemy enemy;
     public virtual AbilityType abilityType { get; }
     public virtual bool isActive { get; set; }
 
-    public void SetEnemy(Enemy enemy)
+    public virtual void SetEnemy(Enemy enemy)
     {
         this.enemy = enemy;
     }   
 
-    public virtual int OnDamage(int damage) { return damage; }
-    public virtual void OnUpdate(float deltaTime) { }
+    public virtual int OnDamage(int damage) { return damage; }  
+    public virtual void OnUpdate() { }   
 }
