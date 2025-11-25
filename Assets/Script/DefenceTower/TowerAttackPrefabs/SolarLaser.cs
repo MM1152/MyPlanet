@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class SolarLaser : BaseAttackPrefab
@@ -69,7 +67,7 @@ public class SolarLaser : BaseAttackPrefab
             var find = collision.GetComponent<IDamageAble>();
 
             var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
-            find.OnDamage((int)(tower.FullDamage * percent));
+            find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
             basePlanet.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
         }
        

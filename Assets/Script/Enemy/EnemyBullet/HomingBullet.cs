@@ -1,7 +1,5 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Unity.VisualScripting;
-using Unity.Android.Gradle.Manifest;
 
 public class HomingBullet : EnemyProjectileSimple
 {

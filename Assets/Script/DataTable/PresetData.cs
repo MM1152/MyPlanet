@@ -49,6 +49,7 @@ public class PresetData
     public async UniTask<(bool sucess , string msg)> LoadAsync()
     {
         await UniTask.WaitUntil(() => FirebaseManager.Instance.UserData != null);
+        await UniTask.WaitUntil(() => FirebaseManager.Instance.UserId != string.Empty);
 
         var path = DataBasePaths.PresetPath + FirebaseManager.Instance.UserId + "/";
         var result = await FirebaseManager.Instance.Database.GetDatas<Data>(path);
@@ -70,6 +71,7 @@ public class PresetData
                 presetDatas.Add(data);
             }
             Init = true;
+            Debug.Log("프리셋 데이터 로드 완료");
             return (true, "프리셋 데이터 로드 완료");
         }
         else

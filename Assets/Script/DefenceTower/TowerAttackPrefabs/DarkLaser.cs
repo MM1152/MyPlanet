@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEditor.FilePathAttribute;
 
 public class DarkLaser : BaseAttackPrefab
 {
@@ -68,7 +67,7 @@ public class DarkLaser : BaseAttackPrefab
             if (find != null)
             {
                 var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
-                find.OnDamage((int)(tower.FullDamage * percent));
+                find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
                 basePlanet.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
             }
         }

@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 
 public abstract class Tower
 {
-    public int FullDamage => towerData.ATK + BonusDamage;
+    public int FullDamage => towerData.ATK + BonusDamage ;
     public int BaseDamage => towerData.ATK;
 
     public float FullAttackSpeed => towerData.Fire_Rate + BonusAttackSpeed;
@@ -16,6 +16,9 @@ public abstract class Tower
 
     public float FullNoise => noise + BonuseNoise;
 
+    public int CalcurateAttackDamage => (int)((FullDamage + planetData.ATK * 0.1f) * (1 + BonusDamagePercent));
+
+    public float BonusDamagePercent { get; set; }
     public float BonusAttackSpeed { get; set; }
     public int BonusDamage { get; set; }
     public int BonusProjectileCount { get; set; }
@@ -65,6 +68,7 @@ public abstract class Tower
     public IStatusEffect StatusEffect => statusEffect;
     public RandomOptionBase Option => baseRandomOption;
 
+    private PlanetTable.Data planetData;
     protected GameObject projectTile;
     protected GameObject tower;
 
@@ -99,6 +103,7 @@ public abstract class Tower
         this.towerData = data;
         this.tower = tower;
         this.slotIndex = slotIndex;
+        planetData = DataTableManager.PlanetTable.Get(FirebaseManager.Instance.PresetData.GetGameData().PlanetId);
 
         typeEffectiveness.Init((ElementType)this.towerData.Attribute);
         SetRandomOption();
@@ -258,12 +263,12 @@ public abstract class Tower
 
     public void AddBonusDamageToPercent(float percent)
     {
-        BonusDamage += (int)(BaseDamage * percent);
+        BonusDamagePercent += percent;
     }
 
     public void MinusBonusDamageToPercent(float percent)
     {
-        BonusDamage -= (int)(BaseDamage * percent);
+        BonusDamagePercent -= percent;
     }
 
     /// <summary>

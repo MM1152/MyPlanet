@@ -10,9 +10,12 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public ElementType ElementType => elementType;
     public StatusEffect StatusEffect => statusEffect;
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
+
     public int BonusDEF => bonusDEF;
     public int FullDEF => planetData.DEF + bonusDEF;
     public int FullHp => hp + shield;
+    public int ATK => planetData.ATK;
+
     private StatusEffect statusEffect = new StatusEffect();
     private TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
     private PassiveSystem passiveSystem = new PassiveSystem();
