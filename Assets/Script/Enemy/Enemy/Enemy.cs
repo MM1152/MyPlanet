@@ -187,7 +187,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             damage = ability.OnDamage(damage);
         }
 
-        if (damage <= 0) return;
+        if (damage <= 0) damage = 1;
 
         currentHP -= damage;
 

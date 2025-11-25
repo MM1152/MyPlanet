@@ -126,6 +126,10 @@ public class TitleTowerPlaceEditWindow : Window
             towerInfos.Add(towerInfo);
 
             int curIdx = ContainPresetList(towerList[i].ID);
+            if (curIdx != -1 && planetData.openSlot[curIdx - 1] == -1)
+            {
+                curIdx = -1;
+            }
             showIndexPanel.Init(towerInfo);
             showIndexPanel.UpdatePlace(curIdx);
 
@@ -200,6 +204,10 @@ public class TitleTowerPlaceEditWindow : Window
             placeHolds.Add(placeHold);
 
             var towerData = DataTableManager.TowerTable.Get(presetData.TowerId[i]);
+            if (planetData.openSlot[i] == -1)
+            {
+                towerData = null;
+            }
             placeHold.PlaceTower(towerData);
 
             int idx = i;
