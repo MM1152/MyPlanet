@@ -9,7 +9,8 @@ public class TitleMainWindow : Window
     [SerializeField] private Button logoutButton;
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI userNickNameText;
-    
+    [SerializeField] private TextMeshProUGUI userGold;
+
     public override void Close()
     {
         base.Close();
@@ -22,6 +23,7 @@ public class TitleMainWindow : Window
 
         selectStageButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
         userNickNameText.text = FirebaseManager.Instance.UserData.nickName;
+        userGold.text = FirebaseManager.Instance.UserData.gold.ToString();
         logoutButton.onClick.AddListener(() =>
         {
             FirebaseManager.Instance.Logout();

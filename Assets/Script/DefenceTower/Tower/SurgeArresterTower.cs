@@ -10,6 +10,8 @@ public class SurgeArresterTower : Tower
 
     public override void Update(float deltaTime)
     {
+        if (!UseAble) return;
+
         timer += deltaTime;
         if(timer >= BonusCoolTime + BonusDuration)
         {

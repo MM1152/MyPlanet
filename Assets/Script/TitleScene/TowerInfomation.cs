@@ -21,6 +21,10 @@ public class TowerInfomation : MonoBehaviour
         data = DataTableManager.TowerTable.Get(towerId);
         towerNameText.text = data.Name; 
         towerTypeText.text= data.AttackType;
+        typeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable , data.Type);
+        effectiveImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable , data.Attribute);
+        effectiveImage.color = Color.black;
+        typeImage.color = Color.black;
     }
 
     public TowerTable.Data GetTowerData()

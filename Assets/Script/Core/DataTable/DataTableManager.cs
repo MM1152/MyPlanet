@@ -18,6 +18,7 @@ public static class DataTableManager
     public static PassiveTable PassiveTable => Get<PassiveTable>(DataTableIds.PassiveTable);
     public static EffectTable EffectTable => Get<EffectTable>(DataTableIds.EffectTable);
     public static LevelUpTable LevelUpTable => Get<LevelUpTable>(DataTableIds.LevelUpTable);
+    public static SpriteTable SpriteTable => Get<SpriteTable>("SpriteTable");
 
     static DataTableManager()
     {
@@ -36,6 +37,7 @@ public static class DataTableManager
         var skillTable = new PassiveTable();
         var effectTable = new EffectTable();
         var levelUpTable = new LevelUpTable();
+        var spriteTable = new SpriteTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -46,7 +48,10 @@ public static class DataTableManager
             stringTable.LoadAsync(DataTableIds.StringTable),
             skillTable.LoadAsync(DataTableIds.PassiveTable),
             effectTable.LoadAsync(DataTableIds.EffectTable),
-            levelUpTable.LoadAsync(DataTableIds.LevelUpTable)
+            levelUpTable.LoadAsync(DataTableIds.LevelUpTable),
+            spriteTable.LoadAsync(DataTableIds.TypeSpriteTable),
+            spriteTable.LoadAsync(DataTableIds.AttackTypeSpriteTable),
+            spriteTable.LoadAsync(DataTableIds.ElementSpriteTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);
@@ -54,6 +59,10 @@ public static class DataTableManager
 
         foreach (var data in datas)
         {
+            if(tables.ContainsKey(data.id))
+            {
+                continue;
+            }
             tables.Add(data.id, data.table);            
         }
         

@@ -18,6 +18,8 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     private PassiveSystem passiveSystem = new PassiveSystem();
     public PassiveSystem PassiveSystem => passiveSystem;
     private PlanetTable.Data planetData;
+    public PlanetTable.Data PlanetData => planetData;
+
     private bool isDead = false;
 
     private int bonusDEF = 0;
