@@ -5,8 +5,7 @@ public class MoveManager
 {
   private Dictionary<int, IMove> moveTable = new Dictionary<int, IMove>()
     {        
-        { 0, new SimpleMove() },        
-        { 2026, new UpDownMove() }, 
+        { 0, new SimpleMove() },                
         { 3026, new UpDownMove() },
         { 4026, new LeftRinghMove() },
         { 5026, new LeftRinghMove() },

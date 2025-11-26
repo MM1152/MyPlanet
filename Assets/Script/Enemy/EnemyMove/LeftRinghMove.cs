@@ -14,9 +14,7 @@ public class LeftRinghMove : IMove
 
     private Vector2 leftPoint;
 
-    private Vector2 rightPoint;
-
-    private bool startcenter = false;
+    private Vector2 rightPoint;    
 
     private Collider2D enemyCollider;
 
@@ -70,8 +68,7 @@ public class LeftRinghMove : IMove
         enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, targetPos, step);
         if(Vector2.Distance(enemy.transform.position, targetPos) < 0.1f)
         {
-            RotateTowardsTarget(enemy); 
-            enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
+            RotateTowardsTarget(enemy);             
             isMovingRight = !isMovingRight;
             return;
         }

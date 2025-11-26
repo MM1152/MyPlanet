@@ -1,7 +1,6 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Unity.VisualScripting;
-using Unity.Android.Gradle.Manifest;
+
 
 public class HomingBullet : EnemyProjectileSimple
 {
@@ -9,7 +8,7 @@ public class HomingBullet : EnemyProjectileSimple
 
     public override void Init(Enemy data, TypeEffectiveness typeEffectiveness)
     {
-        base.Init(data, typeEffectiveness);
+        base.Init(data, typeEffectiveness);  
         poolsId = PoolsId.HomingBullet;
         isWaiting = true;
 

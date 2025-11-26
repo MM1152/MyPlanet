@@ -28,12 +28,12 @@ public class LaserShot : IShotStrategy
 
     public void laserUpdate(Enemy enemy, GameObject target)
     {
-        if (target == null || target.transform == null)return;
-        
+        if (target == null || target.transform == null) return;
+        Debug.Log("Laser Update");
 
         if (!isInitialized)
         {
-            lineRenderer = enemy.GetComponent<LineRenderer>();
+            lineRenderer = enemy.enemyLineRenderer;
             lineRenderer.enabled = true;
             lineRenderer.startWidth = enemy.transform.localScale.y * 0.3f;
             lineRenderer.endWidth = enemy.transform.localScale.y * 0.3f;
@@ -55,12 +55,12 @@ public class LaserShot : IShotStrategy
 
     public void LaserReset()
     {
-         if (lineRenderer != null)
-            {
-                lineRenderer.enabled = false;
-                lineRenderer.positionCount = 0;
-            }
-            isInitialized = false;
+        if (lineRenderer != null)
+        {
+            lineRenderer.enabled = false;
+            lineRenderer.positionCount = 0;
+        }
+        isInitialized = false;
     }
 }
 

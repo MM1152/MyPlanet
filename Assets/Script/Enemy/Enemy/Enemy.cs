@@ -74,8 +74,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public Action ReturnMoveAction;
 
-    private static readonly HashSet<int> BossIDs = new HashSet<int> { 3026, 4026, 5026, 6026, 7026};
+    private static readonly HashSet<int> BossIDs = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
     public bool isBoss => BossIDs.Contains(enemyData.ID);
+
+    public LineRenderer enemyLineRenderer;
 
     private void Awake()
     {
@@ -89,6 +91,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         abilityManager = new AbilityManager();
         attackManager = new AttackManager();
         moveManager = new MoveManager();
+        enemyLineRenderer = GetComponent<LineRenderer>();
     }
 
     public void Initallized(EnemyData.Data data)
@@ -111,9 +114,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         attack = attackManager.GetAttack(enemyType);
         die = dieManager.GetDie(enemyData.ID);
         ability = abilityManager.GetAbility(enemyData.ID);
-        move = moveManager.GetMove(enemyData.ID);        
+        move = moveManager.GetMove(enemyData.ID);
         zone?.Init(this);
-        ResetActions(); 
+        ResetActions();
         ability?.SetEnemy(this);
 #if DEBUG_MODE
         if (isBoss) this.transform.localScale = new Vector2(1f, 1f);
@@ -190,6 +193,20 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         {
             abilityAction?.Invoke();
             nextInterval = Time.time + abilityInterval;
+        }
+
+        if (move is LeftRinghMove)
+        {            
+            attackInterval += Time.deltaTime;
+            if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval-0.5f))
+            {
+                trailShotAttack.ShotLineDraw(this, target);
+            }
+
+            if (attackInterval >= fireInterval)
+            {
+                attack.Attack(this);
+            }
         }
     }
 
