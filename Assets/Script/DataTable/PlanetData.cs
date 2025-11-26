@@ -15,6 +15,7 @@ public class PlanetData
         public int id;
         public int level;
         public int count;
+        public int star;
         // -1 : 닫혀있음 , 0 : 열려있음
         public List<int> openSlot;
         public Data(int id)
@@ -22,6 +23,7 @@ public class PlanetData
             this.id = id;
             level = 0;
             count = 0;
+            star = 0;
             openSlot = new List<int>();
             var grade = DataTableManager.PlanetTable.Get(id).grade;
             var cnt = 0;

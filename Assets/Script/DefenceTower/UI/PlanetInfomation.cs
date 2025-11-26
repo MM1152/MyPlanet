@@ -5,9 +5,15 @@ using UnityEngine.UI;
 
 public class PlanetInfomation : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI planetNameText;
-    [SerializeField] private TextMeshProUGUI planetGradeText;
+    [Header("Texts")]
     [SerializeField] private TextMeshProUGUI planetTypeText;
+    [SerializeField] private TextMeshProUGUI planetGradeText;
+    [SerializeField] private TextMeshProUGUI planetLevelText;
+    [SerializeField] private TextMeshProUGUI planetNameText;
+
+    [Header("Image")]
+    [SerializeField] private Image planetElemetImage;
+    [SerializeField] private Image[] starImages;
 
     private Outline outline;
     private PlanetTable.Data data;
@@ -29,7 +35,8 @@ public class PlanetInfomation : MonoBehaviour
         this.data = data;
         planetNameText.text = data.Name;
         planetGradeText.text = data.grade;
-        planetTypeText.text = data.PlanetType;
+        planetElemetImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, data.Attribute);
+        planetTypeText.text = data.AttributeType;
     }
 
     public PlanetTable.Data GetData()

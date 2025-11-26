@@ -15,6 +15,8 @@ public enum WindowIds
     TitleTowerPlaceEditWindow = 5,
     TitleSelectPlanetWindow = 6,
     DebugTowerPlaceWIndow = 7,
+    TitleBookWindow = 8,
+    TitleBookInfomationWindow = 9,
 }
 
 public enum PopupIds
@@ -172,6 +174,8 @@ public static class DataTableIds
     public static readonly string TypeSpriteTable = "TypeSpriteTable";
     public static readonly string ElementSpriteTable = "ElementSpriteTable";
     public static readonly string AttackTypeSpriteTable = "AttackTypeSpriteTable";
+    public static readonly string OptionTable = "OptionTable";
+    public static readonly string PlanetLevelUpTable = "PlanetLevelUpTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

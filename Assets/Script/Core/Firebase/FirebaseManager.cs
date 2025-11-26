@@ -139,11 +139,13 @@ public class UserData : JsonSerialized
 {
     public string nickName;
     public int gold;
+    public int exp;
     public int version;
     public UserData()
     {
         nickName = "NoName-" + UnityEngine.Random.Range(10000, 50000);
         gold = 0;
+        exp = 0;
         version = FirebaseManager.Instance.Version;
     }
 }
