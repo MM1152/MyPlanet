@@ -24,8 +24,8 @@ public class EnemySpawnManager : MonoBehaviour
 
         init = true;
 #if DEBUG_MODE
-        testButton.gameObject.SetActive(true);
-        testButton.onClick.AddListener(() => SpawnEnemy(1));
+        testButton?.gameObject.SetActive(true);
+        testButton?.onClick.AddListener(() => SpawnEnemy(1));
 #endif
     }
     private void Awake()

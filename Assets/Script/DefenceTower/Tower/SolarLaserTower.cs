@@ -50,4 +50,22 @@ public class SolarLaserTower : Tower
             solarLaser[i].UpgradeLaser();
         }
     }
+
+    public override void PlaceTower()
+    {
+        base.PlaceTower();
+        for(int i = 0; i < solarLaser.Count; i++) 
+        {
+            solarLaser[i].UpgradeLaser();
+        }
+    }
+
+    public override void UnPlaceTower()
+    {
+        base.UnPlaceTower();
+        for(int i = 0; i < solarLaser.Count; i++) 
+        {
+            solarLaser[i].UpgradeLaser();
+        }
+    }
 }

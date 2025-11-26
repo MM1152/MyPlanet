@@ -57,6 +57,7 @@ public class PlanetData
     public async UniTask LoadAllDataAsync()
     {
         await UniTask.WaitUntil(() => FirebaseManager.Instance.UserData != null);
+        await UniTask.WaitUntil(() => FirebaseManager.Instance.UserId != string.Empty);
 
         var path = DataBasePaths.PlentPath + FirebaseManager.Instance.UserId + "/";
         var success = await FirebaseManager.Instance.Database.GetDatas<Data>(path);
@@ -86,6 +87,7 @@ public class PlanetData
                     planetsTable[success.data[i].id] = success.data[i];
                 }
             }
+            Debug.Log("Load Planet Data sussess");
         }
         else
         {

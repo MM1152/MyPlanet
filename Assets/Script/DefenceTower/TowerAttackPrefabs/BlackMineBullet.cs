@@ -64,7 +64,7 @@ public class BlackMineBullet : Bullet
                     collision.transform.position += dir * gravityScale * Time.deltaTime;
 
                     var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
-                    find.OnDamage((int)(tower.FullDamage * percent));
+                    find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
                 }
                
             }

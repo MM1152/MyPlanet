@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Variable.IsJoyStickActive = true;
         lobbyButton.onClick.AddListener(() =>
         {
             LoadingScene.sceneId = SceneIds.TitleScene;

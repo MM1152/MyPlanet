@@ -37,8 +37,7 @@ public class LuminaSniperBullet : Bullet
         var find = collision.GetComponent<IDamageAble>();
         if (find != null) {
             float percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
-            float damage = tower.FullDamage * percent;
-            find.OnDamage((int)damage);
+            find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
         }
 
         if(hominCount > 0)
