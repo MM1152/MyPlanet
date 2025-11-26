@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public Action ReturnMoveAction;
 
-    private static readonly HashSet<int> BossIDs = new HashSet<int> { 3026, 4026, 5026, 6026, 7026, 8026 };
+    private static readonly HashSet<int> BossIDs = new HashSet<int> { 3026, 4026, 5026, 6026, 7026};
     public bool isBoss => BossIDs.Contains(enemyData.ID);
 
     private void Awake()

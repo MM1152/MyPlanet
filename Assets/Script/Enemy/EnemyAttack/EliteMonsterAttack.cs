@@ -9,9 +9,9 @@ public class EliteMonsterAttack : BaseShotAttack
     {
         { ElementType.Normal, new NormalStrategy() },
         { ElementType.Fire, new HomingShot() },
-        { ElementType.Steel, new NormalStrategy() },
         { ElementType.Ice, new SpreadShot() },
-        { ElementType.Light, new LaserShot() },
+        { ElementType.Steel, new NormalStrategy() },
+        { ElementType.Light, new NormalStrategy() },
         { ElementType.Dark, new NormalStrategy() },
     };
     }
