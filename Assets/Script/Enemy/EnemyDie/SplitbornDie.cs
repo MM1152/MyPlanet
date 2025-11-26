@@ -11,7 +11,7 @@ public class SplitbornDie : BaseDie
         if (enemy.currentHP <= 0 && active)
         {
             var waveManager = enemy.WaveManager;
-            var enemySpawnManager = waveManager.EnemySpawnManager;
+            var enemySpawnManager = enemy.enemySpawnManager;
 
             var spawnEnemys = enemySpawnManager.SpawnEnemy(enemy.enemyData.ID, spawnCount);
             foreach (var spawnEnemy in spawnEnemys)
@@ -19,8 +19,11 @@ public class SplitbornDie : BaseDie
                 var offset = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f));
                 spawnEnemy.transform.position = enemy.transform.position + offset;
                 spawnEnemy.die.active = false;                
-                waveManager.totalEnemyCount++;
-                waveManager.waveClearCount++;
+                if(waveManager != null)
+                {
+                    waveManager.totalEnemyCount++;
+                    waveManager.waveClearCount++;
+                }
             }
             active = false;            
         }

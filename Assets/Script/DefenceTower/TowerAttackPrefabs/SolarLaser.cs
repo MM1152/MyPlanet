@@ -27,6 +27,14 @@ public class SolarLaser : BaseAttackPrefab
 
     public void UpgradeLaser()
     {
+        if(!tower.UseAble)
+        {
+            gameObject.SetActive(false);
+        }else
+        {
+            gameObject.SetActive(true);
+        }
+
         gameObject.transform.localScale = new Vector2(tower.BonusWidthSize * baseScale.x, tower.BonusAttackRange * baseScale.y);
     }
 
@@ -47,6 +55,7 @@ public class SolarLaser : BaseAttackPrefab
 
     private void Update()
     {
+        if (!tower.UseAble) return;
         //transform.eulerAngles += Vector3.forward * rotationSpeed * Time.deltaTime;
         transform.eulerAngles += Vector3.forward * rotationSpeed * Time.deltaTime;
         var angle = transform.eulerAngles.z + 90f;

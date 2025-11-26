@@ -16,11 +16,11 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public int FullHp => hp + shield;
     public int ATK => planetData.ATK;
 
-    private StatusEffect statusEffect = new StatusEffect();
-    private TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
-    private PassiveSystem passiveSystem = new PassiveSystem();
+    protected StatusEffect statusEffect = new StatusEffect();
+    protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
+    protected PassiveSystem passiveSystem = new PassiveSystem();
     public PassiveSystem PassiveSystem => passiveSystem;
-    private PlanetTable.Data planetData;
+    protected PlanetTable.Data planetData;
     public PlanetTable.Data PlanetData => planetData;
 
     private bool isDead = false;
@@ -30,7 +30,6 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     [Header("On Reference In inspector")]
     [SerializeField] private SliderValue hpSlider;
-    [SerializeField] private TowerManager towerManager;
     [SerializeField] private SliderValue shieldSlider;
     
     [Header("Test Datas")]
@@ -40,12 +39,12 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public int shield;
     private TextSpawnManager textSpawnManager;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>(); 
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         Init();
         OnChanageHP();
@@ -89,7 +88,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
             }
         }
         hp -= damage;
-        textSpawnManager.SpawnTextUI(damage.ToString(), transform.position).SetColor(Color.yellow);
+        textSpawnManager?.SpawnTextUI(damage.ToString(), transform.position).SetColor(Color.yellow);
         OnChanageHP();
         if (hp <= 0 && !isDead)
         {
@@ -136,8 +135,8 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     public void OnChanageHP()
     {
-        hpSlider.UpdateSlider(hp, maxHp, FullHp / maxHp * 100, FullHp, maxHp);
-        shieldSlider.UpdateSlider(shield, maxHp, "" , "");
+        hpSlider?.UpdateSlider(hp, maxHp, FullHp / maxHp * 100, FullHp, maxHp);
+        shieldSlider?.UpdateSlider(shield, maxHp, "" , "");
     }
 
     public void AddBonusDFSPercent(float percent , float duration)

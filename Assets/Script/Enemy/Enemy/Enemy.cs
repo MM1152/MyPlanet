@@ -50,6 +50,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public IAttack attack;
     public BaseDie die;
     public BaseAbility ability;
+    public EnemySpawnManager enemySpawnManager;
 
     public float TestRangeRadius;
 
@@ -70,8 +71,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         stateMachine = new StateMachine(this);
         spriteRenderer = GetComponent<SpriteRenderer>();
-        waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag).GetComponent<WaveManager>();
-        textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>();
+        waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag)?.GetComponent<WaveManager>();
+        textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag)?.GetComponent<TextSpawnManager>();
+        enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag)?.GetComponent<EnemySpawnManager>();
         zone = GetComponentInChildren<ZoneSearch>();
         typeEffectiveness = new TypeEffectiveness();
         dieManager = new DieManager();

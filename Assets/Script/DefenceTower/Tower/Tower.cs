@@ -96,6 +96,11 @@ public abstract class Tower
     protected IStatusEffect statusEffect;
     protected int slotIndex = -1;
 
+    public void SetPlanetData(PlanetTable.Data planetData)
+    {
+        this.planetData = planetData;
+    }
+
     public virtual void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
     {
         statusEffect = null;
@@ -103,10 +108,20 @@ public abstract class Tower
         this.towerData = data;
         this.tower = tower;
         this.slotIndex = slotIndex;
-        planetData = DataTableManager.PlanetTable.Get(FirebaseManager.Instance.PresetData.GetGameData().PlanetId);
-
-        typeEffectiveness.Init((ElementType)this.towerData.Attribute);
-        SetRandomOption();
+        try
+        {
+            var gameData = FirebaseManager.Instance.PresetData.GetGameData();
+            if(gameData != null)
+            {
+                var planetId = gameData.PlanetId;
+                this.planetData = DataTableManager.PlanetTable.Get(planetId);
+            }
+        }
+        finally
+        {
+            typeEffectiveness.Init((ElementType)this.towerData.Attribute);
+            SetRandomOption();
+        }
     }
 
     private void SetRandomOption()
@@ -159,8 +174,8 @@ public abstract class Tower
             currentAttackInterval = 0;
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
-            attackPrefabs.transform.position = tower.transform.position;
             attackPrefabs.Init(this);
+            attackPrefabs.transform.position = tower.transform.position;
             if (target != null)
                 attackPrefabs.SetTarget(target , FullNoise);
             return true;
@@ -290,10 +305,16 @@ public abstract class Tower
         bonusAttackSpeed -= BaseAttackSpeed * percent;
     }
 
-    public void PlaceTower()
+    public virtual void PlaceTower()
     {
         useAble = true;
         baseRandomOption.SetRandomOption();
+    }
+
+    public virtual void UnPlaceTower()
+    {
+        useAble = false;
+        baseRandomOption.ResetRandomOption();
     }
 
     public ElementType GetElementType()

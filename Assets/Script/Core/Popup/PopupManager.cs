@@ -17,6 +17,7 @@ public class PopupManager : MonoBehaviour
     {
         foreach (var popup in popups)
         {
+            Debug.Log(popup.PoopupId);
             popupTable.Add(popup.PoopupId, popup);
             popup.Init(this);
             popup.ForcingClose();
