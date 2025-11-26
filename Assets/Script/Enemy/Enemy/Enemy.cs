@@ -46,6 +46,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public float bulletSpeed => enemyData.Bullet_Speed;
     public float fireInterval => 60f / enemyData.Fire_Rate;
     public float attackInterval;
+    private float abilityInterval = 1f;
+    private float nextInterval = 0f;
     public int currentHP;
     public event Action<Enemy> OnDie;
     private AttackManager attackManager;
@@ -109,19 +111,22 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         attack = attackManager.GetAttack(enemyType);
         die = dieManager.GetDie(enemyData.ID);
         ability = abilityManager.GetAbility(enemyData.ID);
-        move = moveManager.GetMove(enemyData.ID);
-        move.Init(this);    
+        move = moveManager.GetMove(enemyData.ID);        
         zone?.Init(this);
-        ResetActions();
-        ability?.SetEnemy(this);   
+        ResetActions(); 
+        ability?.SetEnemy(this);
+#if DEBUG_MODE
+        if (isBoss) this.transform.localScale = new Vector2(1f, 1f);
+#endif
         ReturnMoveAction = () =>
         {
-            if (!IsDead&&enemyType == EnemyType.EliteMonster)
+            if (!IsDead && enemyType == EnemyType.EliteMonster)
             {
                 stateMachine.ChangeState(stateMachine.walkState);
             }
-        };     
+        };
     }
+
 
     private void ResetActions()
     {
@@ -181,11 +186,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         stateMachine.currentState.Execute();
 
-        attackInterval += Time.deltaTime;
-        if (ability != null && ability.abilityType == AbilityType.OnUpdate && abilityAction != null && attackInterval >= fireInterval)
+        if (ability != null && ability.abilityType == AbilityType.OnUpdate && abilityAction != null && Time.time >= nextInterval)
         {
             abilityAction?.Invoke();
-            attackInterval = 0f;
+            nextInterval = Time.time + abilityInterval;
         }
     }
 
@@ -239,7 +243,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public void OnDead()
     {
         IsDead = true;
-        ReturnMoveAction = null;    
+        ReturnMoveAction = null;
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();

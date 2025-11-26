@@ -240,6 +240,7 @@ public class WaveManager : MonoBehaviour
                     {
                         var offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
                         enemy.transform.position = spawnPoint.position + offset;
+                        enemy.move.Init(enemy);
                     }
                     spawnPoint.timer = 0f;
                 }

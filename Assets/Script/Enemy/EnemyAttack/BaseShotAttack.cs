@@ -19,6 +19,7 @@ public abstract class BaseShotAttack : IAttack
         {
             GetShotStrategy(enemy.ElementType).Shot(enemy, enemy.GetTarget());
             enemy.attackInterval = 0f;
+            enemy.ReturnMoveAction?.Invoke();
         }
     }
     public IShotStrategy GetShotStrategy(ElementType elementType)

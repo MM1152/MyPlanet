@@ -6,8 +6,9 @@ public class MoveManager
   private Dictionary<int, IMove> moveTable = new Dictionary<int, IMove>()
     {
         { 0, new SimpleMove() },
-        { 3026, new LeftRinghMove() },
+        { 1, new LeftRinghMove() },
         { 2, new UpDownMove() },
+        { 3026, new CornerWrapMove() },
     };
 
     public IMove GetMove(int Id)

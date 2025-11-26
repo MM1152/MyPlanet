@@ -3,6 +3,14 @@ using Cysharp.Threading.Tasks.Triggers;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum UpDownPattern
+{
+    ToAttackPoint,
+    Attacking,
+    ReturnPoint,
+    Waiting,
+}
+
 public class UpDownMove : IMove
 {
     private Rect screenBounds;
@@ -24,13 +32,13 @@ public class UpDownMove : IMove
 
     private bool isMovingUp = false;
 
-    private EnemyMovePattern currentPattern;
+    private UpDownPattern currentPattern;
     public void Init(Enemy enemy)
     {
         screenBounds = enemy.WaveManager.ScreenBounds;
         enemyCollider = enemy.GetComponent<Collider2D>();
         enemyBounds = enemyCollider.bounds;
-        currentPattern = EnemyMovePattern.ToAttackPoint;
+        currentPattern = UpDownPattern.ToAttackPoint;
         target = enemy.GetTarget();
 
         var upCenterY = (target.transform.position.y + screenBounds.yMax) / 2;
@@ -42,23 +50,28 @@ public class UpDownMove : IMove
         isMovingUp = enemy.transform.position.y > upAttackPos.y ? true : false;
     }
 
+    public void PositionSet(Enemy enemy)
+    {
+        enemy.transform.position = isMovingUp ? upPoint : downPoint;
+        currentPattern = UpDownPattern.ToAttackPoint;
+    }
+
     public void Move(Enemy enemy)
     {
         float step = enemy.speed * Time.deltaTime;
-
-        Debug.Log($"현재 패턴: {currentPattern}, 위치: {enemy.transform.position}, 목표위치: {(isMovingUp ? upAttackPos : downAttackPos)}");
+     
         switch (currentPattern)
         {
-            case EnemyMovePattern.ToAttackPoint:
+            case UpDownPattern.ToAttackPoint:
                 MoveToAttackPoint(enemy, step);
                 break;
-            case EnemyMovePattern.Attacking:
+            case UpDownPattern.Attacking:
                 SwitchAttack(enemy);
                 break;
-            case EnemyMovePattern.ReturnPoint:
+            case UpDownPattern.ReturnPoint:
                 MoveReturnPoint(enemy, step);
                 break;
-            case EnemyMovePattern.Waiting:
+            case UpDownPattern.Waiting:
                 WaitAtPoint();
                 break;
         }
@@ -77,7 +90,7 @@ public class UpDownMove : IMove
     {
         RotateTowardsTarget(enemy);
         enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
-        currentPattern = EnemyMovePattern.ReturnPoint;
+        currentPattern = UpDownPattern.ReturnPoint;
     }
 
     private void MoveToAttackPoint(Enemy enemy, float step)
@@ -86,7 +99,7 @@ public class UpDownMove : IMove
         enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, targetPos, step);
         if (Vector2.Distance(enemy.transform.position, targetPos) < 0.1f)
         {
-            currentPattern = EnemyMovePattern.Attacking;
+            currentPattern = UpDownPattern.Attacking;
             return;
         }
     }
@@ -100,7 +113,7 @@ public class UpDownMove : IMove
             delayTime = 3f;
             isMovingUp = !isMovingUp;
             enemy.transform.position = isMovingUp ? upPoint : downPoint;
-            currentPattern = EnemyMovePattern.Waiting;
+            currentPattern = UpDownPattern.Waiting;
             return;
         }
     }
@@ -110,7 +123,7 @@ public class UpDownMove : IMove
         delayTime -= Time.deltaTime;
         if (delayTime <= 0f)
         {
-            currentPattern = EnemyMovePattern.ToAttackPoint;
+            currentPattern = UpDownPattern.ToAttackPoint;
             return;
         }
     }
