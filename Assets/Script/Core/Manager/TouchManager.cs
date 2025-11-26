@@ -54,7 +54,7 @@ public class TouchManager : MonoBehaviour
 
     private void Update()
     {
-        if(isPressed && touchTypes != TouchTypes.NoTab && touchTypes != TouchTypes.Drag)
+        if(isPressed && Vector2.Distance(startTouchPosition, endTouchPosition) < notTabToDragDistance)
         {
             if(Time.unscaledTime - startTouchTime > longTabTime)
             {
@@ -67,16 +67,13 @@ public class TouchManager : MonoBehaviour
     {
         endTouchPosition = context.ReadValue<Vector2>();
         var distance = Vector2.Distance(startTouchPosition, endTouchPosition);
-        Debug.Log("Distance: " + distance);
 
         if (distance > notTabToDragDistance)
         {
             touchTypes = TouchTypes.NoTab;
-            Debug.Log("NoTab");
             if (distance > dragDistance)
             {
                 touchTypes = TouchTypes.Drag;
-                Debug.Log("Drag");
             }
         }
     }
@@ -93,7 +90,6 @@ public class TouchManager : MonoBehaviour
     {
         if (touchTypes == TouchTypes.NoTab || touchTypes == TouchTypes.Drag) return;
 
-        Debug.Log("Touch End");
 
         if (Time.unscaledTime - startTouchTime > longTabTime)
         {

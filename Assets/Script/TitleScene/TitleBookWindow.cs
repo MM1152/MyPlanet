@@ -3,9 +3,15 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro.EditorUtilities;
 using NUnit.Framework.Interfaces;
+using TMPro;
 
 public class TitleBookWindow : Window
 {
+    [Header("UserData")]
+    [SerializeField] private TextMeshProUGUI userNickName;
+    [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI expText;
+
     [Header("Buttons")]
     [SerializeField] private Button planetButton;
     [SerializeField] private Button towerButton;
@@ -76,6 +82,11 @@ public class TitleBookWindow : Window
     {
         currentOpenBook = planetBook;
         currentOpenBook.SetActive(true);
+
+        userNickName.text = FirebaseManager.Instance.UserData.nickName;
+        goldText.text = FirebaseManager.Instance.UserData.gold.ToString();
+        expText.text = FirebaseManager.Instance.UserData.exp.ToString();
+
         base.Open();
     }
 

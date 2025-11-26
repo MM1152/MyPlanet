@@ -23,15 +23,15 @@ public class PlanetLevelUpTable : DataTable
         public string gold { get; set; }
 
         [CsvHelper.Configuration.Attributes.Ignore]
-        public int HP => int.Parse(hp.Replace(',', ' '));
+        public int HP => int.Parse(hp.Replace(",", ""));
         [CsvHelper.Configuration.Attributes.Ignore]
-        public int ATK => int.Parse(atk.Replace(',' , ' '));
+        public int ATK => int.Parse(atk.Replace(",", ""));
         [CsvHelper.Configuration.Attributes.Ignore]
-        public int DEF => int.Parse(def.Replace(',', ' '));
+        public int DEF => int.Parse(def.Replace(",", ""));
         [CsvHelper.Configuration.Attributes.Ignore]
-        public int Exp => int.Parse(exp.Replace(',', ' '));
+        public int Exp => int.Parse(exp.Replace(",", ""));
         [CsvHelper.Configuration.Attributes.Ignore]
-        public int Gold => int.Parse(gold.Replace(',', ' '));
+        public int Gold => int.Parse(gold.Replace(",", ""));
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -56,11 +56,19 @@ public class PlanetLevelUpTable : DataTable
 
     public Data GetData((int planetId, int level) id)
     {
+        if (!levelupTable.ContainsKey(id))
+        {
+            return null;
+        }
         return levelupTable[id];
     }
 
     public Data GetData(int planetId , int level)
     {
+        if(!levelupTable.ContainsKey((planetId, level)))
+        {
+            return null;
+        }
         return levelupTable[(planetId, level)];
     }
 }

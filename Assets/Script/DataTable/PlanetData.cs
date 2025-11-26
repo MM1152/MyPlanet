@@ -16,6 +16,8 @@ public class PlanetData
         public int level;
         public int count;
         public int star;
+
+        public bool UseAble => level != 0;
         // -1 : 닫혀있음 , 0 : 열려있음
         public List<int> openSlot;
         public Data(int id)

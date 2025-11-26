@@ -6,9 +6,6 @@ public class TitleBookInfomationWindow : Window
 {
     [Header("Buttons")]
     [SerializeField] private Button exitButton;
-    [SerializeField] private Button infomationButton;
-    [SerializeField] private Button levelUpbutton;
-    [SerializeField] private Button starUpgradeButton;
 
     [SerializeField] private PlanetInfoViewer planetInfoViewer;
     public override void Close()
@@ -33,7 +30,6 @@ public class TitleBookInfomationWindow : Window
     public void UpdatePlanetData(PlanetTable.Data planetTableData)
     {
         planetInfoViewer.UpdatePlanetData(planetTableData);
-        planetInfoViewer.UpdateTexts();
     }
 
 }
