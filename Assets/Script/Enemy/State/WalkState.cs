@@ -10,8 +10,7 @@ public class WalkState : IState
     }
 
     public void Enter()
-    {
-        enemy.move.Init(enemy);
+    {        
     }
 
     public void Execute()

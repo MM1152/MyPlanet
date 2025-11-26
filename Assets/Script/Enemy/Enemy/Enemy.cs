@@ -110,6 +110,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         die = dieManager.GetDie(enemyData.ID);
         ability = abilityManager.GetAbility(enemyData.ID);
         move = moveManager.GetMove(enemyData.ID);
+        move.Init(this);    
         zone?.Init(this);
         ResetActions();
         ability?.SetEnemy(this);   

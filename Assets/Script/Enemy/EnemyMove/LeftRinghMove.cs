@@ -28,7 +28,7 @@ public class LeftRinghMove : IMove
         enemyBounds = enemyCollider.bounds;
         var y = enemy.transform.position.y > 0f ? screenBounds.yMax : screenBounds.yMin;
         var centerY = (enemy.GetTarget().transform.position.y + y) / 2;
-        startPos = new Vector2(enemy.transform.position.x, centerY);             
+        startPos = new Vector2(enemy.transform.position.x, centerY);
         leftPoint = new Vector2(screenBounds.xMin + enemyBounds.extents.x, centerY);
         rightPoint = new Vector2(screenBounds.xMax - enemyBounds.extents.x, centerY);
     }
@@ -42,18 +42,19 @@ public class LeftRinghMove : IMove
             enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, startPos, step);
             if (Vector2.Distance(enemy.transform.position, startPos) < 0.1f)
             {
-                startcenter = true;           
+                startcenter = true;
+                enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
             }
         }
         else
         {
             if (Mathf.Abs(enemy.transform.position.x - leftPoint.x) < 0.1f)
-            {                
+            {
                 isMovingRight = true;
                 enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
             }
             else if (Mathf.Abs(enemy.transform.position.x - rightPoint.x) < 0.1f)
-            {                
+            {
                 isMovingRight = false;
                 enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
             }
@@ -67,9 +68,9 @@ public class LeftRinghMove : IMove
                 {
                     isMovingRight = false;
                 }
-            }            
+            }
 
-            var targetPos = isMovingRight ? rightPoint : leftPoint;            
+            var targetPos = isMovingRight ? rightPoint : leftPoint;
             enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, targetPos, step);
         }
     }
