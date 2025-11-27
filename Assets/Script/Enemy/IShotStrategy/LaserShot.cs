@@ -29,7 +29,6 @@ public class LaserShot : IShotStrategy
     public void laserUpdate(Enemy enemy, GameObject target)
     {
         if (target == null || target.transform == null) return;
-        Debug.Log("Laser Update");
 
         if (!isInitialized)
         {

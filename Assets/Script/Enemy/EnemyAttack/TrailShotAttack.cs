@@ -41,8 +41,7 @@ public class TrailShotAttack : IShotStrategy
             lineRenderer = enemy.enemyLineRenderer;
             lineRenderer.enabled = true;
             startWidth = 0f;
-            endWidth = enemy.transform.localScale.y * 0.4f;
-            // lineRenderer.material.SetColor("_Color", Color.red);
+            endWidth = enemy.transform.localScale.y * 0.4f;            
             lineRenderer.material.color = Color.red;
             lineRenderer.positionCount = 2;
             isInitialized = true;
@@ -61,8 +60,8 @@ public class TrailShotAttack : IShotStrategy
             lineRenderer.SetPosition(1, offsetPoint);
         }
         growTime += Time.deltaTime;
-        float t = growTime / 0.3f;
-        lineWidth = Mathf.Lerp(startWidth, endWidth, t);
+        float t = growTime / 0.4f;
+        lineWidth = Mathf.Lerp(endWidth, startWidth, t);
         lineRenderer.startWidth = lineWidth;
         lineRenderer.endWidth = lineWidth;
     }

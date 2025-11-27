@@ -104,7 +104,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         attackRange = baseRange;
 #if DEBUG_MODE
         SetColor(enemyData.Attribute);
-#endif
+#endif      
         target = GameObject.FindGameObjectWithTag(TargetTag);
         stateMachine.Init(stateMachine.idleState);
         typeEffectiveness.Init(ElementType);
@@ -196,14 +196,24 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
 
         if (move is LeftRinghMove)
-        {            
+        {
             attackInterval += Time.deltaTime;
-            if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval-0.5f))
+            if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval - 0.4f))
             {
                 trailShotAttack.ShotLineDraw(this, target);
             }
+  
+            if (attack is EliteMonsterAttack rotatingLaserAttack && rotatingLaserAttack.GetShotStrategy(ElementType) is RotatingLaserAttack laserAttack)
+            {
+                if (attackInterval >= laserAttack.rotationInterval)
+                {                  
+                    laserAttack.UpdateLaser(this, target);
+                    laserAttack.Shot(this, target);
 
-            if (attackInterval >= fireInterval)
+                    return;
+                }
+            }
+            else if (attackInterval >= fireInterval)
             {
                 attack.Attack(this);
             }
@@ -260,6 +270,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public void OnDead()
     {
         IsDead = true;
+        this.transform.localScale = new Vector3(0.35f, 0.35f, 1f);    
         ReturnMoveAction = null;
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();

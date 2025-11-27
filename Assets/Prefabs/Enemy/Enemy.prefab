@@ -107,11 +107,13 @@ MonoBehaviour:
   expPrefab: {fileID: 1600504559367190544, guid: 37c23f657c48c3e458fb47d20a195706, type: 3}
   speed: 0
   atk: 0
-  attackrange: 0
+  attackRange: 0
   attackInterval: 0
   currentHP: 0
   TestRangeRadius: 1
+  textSpawnManager: {fileID: 0}
   zone: {fileID: 0}
+  enemyLineRenderer: {fileID: 0}
 --- !u!58 &-8144497166182082810
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -199,7 +201,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -219,7 +221,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
@@ -272,7 +274,7 @@ LineRenderer:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
-    numCapVertices: 0
+    numCapVertices: 10
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}

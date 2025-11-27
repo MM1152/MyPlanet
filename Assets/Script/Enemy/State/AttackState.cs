@@ -40,5 +40,11 @@ public class AttackState : IState
         {
             laserShot.LaserReset();
         }
+
+        if( enemy.attack is EliteMonsterAttack eliteMonsterAttack &&
+        eliteMonsterAttack.GetShotStrategy(enemy.ElementType) is RotatingLaserAttack rotatingLaserAttack)
+        {
+            rotatingLaserAttack.LaserReset(enemy);
+        }       
     }
 }
