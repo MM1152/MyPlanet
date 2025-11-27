@@ -12,9 +12,9 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
 
     public int BonusDEF => bonusDEF;
-    public int FullDEF => planetData.DEF + bonusDEF;
+    public int FullDEF => planetLevelData.DEF + bonusDEF;
     public int FullHp => hp + shield;
-    public int ATK => planetData.ATK;
+    public int ATK => planetLevelData.ATK;
 
     protected StatusEffect statusEffect = new StatusEffect();
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
@@ -22,6 +22,9 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public PassiveSystem PassiveSystem => passiveSystem;
     protected PlanetTable.Data planetData;
     public PlanetTable.Data PlanetData => planetData;
+
+    private PlanetData.Data userPlanetData;
+    private PlanetLevelUpTable.Data planetLevelData;
 
     private bool isDead = false;
 
@@ -53,10 +56,13 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public virtual void Init()
     {
         planetData = DataTableManager.PlanetTable.Get(FirebaseManager.Instance.PresetData.GetGameData().PlanetId);
+        userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
+        planetLevelData = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID, userPlanetData.level);
+
         typeEffectiveness.Init((ElementType)planetData.Attribute);
         passiveSystem.Init(planetData.Skill_ID);
 
-        maxHp = planetData.HP;
+        maxHp = planetLevelData.HP;
         hp = (int)(maxHp);
     }
 
