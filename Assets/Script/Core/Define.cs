@@ -17,6 +17,7 @@ public enum WindowIds
     DebugTowerPlaceWIndow = 7,
     TitleBookWindow = 8,
     TitleBookInfomationWindow = 9,
+    VictoryWindow = 10,
 }
 
 public enum PopupIds

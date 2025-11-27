@@ -34,7 +34,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     [Header("On Reference In inspector")]
     [SerializeField] private SliderValue hpSlider;
     [SerializeField] private SliderValue shieldSlider;
-    
+    [SerializeField] private WaveManager waveManager;
     [Header("Test Datas")]
     public ElementType elementType;
     public int maxHp;
@@ -105,6 +105,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public void OnDead()
     {
         isDead = true;
+        waveManager.EndGame(false);
         Destroy(gameObject);
     }
 
@@ -122,7 +123,6 @@ public class BasePlanet : MonoBehaviour, IDamageAble
                 {
                     bonusDEF -= bonus.value;
                     bonusDEFList.Remove(bonus);
-                    Debug.Log($"비누스 버프 끝 : 강화된 DEF : {FullDEF}");
                 }
                 else
                 {
