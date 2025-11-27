@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 public class Managers
@@ -64,5 +65,12 @@ public class Managers
         loadingProgress.SetActive(false);
 
         return data[0];
+    }
+
+    public async UniTask WaitForLoadingAsync(List<UniTask> task)
+    {
+        loadingProgress.SetActive(true);
+        await UniTask.WhenAll(task);
+        loadingProgress.SetActive(false);
     }
 }   

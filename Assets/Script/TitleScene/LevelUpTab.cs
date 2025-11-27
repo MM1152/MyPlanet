@@ -1,4 +1,8 @@
 using Cysharp.Threading.Tasks;
+using Firebase.Database;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +28,7 @@ public class LevelUpTab : MonoBehaviour
     private void Awake()
     {
         levelUpButton.onClick.AddListener(() => UpgradePlanet().Forget());
+
     }
 
     public void UpdateData(PlanetTable.Data planetData)
@@ -58,9 +63,28 @@ public class LevelUpTab : MonoBehaviour
 
     private async UniTaskVoid UpgradePlanet()
     {
-        var path = DataBasePaths.UserPath + FirebaseManager.Instance.UserId + "/" + "gold";
-        var result = await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.Database.GetDataToValue(path));
+        var goldPath = DataBasePaths.GoldPath;
+        var expPath = DataBasePaths.ExpPath;
 
-        Debug.Log(int.Parse(result.Item1.ToString()));
+        var goldResult = await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.Database.GetDataToValue(goldPath));
+        var expResult = await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.Database.GetDataToValue(expPath));
+
+        var needGold = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID , planetUserData.level + 1).Gold;
+        var needExp = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID , planetUserData.level + 1).Exp;
+
+        var gold = int.Parse(goldResult.Item1.ToString());
+        var exp = int.Parse(expResult.Item1.ToString());
+
+        if (needExp <= exp && needGold <= gold)
+        {
+            List<UniTask> tasks = new List<UniTask>() {
+                FirebaseManager.Instance.PlanetData.LevelUpPlanetAsync(planetData.ID),
+                FirebaseManager.Instance.UserData.UseGoods(needGold , needExp)
+            };
+
+            await Managers.Instance.WaitForLoadingAsync(tasks);
+
+            UpdateText();
+        }
     }
 }

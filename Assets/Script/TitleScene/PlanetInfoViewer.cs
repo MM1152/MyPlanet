@@ -1,3 +1,4 @@
+using Firebase.Database;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,11 +25,17 @@ public class PlanetInfoViewer : MonoBehaviour
 
         levelUpTab.gameObject.SetActive(false);
         infomationTab.gameObject.SetActive(false);
+
     }
 
     public void UpdatePlanetData(PlanetTable.Data planetData)
     {
+        if(this.planetData != null)
+            FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetLevelPathFormating, this.planetData.ID), OnValueChangedLevel);
+
         this.planetData = planetData;
+        FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetLevelPathFormating, planetData.ID), OnValueChangedLevel);
+
         planetUserData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
 
         planetName.text = $"Lv.{planetUserData.level}."+this.planetData.Name;
@@ -63,5 +70,10 @@ public class PlanetInfoViewer : MonoBehaviour
         currentTab = tabObject;
         changeColorBackGround.color = color;
         currentTab.SetActive(true);
+    }
+
+    private void OnValueChangedLevel(object sender , ValueChangedEventArgs args)
+    {
+        planetName.text = string.Format("LV.{0} {1}", args.Snapshot.Value.ToString() , planetData.Name);
     }
 }

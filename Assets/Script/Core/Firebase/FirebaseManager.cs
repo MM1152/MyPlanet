@@ -121,6 +121,11 @@ public class FirebaseManager
         }
     }
 
+    public void Release()
+    {
+        database.Release();
+    }
+
     public void Logout()
     {
         auth.Logout();
@@ -147,6 +152,19 @@ public class UserData : JsonSerialized
         gold = 0;
         exp = 0;
         version = FirebaseManager.Instance.Version;
+    }
+
+    public async UniTask UseGoods(int useGoldAmount , int useExpAmount)
+    {
+        this.gold -= useGoldAmount;
+        this.exp -= useExpAmount;
+
+        await SaveGoodsAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId , this);
+    }
+
+    public async UniTask SaveGoodsAsync(string path , UserData userData)
+    {
+        var success = await FirebaseManager.Instance.Database.OverwriteJsonData<UserData>(path , userData);
     }
 }
 

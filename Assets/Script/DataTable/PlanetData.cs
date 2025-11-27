@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Triggers;
 using System;
 using System.Collections.Generic;
+using UnityEditor.Overlays;
 using UnityEngine;
 //Firebase 저장용 데이터
 public class PlanetData
@@ -63,7 +64,7 @@ public class PlanetData
         await UniTask.WaitUntil(() => FirebaseManager.Instance.UserData != null);
         await UniTask.WaitUntil(() => FirebaseManager.Instance.UserId != string.Empty);
 
-        var path = DataBasePaths.PlentPath + FirebaseManager.Instance.UserId + "/";
+        var path = DataBasePaths.PlanetPath + FirebaseManager.Instance.UserId + "/";
         var success = await FirebaseManager.Instance.Database.GetDatas<Data>(path);
 
         if(success.success)
@@ -106,9 +107,9 @@ public class PlanetData
         init = true;
     }
 
-    public async UniTask SaveAsync(int planetId)
+    private async UniTask SaveAsync(int planetId)
     {
-        var path = DataBasePaths.PlentPath + FirebaseManager.Instance.UserId + $"/{planetId}";
+        var path = DataBasePaths.PlanetPath + FirebaseManager.Instance.UserId + $"/{planetId}";
         var saveData = new Data(planetId);
         var success = await FirebaseManager.Instance.Database.OverwriteJsonData(path, saveData);
 
@@ -135,6 +136,14 @@ public class PlanetData
     public async UniTask WaitForInitalizeAsync()
     {
         await UniTask.WaitUntil(() => init);
+    }
+
+    public async UniTask LevelUpPlanetAsync(int planetId)
+    {
+        var path = DataBasePaths.PlanetPath + FirebaseManager.Instance.UserId + $"/{planetId}";
+        planetsTable[planetId].level++;
+
+        var success = await FirebaseManager.Instance.Database.OverwriteJsonData(path, planetsTable[planetId]);
     }
 
     public void Release()

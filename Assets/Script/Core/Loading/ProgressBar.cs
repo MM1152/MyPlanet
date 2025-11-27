@@ -23,6 +23,6 @@ public class ProgressBar : MonoBehaviour
             image.fillAmount = 0f;
         }
 
-        image.fillAmount += Time.deltaTime * 5f;
+        image.fillAmount += Time.deltaTime;
     }
 }
