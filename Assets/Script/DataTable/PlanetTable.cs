@@ -43,6 +43,22 @@ public class PlanetTable : DataTable
             5 => "어둠",
             _ => "정의되지 않음"
         };
+        public float NeedPeiceCountPercent => grade switch
+        {
+            "C" => DataTableManager.OptionTable.GetValueDataToFloat(5055),
+            "B" => DataTableManager.OptionTable.GetValueDataToFloat(5056),
+            "A" => DataTableManager.OptionTable.GetValueDataToFloat(5057),
+            "S" => DataTableManager.OptionTable.GetValueDataToFloat(5058),
+            _ => 0f
+        };
+        public float InitOpenSlotCount => grade switch
+        {
+            "C" => DataTableManager.OptionTable.GetValueDataToInt(5002),
+            "B" => DataTableManager.OptionTable.GetValueDataToInt(5003),
+            "A" => DataTableManager.OptionTable.GetValueDataToInt(5004),
+            "S" => DataTableManager.OptionTable.GetValueDataToInt(5005),
+            _ => 0f
+        };
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -71,5 +87,29 @@ public class PlanetTable : DataTable
     public List<Data> GetAllData()
     {
         return new List<Data>(planetTable.Values);
+    }
+
+    public int GetUnlockAbleSlotCount(int planetId, int starCount)
+    {
+        var idx = 0;
+        var grade = Get(planetId).grade;
+
+        switch(grade) 
+        {
+            case "C":
+                idx = 5059 + starCount;
+                break;
+            case "B":
+                idx = 5065 + starCount;
+                break;
+            case "A":
+                idx = 5071 + starCount;
+                break;
+            case "S":
+                idx = 5077 + starCount;
+                break;
+        }
+
+        return DataTableManager.OptionTable.GetValueDataToInt(idx);
     }
 }

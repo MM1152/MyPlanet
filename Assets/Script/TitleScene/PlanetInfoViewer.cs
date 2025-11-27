@@ -7,6 +7,8 @@ public class PlanetInfoViewer : MonoBehaviour
 {
     [SerializeField] private LevelUpTab levelUpTab;
     [SerializeField] private InfomationTab infomationTab;
+    [SerializeField] private PlanetStarUpgradeTab starUpgradeTab;
+
     [SerializeField] private Image changeColorBackGround;
     [Header("Buttons")]
     [SerializeField] private Button infomationButton;
@@ -22,10 +24,11 @@ public class PlanetInfoViewer : MonoBehaviour
     {
         infomationButton.onClick.AddListener(() => UpdateTab(infomationTab.gameObject, infomationButton.image.color));
         levelUpbutton.onClick.AddListener(() => UpdateTab(levelUpTab.gameObject, levelUpbutton.image.color));
+        starUpgradeButton.onClick.AddListener(() => UpdateTab(starUpgradeTab.gameObject, starUpgradeButton.image.color));
 
         levelUpTab.gameObject.SetActive(false);
         infomationTab.gameObject.SetActive(false);
-
+        starUpgradeTab.gameObject.SetActive(false);
     }
 
     public void UpdatePlanetData(PlanetTable.Data planetData)
@@ -41,7 +44,8 @@ public class PlanetInfoViewer : MonoBehaviour
         planetName.text = $"Lv.{planetUserData.level}."+this.planetData.Name;
         levelUpTab.UpdateData(planetData);
         infomationTab.UpdateData(planetData);
-      
+        starUpgradeTab.UpdateData(planetData);
+
         UpdateTab(infomationTab.gameObject , infomationButton.image.color);
         CheckUseAblePlanet(planetUserData);
     }

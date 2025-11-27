@@ -34,6 +34,7 @@ public class LevelUpTab : MonoBehaviour
     public void UpdateData(PlanetTable.Data planetData)
     {
         this.planetData = planetData;
+        levelUpButton.interactable = true;
         planetUserData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
         UpdateText();
     }
@@ -56,8 +57,9 @@ public class LevelUpTab : MonoBehaviour
             hpText.text = prevData.HP.ToString();
             atkText.text = prevData.ATK.ToString();
             defText.text = prevData.DEF.ToString();
-            goldText.text = prevData.Gold.ToString();
-            expText.text = prevData.Exp.ToString();
+            goldText.text = "MAX";
+            expText.text = "MAX";
+            levelUpButton.interactable = false;
         }
     }
 

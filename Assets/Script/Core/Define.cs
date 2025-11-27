@@ -23,7 +23,8 @@ public enum WindowIds
 public enum PopupIds
 {
     None = -1,
-    TowerInfomationPopup = 0
+    TowerInfomationPopup = 0,
+    UnLockPopup = 1,
 }
 
 public static class SceneIds
@@ -206,5 +207,8 @@ public static class DataBasePaths
     public static string ExpPath => UserPath + FirebaseManager.Instance.UserId + "/exp";
 
     public static string PlanetDataPathFormating => PlanetPath + FirebaseManager.Instance.UserId + "/{0}";
-    public static string PlanetLevelPathFormating => PlanetDataPathFormating + "/level"; 
+    public static string PlanetLevelPathFormating => PlanetDataPathFormating + "/level";
+    public static string PlanetPeiceCountPathFormating => PlanetDataPathFormating + "/count";
+    public static string PlanetStarCountPathFormating => PlanetDataPathFormating + "/star";
+    public static string PlanetOpenSlotPathFormating => PlanetDataPathFormating + "/openSlot";
 }
