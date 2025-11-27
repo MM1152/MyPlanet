@@ -23,13 +23,11 @@ public class SpriteTable : DataTable
             {
                 if (spriteTable.ContainsKey(filename))
                 {
-                    Debug.Log(data.Path);
                     var sprite = await Addressables.LoadAssetAsync<Sprite>(data.Path);
                     spriteTable[filename].Add(data.ID, sprite);
                 }
                 else
                 {
-                    Debug.Log(data.Path);
                     var sprite = await Addressables.LoadAssetAsync<Sprite>(data.Path);
                     spriteTable.Add(filename, new Dictionary<int, Sprite>());
                     spriteTable[filename].Add(data.ID, sprite);

@@ -1,17 +1,62 @@
 using Cysharp.Threading.Tasks;
 using Firebase.Database;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 public class DataBase 
 {
-
     private FirebaseDatabase database;
     private DatabaseReference root;
+
+    private Dictionary<DatabaseReference, List<EventHandler<ValueChangedEventArgs>>> listners
+        = new Dictionary<DatabaseReference, List<EventHandler<ValueChangedEventArgs>>>();
 
     public void Init()
     {
         database = FirebaseDatabase.DefaultInstance;
         root = database.RootReference;
+    }
+
+    public void AddListner(string path , EventHandler<ValueChangedEventArgs> callback)
+    {
+        DatabaseReference newReference = root.Child(path);
+        if(!listners.ContainsKey(newReference))
+        {
+            listners.Add(newReference  , new List<EventHandler<ValueChangedEventArgs>>() { callback });
+        }
+        else
+        {
+            listners[newReference].Add(callback);
+        }
+
+        newReference.ValueChanged += callback;
+    }
+
+    public void RemoveListner(string path, EventHandler<ValueChangedEventArgs> callback)
+    {
+        DatabaseReference newReference = root.Child(path);
+        if (listners.ContainsKey(newReference))
+        {
+            if (listners[newReference].Contains(callback))
+            {
+                newReference.ValueChanged -= callback;
+                listners[newReference].Remove(callback);
+            }
+        }
+
+    }
+
+    public void Release()
+    {
+        foreach(var key in listners.Keys)
+        {
+            for(int i = 0; i < listners[key].Count; i++)
+            {
+                key.ValueChanged -= listners[key][i];
+            }
+        }
+
+        listners.Clear();
     }
 
     public async UniTask<(int version , bool success)> GetVersion()
@@ -58,6 +103,33 @@ public class DataBase
             data.PushId = snapshot.Key;
             return (data, true);
         }       
+        catch (System.Exception ex)
+        {
+#if DEBUG_MODE
+            Debug.LogError($"Firebase Database GetData Fail : {ex}");
+#endif
+            return (data, false);
+        }
+    }
+
+    public async UniTask<(object data, bool success)> GetDataToValue(string path)
+    {
+        object data = default;
+
+        DatabaseReference newReference = root.Child(path);
+        if (newReference == null)
+            return (data, false);
+
+        try
+        {
+            DataSnapshot snapshot = await newReference.GetValueAsync().AsUniTask();
+            if (!snapshot.Exists)
+                throw new System.Exception($"Empty Value in Firebase database : {path}");
+
+            data = snapshot.Value;
+            
+            return (data, true);
+        }
         catch (System.Exception ex)
         {
 #if DEBUG_MODE

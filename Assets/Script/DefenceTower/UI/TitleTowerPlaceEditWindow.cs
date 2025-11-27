@@ -197,7 +197,7 @@ public class TitleTowerPlaceEditWindow : Window
             (
                 Mathf.Cos(Mathf.Deg2Rad * startAngle),
                 Mathf.Sin(Mathf.Deg2Rad * startAngle)
-            ) * circleSize * 0.35f;
+            ) * circleSize * 0.4f;
 
             startAngle += angle;
             rect.eulerAngles = new Vector3(0, 0, angle * i + 1);
@@ -234,8 +234,6 @@ public class TitleTowerPlaceEditWindow : Window
 
         placeHolds[selectIndex].transform.localScale = Vector3.one * 1.5f;
         placeHolds[selectIndex].Select();
-
-        
     }
 
     private async UniTaskVoid RotateAsync(float from , float to , float duration)
@@ -279,6 +277,8 @@ public class TitleTowerPlaceEditWindow : Window
         {
             placeHolds[prevApplyOptionSlots.right].Select();
         }
+
+        placeHolds[selectIndex].Select();
     }
 
     private int GetLeftSlots(int index , int targetIndex )

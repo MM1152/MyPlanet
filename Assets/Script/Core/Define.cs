@@ -15,6 +15,8 @@ public enum WindowIds
     TitleTowerPlaceEditWindow = 5,
     TitleSelectPlanetWindow = 6,
     DebugTowerPlaceWIndow = 7,
+    TitleBookWindow = 8,
+    TitleBookInfomationWindow = 9,
 }
 
 public enum PopupIds
@@ -173,6 +175,8 @@ public static class DataTableIds
     public static readonly string TypeSpriteTable = "TypeSpriteTable";
     public static readonly string ElementSpriteTable = "ElementSpriteTable";
     public static readonly string AttackTypeSpriteTable = "AttackTypeSpriteTable";
+    public static readonly string OptionTable = "OptionTable";
+    public static readonly string PlanetLevelUpTable = "PlanetLevelUpTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
@@ -193,7 +197,13 @@ public static class DataTableIds
 
 public static class DataBasePaths
 {
-    public static string UserPath = "users/";
-    public static string PresetPath = "preset/";
-    public static string PlentPath = "planet/";
+    public static string UserPath => "users/";
+    public static string PresetPath => "preset/";
+    public static string PlanetPath => "planet/";
+
+    public static string GoldPath => UserPath + FirebaseManager.Instance.UserId + "/gold";
+    public static string ExpPath => UserPath + FirebaseManager.Instance.UserId + "/exp";
+
+    public static string PlanetDataPathFormating => PlanetPath + FirebaseManager.Instance.UserId + "/{0}";
+    public static string PlanetLevelPathFormating => PlanetDataPathFormating + "/level"; 
 }

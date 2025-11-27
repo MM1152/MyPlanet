@@ -1,7 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AddressableAssets;
 public class Managers
 {
     private static Managers instance;
@@ -24,7 +24,7 @@ public class Managers
 
     private TouchManager touchManager;
     private ObjectPoolManager objectPoolManager;
-
+    private GameObject loadingProgress;
     private bool init;
 
     private async UniTaskVoid Init()
@@ -42,6 +42,9 @@ public class Managers
         this.objectPoolManager.transform.SetParent(go.transform);
         await this.objectPoolManager.Init();
 
+        var loadingProgress = await Addressables.LoadAssetAsync<GameObject>("LoadingPanel1").ToUniTask();
+        this.loadingProgress = GameObject.Instantiate(loadingProgress, go.transform);
+
         init = true;
     }
 
@@ -53,5 +56,21 @@ public class Managers
     public async UniTask WaitForManagerInitalizedAsync()
     {
         await UniTask.WaitUntil(() => init);
+    }
+
+    public async UniTask<(T1 , T2)> WaitForLoadingAsync<T1 , T2>(UniTask<(T1 , T2)> task)
+    {
+        loadingProgress.SetActive(true);
+        var data = await UniTask.WhenAll(task);
+        loadingProgress.SetActive(false);
+
+        return data[0];
+    }
+
+    public async UniTask WaitForLoadingAsync(List<UniTask> task)
+    {
+        loadingProgress.SetActive(true);
+        await UniTask.WhenAll(task);
+        loadingProgress.SetActive(false);
     }
 }   

@@ -9,6 +9,7 @@ public class TitleMainWindow : Window
     [SerializeField] private Button selectStageButton;
     [SerializeField] private Button logoutButton;
     [SerializeField] private Button debugModeSceneButton;
+    [SerializeField] private Button bookOpenButton;
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI userNickNameText;
     [SerializeField] private TextMeshProUGUI userGold;
@@ -34,6 +35,11 @@ public class TitleMainWindow : Window
         {
             LoadingScene.sceneId = SceneIds.DebugModeScene;
             SceneManager.LoadScene(SceneIds.LoadingScene);
+        });
+        bookOpenButton.interactable = true;
+        bookOpenButton.onClick.AddListener(() =>
+        {
+            manager.Open(WindowIds.TitleBookWindow);
         });
     }
 

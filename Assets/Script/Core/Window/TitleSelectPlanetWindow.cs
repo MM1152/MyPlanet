@@ -24,7 +24,7 @@ public class TitleSelectPlanetWindow : Window
     private PresetData.Data presetData;
     private PlanetInfomation currentSelectInfomation;
     private List<PlanetInfomation> planetInfomations = new List<PlanetInfomation>();
-
+    
     private int presetIndex;
 
     public override void Close()
@@ -37,12 +37,13 @@ public class TitleSelectPlanetWindow : Window
         base.Init(manager);
 
         windowId = (int)WindowIds.TitleSelectPlanetWindow;
-
         closeButton.onClick.AddListener(() => manager.Open(WindowIds.TitlePresetWindow));
         selectPlanetButton.onClick.AddListener(() => {
             if (planetData == null) return;
-            var towerPlaceWindow =  manager.Open(WindowIds.TitleTowerPlaceEditWindow);
+            var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
+            if (!userData.UseAble) return;
 
+            var towerPlaceWindow =  manager.Open(WindowIds.TitleTowerPlaceEditWindow);
             if(towerPlaceWindow is TitleTowerPlaceEditWindow window)
             {
                 window.SetPresetData(presetData , presetIndex);

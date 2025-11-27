@@ -66,6 +66,7 @@ public class LoadingScene : MonoBehaviour
         {
             await FirebaseManager.Instance.FindUserDataInDatabase();    
         }
+        FirebaseManager.Instance.Release();
         await FirebaseManager.Instance.PresetData.WaitForInitalizeAsync();
         await FirebaseManager.Instance.PlanetData.WaitForInitalizeAsync();
 

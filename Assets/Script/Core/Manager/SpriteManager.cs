@@ -9,7 +9,6 @@ public class SpriteManager
 
     public async UniTask InitalizeAsync()
     {
-
         init = true;
     }
     

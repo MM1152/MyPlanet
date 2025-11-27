@@ -19,6 +19,8 @@ public static class DataTableManager
     public static EffectTable EffectTable => Get<EffectTable>(DataTableIds.EffectTable);
     public static LevelUpTable LevelUpTable => Get<LevelUpTable>(DataTableIds.LevelUpTable);
     public static SpriteTable SpriteTable => Get<SpriteTable>("SpriteTable");
+    public static OptionTable OptionTable => Get<OptionTable>(DataTableIds.OptionTable);
+    public static PlanetLevelUpTable PlanetLevelUpTable => Get<PlanetLevelUpTable>(DataTableIds.PlanetLevelUpTable);
 
     static DataTableManager()
     {
@@ -38,6 +40,8 @@ public static class DataTableManager
         var effectTable = new EffectTable();
         var levelUpTable = new LevelUpTable();
         var spriteTable = new SpriteTable();
+        var optionTable = new OptionTable();
+        var planetLevelUpTable = new PlanetLevelUpTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -52,6 +56,8 @@ public static class DataTableManager
             spriteTable.LoadAsync(DataTableIds.TypeSpriteTable),
             spriteTable.LoadAsync(DataTableIds.AttackTypeSpriteTable),
             spriteTable.LoadAsync(DataTableIds.ElementSpriteTable),
+            optionTable.LoadAsync(DataTableIds.OptionTable),
+            planetLevelUpTable.LoadAsync(DataTableIds.PlanetLevelUpTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

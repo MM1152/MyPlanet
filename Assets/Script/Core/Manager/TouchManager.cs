@@ -9,6 +9,8 @@ public enum TouchTypes
     Tab,
     LongTab,
     LongPress,
+    Drag,
+    NoTab,
 }
 
 public class TouchManager : MonoBehaviour
@@ -19,8 +21,11 @@ public class TouchManager : MonoBehaviour
 
     private float longTabTime = 0.5f;
     [SerializeField] private float startTouchTime = 0f;
+    [SerializeField] private float notTabToDragDistance = 5f;
+    [SerializeField] private float dragDistance = 100f;
 
-    private Vector2 startTouchPosition = Vector2.zero;
+    public Vector2 startTouchPosition = Vector2.zero;
+    public Vector2 endTouchPosition = Vector2.zero;
 
     public InputAction touchAction;
     public InputAction touchPositionAction;
@@ -43,14 +48,13 @@ public class TouchManager : MonoBehaviour
         touchAction.canceled += OnTouchEnd;
 
         touchPositionAction.performed += OnTouchPosition;
-
         touchPositionAction.Enable();
         touchAction.Enable();
     }
 
     private void Update()
     {
-        if(isPressed)
+        if(isPressed && Vector2.Distance(startTouchPosition, endTouchPosition) < notTabToDragDistance)
         {
             if(Time.unscaledTime - startTouchTime > longTabTime)
             {
@@ -61,18 +65,33 @@ public class TouchManager : MonoBehaviour
 
     private void OnTouchPosition(InputAction.CallbackContext context)
     {
-        startTouchPosition = context.ReadValue<Vector2>();
-    }
+        endTouchPosition = context.ReadValue<Vector2>();
+        var distance = Vector2.Distance(startTouchPosition, endTouchPosition);
 
+        if (distance > notTabToDragDistance)
+        {
+            touchTypes = TouchTypes.NoTab;
+            if (distance > dragDistance)
+            {
+                touchTypes = TouchTypes.Drag;
+            }
+        }
+    }
     private void OnTouchStart(InputAction.CallbackContext context)
     {
         startTouchTime = Time.unscaledTime;
         isPressed = true;
+
+        startTouchPosition = touchPositionAction.ReadValue<Vector2>();
+        endTouchPosition = startTouchPosition;
     }
 
     private void OnTouchEnd(InputAction.CallbackContext context)
     {
-        if(Time.unscaledTime - startTouchTime > longTabTime)
+        if (touchTypes == TouchTypes.NoTab || touchTypes == TouchTypes.Drag) return;
+
+
+        if (Time.unscaledTime - startTouchTime > longTabTime)
         {
             touchTypes = TouchTypes.LongTab;
         }

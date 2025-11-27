@@ -10,12 +10,9 @@ public class PresetViewer : MonoBehaviour
     [SerializeField] private Transform towerInfomationRoot;
     [SerializeField] private Button editButton;
     [SerializeField] private Button selectPresetButton;
-    
+
     [Header("Planet Viewer Reference")]
-    [SerializeField] private TextMeshProUGUI planetgradeText;
-    [SerializeField] private TextMeshProUGUI planetTypeText;
-    [SerializeField] private TextMeshProUGUI planetNameText;
-    [SerializeField] private Image planetImage;
+    [SerializeField] private PlanetInfomation planetInfomation;
 
     private List<TowerInfomation> towerInfos = new List<TowerInfomation>();
     private PresetData.Data presetData;
@@ -58,12 +55,7 @@ public class PresetViewer : MonoBehaviour
         towerInfos.Clear();
 
         var planetData = DataTableManager.PlanetTable.Get(presetData.PlanetId);
-        if(planetData != null)
-        {
-            planetgradeText.text = planetData.grade;
-            planetNameText.text = planetData.Name;
-            planetTypeText.text = planetData.PlanetType;
-        }
+        planetInfomation.UpdateTexts(planetData);
 
         for (int i = 0; i < presetData.TowerId.Count; i++)
         {
