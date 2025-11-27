@@ -23,6 +23,7 @@ public class WaveManager : MonoBehaviour
     private List<SpawnPoint> currentWave = new List<SpawnPoint>();
     private List<Vector2> spawnPoints = new List<Vector2>();
     private Rect screenBounds;
+    public Rect ScreenBounds => screenBounds;   
 
     private float spawnOffset = 1.0f;
     private int topPointCount = 3;
@@ -32,7 +33,7 @@ public class WaveManager : MonoBehaviour
 
     private int currentWaveIndex;
     public int CurrentWaveIndex => currentWaveIndex;
-    private float waveDuration = 10f;
+    private float waveDuration = 90f;
     public float WaveDuration => waveDuration;
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;
@@ -72,7 +73,7 @@ public class WaveManager : MonoBehaviour
     private void ResetWave()
     {
         currentWave.Clear();
-        currentWaveIndex = 0;
+        currentWaveIndex = 1;
         totalEnemyCount = 0;
         waveElapsedTime = 0f;
         isFinalWaveEnded = false;
@@ -176,7 +177,7 @@ public class WaveManager : MonoBehaviour
         if (!waves.ContainsKey(currentWaveIndex))
         {
 #if DEBUG_MODE
-            currentWaveIndex = 0;   
+            currentWaveIndex = 1;   
             currentWave = waves[currentWaveIndex];
 
             foreach (var spawnPoint in currentWave)
@@ -238,6 +239,7 @@ public class WaveManager : MonoBehaviour
                     {
                         var offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
                         enemy.transform.position = spawnPoint.position + offset;
+                        enemy.move.Init(enemy);
                     }
                     spawnPoint.timer = 0f;
                 }

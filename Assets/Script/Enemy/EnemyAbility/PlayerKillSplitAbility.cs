@@ -23,11 +23,11 @@ public class PlayerKillSplitAbility : BaseAbility
         {
             if (targetEnemy == null || targetEnemy.IsDead) continue;
 
-            if (targetEnemy.die is SpawnDie spawnDie)
+            if (targetEnemy.die is SpawnDie spawnDie&& enemy.ElementType == targetEnemy.ElementType)
             {
                 spawnDie.SetBonusCount(splitCount);
             }
-            else if (targetEnemy.die is SplitbornDie splitbornDie)
+            else if (targetEnemy.die is SplitbornDie splitbornDie&& enemy.ElementType == targetEnemy.ElementType)
             {
                 splitbornDie.SetBonusCount(splitCount);
             }
@@ -40,12 +40,12 @@ public class PlayerKillSplitAbility : BaseAbility
         {
             if (targetEnemy == null || targetEnemy.IsDead) continue;
 
-            if (targetEnemy.die is SpawnDie spawnDie)
+            if (targetEnemy.die is SpawnDie spawnDie&& enemy.ElementType == targetEnemy.ElementType)
             {
                 spawnDie.ResetCount();
             }
-            else if (targetEnemy.die is SplitbornDie splitbornDie)
-            {
+            else if (targetEnemy.die is SplitbornDie splitbornDie&& enemy.ElementType == targetEnemy.ElementType)
+            {   
                 splitbornDie.ResetCount();
             } 
         }

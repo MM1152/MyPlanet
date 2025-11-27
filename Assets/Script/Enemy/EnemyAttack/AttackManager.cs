@@ -7,8 +7,8 @@ public class AttackManager
     {
         { EnemyType.Melee, new OneTimeMeleeAttacker() },
         { EnemyType.Ranged  , new ShotAttack() },
+        {EnemyType.EliteMonster, new EliteMonsterAttack() },
     };
-   
     public IAttack GetAttack(EnemyType key)
     {
         if (attackTable.ContainsKey(key))
@@ -19,5 +19,5 @@ public class AttackManager
         Debug.LogError("Enemy 타입에 해당하는 공격방식이 없지만 기본 근접공격 넣어드려요");
 #endif
         return attackTable[EnemyType.Melee];
-    }
+    }  
 }

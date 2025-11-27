@@ -27,9 +27,23 @@ public class TitlePresetWindow : Window
         {
             if(currentSelectPresetIndex == -1)
                 return;
+            var presetData = presetViewers[currentSelectPresetIndex].PresetData;
+            var placeTowerCount = 0;
+
+            for(int i = 0; i < presetData.TowerId.Count; i++)
+            {
+                if(presetData.TowerId[i] != -1)
+                {
+                    placeTowerCount++;
+                }
+            }
+
+            if(placeTowerCount == 0)
+            {
+                return;
+            }
 
             LoadingScene.sceneId = SceneIds.GameScene;
-            var presetData = presetViewers[currentSelectPresetIndex].PresetData;
             FirebaseManager.Instance.PresetData.SetGameData(presetData);
             SceneManager.LoadScene(SceneIds.LoadingScene);
         });

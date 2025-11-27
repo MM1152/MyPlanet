@@ -1,5 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private static readonly string TargetTag = "Player";
 
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
+    public TypeEffectiveness typeEffectiveness;
     public int FullDamage => atk;
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
@@ -19,41 +21,46 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public bool IsDead { get; set; }
     public ElementType ElementType => (ElementType)enemyData.Attribute;
     public StatusEffect StatusEffect => statusEffect;
-
     public bool IsStun { get => isStun; set => isStun = value; }
     private bool isStun;
-
     public float BaseSpeed => enemyData.Speed;
     public float CurrentSpeed { get => speed; set => speed = value; }
-
-    public EnemyType enemyType => enemyData.Range > 0 ? EnemyType.Ranged : EnemyType.Melee;
+    public EnemyType enemyType
+    {
+        get
+        {
+            if (isBoss)
+            {
+                return EnemyType.EliteMonster;
+            }
+            return enemyData.Range > 0 ? EnemyType.Ranged : EnemyType.Melee;
+        }
+    }
 
     public float speed;
     public int atk;
     [SerializeField]
     public float attackRange;
-
     private float baseRange;
     private bool bonusApplied = false;
-
     public float bulletSpeed => enemyData.Bullet_Speed;
-
     public float fireInterval => 60f / enemyData.Fire_Rate;
     public float attackInterval;
-
+    private float abilityInterval = 1f;
+    private float nextInterval = 0f;
     public int currentHP;
-    public TypeEffectiveness typeEffectiveness;
     public event Action<Enemy> OnDie;
     private AttackManager attackManager;
     private DieManager dieManager;
+    private MoveManager moveManager;
     private AbilityManager abilityManager;
     public IAttack attack;
     public BaseDie die;
+    public IMove move;
     public BaseAbility ability;
     public EnemySpawnManager enemySpawnManager;
 
     public float TestRangeRadius;
-
     public bool isKilledByPlayer { get; private set; }
 
 #if DEBUG_MODE
@@ -67,6 +74,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public Action OnBuffRemoved;
 
+    public Action ReturnMoveAction;
+
+    private static readonly HashSet<int> BossIDs = new HashSet<int> { 3026, 4026, 5026, 6026, 7026};
+    public bool isBoss => BossIDs.Contains(enemyData.ID);
+
     private void Awake()
     {
         stateMachine = new StateMachine(this);
@@ -79,6 +91,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         dieManager = new DieManager();
         abilityManager = new AbilityManager();
         attackManager = new AttackManager();
+        moveManager = new MoveManager();
+    }
+
+    public void DebugToolsInit()
+    {
+        move.Init(this);
     }
 
     public void Initallized(EnemyData.Data data)
@@ -98,13 +116,25 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         statusEffect.Init();
         isKilledByPlayer = true;
         IsDead = false;
-        attack = attackManager.GetAttack(enemyType);    
+        attack = attackManager.GetAttack(enemyType);
         die = dieManager.GetDie(enemyData.ID);
         ability = abilityManager.GetAbility(enemyData.ID);
+        move = moveManager.GetMove(enemyData.ID);
         zone?.Init(this);
-        ResetActions();
+        ResetActions(); 
         ability?.SetEnemy(this);
+#if DEBUG_MODE
+        if (isBoss) this.transform.localScale = new Vector2(1f, 1f);
+#endif
+        ReturnMoveAction = () =>
+        {
+            if (!IsDead && enemyType == EnemyType.EliteMonster)
+            {
+                stateMachine.ChangeState(stateMachine.walkState);
+            }
+        };
     }
+
 
     private void ResetActions()
     {
@@ -164,11 +194,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         stateMachine.currentState.Execute();
 
-        attackInterval += Time.deltaTime;
-        if (ability != null && ability.abilityType == AbilityType.OnUpdate && abilityAction != null && attackInterval >= fireInterval)
+        if (ability != null && ability.abilityType == AbilityType.OnUpdate && abilityAction != null && Time.time >= nextInterval)
         {
             abilityAction?.Invoke();
-            attackInterval = 0f;
+            nextInterval = Time.time + abilityInterval;
         }
     }
 
@@ -210,19 +239,19 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         int healAmount = Mathf.Min(heal, enemyData.HP - currentHP);
         currentHP += healAmount;
-        // #if DEBUG_MODE
-        //          if (healAmount > 0)
-        //          {
-        Debug.Log($"해당 적 이름 및 타입 : {this.name}, {this.ElementType} - Heal Amount: {healAmount}");
-        var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
-        text.SetColor(Color.green);
-        //          }
-        // #endif
+#if DEBUG_MODE
+        if (healAmount > 0)
+        {
+            var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
+            text.SetColor(Color.green);
+        }
+#endif
     }
 
     public void OnDead()
     {
         IsDead = true;
+        ReturnMoveAction = null;
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();

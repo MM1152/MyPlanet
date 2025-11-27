@@ -28,7 +28,7 @@ public class PelletBoosterAbility : BaseAbility
             {
                 var elementType = targetEnemy.ElementType;
 
-                if (shotAttack.shotStrategies[elementType] is SpreadShot spreadShot)
+                if (shotAttack.GetShotStrategy(elementType) is SpreadShot spreadShot)
                 {
                     spreadShot.SetBonusPellet(boostPellet);
                 }
@@ -45,7 +45,7 @@ public class PelletBoosterAbility : BaseAbility
             if (targetEnemy.attack is ShotAttack shotAttack)
             {
                 var elementType = targetEnemy.ElementType;
-                if (shotAttack.shotStrategies[elementType] is SpreadShot spreadShot)
+                if (shotAttack.GetShotStrategy(elementType)  is SpreadShot spreadShot)
                 {
                     spreadShot.ResetPellet();
                 }

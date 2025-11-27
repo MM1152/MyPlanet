@@ -15,6 +15,8 @@ public class EnemySpawnManager : MonoBehaviour
     public Button testButton;
 #endif
 
+    public bool isDebugMode = false;
+
     private async UniTaskVoid InitalizedAsync()
     {
         //FIX: ������ ���̺� �ʱ�ȭ �ȱ�ٸ�����
@@ -47,6 +49,10 @@ public class EnemySpawnManager : MonoBehaviour
             {
                 var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy);
                 spawnEnemy.Initallized(data);      
+                if(isDebugMode)
+                {
+                    spawnEnemy.DebugToolsInit();
+                }
                 spawnEnemy.OnDie += CheckDieEnemy;
                 spawnEnemys.Add(spawnEnemy);
                 spawnedEnemies.Add(spawnEnemy); 
