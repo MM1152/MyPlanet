@@ -21,8 +21,12 @@ public class BaseDie
             exp.transform.position = enemy.transform.position;
             exp.exp = enemy.enemyData.EXP;
         }       
-        enemy.WaveManager.totalEnemyCount--;    
-        enemy.WaveManager.waveClearCount--;        
+        if(enemy.WaveManager != null)
+        {
+            enemy.WaveManager.totalEnemyCount--;
+            enemy.WaveManager.waveClearCount--;
+        }
+    
         Managers.ObjectPoolManager.Despawn(PoolsId.Enemy, enemy.gameObject);
     }
 

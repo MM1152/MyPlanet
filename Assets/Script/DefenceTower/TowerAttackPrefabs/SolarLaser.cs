@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class SolarLaser : BaseAttackPrefab
@@ -29,6 +27,14 @@ public class SolarLaser : BaseAttackPrefab
 
     public void UpgradeLaser()
     {
+        if(!tower.UseAble)
+        {
+            gameObject.SetActive(false);
+        }else
+        {
+            gameObject.SetActive(true);
+        }
+
         gameObject.transform.localScale = new Vector2(tower.BonusWidthSize * baseScale.x, tower.BonusAttackRange * baseScale.y);
     }
 
@@ -49,6 +55,7 @@ public class SolarLaser : BaseAttackPrefab
 
     private void Update()
     {
+        if (!tower.UseAble) return;
         //transform.eulerAngles += Vector3.forward * rotationSpeed * Time.deltaTime;
         transform.eulerAngles += Vector3.forward * rotationSpeed * Time.deltaTime;
         var angle = transform.eulerAngles.z + 90f;
@@ -69,7 +76,7 @@ public class SolarLaser : BaseAttackPrefab
             var find = collision.GetComponent<IDamageAble>();
 
             var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
-            find.OnDamage((int)(tower.FullDamage * percent));
+            find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
             basePlanet.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
         }
        

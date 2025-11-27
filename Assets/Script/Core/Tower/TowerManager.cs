@@ -9,15 +9,15 @@ using System.Runtime.CompilerServices;
 public class TowerManager : MonoBehaviour
 {
     [SerializeField] private Enemy testTarget;
-    [SerializeField] private GameObject tower;
+    [SerializeField] protected GameObject tower;
     [SerializeField] private EnemySpawnManager enemySpawnManager;
     [SerializeField] private SliderValue expSlider;
 
-    public GameObject basePlanet;
+    public BasePlanet basePlanet;
 
-    private List<Tower> towers = new List<Tower>();
+    protected List<Tower> towers = new List<Tower>();
     public List<Tower> Towers => towers;
-    private TowerFactory towerFactory = new TowerFactory();
+    protected TowerFactory towerFactory = new TowerFactory();
 
     private int totalExp = 0;
     private int currentLevel = 1;
@@ -37,9 +37,9 @@ public class TowerManager : MonoBehaviour
     public bool disAbleLevelUp;
 #endif
 
-    private void Awake()
+    protected virtual void Awake()
     {
-        windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
+        windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
         presetGameData = FirebaseManager.Instance.PresetData.GetGameData();
         for(int i = 0; i < presetGameData.TowerId.Count; i++)
         {
@@ -57,7 +57,7 @@ public class TowerManager : MonoBehaviour
 
     private void Start()
     {
-        expSlider.UpdateSlider(0, levelUpExp , currentLevel , levelUpExp - totalExp);
+        expSlider?.UpdateSlider(0, levelUpExp , currentLevel , levelUpExp - totalExp);
     }
 
     public void LateUpdate()
@@ -111,7 +111,7 @@ public class TowerManager : MonoBehaviour
         return inRangeTargets[rand];
     }
 
-    public void AddTower(TowerTable.Data data , int slotIndex)
+    public virtual void AddTower(TowerTable.Data data , int slotIndex)
     {
         if(data == null)
         {
@@ -124,7 +124,7 @@ public class TowerManager : MonoBehaviour
         instanceTower.Init(tower, this, data , slotIndex);
     }
 
-    public void PlaceTower(TowerTable.Data towerData)
+    public virtual void PlaceTower(TowerTable.Data towerData)
     {
         int index = FindTowerPlaceIndex(towerData);
         var levelUpData = DataTableManager.LevelUpTable.Get(towerData.ID, towers[index].Level + 1);
@@ -141,7 +141,7 @@ public class TowerManager : MonoBehaviour
         towers[index].PlaceTower();
     }
 
-    private int FindTowerPlaceIndex(TowerTable.Data towerData)
+    protected int FindTowerPlaceIndex(TowerTable.Data towerData)
     {
         for (int i = 0; i < towers.Count; i++)
         {
@@ -239,7 +239,7 @@ public class TowerManager : MonoBehaviour
 #endif
             LevelUp();
         }
-        expSlider.UpdateSlider(totalExp, levelUpExp, currentLevel, levelUpExp - totalExp);
+        expSlider?.UpdateSlider(totalExp, levelUpExp, currentLevel, levelUpExp - totalExp);
     }
 
     private void LevelUp()

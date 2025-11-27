@@ -61,7 +61,7 @@ public class ShadowSurge : BaseAttackPrefab
         if(find != null)
         {
             var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
-            find.OnDamage((int)(tower.FullDamage * percent));
+            find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
         }
     }
 }

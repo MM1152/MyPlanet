@@ -14,6 +14,29 @@ public class DataBase
         root = database.RootReference;
     }
 
+    public async UniTask<(int version , bool success)> GetVersion()
+    {
+        DatabaseReference versionRef = root.Child("Version");
+
+        if (versionRef == null) return (0, false);
+
+        try
+        {
+            DataSnapshot snapshot = await versionRef.GetValueAsync().AsUniTask();
+            if(!snapshot.Exists)
+            {
+                throw new System.Exception($"Empty Value Version");
+            }
+            
+            return (int.Parse(snapshot.Value.ToString()) , true);
+        }
+        catch(System.Exception ex)
+        {
+            Debug.LogException(ex);
+            return (0, false);
+        }
+    }
+
     /// <summary>
     /// 파이어베이스에서 데이터 가져오기 및 T로 변환
     /// </summary>

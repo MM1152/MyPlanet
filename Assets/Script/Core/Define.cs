@@ -14,6 +14,7 @@ public enum WindowIds
     TitlePresetWindow = 4,
     TitleTowerPlaceEditWindow = 5,
     TitleSelectPlanetWindow = 6,
+    DebugTowerPlaceWIndow = 7,
 }
 
 public enum PopupIds
@@ -27,6 +28,7 @@ public static class SceneIds
     public static readonly string TitleScene = "TitleScene";
     public static readonly string GameScene = "GameScene";
     public static readonly string LoadingScene = "LoadingScene";
+    public static readonly string DebugModeScene = "DebugModeScene";
 }
 
 public enum ElementType

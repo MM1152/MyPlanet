@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 
 public abstract class Tower
 {
-    public int FullDamage => towerData.ATK + BonusDamage;
+    public int FullDamage => towerData.ATK + BonusDamage ;
     public int BaseDamage => towerData.ATK;
 
     public float FullAttackSpeed => towerData.Fire_Rate + BonusAttackSpeed;
@@ -16,6 +16,9 @@ public abstract class Tower
 
     public float FullNoise => noise + BonuseNoise;
 
+    public int CalcurateAttackDamage => (int)((FullDamage + planetData.ATK * 0.1f) * (1 + BonusDamagePercent));
+
+    public float BonusDamagePercent { get; set; }
     public float BonusAttackSpeed { get; set; }
     public int BonusDamage { get; set; }
     public int BonusProjectileCount { get; set; }
@@ -65,6 +68,7 @@ public abstract class Tower
     public IStatusEffect StatusEffect => statusEffect;
     public RandomOptionBase Option => baseRandomOption;
 
+    private PlanetTable.Data planetData;
     protected GameObject projectTile;
     protected GameObject tower;
 
@@ -92,6 +96,11 @@ public abstract class Tower
     protected IStatusEffect statusEffect;
     protected int slotIndex = -1;
 
+    public void SetPlanetData(PlanetTable.Data planetData)
+    {
+        this.planetData = planetData;
+    }
+
     public virtual void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
     {
         statusEffect = null;
@@ -99,9 +108,20 @@ public abstract class Tower
         this.towerData = data;
         this.tower = tower;
         this.slotIndex = slotIndex;
-
-        typeEffectiveness.Init((ElementType)this.towerData.Attribute);
-        SetRandomOption();
+        try
+        {
+            var gameData = FirebaseManager.Instance.PresetData.GetGameData();
+            if(gameData != null)
+            {
+                var planetId = gameData.PlanetId;
+                this.planetData = DataTableManager.PlanetTable.Get(planetId);
+            }
+        }
+        finally
+        {
+            typeEffectiveness.Init((ElementType)this.towerData.Attribute);
+            SetRandomOption();
+        }
     }
 
     private void SetRandomOption()
@@ -154,8 +174,8 @@ public abstract class Tower
             currentAttackInterval = 0;
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
-            attackPrefabs.transform.position = tower.transform.position;
             attackPrefabs.Init(this);
+            attackPrefabs.transform.position = tower.transform.position;
             if (target != null)
                 attackPrefabs.SetTarget(target , FullNoise);
             return true;
@@ -258,12 +278,12 @@ public abstract class Tower
 
     public void AddBonusDamageToPercent(float percent)
     {
-        BonusDamage += (int)(BaseDamage * percent);
+        BonusDamagePercent += percent;
     }
 
     public void MinusBonusDamageToPercent(float percent)
     {
-        BonusDamage -= (int)(BaseDamage * percent);
+        BonusDamagePercent -= percent;
     }
 
     /// <summary>
@@ -285,10 +305,16 @@ public abstract class Tower
         bonusAttackSpeed -= BaseAttackSpeed * percent;
     }
 
-    public void PlaceTower()
+    public virtual void PlaceTower()
     {
         useAble = true;
         baseRandomOption.SetRandomOption();
+    }
+
+    public virtual void UnPlaceTower()
+    {
+        useAble = false;
+        baseRandomOption.ResetRandomOption();
     }
 
     public ElementType GetElementType()

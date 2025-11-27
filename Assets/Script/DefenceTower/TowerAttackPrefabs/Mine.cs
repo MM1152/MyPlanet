@@ -51,7 +51,7 @@ public class Mine : BaseAttackPrefab
         if (find != null)
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
-            find.OnDamage((int)(tower.FullDamage * percent));
+            find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
             find.StatusEffect.Apply(effect, find);
             Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
 

@@ -1,11 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 public class PresetData
 {
@@ -20,7 +16,6 @@ public class PresetData
         public string PresetName;
         public int PlanetId;
         public List<int> TowerId;
-
         public Data()
         {
             PresetName = "프리셋";
@@ -53,19 +48,30 @@ public class PresetData
 
     public async UniTask<(bool sucess , string msg)> LoadAsync()
     {
+        await UniTask.WaitUntil(() => FirebaseManager.Instance.UserData != null);
         await UniTask.WaitUntil(() => FirebaseManager.Instance.UserId != string.Empty);
 
-        var path = DataBasePaths.PresetPath + FirebaseManager.Instance.UserId;
+        var path = DataBasePaths.PresetPath + FirebaseManager.Instance.UserId + "/";
         var result = await FirebaseManager.Instance.Database.GetDatas<Data>(path);
 
         if(result.success)
         {
             // 이전에 로그인을 해서 프리셋 데이터를 가지고 있는 경우
+            if(FirebaseManager.Instance.ChangeVersion)
+            {
+                for(int i = 0; i < result.data.Count; i++)
+                {
+                    var newPath = path + result.data[i].PushId;
+                    var success = await FirebaseManager.Instance.Database.OverwriteJsonData(newPath, result.data[i]);
+                }
+            }
+
             foreach(var data in result.data)
             {
                 presetDatas.Add(data);
             }
             Init = true;
+            Debug.Log("프리셋 데이터 로드 완료");
             return (true, "프리셋 데이터 로드 완료");
         }
         else

@@ -58,6 +58,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public BaseDie die;
     public IMove move;
     public BaseAbility ability;
+    public EnemySpawnManager enemySpawnManager;
+
     public float TestRangeRadius;
     public bool isKilledByPlayer { get; private set; }
 
@@ -81,14 +83,20 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         stateMachine = new StateMachine(this);
         spriteRenderer = GetComponent<SpriteRenderer>();
-        waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag).GetComponent<WaveManager>();
-        textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>();
+        waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag)?.GetComponent<WaveManager>();
+        textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag)?.GetComponent<TextSpawnManager>();
+        enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag)?.GetComponent<EnemySpawnManager>();
         zone = GetComponentInChildren<ZoneSearch>();
         typeEffectiveness = new TypeEffectiveness();
         dieManager = new DieManager();
         abilityManager = new AbilityManager();
         attackManager = new AttackManager();
         moveManager = new MoveManager();
+    }
+
+    public void DebugToolsInit()
+    {
+        move.Init(this);
     }
 
     public void Initallized(EnemyData.Data data)
@@ -111,7 +119,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         attack = attackManager.GetAttack(enemyType);
         die = dieManager.GetDie(enemyData.ID);
         ability = abilityManager.GetAbility(enemyData.ID);
-        move = moveManager.GetMove(enemyData.ID);        
+        move = moveManager.GetMove(enemyData.ID);
         zone?.Init(this);
         ResetActions(); 
         ability?.SetEnemy(this);

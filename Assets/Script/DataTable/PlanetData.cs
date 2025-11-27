@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,14 +17,12 @@ public class PlanetData
         public int count;
         // -1 : 닫혀있음 , 0 : 열려있음
         public List<int> openSlot;
-
         public Data(int id)
         {
             this.id = id;
             level = 0;
             count = 0;
             openSlot = new List<int>();
-
             var grade = DataTableManager.PlanetTable.Get(id).grade;
             var cnt = 0;
 
@@ -57,6 +56,7 @@ public class PlanetData
 
     public async UniTask LoadAllDataAsync()
     {
+        await UniTask.WaitUntil(() => FirebaseManager.Instance.UserData != null);
         await UniTask.WaitUntil(() => FirebaseManager.Instance.UserId != string.Empty);
 
         var path = DataBasePaths.PlentPath + FirebaseManager.Instance.UserId + "/";
@@ -65,6 +65,17 @@ public class PlanetData
         if(success.success)
         {
             // 데이터가 있다면
+            if(FirebaseManager.Instance.ChangeVersion)
+            {
+                Debug.Log("Update Planet Data Version : ");
+                for (int i = 0; i < success.data.Count; i++)
+                {
+                    var updatePath = path + success.data[i].id + '/';
+                    Debug.Log("Update Planet Data Version : " + success.data[i].id);
+                    await FirebaseManager.Instance.Database.OverwriteJsonData(updatePath, success.data[i]);
+                }
+            }
+
             for(int i = 0; i < success.data.Count; i++)
             {
                 if(!planetsTable.ContainsKey(success.data[i].id))
@@ -76,6 +87,7 @@ public class PlanetData
                     planetsTable[success.data[i].id] = success.data[i];
                 }
             }
+            Debug.Log("Load Planet Data sussess");
         }
         else
         {

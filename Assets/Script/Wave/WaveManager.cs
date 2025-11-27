@@ -73,7 +73,7 @@ public class WaveManager : MonoBehaviour
     private void ResetWave()
     {
         currentWave.Clear();
-        currentWaveIndex = 0;
+        currentWaveIndex = 1;
         totalEnemyCount = 0;
         waveElapsedTime = 0f;
         isFinalWaveEnded = false;
@@ -177,7 +177,7 @@ public class WaveManager : MonoBehaviour
         if (!waves.ContainsKey(currentWaveIndex))
         {
 #if DEBUG_MODE
-            currentWaveIndex = 0;   
+            currentWaveIndex = 1;   
             currentWave = waves[currentWaveIndex];
 
             foreach (var spawnPoint in currentWave)
@@ -216,7 +216,6 @@ public class WaveManager : MonoBehaviour
 
             if (spawnPoint.currentSpawnEnemyCount >= spawnPoint.maxSpawnCount)
             {
-                Debug.Log($"여기{spawnPoint} 얘들 {spawnPoint.enemyId}다참");
                 continue;
             }
 
