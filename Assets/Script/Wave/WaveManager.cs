@@ -44,6 +44,10 @@ public class WaveManager : MonoBehaviour
     private EnemySpawnManager enemySpawnManager;
     public EnemySpawnManager EnemySpawnManager => enemySpawnManager;
 
+    [Header("References")]
+    [SerializeField] private WindowManager windowManager;
+
+    private float playTimeTimer;
 #if DEBUG_MODE
     public bool UIUpdateTest = false;
 #endif
@@ -174,18 +178,21 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
+        playTimeTimer += Time.deltaTime;
+
+        // 웨이브 무한으로 돌게 처리하는 부분
         if (!waves.ContainsKey(currentWaveIndex))
         {
 #if DEBUG_MODE
-            currentWaveIndex = 1;   
+            currentWaveIndex = 1;
             currentWave = waves[currentWaveIndex];
 
             foreach (var spawnPoint in currentWave)
-        {
-            spawnPoint.timer = 0f;
-            spawnPoint.isStart = false;
-            waveClearCount += spawnPoint.maxSpawnCount;
-        }
+            {
+                spawnPoint.timer = 0f;
+                spawnPoint.isStart = false;
+                waveClearCount += spawnPoint.maxSpawnCount;
+            }
             Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
 #endif
             return;
@@ -199,7 +206,7 @@ public class WaveManager : MonoBehaviour
         {
             if (isFinalWaveEnded)
             {
-                EndGame();
+                EndGame(true);
             }
             else
             {
@@ -260,18 +267,18 @@ public class WaveManager : MonoBehaviour
         if (!waves.ContainsKey(nextWaveIndex))
         {
 #if DEBUG_MODE
-            currentWaveIndex = 0;
-            currentWave = waves[currentWaveIndex];
+            //currentWaveIndex = 0;
+            //currentWave = waves[currentWaveIndex];
 
-            foreach (var spawnPoint in currentWave)
-            {
-                spawnPoint.timer = 0f;
-                spawnPoint.isStart = false;
-                waveClearCount += spawnPoint.maxSpawnCount;
-            }
-            Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
+            //foreach (var spawnPoint in currentWave)
+            //{
+            //    spawnPoint.timer = 0f;
+            //    spawnPoint.isStart = false;
+            //    waveClearCount += spawnPoint.maxSpawnCount;
+            //}
+            //Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
 #endif
-            //isFinalWaveEnded = true;
+            isFinalWaveEnded = true;
 #if DEBUG_MODE
             //Debug.Log("지금 마지막웨이브 다음으로 넘어갈수없다.");
 #endif
@@ -289,8 +296,16 @@ public class WaveManager : MonoBehaviour
         waveElapsedTime = 0f;
     }
 
-    private void EndGame()
+    public void EndGame(bool isClear)
     {
         // 여기에 게임 종료 로직 추가
+        if(windowManager != null)
+        {
+            var window = windowManager.Open(WindowIds.VictoryWindow);
+            if(window is VictoryWindow victoryWindow)
+            {
+                victoryWindow.UpdateText(playTimeTimer , isClear);
+            }
+        }
     }
 }

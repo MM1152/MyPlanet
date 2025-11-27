@@ -45,6 +45,8 @@ public class Managers
         var loadingProgress = await Addressables.LoadAssetAsync<GameObject>("LoadingPanel1").ToUniTask();
         this.loadingProgress = GameObject.Instantiate(loadingProgress, go.transform);
 
+        Application.targetFrameRate = 60;
+
         init = true;
     }
 

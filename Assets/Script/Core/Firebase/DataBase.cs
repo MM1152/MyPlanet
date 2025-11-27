@@ -14,7 +14,9 @@ public class DataBase
     public void Init()
     {
         database = FirebaseDatabase.DefaultInstance;
+        database.SetPersistenceEnabled(false);
         root = database.RootReference;
+
     }
 
     public void AddListner(string path , EventHandler<ValueChangedEventArgs> callback)
