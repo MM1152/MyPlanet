@@ -67,6 +67,33 @@ public class DataBase
         }
     }
 
+    public async UniTask<(object data, bool success)> GetDataToValue(string path)
+    {
+        object data = default;
+
+        DatabaseReference newReference = root.Child(path);
+        if (newReference == null)
+            return (data, false);
+
+        try
+        {
+            DataSnapshot snapshot = await newReference.GetValueAsync().AsUniTask();
+            if (!snapshot.Exists)
+                throw new System.Exception($"Empty Value in Firebase database : {path}");
+
+            data = snapshot.Value;
+            
+            return (data, true);
+        }
+        catch (System.Exception ex)
+        {
+#if DEBUG_MODE
+            Debug.LogError($"Firebase Database GetData Fail : {ex}");
+#endif
+            return (data, false);
+        }
+    }
+
     /// <summary>
     /// 해당 path의 모든 데이터를 T형식 리스트로 변환
     /// </summary>

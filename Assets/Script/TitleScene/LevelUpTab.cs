@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,8 +15,17 @@ public class LevelUpTab : MonoBehaviour
     [Header("Images")]
     [SerializeField] private Image planetImage;
 
+    [Header("Buttons")]
+    [SerializeField] private Button levelUpButton;
+
     private PlanetTable.Data planetData;
     private PlanetData.Data planetUserData;
+
+    private void Awake()
+    {
+        levelUpButton.onClick.AddListener(() => UpgradePlanet().Forget());
+    }
+
     public void UpdateData(PlanetTable.Data planetData)
     {
         this.planetData = planetData;
@@ -44,5 +54,13 @@ public class LevelUpTab : MonoBehaviour
             goldText.text = prevData.Gold.ToString();
             expText.text = prevData.Exp.ToString();
         }
+    }
+
+    private async UniTaskVoid UpgradePlanet()
+    {
+        var path = DataBasePaths.UserPath + FirebaseManager.Instance.UserId + "/" + "gold";
+        var result = await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.Database.GetDataToValue(path));
+
+        Debug.Log(int.Parse(result.Item1.ToString()));
     }
 }
