@@ -1,17 +1,17 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class ShotAttack : BaseShotAttack
+public class EliteMonsterAttack : BaseShotAttack
 {
-    public ShotAttack()
+    public EliteMonsterAttack()
     {
         shotStrategies = new Dictionary<ElementType, IShotStrategy>()
     {
         { ElementType.Normal, new NormalStrategy() },
         { ElementType.Fire, new HomingShot() },
-        { ElementType.Steel, new NormalStrategy() },
         { ElementType.Ice, new SpreadShot() },
-        { ElementType.Light, new LaserShot() },
+        { ElementType.Steel, new NormalStrategy() },
+        { ElementType.Light, new NormalStrategy() },
         { ElementType.Dark, new NormalStrategy() },
     };
     }

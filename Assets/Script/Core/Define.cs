@@ -95,6 +95,7 @@ public enum EnemyType
 {
     Melee = 0,
     Ranged = 1,
+    EliteMonster = 2,
 }
 
 public static class AddressableNames

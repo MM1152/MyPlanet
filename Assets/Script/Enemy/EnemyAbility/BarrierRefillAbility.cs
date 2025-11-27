@@ -22,7 +22,7 @@ public class BarrierRefillAbility : BaseAbility
         {
             if (targetEnemy == null || targetEnemy.IsDead) continue;
 
-            if (targetEnemy.ability is BarrierAbility barrierAbility)
+            if (targetEnemy.ability is BarrierAbility barrierAbility&&enemy.ElementType== targetEnemy.ElementType)
             {
                 barrierAbility.RefillBarrier(refillAmount);
             }

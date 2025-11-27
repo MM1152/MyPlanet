@@ -25,8 +25,8 @@ public class AttackState : IState
         }
 
         if (enemy.attackRange <= 0 || Vector2.Distance(enemy.transform.position, target.transform.position) <= enemy.attackRange)
-        {
-            enemy.attack.Attack(enemy);
+        {            
+            enemy.attack.Attack(enemy);            
             return;
         }
 
@@ -36,7 +36,7 @@ public class AttackState : IState
     public void Exit()
     {
         if (enemy.attack is ShotAttack shotAttack &&
-        shotAttack.shotStrategies[enemy.ElementType] is LaserShot laserShot)
+        shotAttack.GetShotStrategy(enemy.ElementType) is LaserShot laserShot)
         {
             laserShot.LaserReset();
         }
