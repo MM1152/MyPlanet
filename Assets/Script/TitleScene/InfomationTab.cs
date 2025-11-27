@@ -35,7 +35,7 @@ public class InfomationTab : MonoBehaviour
         }
     }
 
-    private void ResetStar()
+    private void ResetStar()    
     {
         for(int i = 0; i < startsImages.Length; i++)
         {

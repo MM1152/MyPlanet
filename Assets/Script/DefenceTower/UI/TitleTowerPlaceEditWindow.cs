@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using System.Linq;
 using Unity.VisualScripting;
+using System.Threading.Tasks;
 
 public class TitleTowerPlaceEditWindow : Window
 {
@@ -81,7 +82,7 @@ public class TitleTowerPlaceEditWindow : Window
     {
         this.presetData = presetData;
         this.presetIndex = presetIndex;
-        this.planetData = FirebaseManager.Instance.PlanetData.GetDeepCopy(this.presetData.PlanetId);
+        this.planetData = FirebaseManager.Instance.PlanetData.GetOrigin(this.presetData.PlanetId);
         placeCount = presetData.TowerId.Count;
 
         UpdateTowerHold();
@@ -212,10 +213,26 @@ public class TitleTowerPlaceEditWindow : Window
 
             int idx = i;
             placeHold.button.onClick.AddListener(() => {
+                OpenUnLockSlotPopup(idx);
                 if (placeHold.DisAble) return;
                 RotateCircle(idx);
                 FindOptionApplyTower(placeHolds[idx].TowerData);
             });
+        }
+
+        CheckPlaceHoldUnlockAble();
+    }
+
+    private void CheckPlaceHoldUnlockAble()
+    {
+        var unlockAbleSlotCount = DataTableManager.PlanetTable.GetUnlockAbleSlotCount(planetData.id, planetData.star);
+
+        for(int i = 0; i < unlockAbleSlotCount; i++)
+        {
+            if (planetData.openSlot[i] == -1)
+            {
+                placeHolds[i].SetUnLockAble(true);
+            }
         }
     }
 
@@ -297,5 +314,22 @@ public class TitleTowerPlaceEditWindow : Window
         int right = GetRightSlots(index , targetIndex);
 
         return (left, right);
+    }
+
+    private void OpenUnLockSlotPopup(int selectIdx)
+    {
+        if (placeHolds[selectIdx].UnLockAble)
+        {
+            var popup = popupManager.Open<UnLockPopup>(PopupIds.UnLockPopup);
+            popup.Setting(selectIdx , UnLock);
+        }
+    }
+
+    private void UnLock(int idx)
+    {
+        var task = FirebaseManager.Instance.PlanetData.UnLockSlotAsync(planetData.id, idx);
+        Managers.Instance.WaitForLoadingAsync(task).Forget();
+        placeHolds[idx].SetUnLockAble(false);
+        placeHolds[idx].UpdateSlot(0);
     }
 }

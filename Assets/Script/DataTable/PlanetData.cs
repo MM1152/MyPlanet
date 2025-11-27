@@ -26,14 +26,8 @@ public class PlanetData
             count = 0;
             star = 0;
             openSlot = new List<int>();
-            var grade = DataTableManager.PlanetTable.Get(id).grade;
-            var cnt = 0;
 
-            if (grade == "S") cnt = 7;
-            else if (grade == "A") cnt = 6;
-            else if (grade == "B") cnt = 5;
-            else if (grade == "C") cnt = 4;
-
+            var cnt = DataTableManager.PlanetTable.Get(id).InitOpenSlotCount;
             for(int i = 0; i < 12; i++)
             {
                 openSlot.Add(-1);
@@ -44,6 +38,17 @@ public class PlanetData
                 }
             }
         }
+
+        public int NeedPeiceCount => star switch
+        {
+            0 => DataTableManager.OptionTable.GetValueDataToInt(5050),
+            1 => DataTableManager.OptionTable.GetValueDataToInt(5051),
+            2 => DataTableManager.OptionTable.GetValueDataToInt(5052),
+            3 => DataTableManager.OptionTable.GetValueDataToInt(5053),
+            4 => DataTableManager.OptionTable.GetValueDataToInt(5054),
+            _ => 0
+        };
+    
     }
 
     public Data GetDeepCopy(int id)
@@ -120,7 +125,7 @@ public class PlanetData
             // 저장 성공
             Debug.Log ("Planet Data Save Success");
             if(!planetsTable.ContainsKey(planetId))
-            {
+            {   
                 planetsTable.Add(planetId, saveData);
             }
             else
@@ -145,9 +150,23 @@ public class PlanetData
         var path = DataBasePaths.PlanetPath + FirebaseManager.Instance.UserId + $"/{planetId}";
         planetsTable[planetId].level++;
 
-        var success = await FirebaseManager.Instance.Database.OverwriteJsonData(path, planetsTable[planetId]);
+        await FirebaseManager.Instance.Database.OverwriteJsonData(path, planetsTable[planetId]);
     }
 
+    public async UniTask UpgradeStarAsync(int planetId , int usePieceCount)
+    {
+        var path = string.Format(DataBasePaths.PlanetDataPathFormating, planetId);
+        planetsTable[planetId].star++;
+        planetsTable[planetId].count -= usePieceCount;
+        await FirebaseManager.Instance.Database.OverwriteJsonData(path, planetsTable[planetId]);
+    }
+
+    public async UniTask UnLockSlotAsync(int planetId, int unlockIdx)
+    {
+        var path = string.Format(DataBasePaths.PlanetDataPathFormating, planetId);
+        planetsTable[planetId].openSlot[unlockIdx] = 0;
+        await FirebaseManager.Instance.Database.OverwriteJsonData(path, planetsTable[planetId]);
+    }
     public void Release()
     {
         planetsTable.Clear();
