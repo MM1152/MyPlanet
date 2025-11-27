@@ -2,13 +2,13 @@
 
 public class LuminaSniperBullet : Bullet
 {
-    private int hominCount = 0;
+    private int homingCount = 0;
 
     public override void Init(Tower data)
     {
         base.Init(data);
         poolsId = PoolsId.LuminaSniperBullet;
-        hominCount = tower.BonusTargetingCount;
+        homingCount = tower.BonusTargetingCount;
     }
 
     public override void SetTarget(Transform target, float noise)
@@ -40,13 +40,14 @@ public class LuminaSniperBullet : Bullet
             find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
         }
 
-        if(hominCount > 0)
+        if(homingCount > 0)
         {
-            hominCount--;
+            homingCount--;
             var enemy = tower.towerManager.FindTargets(transform.position);
-            if(enemy != null && enemy.Count > 2)
+            if(enemy != null)
             {
-                var target = enemy[1];
+                if (target != enemy[0]) target = enemy[0].transform;
+                else if (enemy.Count > 2 && target != enemy[1]) target = enemy[1].transform;
                 SetTarget(target.transform, noise);
             }
             else

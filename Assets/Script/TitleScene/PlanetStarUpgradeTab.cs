@@ -70,7 +70,7 @@ public class PlanetStarUpgradeTab : MonoBehaviour
         currentPeiceCountText.text = $"조각 개수 : {currentPieceCount}/{needPieceCount}";
         starCountSlider.value = (float)currentPieceCount / needPieceCount;
 
-        needPeiceCountText.text = needPieceCount.ToString();
+        needPeiceCountText.text = "필요한 조각 개수 : " + needPieceCount.ToString();
     }
 
 
@@ -99,9 +99,9 @@ public class PlanetStarUpgradeTab : MonoBehaviour
         {
             var tasks = FirebaseManager.Instance.PlanetData.UpgradeStarAsync(planetTableData.ID , needPieceCount);
             await Managers.Instance.WaitForLoadingAsync(tasks);
+            upgradeButton.interactable = true;
             UpdateData();
         }
-        upgradeButton.interactable = true;
     }
 
     private int GetUnlockSlotCount(string grade , int starLevel)

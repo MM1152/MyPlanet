@@ -74,7 +74,7 @@ public class TitleTowerPlaceEditWindow : Window
     {
         selectIndex = 0;
         circle.transform.eulerAngles = Vector3.zero;
-
+        isRotate = false;
         base.Open();
     }
 

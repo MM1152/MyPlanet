@@ -51,12 +51,6 @@ public class PlanetData
     
     }
 
-    public Data GetDeepCopy(int id)
-    {
-        var copyData = new Data(id);
-        return copyData;
-    }
-
     public Data GetOrigin(int id)
     {
         return planetsTable[id];
