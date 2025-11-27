@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
-using NUnit.Framework.Interfaces;
 using TMPro;
 
 public class TitleBookWindow : Window

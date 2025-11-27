@@ -5,7 +5,6 @@ using System.Linq;
 using CsvHelper;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
-using UnityEditor.AddressableAssets.BuildReportVisualizer;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 

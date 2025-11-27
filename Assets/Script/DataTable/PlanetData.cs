@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Triggers;
 using System;
 using System.Collections.Generic;
-using UnityEditor.Overlays;
 using UnityEngine;
 //Firebase 저장용 데이터
 public class PlanetData
@@ -111,6 +109,10 @@ public class PlanetData
     {
         var path = DataBasePaths.PlanetPath + FirebaseManager.Instance.UserId + $"/{planetId}";
         var saveData = new Data(planetId);
+        if(planetId == 1001)
+        {
+            saveData.level = 1;
+        }
         var success = await FirebaseManager.Instance.Database.OverwriteJsonData(path, saveData);
 
         if(success)

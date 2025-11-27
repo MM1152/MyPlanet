@@ -31,11 +31,14 @@ public class TitleMainWindow : Window
         {
             FirebaseManager.Instance.Logout();
         });
+
+#if UNITY_EDITOR
         debugModeSceneButton.onClick.AddListener(() =>
         {
             LoadingScene.sceneId = SceneIds.DebugModeScene;
             SceneManager.LoadScene(SceneIds.LoadingScene);
         });
+#endif
         bookOpenButton.interactable = true;
         bookOpenButton.onClick.AddListener(() =>
         {

@@ -149,8 +149,8 @@ public class UserData : JsonSerialized
     public UserData()
     {
         nickName = "NoName-" + UnityEngine.Random.Range(10000, 50000);
-        gold = 0;
-        exp = 0;
+        gold = 30000;
+        exp = 30000;
         version = FirebaseManager.Instance.Version;
     }
 

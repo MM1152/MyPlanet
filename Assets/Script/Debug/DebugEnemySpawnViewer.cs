@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class DebugEnemySpawnViewer : MonoBehaviour
 {
+#if UNITY_EDITOR
     public TextMeshProUGUI enemyIdText;
     public Image enemyImage;
     public EnemyData.Data enemyData;
@@ -41,4 +42,5 @@ public class DebugEnemySpawnViewer : MonoBehaviour
     {
         enemyIdText.text = enemyData.ID.ToString();
     }
+#endif
 }
