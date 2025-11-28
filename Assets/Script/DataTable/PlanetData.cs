@@ -155,6 +155,13 @@ public class PlanetData
         await FirebaseManager.Instance.Database.OverwriteJsonData(path, planetsTable[planetId]);
     }
 
+    public async UniTask AddPieceCountAsync(int planetId, int amountPieceCount)
+    {
+        var path = string.Format(DataBasePaths.PlanetDataPathFormating, planetId);
+        planetsTable[planetId].count += amountPieceCount;
+        await FirebaseManager.Instance.Database.OverwriteJsonData(path, planetsTable[planetId]);
+    }
+
     public async UniTask UnLockSlotAsync(int planetId, int unlockIdx)
     {
         var path = string.Format(DataBasePaths.PlanetDataPathFormating, planetId);

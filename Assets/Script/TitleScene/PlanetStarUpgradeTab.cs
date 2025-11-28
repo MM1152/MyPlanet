@@ -37,7 +37,11 @@ public class PlanetStarUpgradeTab : MonoBehaviour
 
     public void UpdateData(PlanetTable.Data planetTableData)
     {
+        if (this.planetTableData != null)
+            FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetPeiceCountPathFormating , this.planetTableData.ID) ,OnValueChangeCount);
+
         this.planetTableData = planetTableData;
+        FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetPeiceCountPathFormating , this.planetTableData.ID) ,OnValueChangeCount);
         userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
 
         upgradeButton.interactable = true;
@@ -139,5 +143,10 @@ public class PlanetStarUpgradeTab : MonoBehaviour
         {
             unlockSlotText.text = $"{currentSlots} >> {nextSlots}";
         }
+    }
+
+    private void OnValueChangeCount(object sender , ValueChangedEventArgs args)
+    {
+        UpdatePeiceCount(planetTableData, userPlanetData);
     }
 }
