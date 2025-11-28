@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Video;
 
 public abstract class Tower
 {
@@ -68,7 +69,7 @@ public abstract class Tower
     public IStatusEffect StatusEffect => statusEffect;
     public RandomOptionBase Option => baseRandomOption;
 
-    private PlanetTable.Data planetData;
+    private PlanetLevelUpTable.Data planetData;
     protected GameObject projectTile;
     protected GameObject tower;
 
@@ -96,9 +97,12 @@ public abstract class Tower
     protected IStatusEffect statusEffect;
     protected int slotIndex = -1;
 
+    //Debug 용임 지우면 X
     public void SetPlanetData(PlanetTable.Data planetData)
     {
-        this.planetData = planetData;
+        var planetId = planetData.ID;
+        var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetId);
+        this.planetData = userData.PlanetLevelData;
     }
 
     public virtual void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
@@ -114,7 +118,8 @@ public abstract class Tower
             if(gameData != null)
             {
                 var planetId = gameData.PlanetId;
-                this.planetData = DataTableManager.PlanetTable.Get(planetId);
+                var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetId);
+                this.planetData = userData.PlanetLevelData;
             }
         }
         finally

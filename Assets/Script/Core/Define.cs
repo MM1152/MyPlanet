@@ -18,6 +18,7 @@ public enum WindowIds
     TitleBookWindow = 8,
     TitleBookInfomationWindow = 9,
     VictoryWindow = 10,
+    OptionUpgradeWindow = 11,
 }
 
 public enum PopupIds
@@ -211,4 +212,12 @@ public static class DataBasePaths
     public static string PlanetPeiceCountPathFormating => PlanetDataPathFormating + "/count";
     public static string PlanetStarCountPathFormating => PlanetDataPathFormating + "/star";
     public static string PlanetOpenSlotPathFormating => PlanetDataPathFormating + "/openSlot";
+}
+
+public static class EnemyTypes
+{
+    private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 4026, 5026, 6026, 7026 };
+    private static readonly HashSet<int> EliteMonseterIds = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
+    public static bool IsEliteMonster(int id) => EliteMonseterIds.Contains(id);
+    public static bool IsBossMonster(int id) => BossMonsterIds.Contains(id);
 }

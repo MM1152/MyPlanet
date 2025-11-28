@@ -48,7 +48,8 @@ public class PlanetData
             4 => DataTableManager.OptionTable.GetValueDataToInt(5054),
             _ => 0
         };
-    
+        
+        public PlanetLevelUpTable.Data PlanetLevelData => DataTableManager.PlanetLevelUpTable.GetData(id, level);
     }
 
     public Data GetOrigin(int id)
