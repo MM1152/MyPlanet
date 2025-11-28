@@ -226,12 +226,15 @@ public class TitleTowerPlaceEditWindow : Window
     private void CheckPlaceHoldUnlockAble()
     {
         var unlockAbleSlotCount = DataTableManager.PlanetTable.GetUnlockAbleSlotCount(planetData.id, planetData.star);
+        var currentOpenSlotCount = planetData.openSlot.Count(x => x != -1);
 
-        for(int i = 0; i < unlockAbleSlotCount; i++)
+        bool unlockAble = unlockAbleSlotCount - currentOpenSlotCount == 0 ? false : true; 
+
+        for(int i = 0; i < placeHolds.Count; i++)
         {
-            if (planetData.openSlot[i] == -1)
+            if(planetData.openSlot[i] == -1)
             {
-                placeHolds[i].SetUnLockAble(true);
+                placeHolds[i].SetUnLockAble(unlockAble);
             }
         }
     }
@@ -327,9 +330,16 @@ public class TitleTowerPlaceEditWindow : Window
 
     private void UnLock(int idx)
     {
-        var task = FirebaseManager.Instance.PlanetData.UnLockSlotAsync(planetData.id, idx);
-        Managers.Instance.WaitForLoadingAsync(task).Forget();
-        placeHolds[idx].SetUnLockAble(false);
-        placeHolds[idx].UpdateSlot(0);
+        UnLockAsync(idx).Forget();
     }
+
+    private async UniTaskVoid UnLockAsync(int idx)
+    {
+        var task = FirebaseManager.Instance.PlanetData.UnLockSlotAsync(planetData.id, idx);
+        await Managers.Instance.WaitForLoadingAsync(task);
+        CheckPlaceHoldUnlockAble();
+        placeHolds[idx].UpdateSlot(0);
+        placeHolds[idx].SetUnLockAble(false);
+    }
+
 }
