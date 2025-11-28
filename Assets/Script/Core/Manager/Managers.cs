@@ -75,4 +75,11 @@ public class Managers
         await UniTask.WhenAll(task);
         loadingProgress.SetActive(false);
     }
+
+    public async UniTask WaitForLoadingAsync(UniTask task)
+    {
+        loadingProgress.SetActive(true);
+        await UniTask.WhenAll(task);
+        loadingProgress.SetActive(false);
+    }
 }   

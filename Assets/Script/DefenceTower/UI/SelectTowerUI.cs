@@ -40,7 +40,7 @@ public class SelectTowerUI : MonoBehaviour
     public void SetTowerData(Tower data)
     {
         this.towerData = data.TowerData;
-        towerNameText.text = towerData.Name;
+        towerNameText.text = towerData.Name + (data.Level == 0 ? "" : $"+{data.Level}단계");
         towerTypeText.text = towerData.AttackType;
         slotIndexText.text = data.SlotIndex + "번 슬릇";
         towerDescriptionText.text = "대충 이런 타워입니다~";
