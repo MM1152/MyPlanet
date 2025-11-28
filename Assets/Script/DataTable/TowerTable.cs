@@ -44,6 +44,8 @@ public class TowerTable : DataTable
         };
         [CsvHelper.Configuration.Attributes.Ignore]
         public float optionValue;
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public float FullOptionValue => optionValue;
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -54,7 +56,7 @@ public class TowerTable : DataTable
 
         foreach (var data in datas)
         {
-            data.optionValue = Random.Range(data.Min_Value , data.Max_Value);
+            data.optionValue = (int)Random.Range(data.Min_Value , data.Max_Value);
             towerTable.Add(data.ID, data);
         }
 

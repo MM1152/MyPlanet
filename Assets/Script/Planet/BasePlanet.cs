@@ -57,7 +57,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     {
         planetData = DataTableManager.PlanetTable.Get(FirebaseManager.Instance.PresetData.GetGameData().PlanetId);
         userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
-        planetLevelData = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID, userPlanetData.level);
+        planetLevelData = userPlanetData.PlanetLevelData;
 
         typeEffectiveness.Init((ElementType)planetData.Attribute);
         passiveSystem.Init(planetData.Skill_ID);

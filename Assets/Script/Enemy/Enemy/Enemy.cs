@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         get
         {
-            if (isBoss)
+            if (EnemyTypes.IsEliteMonster(enemyData.ID))
             {
                 return EnemyType.EliteMonster;
             }
@@ -76,8 +76,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public Action ReturnMoveAction;
 
-    private static readonly HashSet<int> BossIDs = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
-    public bool isBoss => BossIDs.Contains(enemyData.ID);
+
 
     public LineRenderer enemyLineRenderer;
 
@@ -127,11 +126,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         ResetActions();
         ability?.SetEnemy(this);
 #if DEBUG_MODE
-        if (isBoss) this.transform.localScale = new Vector2(1f, 1f);
+        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector2(1f, 1f);
 #endif
         ReturnMoveAction = () =>
         {
-            if (!IsDead && enemyType == EnemyType.EliteMonster)
+            if (!IsDead && EnemyTypes.IsEliteMonster(data.ID))
             {
                 stateMachine.ChangeState(stateMachine.walkState);
             }
@@ -144,6 +143,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         abilityAction = null;
         OnBuffRemoved = null;
     }
+
 #if DEBUG_MODE
     private void SetColor(int typeEffectiveness)
     {
@@ -284,6 +284,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();
         OnDie?.Invoke(this);
+        OnDie = null;
     }
 
     public void SetBonusRange(int bonus)
