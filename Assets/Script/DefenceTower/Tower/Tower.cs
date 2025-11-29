@@ -9,16 +9,16 @@ public abstract class Tower
     public int FullDamage => towerData.ATK + BonusDamage ;
     public int BaseDamage => towerData.ATK;
 
-    public float FullAttackSpeed => towerData.Fire_Rate + BonusAttackSpeed;
+    public float FullAttackSpeed => (towerData.Fire_Rate + BonusAttackSpeed) * (1 + BonusAttackSpeedPercent);
     public float BaseAttackSpeed => towerData.Fire_Rate;
-
     public float FullAttackRange => towerData.Attack_Range + BonusAttackRange;
     public float BaseAttackRange => towerData.Attack_Range;
 
     public float FullNoise => noise + BonuseNoise;
 
     public int CalcurateAttackDamage => (int)((FullDamage + planetData.ATK * 0.1f) * (1 + BonusDamagePercent));
-
+    
+    public float BonusAttackSpeedPercent { get; set; }
     public float BonusDamagePercent { get; set; }
     public float BonusAttackSpeed { get; set; }
     public int BonusDamage { get; set; }
@@ -302,12 +302,12 @@ public abstract class Tower
 
     public void AddBonusAttackSpeedTopercent(float percent)
     {
-        bonusAttackSpeed += BaseAttackSpeed * percent;
+        BonusAttackSpeedPercent += percent;
     }
 
     public void MinusBonusAttackSpeedTopercent(float percent)
     {
-        bonusAttackSpeed -= BaseAttackSpeed * percent;
+        BonusAttackSpeedPercent -= percent;
     }
 
     public virtual void PlaceTower()

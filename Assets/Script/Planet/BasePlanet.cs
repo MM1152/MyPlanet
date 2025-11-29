@@ -133,15 +133,28 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         }
     }
 
-    public void AddShield (int amount)
+    public void AddShield(int amount)
     {
         shield += amount;
         OnChanageHP();
     }
 
+    public void AddShieldToPercent(float percent)
+    {
+        shield += (int)(maxHp * percent);
+        OnChanageHP();
+    }
+
+    public void RemoveShieldToPercent(float percent)
+    {
+        shield -= (int)(maxHp * percent);
+        shield = Mathf.Clamp(shield, 0, maxHp);
+        OnChanageHP();
+    }
+
     public void OnChanageHP()
     {
-        hpSlider?.UpdateSlider(hp, maxHp, FullHp / maxHp * 100, FullHp, maxHp);
+        hpSlider?.UpdateSlider(hp, maxHp, $"{((float)FullHp / maxHp) * 100f:F2}", FullHp, maxHp);
         shieldSlider?.UpdateSlider(shield, maxHp, "" , "");
     }
 

@@ -23,7 +23,6 @@ public class SimpleMove : IMove
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
-        Debug.Log("Move");
         if (distance <= enemy.attackRange && enemy.enemyType != EnemyType.Melee)
         {
             enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
