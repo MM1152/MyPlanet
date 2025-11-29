@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using Unity.VisualScripting;
-
+using UnityEngine;
 public abstract class Consumable
 {
     protected TowerManager towerManager;
@@ -12,7 +11,7 @@ public abstract class Consumable
 
     private CancellationTokenSource ctr;
     protected float duration;
-
+    protected UnityEngine.GameObject uiTab;
     public void Init(TowerManager towerManager , BasePlanet planet , ConsumalbeTable.Data data)
     {
         this.towerManager = towerManager;
@@ -25,19 +24,23 @@ public abstract class Consumable
         }
 
         ctr = new CancellationTokenSource();
+        this.duration = consumData.duration;
+        UseItemAsync(consumData.duration, ctr).Forget();
     }
 
-    public void UseItem()
+    public void SetUI(UnityEngine.GameObject uiTab)
     {
-        UseItemAsync(consumData.duration, ctr).Forget();
-        this.duration = consumData.duration;
+        this.uiTab = uiTab;
     }
 
     public void Release()
     {
-        ctr.Cancel();
-        ctr.Dispose();
-        ctr = null;
+        if(ctr != null && !ctr.IsCancellationRequested)
+        {
+            ctr.Cancel();
+            ctr.Dispose();
+            ctr = null;
+        }
     }
 
     public void Update(float deltaTIme)

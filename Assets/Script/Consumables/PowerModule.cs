@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class PowerModule : Consumable
 {
@@ -14,8 +15,7 @@ public class PowerModule : Consumable
                 towers[i].MinusBonusDamageToPercent(consumData.effect_value);
             }
         }
-        Release();
-        duration = 0f;
+        GameObject.Destroy(uiTab);
     }
 
     protected override async UniTaskVoid UseItemAsync(float duration , CancellationTokenSource ctr)
@@ -38,4 +38,5 @@ public class PowerModule : Consumable
             ResetItem();
         }
     }
+
 }

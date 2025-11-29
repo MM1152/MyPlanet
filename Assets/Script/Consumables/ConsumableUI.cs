@@ -17,8 +17,8 @@ public class ConsumableUI : MonoBehaviour
     public void SetConsumable(Consumable cosumable)
     {
         this.consumable = cosumable;
+        this.consumable.SetUI(this.gameObject);
         consumableNameText.text = consumable.ConsumData.Name;
-        consumable.UseItem();
     }
 
     private void Update()
@@ -30,8 +30,6 @@ public class ConsumableUI : MonoBehaviour
             if (consumable.GetDuration() <= 0f)
             {
                 consumable = null;
-
-                Destroy(this.gameObject);
             }
         }
     }
