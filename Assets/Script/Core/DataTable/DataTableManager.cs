@@ -21,7 +21,7 @@ public static class DataTableManager
     public static SpriteTable SpriteTable => Get<SpriteTable>("SpriteTable");
     public static OptionTable OptionTable => Get<OptionTable>(DataTableIds.OptionTable);
     public static PlanetLevelUpTable PlanetLevelUpTable => Get<PlanetLevelUpTable>(DataTableIds.PlanetLevelUpTable);
-
+    public static ConsumalbeTable ConsumalbeTable => Get<ConsumalbeTable>(DataTableIds.ConsumableTable);
     static DataTableManager()
     {
         LoadAllAsync().Forget();
@@ -42,6 +42,7 @@ public static class DataTableManager
         var spriteTable = new SpriteTable();
         var optionTable = new OptionTable();
         var planetLevelUpTable = new PlanetLevelUpTable();
+        var consumalbeTable = new ConsumalbeTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -58,6 +59,7 @@ public static class DataTableManager
             spriteTable.LoadAsync(DataTableIds.ElementSpriteTable),
             optionTable.LoadAsync(DataTableIds.OptionTable),
             planetLevelUpTable.LoadAsync(DataTableIds.PlanetLevelUpTable),
+            consumalbeTable.LoadAsync(DataTableIds.ConsumableTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

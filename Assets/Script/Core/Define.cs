@@ -180,6 +180,7 @@ public static class DataTableIds
     public static readonly string AttackTypeSpriteTable = "AttackTypeSpriteTable";
     public static readonly string OptionTable = "OptionTable";
     public static readonly string PlanetLevelUpTable = "PlanetLevelUpTable";
+    public static readonly string ConsumableTable = "ConsumableTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
@@ -220,4 +221,10 @@ public static class EnemyTypes
     private static readonly HashSet<int> EliteMonseterIds = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
     public static bool IsEliteMonster(int id) => EliteMonseterIds.Contains(id);
     public static bool IsBossMonster(int id) => BossMonsterIds.Contains(id);
+}
+
+public static class ColorDefine
+{
+    public static readonly Color TowerSelectUIColor = new Color(0.5058824f , 0.7921569f , 0.764706f , 1f);
+    public static readonly Color ConsumableSelectUiColor = new Color(0.6235294f, 0.654902f, 0.8196079f, 1f);
 }

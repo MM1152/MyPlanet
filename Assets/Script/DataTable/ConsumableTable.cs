@@ -1,12 +1,13 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 public class ConsumalbeTable : DataTable
 {
     private Dictionary<int, Data> consumableTable = new Dictionary<int, Data>();
-
+    public ConditionFactory conditionFactory = new ConditionFactory();
     public class Data
     {
         public int Item_id { get; set; }
@@ -18,6 +19,8 @@ public class ConsumalbeTable : DataTable
         public int duration { get; set; }
         public int Item_description { get; set; }
 
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public ICondition condition;
         public string Name => DataTableManager.StringTable.Get(name_id);
         public string Description => DataTableManager.StringTable.Get(Item_description);
     }
@@ -32,6 +35,7 @@ public class ConsumalbeTable : DataTable
         foreach(var data in result)
         {
             consumableTable.Add(data.Item_id, data);
+            data.condition = conditionFactory.CreateInstance(data.Item_Condition);
         }
 
         return (filename, this);
@@ -40,5 +44,28 @@ public class ConsumalbeTable : DataTable
     public Data Get(int itemId)
     {
         return consumableTable[itemId];
+    }
+
+    public List<Data> GetAll()
+    {
+        return new List<Data>(consumableTable.Values);
+    }
+
+    public List<Data> GetDatasWithCondition(List<Tower> towers)
+    {
+        var lists = new List<Data>();
+
+        foreach(var consumable in consumableTable.Values)
+        {
+            foreach(var tower in towers)
+            {
+                if(consumable.condition.CheckCondition(tower , null, null) && !lists.Contains(consumable))
+                {
+                    lists.Add(consumable);
+                }
+            }
+        }
+
+        return lists;
     }
 }

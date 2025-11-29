@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class ConditionFactory : BaseFactory<ICondition>
+public class  ConditionFactory : BaseFactory<ICondition>
 {
     private Dictionary<int, ICondition> conditionTable = new Dictionary<int, ICondition>()
     {

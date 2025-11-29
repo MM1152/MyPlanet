@@ -14,19 +14,28 @@ public class PlaceTowerWindow : Window
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private Button selectTowerButton;
+    [SerializeField] private ConsumableManager consumableManager;
+
+    [Header("타워와 소모품 선택지에서 나올 확률")]
+    [SerializeField] private float towerSpawnPercent;
+    [SerializeField] private float consumableSpawnPercent;
 
     private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
     private int selectTowerIndex = -1;
+
+
 #if DEBUG_MODE
     public Button testButton;
     [Header("뽑고 싶은 타워 ID 값 넣기")]
     public int towerId;
+    [Header("뽑고 싶은 소모품 ID 값 넣기")]
+    public int consumableId;
 #endif
 
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
-
+        
         for (int i = 0; i < selectTowerUICount; i++)
         {
             SelectTowerUI obj = Instantiate(selectTowerUI, selectTowerUIRoot);
@@ -45,33 +54,38 @@ public class PlaceTowerWindow : Window
     private void OnClickSelectTowerButton()
     {
         if (selectTowerIndex == -1) return;
-
         var towerData = selectTowerUIs[selectTowerIndex].GetTowerData();
-        towerManager.PlaceTower(towerData);
+        if (towerData != null)
+        {
+            towerManager.PlaceTower(towerData);
+        }
+        else
+        {
+            var consumData = selectTowerUIs[selectTowerIndex].GetCosumaableData();
+            consumableManager.SetConsumable(consumData);
+        }
         manager.Close();
     }
 
     public override void Open()
     {
-        if(selectTowerIndex != -1)
-        {
-            selectTowerUIs[selectTowerIndex].ResetOutline();
-            selectTowerIndex = -1;
-        }
-
+        selectTowerIndex = -1;
         levelText.text = $"Lv. {towerManager.CurrentLevel}";
 
         for (int i = 0; i < selectTowerUICount; i++)
         {
-            var tower = towerManager.GetRandomTower();
-#if DEBUG_MODE
-            if (towerId != -1)
+            var percent = Random.Range(0f, 1f);
+            if(percent < towerSpawnPercent)
             {
-                tower = towerManager.GetTower(towerId);
+                var tower = towerManager.GetRandomTower();
+                selectTowerUIs[i].SetTowerData(tower);
             }
-#endif
-            // FIX : 이부분 랜덤하게 데이터 넘겨주게 변경
-            selectTowerUIs[i].SetTowerData(tower);
+            else
+            {
+                var consumable = consumableManager.GetRandomData();
+                selectTowerUIs[i].SetConsumableData(consumable);
+            }
+            
         }
         Time.timeScale = 0f;
         base.Open();
@@ -79,6 +93,10 @@ public class PlaceTowerWindow : Window
 
     public override void Close()
     {
+        for(int i = 0; i < selectTowerUIs.Count; i++)
+        {
+            selectTowerUIs[i].ResetOutline();
+        }
         Time.timeScale = 1f;
         base.Close();
     }
