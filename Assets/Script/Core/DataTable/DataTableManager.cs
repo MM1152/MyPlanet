@@ -22,6 +22,8 @@ public static class DataTableManager
     public static OptionTable OptionTable => Get<OptionTable>(DataTableIds.OptionTable);
     public static PlanetLevelUpTable PlanetLevelUpTable => Get<PlanetLevelUpTable>(DataTableIds.PlanetLevelUpTable);
     public static ConsumalbeTable ConsumalbeTable => Get<ConsumalbeTable>(DataTableIds.ConsumableTable);
+    public static TerraformingTable TerraformingTable => Get<TerraformingTable>(DataTableIds.TerraformingTable);
+
     static DataTableManager()
     {
         LoadAllAsync().Forget();
@@ -43,6 +45,7 @@ public static class DataTableManager
         var optionTable = new OptionTable();
         var planetLevelUpTable = new PlanetLevelUpTable();
         var consumalbeTable = new ConsumalbeTable();
+        var terraformingTable = new TerraformingTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -60,6 +63,7 @@ public static class DataTableManager
             optionTable.LoadAsync(DataTableIds.OptionTable),
             planetLevelUpTable.LoadAsync(DataTableIds.PlanetLevelUpTable),
             consumalbeTable.LoadAsync(DataTableIds.ConsumableTable),
+            terraformingTable.LoadAsync(DataTableIds.TerraformingTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

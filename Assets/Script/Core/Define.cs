@@ -1,8 +1,6 @@
-﻿using NUnit.Framework.Constraints;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Collections.Generic;
 using UnityEngine;
+
 
 public enum WindowIds
 {
@@ -19,6 +17,8 @@ public enum WindowIds
     TitleBookInfomationWindow = 9,
     VictoryWindow = 10,
     OptionUpgradeWindow = 11,
+    TerraformingWindow = 12,
+    WaveWindow = 13,
 }
 
 public enum PopupIds
@@ -91,6 +91,7 @@ public enum PoolsId
     SimpleBullet = 300,
     HomingBullet = 301,
     SpreadBullet = 302,
+    SwitchDirectionBullet = 303,
 
     Exp = 400,
     DamageText = 600,
@@ -103,6 +104,7 @@ public enum EnemyType
     Melee = 0,
     Ranged = 1,
     EliteMonster = 2,
+    Boss = 3,
 }
 
 public static class AddressableNames
@@ -137,6 +139,7 @@ public static class AddressableNames
         { "Surge" , PoolsId.Surge },
         { "BlackMineBullet" , PoolsId.BlackMineBullet },
         { "ShadowSurge" , PoolsId.ShadowSurge },
+        { "SwitchDirectionBullet", PoolsId.SwitchDirectionBullet },
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -180,6 +183,7 @@ public static class DataTableIds
     public static readonly string AttackTypeSpriteTable = "AttackTypeSpriteTable";
     public static readonly string OptionTable = "OptionTable";
     public static readonly string PlanetLevelUpTable = "PlanetLevelUpTable";
+    public static readonly string TerraformingTable = "TerraformingTable";
     public static readonly string ConsumableTable = "ConsumableTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
@@ -217,7 +221,7 @@ public static class DataBasePaths
 
 public static class EnemyTypes
 {
-    private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 4026, 5026, 6026, 7026 };
+    private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 4027, 5027, 6027, 7027 };
     private static readonly HashSet<int> EliteMonseterIds = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
     public static bool IsEliteMonster(int id) => EliteMonseterIds.Contains(id);
     public static bool IsBossMonster(int id) => BossMonsterIds.Contains(id);
@@ -228,3 +232,71 @@ public static class ColorDefine
     public static readonly Color TowerSelectUIColor = new Color(0.5058824f , 0.7921569f , 0.764706f , 1f);
     public static readonly Color ConsumableSelectUiColor = new Color(0.6235294f, 0.654902f, 0.8196079f, 1f);
 }
+
+public static class TerraformingData
+{
+    public enum TerraformingTargetType
+    {
+        Plant = 1,
+        DefenseTower = 2,
+        Tower = 3,
+        Player = 4
+    }
+
+    public enum T_Effect_type
+    {
+        IncreaseGoldGain = 12014,
+        IncreaseExpGain = 12015,
+        IncreaseMaxHealth = 12017,
+        IncreaseAttackSpeed = 12018,
+        IncreaseAttackDamage = 12012,
+        HealthRegeneration = 12019,
+        IncreaseMovementSpeed = 12008,
+        IncreaseDefense = 12016
+    }
+
+    public static HashSet<int> terraformingUnlockPoints = new HashSet<int>();
+    public static int[] terrformingOpenValues = new int[4] { 20, 45, 75, 100 };
+    private static readonly Dictionary<int, string> terraformingNameDataKeys = new()
+    {
+        { 6119 , "세이지 하버" },
+        { 6120 , "로터스 필드" },
+        { 6121 , "허브리움" },
+        { 6122 , "솔라 루트" },
+        { 6123 , "세렌시아" },
+        { 6124 , "네오 시드"},
+        { 6125 , "글로리페탈"},
+        { 6126 , "엘레멘트 리프"}
+    };
+
+    private static readonly Dictionary<int, string> terraformingDescDataKeys = new()
+    {
+        { 6127 , "게임 종료 후 결산 시 얻는 골드 획득량이 5% 증가합니다." },
+        { 6128 , "게임 종료 후 결산 시 얻는 경험치 획득량이 5% 증가합니다." },
+        { 6129 , "행성의 최대 체력이 12% 증가합니다." },
+        { 6130 , "방어 위성에 설치된 타워 전체의 공격 속도가 10% 증가합니다." },
+        { 6131 , "행성의 공격력이 15% 증가합니다." },
+        { 6132 , "1초마다 행성 체력이 1%씩 재생됩니다." },
+        { 6133 , "방어 위성의 이동 속도가 25% 증가합니다." },
+        { 6134 , "행성의 방어력이 15% 증가합니다." }
+    };
+
+    public static string GetTerraformingNameDataKey(int id)
+    {
+        if (terraformingNameDataKeys.TryGetValue(id, out string key))
+        {
+            return key;
+        }
+        return string.Empty;
+    }
+
+    public static string GetTerraformingDescriptionDataKey(int id)
+    {
+        if (terraformingDescDataKeys.TryGetValue(id, out string key))
+        {
+            return key;
+        }
+        return string.Empty;
+    }
+}
+

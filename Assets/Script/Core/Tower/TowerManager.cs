@@ -41,7 +41,7 @@ public class TowerManager : MonoBehaviour
     {
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
         presetGameData = FirebaseManager.Instance.PresetData.GetGameData();
-        for(int i = 0; i < presetGameData.TowerId.Count; i++)
+        for (int i = 0; i < presetGameData.TowerId.Count; i++)
         {
             int towerId = presetGameData.TowerId[i];
             if (towerId == -1)
@@ -51,24 +51,24 @@ public class TowerManager : MonoBehaviour
             }
 
             var data = DataTableManager.TowerTable.Get(towerId);
-            AddTower(data , i + 1);
+            AddTower(data, i + 1);
         }
     }
 
     private void Start()
     {
-        expSlider?.UpdateSlider(0, levelUpExp , currentLevel , levelUpExp - totalExp);
+        expSlider?.UpdateSlider(0, levelUpExp, currentLevel, levelUpExp - totalExp);
     }
 
     public void LateUpdate()
     {
 #if DEBUG_MODE
-        if(stopAttack)
+        if (stopAttack)
         {
             return;
         }
 #endif
-        foreach(var tower in towers)
+        foreach (var tower in towers)
         {
             tower?.Update(Time.deltaTime);
         }
@@ -92,28 +92,28 @@ public class TowerManager : MonoBehaviour
     public Enemy FindTargetLast()
     {
         var enemys = enemySpawnManager.GetEnemyDatas(tower.transform.position);
-        if(enemys != null) 
+        if (enemys != null)
             return enemys[enemys.Count - 1];
 
         return null;
     }
 
-    public Enemy FindTargetInRange(Vector3 targetPosition , float distance)
+    public Enemy FindTargetInRange(Vector3 targetPosition, float distance)
     {
         var targets = FindTargets();
-        if(targets == null)
+        if (targets == null)
             return null;
 
         var inRangeTargets = targets.Where(x => Vector3.Distance(x.transform.position, targetPosition) <= distance).ToList();
-        if(inRangeTargets.Count == 0)
+        if (inRangeTargets.Count == 0)
             return null;
         int rand = UnityEngine.Random.Range(0, inRangeTargets.Count);
         return inRangeTargets[rand];
     }
 
-    public virtual void AddTower(TowerTable.Data data , int slotIndex)
+    public virtual void AddTower(TowerTable.Data data, int slotIndex)
     {
-        if(data == null)
+        if (data == null)
         {
             towers.Add(null);
             return;
@@ -121,7 +121,7 @@ public class TowerManager : MonoBehaviour
 
         Tower instanceTower = towerFactory.CreateInstance(data.ID);
         towers.Add(instanceTower);
-        instanceTower.Init(tower, this, data , slotIndex);
+        instanceTower.Init(tower, this, data, slotIndex);
     }
 
     public virtual void PlaceTower(TowerTable.Data towerData)
@@ -131,7 +131,7 @@ public class TowerManager : MonoBehaviour
 
         if (towers[index].UseAble)
         {
-            if(levelUpData != null)
+            if (levelUpData != null)
             {
                 towers[index].LevelUp(levelUpData);
             }
@@ -181,7 +181,7 @@ public class TowerManager : MonoBehaviour
         List<Tower> returnTowers = new List<Tower>();
         Tower tower = towers[Utils.ClampIndex(target - radius, towers.Count)];
 
-        if( tower != null )
+        if (tower != null)
         {
             returnTowers.Add(tower);
         }
@@ -265,7 +265,7 @@ public class TowerManager : MonoBehaviour
 
     public Tower GetIdToTower(int id)
     {
-        for(int i = 0; i < towers.Count; i++)
+        for (int i = 0; i < towers.Count; i++)
         {
             if (towers[i].ID == id)
             {
@@ -278,7 +278,7 @@ public class TowerManager : MonoBehaviour
 
     public List<Tower> GetTowerToAttribute(ElementType elementType)
     {
-        var elementTower = towers.Where(x => x != null &&  x.GetElementType() == elementType).ToList();
+        var elementTower = towers.Where(x => x != null && x.GetElementType() == elementType).ToList();
         return elementTower;
     }
 
@@ -286,4 +286,24 @@ public class TowerManager : MonoBehaviour
     {
         return towers;
     }
+
+    public void UpgradeAllTowerATK(float effectValue)
+    {
+        foreach (var tower in towers)
+        {
+            if (tower == null) continue;
+            var bonusDamage = tower.FullDamage * effectValue;
+            tower.AddBonusDamage((int)bonusDamage);
+        }
+    }   
+
+    public void UpgradeAllTowerAttackSpeed(float percent)
+    {
+        foreach (var tower in towers)
+        {
+            if (tower == null) continue;
+            tower.AddBonusAttackSpeedTopercent(percent); 
+        }
+    }
+
 }

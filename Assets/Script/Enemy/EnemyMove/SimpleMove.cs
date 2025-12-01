@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SimpleMove : IMove
 {
-    GameObject target;
+    private GameObject target;
 
     public void Init(Enemy enemy)
     {
@@ -22,7 +22,7 @@ public class SimpleMove : IMove
         Vector2 dir = target.transform.position - enemy.transform.position;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-
+        
         if (distance <= enemy.attackRange && enemy.enemyType != EnemyType.Melee)
         {
             enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);

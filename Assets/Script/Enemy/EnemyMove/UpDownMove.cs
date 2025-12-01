@@ -1,6 +1,3 @@
-using System.Security;
-using Cysharp.Threading.Tasks.Triggers;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum UpDownPattern

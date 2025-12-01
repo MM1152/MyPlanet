@@ -1,19 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-
+using Cysharp.Threading.Tasks;
+using TMPro;
 public class WaveManager : MonoBehaviour
 {
     public class SpawnPoint
     {
         public Vector2 position;
         public int enemyId;
-      
+
         public int spawnCount;
 
         public int maxSpawnCount;
-     
+
         public float spawnStartDelayTime;
-  
+
         public float spawnDelayTime;
         public float timer = 0f;
         public int currentSpawnEnemyCount;
@@ -22,8 +24,19 @@ public class WaveManager : MonoBehaviour
     private Dictionary<int, List<SpawnPoint>> waves = new Dictionary<int, List<SpawnPoint>>();
     private List<SpawnPoint> currentWave = new List<SpawnPoint>();
     private List<Vector2> spawnPoints = new List<Vector2>();
+
+    [SerializeField]
+    private SliderValue sliderValue;
+
+    [SerializeField]
+    private Terraforming terraforming;
+    //현재량 
+    private int waveTerraformingValue = 0;
+    //총량
+    private int totalTerraformingValue = 0;
+
     private Rect screenBounds;
-    public Rect ScreenBounds => screenBounds;   
+    public Rect ScreenBounds => screenBounds;
 
     private float spawnOffset = 1.0f;
     private int topPointCount = 3;
@@ -31,13 +44,14 @@ public class WaveManager : MonoBehaviour
     private int bottomPointCount = 3;
     private int rightPointCount = 4;
 
-    private int currentWaveIndex;
+    private int nextWaveIndex = 1;
+    private int currentWaveIndex = 1;
     public int CurrentWaveIndex => currentWaveIndex;
-    private float waveDuration = 90f;
+    private float waveDuration = 20f;
     public float WaveDuration => waveDuration;
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;
-    public bool isFinalWaveEnded = false;
+    public bool isFinalWaveEnded => currentWaveIndex >= waves.Count;
 
     public int waveClearCount = 0;
     public int totalEnemyCount = 0;
@@ -51,6 +65,19 @@ public class WaveManager : MonoBehaviour
 #if DEBUG_MODE
     public bool UIUpdateTest = false;
 #endif
+
+    public int terrformingValueCount = 56;
+
+    // public int[] monsterStage = new int[2] { 2, 3 };
+
+    [SerializeField]
+    private GameObject warringWindow;
+    [SerializeField]
+    private TextMeshProUGUI warringText;
+
+
+    [SerializeField]
+    private WaveWindow waveWindow;
 
     private int stageId = 1;
     public int SetStageId(int id)
@@ -69,9 +96,13 @@ public class WaveManager : MonoBehaviour
         InitPoint();
         DataInit();
         ResetWave();
+        TerraformingData.terraformingUnlockPoints.Clear();
 #if DEBUG_MODE
         UIUpdateTest = true;
 #endif
+        waveTerraformingValue = 0;
+
+        sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, waveTerraformingValue * 100 / totalTerraformingValue);
     }
 
     private void ResetWave()
@@ -80,8 +111,8 @@ public class WaveManager : MonoBehaviour
         currentWaveIndex = 1;
         totalEnemyCount = 0;
         waveElapsedTime = 0f;
-        isFinalWaveEnded = false;
         currentWave = waves[currentWaveIndex];
+        waveWindow.SetWaveText(currentWaveIndex);
         foreach (var spawnPoint in currentWave)
         {
             spawnPoint.timer = 0f;
@@ -125,6 +156,26 @@ public class WaveManager : MonoBehaviour
                 waves[waveNumber].Add(spawnPoint);
             }
         }
+
+
+
+        if (stageData != null)
+        {
+            foreach (var waveGroup in stageData.waveGroups)
+            {
+                for (int i = 0; i < terrformingValueCount; i++)
+                {
+                    if (waveGroup.waveDatas.Count <= i) break;
+                    totalTerraformingValue += waveGroup.waveDatas[i].MAX_SPON;
+                }
+            }
+        }
+        else
+        {
+            totalTerraformingValue = 0;
+        }
+
+
     }
 
     private void InitScreenBounds()
@@ -179,6 +230,15 @@ public class WaveManager : MonoBehaviour
     private void Update()
     {
         playTimeTimer += Time.deltaTime;
+        if (!isFinalWaveEnded)
+        {
+            waveElapsedTime += Time.deltaTime;
+            waveWindow.SetWaveTimerText(waveDuration - waveElapsedTime);
+        }
+        else
+        {
+            waveWindow.SetWaveTimerText(0f);
+        }
 
         // 웨이브 무한으로 돌게 처리하는 부분
         if (!waves.ContainsKey(currentWaveIndex))
@@ -198,11 +258,8 @@ public class WaveManager : MonoBehaviour
             return;
         }
 
-        waveElapsedTime += Time.deltaTime;
 
-        StartSpawnWave(Time.deltaTime);
-
-        if (waveElapsedTime >= waveDuration || waveClearCount <= 0)
+        if ((!isFinalWaveEnded && waveElapsedTime >= waveDuration) || waveClearCount <= 0)
         {
             if (isFinalWaveEnded)
             {
@@ -213,6 +270,7 @@ public class WaveManager : MonoBehaviour
                 NextWave();
             }
         }
+        StartSpawnWave(Time.deltaTime);
     }
 
     private void StartSpawnWave(float deltaTime)
@@ -234,9 +292,9 @@ public class WaveManager : MonoBehaviour
 
             if (spawnPoint.timer >= spawnPoint.spawnDelayTime && spawnPoint.isStart)
             {
-                Debug.Log($"Spawn Enemy ID : {spawnPoint.enemyId} Count : {spawnPoint.spawnCount}");
                 var remainingToSpawn = spawnPoint.maxSpawnCount - spawnPoint.currentSpawnEnemyCount;
                 var minCount = Mathf.Min(spawnPoint.spawnCount, remainingToSpawn);
+
                 var enemys = enemySpawnManager.SpawnEnemy(spawnPoint.enemyId, minCount);
                 spawnPoint.currentSpawnEnemyCount += minCount;
                 totalEnemyCount += minCount;
@@ -247,6 +305,10 @@ public class WaveManager : MonoBehaviour
                         var offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
                         enemy.transform.position = spawnPoint.position + offset;
                         enemy.move.Init(enemy);
+                        enemy.OnTerraformingValueChanged += () =>
+                        {
+                            UpdateTerraformingValue();
+                        };
                     }
                     spawnPoint.timer = 0f;
                 }
@@ -260,52 +322,92 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    public void UpdateTerraformingValue()
+    {
+        if (waveTerraformingValue >= totalTerraformingValue)
+            return;
+
+        waveTerraformingValue++;
+        var percent = Mathf.Min(waveTerraformingValue * 100 / totalTerraformingValue, 100);
+        sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, percent, 100);
+
+        for (int i = 0; i < TerraformingData.terrformingOpenValues.Length; i++)
+        {
+            if (percent >= TerraformingData.terrformingOpenValues[i])
+            {
+                if (!TerraformingData.terraformingUnlockPoints.Contains(TerraformingData.terrformingOpenValues[i]))
+                {
+                    TerraformingData.terraformingUnlockPoints.Add(TerraformingData.terrformingOpenValues[i]);
+                    terraforming.SetPoint(i + 1);
+                    Time.timeScale = 0f;
+                    return;
+                }
+            }
+        }
+    }
+
     private void NextWave()
     {
-        int nextWaveIndex = currentWaveIndex + 1;
+        nextWaveIndex = currentWaveIndex + 1;
 
         if (!waves.ContainsKey(nextWaveIndex))
         {
-#if DEBUG_MODE
-            //currentWaveIndex = 0;
-            //currentWave = waves[currentWaveIndex];
-
-            //foreach (var spawnPoint in currentWave)
-            //{
-            //    spawnPoint.timer = 0f;
-            //    spawnPoint.isStart = false;
-            //    waveClearCount += spawnPoint.maxSpawnCount;
-            //}
-            //Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
-#endif
-            isFinalWaveEnded = true;
-#if DEBUG_MODE
-            //Debug.Log("지금 마지막웨이브 다음으로 넘어갈수없다.");
-#endif
             return;
         }
 
         currentWave.Clear();
         currentWave = waves[nextWaveIndex];
         currentWaveIndex = nextWaveIndex;
-
+        waveWindow.SetWaveText(currentWaveIndex);
         foreach (var currentPoint in currentWave)
         {
             waveClearCount += currentPoint.maxSpawnCount;
         }
         waveElapsedTime = 0f;
+
+
+
+        var monsterId = currentWave[0].enemyId;
+        if (EnemyTypes.IsEliteMonster(monsterId))
+        {
+            warringWindow.SetActive(true);
+            warringText.text = $"엘리트 보스 몬스터 출현!";
+            ShowWarringWindow().Forget();
+            Time.timeScale = 0f;
+        }
+        else if (EnemyTypes.IsBossMonster(monsterId))
+        {
+            warringWindow.SetActive(true);
+            warringText.text = $"보스 몬스터 출현!";
+            ShowWarringWindow().Forget();
+            Time.timeScale = 0f;
+        }
+
     }
 
     public void EndGame(bool isClear)
     {
         // 여기에 게임 종료 로직 추가
-        if(windowManager != null)
+        if (windowManager != null)
         {
             var window = windowManager.Open(WindowIds.VictoryWindow);
-            if(window is VictoryWindow victoryWindow)
+            if (window is VictoryWindow victoryWindow)
             {
-                victoryWindow.UpdateText(playTimeTimer , isClear);
+                victoryWindow.UpdateText(playTimeTimer, isClear);
             }
+        }
+        Time.timeScale = 0f;
+        Debug.Log("게임 종료");
+    }
+
+    private async UniTask ShowWarringWindow()
+    {
+        await UniTask.Delay(1000, true, cancellationToken: this.GetCancellationTokenOnDestroy());
+        Time.timeScale = 1.0f;
+        warringWindow.SetActive(false);
+        if (waves.Count <= currentWaveIndex)
+        {
+            enemySpawnManager.ClearAllEnemy();
         }
     }
 }

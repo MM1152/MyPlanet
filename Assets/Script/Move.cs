@@ -111,4 +111,9 @@ public class Move : MonoBehaviour
             jotstickInput = Vector2.zero;
         }
     }
+
+    public void MoveSpeedUpgrade(float effectValue)
+    {
+        speed += speed * effectValue ;
+    }
 }
