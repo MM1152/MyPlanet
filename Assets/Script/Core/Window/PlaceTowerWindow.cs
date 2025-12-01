@@ -36,9 +36,9 @@ public class PlaceTowerWindow : Window
     {
         base.Init(manager);
         
-        for (int i = 0; i < selectTowerUICount; i++)
+        for (int i = 0; i < selectTowerUIRoot.childCount; i++)
         {
-            SelectTowerUI obj = Instantiate(selectTowerUI, selectTowerUIRoot);
+            SelectTowerUI obj = selectTowerUIRoot.GetChild(i).GetComponent<SelectTowerUI>();
             obj.Initalized(i , (value) => selectTowerIndex = value);
             selectTowerUIs.Add(obj);
         }
@@ -67,13 +67,57 @@ public class PlaceTowerWindow : Window
         manager.Close();
     }
 
+    public override void TutorialTowerOpen1()
+    {
+        selectTowerIndex = -1;
+        levelText.text = $"Lv. {towerManager.CurrentLevel}";
+
+        var towerCount = towerManager.GetAllTower().Count;
+        for (int i = 0; i < towerCount; i++)
+        {
+            if (towerManager.Towers[i] == null) continue;
+            var tower = towerManager.GetTower(i);
+            selectTowerUIs[i].SetInteractive(true);
+            selectTowerUIs[i].SetTowerData(tower);
+        }
+
+        selectTowerUIs[1].SetInteractive(false);
+        selectTowerUIs[2].SetInteractive(false);
+        
+        Time.timeScale = 0f;
+        base.TutorialTowerOpen1();
+    }
+
+    public override void TutorialTowerOpen2()
+    {
+        selectTowerIndex = -1;
+        levelText.text = $"Lv. {towerManager.CurrentLevel}";
+
+        var towerCount = towerManager.GetAllTower().Count;
+        for (int i = 0; i < towerCount; i++)
+        {
+            if (towerManager.Towers[i] == null) continue;
+            var tower = towerManager.GetTower(i);
+            selectTowerUIs[i].SetTowerData(tower);
+            selectTowerUIs[i].SetInteractive(true);
+        }
+
+        selectTowerUIs[0].SetInteractive(false);
+        selectTowerUIs[2].SetInteractive(false);
+
+        Time.timeScale = 0f;
+        base.TutorialTowerOpen1();
+    }
+
     public override void Open()
     {
+        if (Variable.IsTutorialActive) return;
         selectTowerIndex = -1;
         levelText.text = $"Lv. {towerManager.CurrentLevel}";
 
         for (int i = 0; i < selectTowerUICount; i++)
         {
+            selectTowerUIs[i].SetInteractive(true);
             var percent = Random.Range(0f, 1f);
             if(percent < towerSpawnPercent)
             {
@@ -95,9 +139,9 @@ public class PlaceTowerWindow : Window
     {
         for(int i = 0; i < selectTowerUIs.Count; i++)
         {
+            selectTowerUIs[i].gameObject.SetActive(false);
             selectTowerUIs[i].ResetOutline();
         }
-        Time.timeScale = 1f;
         base.Close();
     }
 }

@@ -17,6 +17,7 @@ public class SelectTowerUI : MonoBehaviour
 
     private Toggle toggle;
     private Outline outLine;
+    private Button button;
 
     private Action<int> OnChangeIndex;
 
@@ -42,10 +43,16 @@ public class SelectTowerUI : MonoBehaviour
         });
     }
 
+    public void SetInteractive(bool active)
+    {
+        toggle.interactable = active;
+    }
+
     public void SetTowerData(Tower data)
     {
         backGroundImage.color = ColorDefine.TowerSelectUIColor;
 
+        gameObject.SetActive(true);
         this.towerData = data.TowerData;
         towerNameText.text = towerData.Name + (data.Level == 0 ? "" : $"+{data.Level}단계");
         towerTypeText.gameObject.SetActive(true);   
@@ -58,6 +65,7 @@ public class SelectTowerUI : MonoBehaviour
     {
         backGroundImage.color = ColorDefine.ConsumableSelectUiColor;
 
+        gameObject.SetActive(true);
         this.consumeData = data;
         towerNameText.text = data.Name;
         towerTypeText.gameObject.SetActive(false);

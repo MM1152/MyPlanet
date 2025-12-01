@@ -44,7 +44,7 @@ public class TitlePresetWindow : Window
             }
 
             LoadingScene.sceneId = SceneIds.GameScene;
-            FirebaseManager.Instance.PresetData.SetGameData(presetData);
+            FirebaseManager.Instance.PresetData.SetGameData(presetData , 1);
             SceneManager.LoadScene(SceneIds.LoadingScene);
         });
     }

@@ -30,6 +30,10 @@ public class StringTable : DataTable
 
     public string Get(int id)
     {
+        if(stringTable.ContainsKey(id) == false)
+        {
+            return "";
+        }
         return stringTable[id].String_kor;
     }
 }

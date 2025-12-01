@@ -178,8 +178,9 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
+        if (!Variable.IsSpawnActive) return;
         playTimeTimer += Time.deltaTime;
-
+        
         // 웨이브 무한으로 돌게 처리하는 부분
         if (!waves.ContainsKey(currentWaveIndex))
         {
@@ -215,7 +216,7 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    private void StartSpawnWave(float deltaTime)
+    public void StartSpawnWave(float deltaTime)
     {
         foreach (var spawnPoint in currentWave)
         {
@@ -259,8 +260,12 @@ public class WaveManager : MonoBehaviour
             }
         }
     }
-
-    private void NextWave()
+    //Tutorial
+    public void StartWave()
+    {
+        StartSpawnWave(Time.deltaTime);
+    }
+    public void NextWave()
     {
         int nextWaveIndex = currentWaveIndex + 1;
 

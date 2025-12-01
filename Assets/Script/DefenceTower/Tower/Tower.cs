@@ -114,7 +114,7 @@ public abstract class Tower
         this.slotIndex = slotIndex;
         try
         {
-            var gameData = FirebaseManager.Instance.PresetData.GetGameData();
+            var gameData = FirebaseManager.Instance.PresetData.GetGameData().data;
             if(gameData != null)
             {
                 var planetId = gameData.PlanetId;

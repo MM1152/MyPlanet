@@ -40,7 +40,7 @@ public class TowerManager : MonoBehaviour
     protected virtual void Awake()
     {
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
-        presetGameData = FirebaseManager.Instance.PresetData.GetGameData();
+        presetGameData = FirebaseManager.Instance.PresetData.GetGameData().data;
         for(int i = 0; i < presetGameData.TowerId.Count; i++)
         {
             int towerId = presetGameData.TowerId[i];
@@ -256,6 +256,14 @@ public class TowerManager : MonoBehaviour
 
 
         windowManager.Open(WindowIds.PlaceTowerWindow);
+    }
+
+    public void TutorialLevelUp()
+    {
+        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
+        totalExp = 0;
+
+        windowManager.TutorialOpen2((int)WindowIds.PlaceTowerWindow);
     }
 
     public Tower GetTower(int id)

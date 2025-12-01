@@ -17,7 +17,6 @@ public class OptionUpgradeWindow : Window
     private int selectIndex = -1;
     public override void Close()
     {
-        Time.timeScale = 1f;
         base.Close();
     }
 

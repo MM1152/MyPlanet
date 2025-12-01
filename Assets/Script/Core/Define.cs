@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
+[Serializable]
 public enum WindowIds
 {
     None = -1,
@@ -50,6 +51,8 @@ public enum ElementType
 public static class Variable
 {
     public static bool IsJoyStickActive;
+    public static bool IsTutorialActive;
+    public static bool IsSpawnActive;
 }
 
 public static class AddressableLabelIds

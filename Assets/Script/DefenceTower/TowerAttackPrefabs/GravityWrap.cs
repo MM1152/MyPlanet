@@ -13,7 +13,7 @@ public class GravityWrap : BaseAttackPrefab
         base.Init(data);
         poolsId = PoolsId.GravityWrap;
         transform.localScale = new Vector3(tower.FullAttackRange , tower.FullAttackRange , 0f);
-        duration = 5; //tower.BonusDuration;
+        duration = tower.BonusDuration;
     }
 
     public void Setting(Transform followTarget , string targetTag)

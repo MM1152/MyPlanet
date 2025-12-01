@@ -7,8 +7,14 @@ public class PresetData
 {
     public bool Init { get; set; }
     private List<Data> presetDatas = new List<Data>();
-    private Data inGameData;
+    private InGameData inGameData;
     public event Action<int> OnChangePresetData;
+
+    public class InGameData
+    {
+        public Data data;
+        public int stageId;
+    }
 
     [Serializable]
     public class Data : JsonSerialized
@@ -24,12 +30,26 @@ public class PresetData
         }
     }
 
-    public void SetGameData(Data InGameData)
+    public void SetGameData(Data InGameData , int stageId)
     {
-        this.inGameData = InGameData;
+        inGameData = new InGameData();
+        if(stageId == 1)
+        {
+            Data tutorialData = new Data();
+            tutorialData.PlanetId = 1001;
+            tutorialData.TowerId[0] = 2003;
+            tutorialData.TowerId[1] = 2015;
+            tutorialData.TowerId[2] = 2017;
+            inGameData.data = tutorialData;
+        }
+        else
+        {
+            inGameData.data = InGameData;
+        }
+        inGameData.stageId = stageId;
     } 
 
-    public Data GetGameData()
+    public InGameData GetGameData()
     {
         return inGameData;
     }

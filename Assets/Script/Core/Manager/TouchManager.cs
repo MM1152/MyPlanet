@@ -13,11 +13,20 @@ public enum TouchTypes
     NoTab,
 }
 
+public enum TouchPhase
+{
+    None,
+    Start,
+    Performed,
+    End,
+}
+
 public class TouchManager : MonoBehaviour
 {
     [SerializeField] private TouchTypes touchTypes = TouchTypes.None;
-
+    [SerializeField] private TouchPhase touchPhase = TouchPhase.None;
     public TouchTypes TouchType => touchTypes;
+    public TouchPhase TouchPhase => touchPhase;
 
     private float longTabTime = 0.5f;
     [SerializeField] private float startTouchTime = 0f;
@@ -65,6 +74,7 @@ public class TouchManager : MonoBehaviour
 
     private void OnTouchPosition(InputAction.CallbackContext context)
     {
+        touchPhase = TouchPhase.Performed;
         endTouchPosition = context.ReadValue<Vector2>();
         var distance = Vector2.Distance(startTouchPosition, endTouchPosition);
 
@@ -77,8 +87,11 @@ public class TouchManager : MonoBehaviour
             }
         }
     }
+
+
     private void OnTouchStart(InputAction.CallbackContext context)
     {
+        touchPhase = TouchPhase.Start;
         startTouchTime = Time.unscaledTime;
         isPressed = true;
 
@@ -88,6 +101,7 @@ public class TouchManager : MonoBehaviour
 
     private void OnTouchEnd(InputAction.CallbackContext context)
     {
+        touchPhase = TouchPhase.End;
         if (touchTypes == TouchTypes.NoTab || touchTypes == TouchTypes.Drag) return;
 
 
