@@ -1521,6 +1521,19 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
     currentDelay: 0
+  - hilightPanels: []
+    delay: 0
+    stringTableId: 6108
+    activeTimeScale: 0
+    disAbleTutorialBackGorund: 1
+    isSelectOnTarget: 1
+    isWaitDelay: 1
+    enableJoystick: 0
+    enableSpawn: 0
+    action:
+      m_PersistentCalls:
+        m_Calls: []
+    currentDelay: 0
   - hilightPanels:
     - {fileID: 1893264662}
     delay: 0
@@ -1793,12 +1806,25 @@ MonoBehaviour:
         m_Calls: []
     currentDelay: 0
   - hilightPanels: []
-    delay: 5
+    delay: 0
     stringTableId: 6117
     activeTimeScale: 1
     disAbleTutorialBackGorund: 0
     isSelectOnTarget: 1
-    isWaitDelay: 0
+    isWaitDelay: 1
+    enableJoystick: 1
+    enableSpawn: 0
+    action:
+      m_PersistentCalls:
+        m_Calls: []
+    currentDelay: 0
+  - hilightPanels: []
+    delay: 0
+    stringTableId: 0
+    activeTimeScale: 1
+    disAbleTutorialBackGorund: 0
+    isSelectOnTarget: 1
+    isWaitDelay: 1
     enableJoystick: 1
     enableSpawn: 1
     action:
@@ -1806,7 +1832,47 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1936811336}
           m_TargetAssemblyTypeName: WaveManager, Assembly-CSharp
-          m_MethodName: NextWave
+          m_MethodName: StartSpawnWave
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    currentDelay: 0
+  sector2Tutorials:
+  - hilightPanels: []
+    delay: 0
+    stringTableId: 6118
+    activeTimeScale: 0
+    disAbleTutorialBackGorund: 0
+    isSelectOnTarget: 1
+    isWaitDelay: 1
+    enableJoystick: 0
+    enableSpawn: 0
+    action:
+      m_PersistentCalls:
+        m_Calls: []
+    currentDelay: 0
+  - hilightPanels:
+    - {fileID: 999531975}
+    delay: 0
+    stringTableId: 0
+    activeTimeScale: 0
+    disAbleTutorialBackGorund: 0
+    isSelectOnTarget: 0
+    isWaitDelay: 1
+    enableJoystick: 0
+    enableSpawn: 0
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 735681389}
+          m_TargetAssemblyTypeName: TowerManager, Assembly-CSharp
+          m_MethodName: TutorialLevelUp1
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1817,12 +1883,44 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
     currentDelay: 0
+  - hilightPanels:
+    - {fileID: 999531975}
+    - {fileID: 59441367}
+    delay: 0
+    stringTableId: 0
+    activeTimeScale: 0
+    disAbleTutorialBackGorund: 0
+    isSelectOnTarget: 0
+    isWaitDelay: 1
+    enableJoystick: 0
+    enableSpawn: 0
+    action:
+      m_PersistentCalls:
+        m_Calls: []
+    currentDelay: 0
+  sector3Tutorials:
+  - hilightPanels: []
+    delay: 0
+    stringTableId: 6119
+    activeTimeScale: 0
+    disAbleTutorialBackGorund: 1
+    isSelectOnTarget: 1
+    isWaitDelay: 1
+    enableJoystick: 0
+    enableSpawn: 0
+    action:
+      m_PersistentCalls:
+        m_Calls: []
+    currentDelay: 0
+  sector4Tutorials: []
   tutorialBackGround: {fileID: 698927945}
   tutorialText: {fileID: 1365304224}
   tutorialHighLightImage: {fileID: 1351260234}
-  startTutorialIndex: 11
-  wordDelay: 0.001
-  windowManager: {fileID: 0}
+  startTutorialIndex: 0
+  nextTutorialStartIndex: 070000000a0000000b00000010000000
+  wordDelay: 0.06
+  windowManager: {fileID: 620590076}
+  waveManager: {fileID: 0}
 --- !u!1 &184106441
 GameObject:
   m_ObjectHideFlags: 0
@@ -6689,6 +6787,11 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!1 &999531975 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6728240041708952483, guid: 27bad646717a35b4bbb327863237ac3f, type: 3}
+  m_PrefabInstance: {fileID: 279682699}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1001738400
 GameObject:
   m_ObjectHideFlags: 0
@@ -11538,6 +11641,7 @@ MonoBehaviour:
   waveClearCount: 0
   totalEnemyCount: 0
   windowManager: {fileID: 620590076}
+  tutorialManager: {fileID: 170518383}
   UIUpdateTest: 0
 --- !u!4 &1936811337
 Transform:

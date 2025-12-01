@@ -109,6 +109,28 @@ public class PlaceTowerWindow : Window
         base.TutorialTowerOpen1();
     }
 
+    public override void TutorialTowerOpen3()
+    {
+        selectTowerIndex = -1;
+        levelText.text = $"Lv. {towerManager.CurrentLevel}";
+
+        var towerCount = towerManager.GetAllTower().Count;
+        for (int i = 0; i < towerCount; i++)
+        {
+            if (towerManager.Towers[i] == null) continue;
+            var tower = towerManager.GetTower(i);
+            selectTowerUIs[i].SetTowerData(tower);
+            selectTowerUIs[i].SetInteractive(true);
+        }
+
+        selectTowerUIs[0].SetInteractive(false);
+        selectTowerUIs[1].SetInteractive(false);
+
+        Time.timeScale = 0f;
+        base.TutorialTowerOpen1();
+    }
+
+
     public override void Open()
     {
         if (Variable.IsTutorialActive) return;
@@ -119,17 +141,14 @@ public class PlaceTowerWindow : Window
         {
             selectTowerUIs[i].SetInteractive(true);
             var percent = Random.Range(0f, 1f);
-            if(percent < towerSpawnPercent)
+            if (percent < towerSpawnPercent)
             {
-                var tower = towerManager.GetRandomTower();
-                selectTowerUIs[i].SetTowerData(tower);
+                selectTowerUIs[i].SetTowerData(towerManager.GetRandomTower());
             }
             else
             {
-                var consumable = consumableManager.GetRandomData();
-                selectTowerUIs[i].SetConsumableData(consumable);
+                selectTowerUIs[i].SetConsumableData(consumableManager.GetRandomData());
             }
-            
         }
         Time.timeScale = 0f;
         base.Open();
@@ -139,7 +158,6 @@ public class PlaceTowerWindow : Window
     {
         for(int i = 0; i < selectTowerUIs.Count; i++)
         {
-            selectTowerUIs[i].gameObject.SetActive(false);
             selectTowerUIs[i].ResetOutline();
         }
         base.Close();

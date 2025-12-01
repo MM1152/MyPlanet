@@ -266,6 +266,14 @@ public class TowerManager : MonoBehaviour
         windowManager.TutorialOpen2((int)WindowIds.PlaceTowerWindow);
     }
 
+    public void TutorialLevelUp1()
+    {
+        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
+        totalExp = 0;
+
+        windowManager.TutorialOpen3((int)WindowIds.PlaceTowerWindow);
+    }
+
     public Tower GetTower(int id)
     {
         return towers[id];

@@ -10,16 +10,20 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     [SerializeField] private List<Tutorial> tutorials;
-
+    [SerializeField] private List<Tutorial> sector2Tutorials;
+    [SerializeField] private List<Tutorial> sector3Tutorials;
+    [SerializeField] private List<Tutorial> sector4Tutorials;
     [Header("Tutorial Settings")]
     [SerializeField] private GameObject tutorialBackGround;
     [SerializeField] private TextMeshProUGUI tutorialText;
     [SerializeField] private RectTransform tutorialHighLightImage;
     [SerializeField] private int startTutorialIndex = -1;
+    [SerializeField] private List<int> nextTutorialStartIndex;
     [Header("TextAnimationSetting")]
     [SerializeField] private float wordDelay;
     [Header("References")]
     [SerializeField] private WindowManager windowManager;
+    [SerializeField] private WaveManager waveManager;
 
     private bool isPlayWordAnimation = false;
     private StringBuilder sb = new StringBuilder();
@@ -35,9 +39,21 @@ public class TutorialManager : MonoBehaviour
         Variable.IsSpawnActive = true;
 
         tutorialBackGroundImage = tutorialBackGround.GetComponent<Image>();
+
+       
         foreach (var tutorial in tutorials)
         {
             tutorial.Init(this);
+        }
+
+        foreach(var tutorial in sector2Tutorials)
+        {
+            tutorial.Init(this);
+        }
+
+        if(waveManager != null && nextTutorialStartIndex != null)
+        {
+            waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[0];
         }
 
         if(startTutorialIndex != -1)
@@ -80,15 +96,15 @@ public class TutorialManager : MonoBehaviour
 
         if (currentTutorialIdx >= tutorials.Count)
         {
-            currentTutorial.Exit();
+            currentTutorial?.Exit();
             currentTutorial = null;
             tutorialText.text = string.Empty;
             tutorialBackGround.SetActive(false);
             return;
         }
-        currentTutorial.Exit();
+        currentTutorial?.Exit();
         currentTutorial = tutorials[currentTutorialIdx];
-        currentTutorial.Excute();
+        currentTutorial?.Excute();
     }
     public async UniTask WordAnimationAsync(string msg)
     {
@@ -145,5 +161,29 @@ public class TutorialManager : MonoBehaviour
 
         tutorialHighLightImage.sizeDelta = sizedelta;
         tutorialHighLightImage.position = targetPos;
+    }
+
+    public void SetSector2Tutorial()
+    {
+        tutorials = sector2Tutorials;
+        currentTutorialIdx = -1;
+        ForceUpdateTutorial();
+
+        if (waveManager != null && nextTutorialStartIndex != null)
+        {
+            waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[1];
+        }
+    }
+
+    public void SetSector3Tutorial()
+    {
+        tutorials = sector3Tutorials;
+        currentTutorialIdx = -1;
+        ForceUpdateTutorial();
+
+        if (waveManager != null && nextTutorialStartIndex != null)
+        {
+            waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[2];
+        }
     }
 }

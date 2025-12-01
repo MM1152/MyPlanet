@@ -44,8 +44,11 @@ public class WaveManager : MonoBehaviour
     private EnemySpawnManager enemySpawnManager;
     public EnemySpawnManager EnemySpawnManager => enemySpawnManager;
 
+
     [Header("References")]
     [SerializeField] private WindowManager windowManager;
+    [SerializeField] private TutorialManager tutorialManager;
+    public int NextTutorialWaveIndex { get; set; } = 5;
 
     private float playTimeTimer;
 #if DEBUG_MODE
@@ -268,7 +271,11 @@ public class WaveManager : MonoBehaviour
     public void NextWave()
     {
         int nextWaveIndex = currentWaveIndex + 1;
-
+        if (tutorialManager != null && NextTutorialWaveIndex == nextWaveIndex)
+        {
+            tutorialManager.SetSector2Tutorial();
+            return;
+        }
         if (!waves.ContainsKey(nextWaveIndex))
         {
 #if DEBUG_MODE
