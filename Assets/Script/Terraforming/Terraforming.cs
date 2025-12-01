@@ -2,15 +2,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
+using System.Runtime.InteropServices;
 
 public class Terraforming : MonoBehaviour
 {
     private WindowManager windowManager;
 
     [SerializeField] private TerraformingWindow terraformingWindow;
+
+    [SerializeField] private StatusWindow statusWindow;
     private static BasePlanet basePlanet;
     private static Move defenceTowerMove;
     private static TowerManager towerManager;
+
+    public Dictionary<int, TerraformingTable.Data> terraformingChoiceData = new Dictionary<int, TerraformingTable.Data>();    
 
     private Dictionary<TerraformingData.T_Effect_type, Action<float>> terraformingActions = new Dictionary<TerraformingData.T_Effect_type, Action<float>>()
     {
@@ -53,13 +58,20 @@ public class Terraforming : MonoBehaviour
 
 
         terraformingWindow.leftButton.onClick.RemoveAllListeners();
-        terraformingWindow.leftButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)left.T_Effect_type); windowManager.Close(); });
+        terraformingWindow.leftButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)left.T_Effect_type); SetTerraformingState(point, left); windowManager.Close(); });
 
         terraformingWindow.rightButton.onClick.RemoveAllListeners();
-        terraformingWindow.rightButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)right.T_Effect_type); windowManager.Close(); });
+        terraformingWindow.rightButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)right.T_Effect_type); SetTerraformingState(point, right); windowManager.Close(); });
         windowManager.Open(WindowIds.TerraformingWindow);
-
     }
+
+   private void SetTerraformingState(int point ,TerraformingTable.Data data)
+   {
+         if (point > TerraformingData.terrformingOpenValues.Length)
+              return;
+    
+         statusWindow.SetTerraformingState(point-1, data);
+   }     
 
 #if DEBUG_MODE
     private void Update()

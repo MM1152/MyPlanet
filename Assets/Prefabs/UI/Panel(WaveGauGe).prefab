@@ -566,7 +566,7 @@ GameObject:
   - component: {fileID: 4855035990059056783}
   - component: {fileID: 4862291435966108429}
   m_Layer: 5
-  m_Name: Button
+  m_Name: StateButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2313,6 +2313,7 @@ GameObject:
   - component: {fileID: 7096623468111415749}
   - component: {fileID: 7229809749121400315}
   - component: {fileID: 7088361276164322281}
+  - component: {fileID: 1454102990283094238}
   m_Layer: 5
   m_Name: Panel(WaveGauGe)
   m_TagString: Untagged
@@ -2378,6 +2379,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1454102990283094238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4057928479692970514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96e4dfe98593b7a46ba384b25d6288ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waveNumberText: {fileID: 6657448872595972115}
+  waveTimerText: {fileID: 2758848806200987567}
+  waveGoldText: {fileID: 4814457066687071610}
+  backSceneButton: {fileID: 4960616959059579269}
 --- !u!1 &4083899656994818834
 GameObject:
   m_ObjectHideFlags: 0
@@ -2523,7 +2540,7 @@ GameObject:
   - component: {fileID: 2387986695368242673}
   - component: {fileID: 4960616959059579269}
   m_Layer: 5
-  m_Name: Button
+  m_Name: backButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

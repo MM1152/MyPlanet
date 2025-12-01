@@ -17,6 +17,8 @@ public class TerraformingWindow : Window
     [SerializeField] private TextMeshProUGUI leftDescText;
     [SerializeField] private TextMeshProUGUI rightDescText;
 
+    [SerializeField] private TerraformingStatusPopUpWindow terraformingPopupWindow;
+
     public override void Close()
     {
         base.Close();
@@ -40,11 +42,16 @@ public class TerraformingWindow : Window
         rightDescText.text = rightDesc;
 
         levelText.text = $"{point} /{TerraformingData.terrformingOpenValues.Length}";
+
+        if (terraformingPopupWindow.gameObject.activeSelf)
+        {
+            terraformingPopupWindow.Close();
+        }
     }
 
     public override void Open()
     {
-        base.Open();      
+        base.Open();
     }
 }
 

@@ -10,6 +10,7 @@ public class StatusWindow : Window
     [SerializeField] private Transform statusViewerRoot;
     [SerializeField] private BasePlanet basePlanet;
     [SerializeField] private Button closeButton;
+    [SerializeField] private List<TerraformingUI> terraformingStateObjects;
 
     private List<StatusViewer> statusViewers = new List<StatusViewer>();
     public override void Init(WindowManager manager)
@@ -54,5 +55,13 @@ public class StatusWindow : Window
     public override void Close()
     {
         base.Close();
+    }
+
+    public void SetTerraformingState(int point, TerraformingTable.Data data)
+    {
+        if (point >= terraformingStateObjects.Count)
+            return;
+
+        terraformingStateObjects[point].SetUI(data);
     }
 }
