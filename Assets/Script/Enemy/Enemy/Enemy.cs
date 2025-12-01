@@ -29,9 +29,14 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         get
         {
+          
             if (EnemyTypes.IsEliteMonster(enemyData.ID))
             {
                 return EnemyType.EliteMonster;
+            }
+            else if (EnemyTypes.IsBossMonster(enemyData.ID))
+            {
+                return EnemyType.Boss;
             }
             return enemyData.Range > 0 ? EnemyType.Ranged : EnemyType.Melee;
         }
@@ -50,6 +55,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private float nextInterval = 0f;
     public int currentHP;
     public event Action<Enemy> OnDie;
+
+    public event Action OnTerraformingValueChanged;
     private AttackManager attackManager;
     private DieManager dieManager;
     private MoveManager moveManager;
@@ -73,6 +80,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public Action OnBuffRemoved;
 
     public Action ReturnMoveAction;
+
 
 
 
@@ -121,16 +129,19 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         attack = attackManager.GetAttack(enemyType);
         die = dieManager.GetDie(enemyData.ID);
         ability = abilityManager.GetAbility(enemyData.ID);
-        move = moveManager.GetMove(enemyData.ID);
+        move = moveManager.GetMove(enemyType);
         zone?.Init(this);
         ResetActions();
         ability?.SetEnemy(this);
 #if DEBUG_MODE
-        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector2(1f, 1f);
+    
+        if( EnemyTypes.IsBossMonster(data.ID)) this.transform.localScale = new Vector2(1f, 1f);    
+        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector2(0.7f, 0.7f);
 #endif
         ReturnMoveAction = () =>
         {
-            if (!IsDead && EnemyTypes.IsEliteMonster(data.ID))
+           
+            if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID)||EnemyTypes.IsBossMonster(data.ID)))
             {
                 stateMachine.ChangeState(stateMachine.walkState);
             }
@@ -283,6 +294,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();
+        OnTerraformingValueChanged?.Invoke();
+        OnTerraformingValueChanged -= waveManager.UpdateTerraformingValue;  
+        OnDie?.Invoke(this);       
         OnDie?.Invoke(this);
         OnDie = null;
     }

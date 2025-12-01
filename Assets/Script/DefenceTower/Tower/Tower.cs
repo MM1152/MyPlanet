@@ -7,7 +7,8 @@ using UnityEngine.Video;
 public abstract class Tower
 {
     public int FullDamage => towerData.ATK + BonusDamage ;
-    public int BaseDamage => towerData.ATK;
+    public int BaseDamage => towerData.ATK;   
+    
 
     public float FullAttackSpeed => (towerData.Fire_Rate + BonusAttackSpeed) * (1 + BonusAttackSpeedPercent);
     public float BaseAttackSpeed => towerData.Fire_Rate;
@@ -111,7 +112,7 @@ public abstract class Tower
         this.manager = manager;
         this.towerData = data;
         this.tower = tower;
-        this.slotIndex = slotIndex;
+        this.slotIndex = slotIndex;        
         try
         {
             var gameData = FirebaseManager.Instance.PresetData.GetGameData().data;
@@ -331,5 +332,6 @@ public abstract class Tower
     {
         this.statusEffect = statusEffect;
     }
+   
     protected abstract BaseAttackPrefab CreateAttackPrefab();
 }

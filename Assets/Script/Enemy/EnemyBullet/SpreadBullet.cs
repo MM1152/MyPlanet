@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SpreadBullet : EnemyProjectileSimple
 {
-   private bool isDespawned = false; 
+//    private bool isDespawned = false; 
     
    private float range; 
 
@@ -14,7 +14,7 @@ public class SpreadBullet : EnemyProjectileSimple
     {
         base.Init(data, typeEffectiveness);
         poolsId = PoolsId.SpreadBullet;
-        isDespawned = false;
+        // isDespawned = false;
         range = data.attackRange;    
         // DelayDespawn().Forget();    
     }
@@ -27,7 +27,7 @@ public class SpreadBullet : EnemyProjectileSimple
     protected override void HitTarget(Collider2D collision)
     {
         base.HitTarget(collision);
-        isDespawned = true;
+        // isDespawned = true;
         Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);        
     }
     
@@ -40,7 +40,7 @@ public class SpreadBullet : EnemyProjectileSimple
         else
         {
             Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
-             isDespawned = true;
+            //  isDespawned = true;
         }
     }
 
