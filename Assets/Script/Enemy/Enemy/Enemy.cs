@@ -82,9 +82,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public Action ReturnMoveAction;
 
-    private static readonly HashSet<int> EliteMonsterIDs = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
+    public static readonly HashSet<int> EliteMonsterIDs = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
 
-    private static readonly HashSet<int> BossIDs = new HashSet<int> { 3027 };
+    public static readonly HashSet<int> BossIDs = new HashSet<int> { 3027 };
 
     public bool isEliteMonster => EliteMonsterIDs.Contains(enemyData.ID);   
     public bool isBoss => BossIDs.Contains(enemyData.ID);

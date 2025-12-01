@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using JetBrains.Annotations;
+using TMPro;
 public class WaveManager : MonoBehaviour
 {
     public class SpawnPoint
@@ -51,7 +51,7 @@ public class WaveManager : MonoBehaviour
     public float WaveDuration => waveDuration;
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;
-    public bool isFinalWaveEnded = false;
+    public bool isFinalWaveEnded => currentWaveIndex >= waves.Count;
 
     public int waveClearCount = 0;
     public int totalEnemyCount = 0;
@@ -68,6 +68,9 @@ public class WaveManager : MonoBehaviour
 
     [SerializeField]
     private GameObject warringWindow;
+    [SerializeField]
+    private TextMeshProUGUI warringText;
+
 
     [SerializeField]
     private WaveWindow waveWindow;
@@ -103,7 +106,6 @@ public class WaveManager : MonoBehaviour
         currentWaveIndex = 1;
         totalEnemyCount = 0;
         waveElapsedTime = 0f;
-        isFinalWaveEnded = false;
         currentWave = waves[currentWaveIndex];
         waveWindow.SetWaveText(currentWaveIndex);
         foreach (var spawnPoint in currentWave)
@@ -222,9 +224,17 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        waveElapsedTime += Time.deltaTime;
+        if (!isFinalWaveEnded)
+        {
+            waveElapsedTime += Time.deltaTime;
+            waveWindow.SetWaveTimerText(waveDuration - waveElapsedTime);
+        }
+        else
+        {
+            waveWindow.SetWaveTimerText(0f);
+        }
 
-        if (waveElapsedTime >= waveDuration || waveClearCount <= 0)
+        if ((!isFinalWaveEnded && waveElapsedTime >= waveDuration) || waveClearCount <= 0)
         {
             if (isFinalWaveEnded)
             {
@@ -236,7 +246,6 @@ public class WaveManager : MonoBehaviour
             }
         }
         StartSpawnWave(Time.deltaTime);
-        waveWindow.SetWaveTimerText(waveDuration - waveElapsedTime);
     }
 
     private void StartSpawnWave(float deltaTime)
@@ -315,11 +324,6 @@ public class WaveManager : MonoBehaviour
 
         if (!waves.ContainsKey(nextWaveIndex))
         {
-            if (waves.Count <= nextWaveIndex)
-            {
-                isFinalWaveEnded = true;
-            }
-
 #if DEBUG_MODE
             Debug.Log("다음 웨이브가 없습니다.");
 #endif
@@ -339,6 +343,20 @@ public class WaveManager : MonoBehaviour
         if (monsterStage.Contains(currentWaveIndex))
         {
             warringWindow.SetActive(true);
+            var monsterId = currentWave[0].enemyId;
+            if (Enemy.EliteMonsterIDs.Contains(monsterId))
+            {
+                warringText.text = $"엘리트 보스 몬스터 출현!";
+            }
+            else if (Enemy.BossIDs.Contains(monsterId))
+            {
+                warringText.text = $"보스 몬스터 출현!";
+            }
+            else
+            {
+                warringText.text = $"강력한 몬스터 출현!";
+            }
+
             ShowWarringWindow().Forget();
             Time.timeScale = 0f;
         }
@@ -346,7 +364,8 @@ public class WaveManager : MonoBehaviour
 
     private void EndGame()
     {
-        // 여기에 게임 종료 로직 추가
+        Time.timeScale = 0f;
+        Debug.Log("게임 종료");
     }
 
     private async UniTask ShowWarringWindow()
