@@ -14,6 +14,17 @@ public class SliderValue : MonoBehaviour
         slider = GetComponent<Slider>();
     }
 
+    public void UpdateSlider(int value , int maxValue, object args)
+    {
+        if (text != null)
+        {
+            text.text = string.Format(FormatingString, args);
+        }
+
+        slider.value = (float)value / maxValue;
+    }
+
+
     public void UpdateSlider(int value , int maxValue , object args1 , object args2)
     {
         if (text != null)
