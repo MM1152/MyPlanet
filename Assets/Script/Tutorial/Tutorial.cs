@@ -59,6 +59,10 @@ public class Tutorial
         {
             manager.WordAnimationAsync(msg).Forget();
         }
+        else
+        {
+            manager.isPlayWordAnimation = false;
+        }
 
         action?.Invoke();
 

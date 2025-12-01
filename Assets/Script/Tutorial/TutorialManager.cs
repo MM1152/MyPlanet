@@ -6,6 +6,7 @@ using TMPro;
 using NUnit.Framework;
 using System.Runtime.CompilerServices;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private WindowManager windowManager;
     [SerializeField] private WaveManager waveManager;
 
-    private bool isPlayWordAnimation = false;
+    public bool isPlayWordAnimation = false;
     private StringBuilder sb = new StringBuilder();
     private Tutorial currentTutorial;
     private Image tutorialBackGroundImage; 
@@ -61,12 +62,11 @@ public class TutorialManager : MonoBehaviour
             Variable.IsTutorialActive = true;
             Variable.IsSpawnActive = false;
         }
-            
     }
 
-    private void OnEnable()
+    private async UniTaskVoid Start()
     {
-
+        await UniTask.Delay(100 , cancellationToken : gameObject.GetCancellationTokenOnDestroy());
         if (startTutorialIndex != -1)
         {
             currentTutorial = tutorials[startTutorialIndex];
@@ -102,13 +102,13 @@ public class TutorialManager : MonoBehaviour
             tutorialBackGround.SetActive(false);
             return;
         }
+        isPlayWordAnimation = true;
         currentTutorial?.Exit();
         currentTutorial = tutorials[currentTutorialIdx];
         currentTutorial?.Excute();
     }
     public async UniTask WordAnimationAsync(string msg)
     {
-        isPlayWordAnimation = true;
         tutorialBackGround.SetActive(true);
         sb.Clear();
 
@@ -136,16 +136,14 @@ public class TutorialManager : MonoBehaviour
     {
         Canvas.ForceUpdateCanvases();
         tutorialHighLightImage.gameObject.SetActive(true);
-        tutorialHighLightImage.anchorMin = target.anchorMin;
-        tutorialHighLightImage.anchorMax = target.anchorMax;
-        tutorialHighLightImage.pivot = target.pivot;    
+        tutorialHighLightImage.anchorMin = Vector2.one * 0.5f;
+        tutorialHighLightImage.anchorMax = Vector2.one * 0.5f;
+        tutorialHighLightImage.pivot = Vector2.one * 0.5f;
 
         Vector2 targetSize = new Vector2(target.rect.width , target.rect.height);
-        Debug.Log(target.transform.position);
-        Vector3 targetPosition = target.transform.position;
-        
+        Debug.Log(target.position);
         tutorialHighLightImage.sizeDelta = targetSize;
-        tutorialHighLightImage.position = targetPosition;
+        tutorialHighLightImage.position = target.position;
     }
 
     public void SetTutorialHighLightImagePositionAndSize(GameObject target , Vector2 sizedelta)

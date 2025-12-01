@@ -1444,7 +1444,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorials:
-  - hilightPanels: []
+  - hilightPanels:
+    - {fileID: 2025301493}
     delay: 0
     stringTableId: 6102
     activeTimeScale: 0
@@ -1458,7 +1459,7 @@ MonoBehaviour:
         m_Calls: []
     currentDelay: 0
   - hilightPanels:
-    - {fileID: 941315119}
+    - {fileID: 963716510}
     delay: 0
     stringTableId: 6103
     activeTimeScale: 0
@@ -1472,7 +1473,7 @@ MonoBehaviour:
         m_Calls: []
     currentDelay: 0
   - hilightPanels:
-    - {fileID: 1530587267}
+    - {fileID: 1557658442}
     delay: 0
     stringTableId: 6104
     activeTimeScale: 0
@@ -1485,7 +1486,8 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
     currentDelay: 0
-  - hilightPanels: []
+  - hilightPanels:
+    - {fileID: 1851671350}
     delay: 0
     stringTableId: 6105
     activeTimeScale: 0
@@ -1499,7 +1501,7 @@ MonoBehaviour:
         m_Calls: []
     currentDelay: 0
   - hilightPanels:
-    - {fileID: 1501312619}
+    - {fileID: 1720687857}
     delay: 0
     stringTableId: 6106
     activeTimeScale: 0
@@ -1757,12 +1759,13 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
     currentDelay: 0
-  - hilightPanels: []
+  - hilightPanels:
+    - {fileID: 273669044}
     delay: 0
     stringTableId: 0
     activeTimeScale: 1
-    disAbleTutorialBackGorund: 1
-    isSelectOnTarget: 1
+    disAbleTutorialBackGorund: 0
+    isSelectOnTarget: 0
     isWaitDelay: 1
     enableJoystick: 0
     enableSpawn: 0
@@ -1781,20 +1784,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-    currentDelay: 0
-  - hilightPanels:
-    - {fileID: 273669044}
-    delay: 0
-    stringTableId: 0
-    activeTimeScale: 1
-    disAbleTutorialBackGorund: 0
-    isSelectOnTarget: 0
-    isWaitDelay: 1
-    enableJoystick: 0
-    enableSpawn: 0
-    action:
-      m_PersistentCalls:
-        m_Calls: []
     currentDelay: 0
   - hilightPanels:
     - {fileID: 59441367}
@@ -1921,9 +1910,9 @@ MonoBehaviour:
   tutorialBackGround: {fileID: 698927945}
   tutorialText: {fileID: 1365304224}
   tutorialHighLightImage: {fileID: 1351260234}
-  startTutorialIndex: -1
+  startTutorialIndex: 0
   nextTutorialStartIndex: 070000000a0000000b00000010000000
-  wordDelay: 0.06
+  wordDelay: 0.001
   windowManager: {fileID: 620590076}
   waveManager: {fileID: 1936811336}
 --- !u!1 &184106441
@@ -5988,6 +5977,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1986819532660611157, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1986819532660611157, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2187039616614710050, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6374,6 +6371,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6291646531725135858, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6657448872595972115, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+      propertyPath: m_fontSize
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 6657448872595972115, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+      propertyPath: m_enableAutoSizing
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6730467827638060169, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
@@ -6923,7 +6928,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4960616959059579269, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
   m_PrefabInstance: {fileID: 790478612}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 963716510}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -8056,6 +8061,11 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: 2
   m_LayoutPriority: 1
+--- !u!1 &963716510 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4326282415190998215, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &996581092
 GameObject:
   m_ObjectHideFlags: 0
@@ -11071,6 +11081,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1553257390}
   m_CullTransparentMesh: 1
+--- !u!1 &1557658442 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2650288019686525702, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1558087793
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11744,6 +11759,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1716669981}
   m_CullTransparentMesh: 1
+--- !u!1 &1720687857 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8322259990483700167, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1722266086
 GameObject:
   m_ObjectHideFlags: 0
@@ -12477,6 +12497,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a89a4eba6f3ba6541962c6844282c60a, type: 3}
+--- !u!1 &1851671350 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5347283639881793474, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1852888215
 GameObject:
   m_ObjectHideFlags: 0
@@ -13444,6 +13469,11 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: 2
   m_LayoutPriority: 1
+--- !u!1 &2025301493 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2042882411339201350, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2028403969
 GameObject:
   m_ObjectHideFlags: 0

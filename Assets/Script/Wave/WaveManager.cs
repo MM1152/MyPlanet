@@ -344,7 +344,6 @@ public class WaveManager : MonoBehaviour
                 {
                     TerraformingData.terraformingUnlockPoints.Add(TerraformingData.terrformingOpenValues[i]);
                     terraforming.SetPoint(i + 1);
-                    Time.timeScale = 0f;
                     return;
                 }
             }

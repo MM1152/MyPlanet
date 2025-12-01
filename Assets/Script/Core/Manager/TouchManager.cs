@@ -30,8 +30,8 @@ public class TouchManager : MonoBehaviour
 
     private float longTabTime = 0.5f;
     [SerializeField] private float startTouchTime = 0f;
-    [SerializeField] private float notTabToDragDistance = 5f;
-    [SerializeField] private float dragDistance = 100f;
+    [SerializeField] private float notTabToDragDistance = 50f;
+    [SerializeField] private float dragDistance = 200f;
 
     public Vector2 startTouchPosition = Vector2.zero;
     public Vector2 endTouchPosition = Vector2.zero;
@@ -39,6 +39,7 @@ public class TouchManager : MonoBehaviour
     public InputAction touchAction;
     public InputAction touchPositionAction;
     private bool isPressed = false;
+    public bool isTabAble = false;
     public void Init()
     {
         touchAction = new InputAction
@@ -85,12 +86,14 @@ public class TouchManager : MonoBehaviour
             {
                 touchTypes = TouchTypes.Drag;
             }
+            isTabAble = false;
         }
     }
 
 
     private void OnTouchStart(InputAction.CallbackContext context)
     {
+        isTabAble = true;
         touchPhase = TouchPhase.Start;
         startTouchTime = Time.unscaledTime;
         isPressed = true;
@@ -103,7 +106,7 @@ public class TouchManager : MonoBehaviour
     {
         touchPhase = TouchPhase.End;
         if (touchTypes == TouchTypes.NoTab || touchTypes == TouchTypes.Drag) return;
-
+        if (!isTabAble) return;
 
         if (Time.unscaledTime - startTouchTime > longTabTime)
         {
@@ -119,6 +122,7 @@ public class TouchManager : MonoBehaviour
     private void LateUpdate()
     {
         touchTypes = TouchTypes.None;
+        touchPhase = TouchPhase.None;
     }
 
     private List<RaycastResult> FindUi()
