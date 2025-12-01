@@ -19,7 +19,6 @@ public class EnemySpawnManager : MonoBehaviour
 
     private async UniTaskVoid InitalizedAsync()
     {
-        //FIX: ������ ���̺� �ʱ�ȭ �ȱ�ٸ�����
         await DataTableManager.WaitForInitalizeAsync();
         var enemy = await Addressables.LoadAssetAsync<GameObject>("Enemy").ToUniTask();
         enemyPrefab = enemy.GetComponent<Enemy>();
@@ -64,7 +63,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void CheckDieEnemy(Enemy enemy)
     {
-        enemy.OnDie -= CheckDieEnemy;
+        enemy.OnDie -= CheckDieEnemy;        
         spawnEnemys.Remove(enemy);
     }
 
@@ -93,5 +92,14 @@ public class EnemySpawnManager : MonoBehaviour
             return list[0];
         }
         return null;
+    }
+
+    public void ClearAllEnemy()
+    {
+        foreach (var enemy in spawnEnemys)
+        {
+            poolManager.Despawn(PoolsId.Enemy, enemy.gameObject);
+        }
+        spawnEnemys.Clear();
     }
 }
