@@ -58,10 +58,10 @@ public class Terraforming : MonoBehaviour
 
 
         terraformingWindow.leftButton.onClick.RemoveAllListeners();
-        terraformingWindow.leftButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)left.T_Effect_type); SetTerraformingState(point, left); windowManager.Close(); });
+        terraformingWindow.leftButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)left.T_Effect_type, left.T_effect_value); SetTerraformingState(point, left); windowManager.Close(); });
 
         terraformingWindow.rightButton.onClick.RemoveAllListeners();
-        terraformingWindow.rightButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)right.T_Effect_type); SetTerraformingState(point, right); windowManager.Close(); });
+        terraformingWindow.rightButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)right.T_Effect_type, right.T_effect_value); SetTerraformingState(point, right); windowManager.Close(); });
         windowManager.Open(WindowIds.TerraformingWindow);
     }
 
@@ -114,7 +114,7 @@ public class Terraforming : MonoBehaviour
     }
 #endif  
 
-    private void ExecuteTerraforming(TerraformingData.T_Effect_type effectType, float effectValue = 1f)
+    private void ExecuteTerraforming(TerraformingData.T_Effect_type effectType, float effectValue)
     {
         if (terraformingActions.ContainsKey(effectType))
         {

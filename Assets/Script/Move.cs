@@ -114,6 +114,6 @@ public class Move : MonoBehaviour
 
     public void MoveSpeedUpgrade(float effectValue)
     {
-        speed = speed * (1f + effectValue / 100f);
+        speed += speed * effectValue ;
     }
 }

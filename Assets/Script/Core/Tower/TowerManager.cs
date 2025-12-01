@@ -302,7 +302,7 @@ public class TowerManager : MonoBehaviour
         foreach (var tower in towers)
         {
             if (tower == null) continue;
-            tower.AddBonusAttackSpeedTopercent(percent); // 타워의 공속 증가 메서드
+            tower.AddBonusAttackSpeedTopercent(percent); 
         }
     }
 

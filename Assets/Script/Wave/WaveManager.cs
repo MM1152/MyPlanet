@@ -68,7 +68,7 @@ public class WaveManager : MonoBehaviour
 
     public int terrformingValueCount = 56;
 
-    public int[] monsterStage = new int[2] { 2, 3 };
+    // public int[] monsterStage = new int[2] { 2, 3 };
 
     [SerializeField]
     private GameObject warringWindow;
@@ -96,6 +96,7 @@ public class WaveManager : MonoBehaviour
         InitPoint();
         DataInit();
         ResetWave();
+        TerraformingData.terraformingUnlockPoints.Clear();
 #if DEBUG_MODE
         UIUpdateTest = true;
 #endif
@@ -256,7 +257,7 @@ public class WaveManager : MonoBehaviour
 #endif
             return;
         }
-      
+
 
         if ((!isFinalWaveEnded && waveElapsedTime >= waveDuration) || waveClearCount <= 0)
         {
@@ -323,9 +324,12 @@ public class WaveManager : MonoBehaviour
 
     public void UpdateTerraformingValue()
     {
+        if (waveTerraformingValue >= totalTerraformingValue)
+            return;
+
         waveTerraformingValue++;
-        var percent = waveTerraformingValue * 100 / totalTerraformingValue;
-        sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, percent);
+        var percent = Mathf.Min(waveTerraformingValue * 100 / totalTerraformingValue, 100);
+        sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, percent, 100);
 
         for (int i = 0; i < TerraformingData.terrformingOpenValues.Length; i++)
         {
@@ -361,37 +365,35 @@ public class WaveManager : MonoBehaviour
         }
         waveElapsedTime = 0f;
 
-        if (monsterStage.Contains(currentWaveIndex))
+
+
+        var monsterId = currentWave[0].enemyId;
+        if (EnemyTypes.IsEliteMonster(monsterId))
         {
             warringWindow.SetActive(true);
-            var monsterId = currentWave[0].enemyId;
-            if (EnemyTypes.IsEliteMonster(monsterId))
-            {
-                warringText.text = $"엘리트 보스 몬스터 출현!";
-            }
-            else if (EnemyTypes.IsBossMonster(monsterId))
-            {
-                warringText.text = $"보스 몬스터 출현!";
-            }
-            else
-            {
-                warringText.text = $"강력한 몬스터 출현!";
-            }
-
+            warringText.text = $"엘리트 보스 몬스터 출현!";
             ShowWarringWindow().Forget();
             Time.timeScale = 0f;
         }
+        else if (EnemyTypes.IsBossMonster(monsterId))
+        {
+            warringWindow.SetActive(true);
+            warringText.text = $"보스 몬스터 출현!";
+            ShowWarringWindow().Forget();
+            Time.timeScale = 0f;
+        }
+
     }
 
     public void EndGame(bool isClear)
     {
         // 여기에 게임 종료 로직 추가
-        if(windowManager != null)
+        if (windowManager != null)
         {
             var window = windowManager.Open(WindowIds.VictoryWindow);
-            if(window is VictoryWindow victoryWindow)
+            if (window is VictoryWindow victoryWindow)
             {
-                victoryWindow.UpdateText(playTimeTimer , isClear);
+                victoryWindow.UpdateText(playTimeTimer, isClear);
             }
         }
         Time.timeScale = 0f;

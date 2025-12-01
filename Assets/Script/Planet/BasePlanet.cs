@@ -123,7 +123,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
         if (isRegenerating && healthRegenerationValue > 0f)
         {
-            float healPerFrame = maxHp * (healthRegenerationValue / 100f) * Time.deltaTime;
+            float healPerFrame = maxHp * healthRegenerationValue * Time.deltaTime;
             hp += (int)healPerFrame;
             hp = Mathf.Clamp(hp, 0, maxHp);
             OnChanageHP();
@@ -207,15 +207,15 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     public void IncreaseMaxHealth(float effectValue)
     {
-        float previousHpPercent = (float)hp / maxHp;
-        maxHp = (int)(maxHp * (1f + effectValue / 100f));
-        hp = (int)(maxHp * previousHpPercent);
+        int oldMaxHp = maxHp;        
+        maxHp += (int)(maxHp * effectValue );
+        hp = (int)((float)hp / oldMaxHp * maxHp);
         OnChanageHP();
     }
 
     public void DefenseUpgrade(float effectValue)
     {
-        bonusDEF += (int)(planetData.DEF * (effectValue / 100f));
+        bonusDEF += (int)(planetData.DEF * effectValue);
     }
 
     public void HealthRegenerationUpgrade(float effectValue)
