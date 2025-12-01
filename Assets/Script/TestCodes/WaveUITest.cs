@@ -13,6 +13,7 @@ public class WaveUITest : MonoBehaviour
     
     private void Update()
     {
+#if DEBUG_MODE
         if(waveManager.UIUpdateTest)
         {
          waveText.text = $"Wave : {waveManager.CurrentWaveIndex+1} "; 
@@ -20,5 +21,6 @@ public class WaveUITest : MonoBehaviour
          TimerText.text = $"Next :{waveManager.WaveDuration:00} \nTime :{waveManager.WaveElapsedTime:00}";
          WaveClearCountText.text = $"Clear : {waveManager.waveClearCount}";
         }
+#endif
     }  
 }
