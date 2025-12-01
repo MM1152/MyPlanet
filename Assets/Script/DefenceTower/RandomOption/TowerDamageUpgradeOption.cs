@@ -3,23 +3,29 @@ using Unity.VisualScripting;
 using UnityEngine;
 public class TowerDamageUpgradeOption : RandomOptionBase
 {
+   
     public override void Init(TowerManager towerManager, TowerTable.Data baseTowerData, RandomOptionData.Data optionData)
     {
         base.Init(towerManager, baseTowerData , optionData);
-
     }
 
     public override void ResetRandomOption()
     {
+        if(towers == null) return;
         foreach(var tower in towers)
         {
-            tower.AddBonusDamage((int)-baseTowerData.optionValue);
+            if (tower == null) continue;
+            tower.MinusBonusDamageToPercent(FullOptionValue / 100f);
         }
     }
 
     public override void SetRandomOption()
     {
         GetApplyOptionTowers();
+        if(towers == null)
+        {
+            return;
+        }
 
         foreach (var tower in towers)
         {
@@ -27,7 +33,7 @@ public class TowerDamageUpgradeOption : RandomOptionBase
             //Debug.Log($"Before Damage Amount Apply : {tower.Damage} towerID : {tower.ID}");
 #endif
             if (tower == null) continue;
-            tower.AddBonusDamage((int)baseTowerData.optionValue);
+            tower.AddBonusDamageToPercent(FullOptionValue / 100f);
 #if DEBUG_MODE
             //Debug.Log($"After Damage Amount Apply : {tower.Damage} towerID : {tower.ID}");
 #endif
@@ -41,9 +47,6 @@ public class TowerDamageUpgradeOption : RandomOptionBase
 
     public override string GetOptionStringFormatting()
     {
-        if (optionData.id == 1)
-            return string.Empty;
-        else
-            return string.Empty;
+        return "공격력 증가";
     }
 }

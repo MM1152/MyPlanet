@@ -4,7 +4,7 @@ public class TowerAttackSpeedOption : RandomOptionBase
 {
     public override string GetOptionStringFormatting()
     {
-        return string.Empty;
+        return "공격속도 증가";
     }
 
     public override void Init(TowerManager towerManager, TowerTable.Data baseTowerData, RandomOptionData.Data optionData)
@@ -14,18 +14,25 @@ public class TowerAttackSpeedOption : RandomOptionBase
 
     public override void ResetRandomOption()
     {
+        if(towers == null) return;
         foreach (var applyTower in towers)
         {
-            applyTower.AddBonusAttackSpeed(-baseTowerData.optionValue / 100f);
+            if (applyTower == null) continue;
+            applyTower.MinusBonusAttackSpeedTopercent(FullOptionValue / 100f);
         }
     }
 
     public override void SetRandomOption()
     {
         GetApplyOptionTowers();
+        if(towers == null)
+        {
+            return;
+        }
         foreach(var applyTower in towers)
         {
-            applyTower.AddBonusAttackSpeed(baseTowerData.optionValue / 100f);
+            if (applyTower == null) continue;
+            applyTower.AddBonusAttackSpeedTopercent(FullOptionValue / 100f);
         }
     }
 

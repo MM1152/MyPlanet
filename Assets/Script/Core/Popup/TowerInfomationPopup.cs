@@ -11,7 +11,7 @@ public class TowerInfomationPopup : Popup
     [SerializeField] private TextMeshProUGUI towerDescriptionText;
 
     [SerializeField] private Image towerImage;
-
+    [SerializeField] private RandomOptionData randomOptionData = new RandomOptionData(); 
     public override bool Close()
     {
         return base.Close();
@@ -34,6 +34,6 @@ public class TowerInfomationPopup : Popup
         //towerGradeText.text = towerData.grade ??
         towerTypeText.text = towerData.AttackType;
         towerElementText.text = ((ElementType)towerData.Attribute).ToString();
-        //towerDescriptionText.text = towerData. ??
+        towerDescriptionText.text = randomOptionData.GetData(towerData.Option).option.GetOptionStringFormatting();
     }
 }

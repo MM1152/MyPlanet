@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using Firebase.Database;
+using JetBrains.Annotations;
 using System;
 using TMPro;
 using UnityEngine;
@@ -33,6 +34,7 @@ public class PlanetInfomation : MonoBehaviour
     {
         outline = GetComponent<Outline>();
         outline.enabled = false;
+        
     }
 
     public void UpdateTexts(PlanetTable.Data data)
@@ -40,7 +42,13 @@ public class PlanetInfomation : MonoBehaviour
         if (data.ID == 1011 || data.ID == 1012)
             isSetting = false;
 
+        var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
+        FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangedStar);
         this.data = data;
+
+        path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
+        FirebaseManager.Instance.Database.AddListner(path, OnValueChangedStar);
+
         userData = FirebaseManager.Instance.PlanetData.GetOrigin(data.ID);
 
         planetNameText.text = data.Name;
@@ -92,5 +100,10 @@ public class PlanetInfomation : MonoBehaviour
         {
             OnClickPlanet?.Invoke(data, this);
         }
+    }
+
+    private void OnValueChangedStar(object sender , ValueChangedEventArgs args)
+    {
+        UpdateStar(int.Parse(args.Snapshot.Value.ToString()));
     }
 }

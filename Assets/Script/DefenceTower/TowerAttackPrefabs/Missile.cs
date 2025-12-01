@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public class Missile : ProjectTile
 {
@@ -40,7 +41,7 @@ public class Missile : ProjectTile
         currentAngle += rotationAmount;
 
         float radAngle = currentAngle * Mathf.Deg2Rad;
-
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, currentAngle);
         return new Vector3(Mathf.Cos(radAngle) , Mathf.Sin(radAngle) , 0).normalized;
     }
 

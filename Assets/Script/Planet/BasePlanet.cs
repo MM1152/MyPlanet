@@ -12,10 +12,9 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
 
     public int BonusDEF => bonusDEF;
-    public int FullDEF => planetData.DEF + bonusDEF;
-
+    public int FullDEF => planetLevelData.DEF + bonusDEF;
     public int FullHp => hp + shield;
-    public int ATK => PlanetData.ATK + bonusATK;
+    public int ATK => planetLevelData.ATK;
 
     protected StatusEffect statusEffect = new StatusEffect();
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
@@ -23,6 +22,9 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public PassiveSystem PassiveSystem => passiveSystem;
     protected PlanetTable.Data planetData;
     public PlanetTable.Data PlanetData => planetData;
+
+    private PlanetData.Data userPlanetData;
+    private PlanetLevelUpTable.Data planetLevelData;
 
     private bool isDead = false;
 
@@ -33,7 +35,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     [Header("On Reference In inspector")]
     [SerializeField] private SliderValue hpSlider;
     [SerializeField] private SliderValue shieldSlider;
-
+    [SerializeField] private WaveManager waveManager;
     [Header("Test Datas")]
     public ElementType elementType;
     public int maxHp;
@@ -59,8 +61,13 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public virtual void Init()
     {
         planetData = DataTableManager.PlanetTable.Get(FirebaseManager.Instance.PresetData.GetGameData().PlanetId);
+        userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
+        planetLevelData = userPlanetData.PlanetLevelData;
+
         typeEffectiveness.Init((ElementType)planetData.Attribute);
         passiveSystem.Init(planetData.Skill_ID);
+
+        maxHp = planetLevelData.HP;
         hp = (int)(maxHp);
         healthRegenerationValue = 0f;
         isRegenerating = false;
@@ -105,6 +112,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public void OnDead()
     {
         isDead = true;
+        waveManager.EndGame(false);
         Destroy(gameObject);
     }
 
@@ -130,7 +138,6 @@ public class BasePlanet : MonoBehaviour, IDamageAble
                 {
                     bonusDEF -= bonus.value;
                     bonusDEFList.Remove(bonus);
-                    Debug.Log($"비누스 버프 끝 : 강화된 DEF : {FullDEF}");
                 }
                 else
                 {
@@ -147,10 +154,23 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         OnChanageHP();
     }
 
+    public void AddShieldToPercent(float percent)
+    {
+        shield += (int)(maxHp * percent);
+        OnChanageHP();
+    }
+
+    public void RemoveShieldToPercent(float percent)
+    {
+        shield -= (int)(maxHp * percent);
+        shield = Mathf.Clamp(shield, 0, maxHp);
+        OnChanageHP();
+    }
+
     public void OnChanageHP()
     {
-        hpSlider?.UpdateSlider(hp, maxHp, FullHp / maxHp * 100, FullHp, maxHp);
-        shieldSlider?.UpdateSlider(shield, maxHp, "", "");
+        hpSlider?.UpdateSlider(hp, maxHp, $"{((float)FullHp / maxHp) * 100f:F2}", FullHp, maxHp);
+        shieldSlider?.UpdateSlider(shield, maxHp, "" , "");
     }
 
     public void AddBonusDFSPercent(float percent, float duration)

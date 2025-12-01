@@ -58,6 +58,10 @@ public class WaveManager : MonoBehaviour
     private EnemySpawnManager enemySpawnManager;
     public EnemySpawnManager EnemySpawnManager => enemySpawnManager;
 
+    [Header("References")]
+    [SerializeField] private WindowManager windowManager;
+
+    private float playTimeTimer;
 #if DEBUG_MODE
     public bool UIUpdateTest = false;
 #endif
@@ -224,6 +228,7 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
+        playTimeTimer += Time.deltaTime;
         if (!isFinalWaveEnded)
         {
             waveElapsedTime += Time.deltaTime;
@@ -234,11 +239,30 @@ public class WaveManager : MonoBehaviour
             waveWindow.SetWaveTimerText(0f);
         }
 
+        // 웨이브 무한으로 돌게 처리하는 부분
+        if (!waves.ContainsKey(currentWaveIndex))
+        {
+#if DEBUG_MODE
+            currentWaveIndex = 1;
+            currentWave = waves[currentWaveIndex];
+
+            foreach (var spawnPoint in currentWave)
+            {
+                spawnPoint.timer = 0f;
+                spawnPoint.isStart = false;
+                waveClearCount += spawnPoint.maxSpawnCount;
+            }
+            Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
+#endif
+            return;
+        }
+      
+
         if ((!isFinalWaveEnded && waveElapsedTime >= waveDuration) || waveClearCount <= 0)
         {
             if (isFinalWaveEnded)
             {
-                EndGame();
+                EndGame(true);
             }
             else
             {
@@ -325,6 +349,11 @@ public class WaveManager : MonoBehaviour
         if (!waves.ContainsKey(nextWaveIndex))
         {
 #if DEBUG_MODE
+           
+
+            isFinalWaveEnded = true;
+
+        
             Debug.Log("다음 웨이브가 없습니다.");
 #endif
             return;
@@ -362,8 +391,17 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    private void EndGame()
+    public void EndGame(bool isClear)
     {
+        // 여기에 게임 종료 로직 추가
+        if(windowManager != null)
+        {
+            var window = windowManager.Open(WindowIds.VictoryWindow);
+            if(window is VictoryWindow victoryWindow)
+            {
+                victoryWindow.UpdateText(playTimeTimer , isClear);
+            }
+        }
         Time.timeScale = 0f;
         Debug.Log("게임 종료");
     }

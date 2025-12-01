@@ -19,8 +19,8 @@ public class StatusViewer : MonoBehaviour
     public void UpdateStatus()
     {
         sb.Clear();
-        sb.AppendLine($"{tower.BaseDamage} + {tower.BonusDamage}");
-        sb.AppendLine($"{tower.BaseAttackSpeed} + {tower.BonusAttackSpeed}");
+        sb.AppendLine($"{tower.BaseDamage} + {tower.BonusDamage} + {tower.BonusDamagePercent * 100f}%");
+        sb.AppendLine($"{tower.BaseAttackSpeed} + {tower.BonusAttackSpeed} + {tower.BonusAttackSpeedPercent * 100f}%");
         sb.AppendLine($"{tower.BaseAttackRange} + {tower.BonusAttackRange}");
         statusText.text = sb.ToString();
 

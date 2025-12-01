@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Video;
 
 public abstract class Tower
 {
@@ -9,16 +10,16 @@ public abstract class Tower
     public int BaseDamage => towerData.ATK;   
     
 
-    public float FullAttackSpeed => towerData.Fire_Rate + BonusAttackSpeed;
+    public float FullAttackSpeed => (towerData.Fire_Rate + BonusAttackSpeed) * (1 + BonusAttackSpeedPercent);
     public float BaseAttackSpeed => towerData.Fire_Rate;
-
     public float FullAttackRange => towerData.Attack_Range + BonusAttackRange;
     public float BaseAttackRange => towerData.Attack_Range;
 
     public float FullNoise => noise + BonuseNoise;
 
     public int CalcurateAttackDamage => (int)((FullDamage + planetData.ATK * 0.1f) * (1 + BonusDamagePercent));
-
+    
+    public float BonusAttackSpeedPercent { get; set; }
     public float BonusDamagePercent { get; set; }
     public float BonusAttackSpeed { get; set; }
     public int BonusDamage { get; set; }
@@ -69,7 +70,7 @@ public abstract class Tower
     public IStatusEffect StatusEffect => statusEffect;
     public RandomOptionBase Option => baseRandomOption;
 
-    private PlanetTable.Data planetData;
+    private PlanetLevelUpTable.Data planetData;
     protected GameObject projectTile;
     protected GameObject tower;
 
@@ -97,9 +98,12 @@ public abstract class Tower
     protected IStatusEffect statusEffect;
     protected int slotIndex = -1;
 
+    //Debug 용임 지우면 X
     public void SetPlanetData(PlanetTable.Data planetData)
     {
-        this.planetData = planetData;
+        var planetId = planetData.ID;
+        var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetId);
+        this.planetData = userData.PlanetLevelData;
     }
 
     public virtual void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
@@ -115,7 +119,8 @@ public abstract class Tower
             if(gameData != null)
             {
                 var planetId = gameData.PlanetId;
-                this.planetData = DataTableManager.PlanetTable.Get(planetId);
+                var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetId);
+                this.planetData = userData.PlanetLevelData;
             }
         }
         finally
@@ -298,12 +303,12 @@ public abstract class Tower
 
     public void AddBonusAttackSpeedTopercent(float percent)
     {
-        bonusAttackSpeed += BaseAttackSpeed * percent;
+        BonusAttackSpeedPercent += percent;
     }
 
     public void MinusBonusAttackSpeedTopercent(float percent)
     {
-        bonusAttackSpeed -= BaseAttackSpeed * percent;
+        BonusAttackSpeedPercent -= percent;
     }
 
     public virtual void PlaceTower()

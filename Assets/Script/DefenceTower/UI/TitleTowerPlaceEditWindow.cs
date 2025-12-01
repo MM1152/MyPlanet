@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using System.Linq;
 using Unity.VisualScripting;
+using System.Threading.Tasks;
 
 public class TitleTowerPlaceEditWindow : Window
 {
@@ -73,7 +74,7 @@ public class TitleTowerPlaceEditWindow : Window
     {
         selectIndex = 0;
         circle.transform.eulerAngles = Vector3.zero;
-
+        isRotate = false;
         base.Open();
     }
 
@@ -81,7 +82,7 @@ public class TitleTowerPlaceEditWindow : Window
     {
         this.presetData = presetData;
         this.presetIndex = presetIndex;
-        this.planetData = FirebaseManager.Instance.PlanetData.GetDeepCopy(this.presetData.PlanetId);
+        this.planetData = FirebaseManager.Instance.PlanetData.GetOrigin(this.presetData.PlanetId);
         placeCount = presetData.TowerId.Count;
 
         UpdateTowerHold();
@@ -212,10 +213,29 @@ public class TitleTowerPlaceEditWindow : Window
 
             int idx = i;
             placeHold.button.onClick.AddListener(() => {
+                OpenUnLockSlotPopup(idx);
                 if (placeHold.DisAble) return;
                 RotateCircle(idx);
                 FindOptionApplyTower(placeHolds[idx].TowerData);
             });
+        }
+
+        CheckPlaceHoldUnlockAble();
+    }
+
+    private void CheckPlaceHoldUnlockAble()
+    {
+        var unlockAbleSlotCount = DataTableManager.PlanetTable.GetUnlockAbleSlotCount(planetData.id, planetData.star);
+        var currentOpenSlotCount = planetData.openSlot.Count(x => x != -1);
+
+        bool unlockAble = unlockAbleSlotCount - currentOpenSlotCount == 0 ? false : true; 
+
+        for(int i = 0; i < placeHolds.Count; i++)
+        {
+            if(planetData.openSlot[i] == -1)
+            {
+                placeHolds[i].SetUnLockAble(unlockAble);
+            }
         }
     }
 
@@ -298,4 +318,28 @@ public class TitleTowerPlaceEditWindow : Window
 
         return (left, right);
     }
+
+    private void OpenUnLockSlotPopup(int selectIdx)
+    {
+        if (placeHolds[selectIdx].UnLockAble)
+        {
+            var popup = popupManager.Open<UnLockPopup>(PopupIds.UnLockPopup);
+            popup.Setting(selectIdx , UnLock);
+        }
+    }
+
+    private void UnLock(int idx)
+    {
+        UnLockAsync(idx).Forget();
+    }
+
+    private async UniTaskVoid UnLockAsync(int idx)
+    {
+        var task = FirebaseManager.Instance.PlanetData.UnLockSlotAsync(planetData.id, idx);
+        await Managers.Instance.WaitForLoadingAsync(task);
+        CheckPlaceHoldUnlockAble();
+        placeHolds[idx].UpdateSlot(0);
+        placeHolds[idx].SetUnLockAble(false);
+    }
+
 }

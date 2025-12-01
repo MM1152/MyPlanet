@@ -6,6 +6,7 @@ public class TowerPlaceHold : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI indexText;
     [SerializeField] private GameObject disAbleSlot;
+    [SerializeField] private GameObject unlockSlot;
     [SerializeField] private Image towerImage;
     [SerializeField] private Image towerImageBackGround;
     private Outline outline;
@@ -18,6 +19,9 @@ public class TowerPlaceHold : MonoBehaviour
     private bool disAble = false;
     public bool DisAble => disAble;
 
+    private bool unLockAble;
+    public bool UnLockAble => unLockAble;
+
     private TowerTable.Data towerData = null;
     public TowerTable.Data TowerData => towerData;
     public void Init()
@@ -27,6 +31,7 @@ public class TowerPlaceHold : MonoBehaviour
         button = GetComponent<Button>();
         image = GetComponent<Image>();
         disAbleSlot.SetActive(false);
+        unlockSlot.SetActive(false);
     }
 
     public void UpdateSlot(int index)
@@ -64,6 +69,20 @@ public class TowerPlaceHold : MonoBehaviour
             towerImageBackGround.gameObject.SetActive(true);
         }
         image.color = Color.white;
+    }
+
+    public void SetUnLockAble(bool unlockAble)
+    {
+        this.unLockAble = unlockAble;
+
+        if (unLockAble)
+        {
+            unlockSlot.SetActive(true);
+        }
+        else
+        {
+            unlockSlot.SetActive(false);
+        }
     }
 
     public bool Placed()

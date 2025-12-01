@@ -14,14 +14,17 @@ public enum WindowIds
     DebugTowerPlaceWIndow = 7,
     TitleBookWindow = 8,
     TitleBookInfomationWindow = 9,
-    TerraformingWindow = 10,
-    WaveWindow = 11,
+    TerraformingWindow = 12,
+    WaveWindow = 13,
+    VictoryWindow = 10,
+    OptionUpgradeWindow = 11,
 }
 
 public enum PopupIds
 {
     None = -1,
-    TowerInfomationPopup = 0
+    TowerInfomationPopup = 0,
+    UnLockPopup = 1,
 }
 
 public static class SceneIds
@@ -180,6 +183,7 @@ public static class DataTableIds
     public static readonly string OptionTable = "OptionTable";
     public static readonly string PlanetLevelUpTable = "PlanetLevelUpTable";
     public static readonly string TerraformingTable = "TerraformingTable";
+    public static readonly string ConsumableTable = "ConsumableTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
@@ -209,6 +213,24 @@ public static class DataBasePaths
 
     public static string PlanetDataPathFormating => PlanetPath + FirebaseManager.Instance.UserId + "/{0}";
     public static string PlanetLevelPathFormating => PlanetDataPathFormating + "/level";
+    public static string PlanetLevelPathFormating => PlanetDataPathFormating + "/level";
+    public static string PlanetPeiceCountPathFormating => PlanetDataPathFormating + "/count";
+    public static string PlanetStarCountPathFormating => PlanetDataPathFormating + "/star";
+    public static string PlanetOpenSlotPathFormating => PlanetDataPathFormating + "/openSlot";
+}
+
+public static class EnemyTypes
+{
+    private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 4026, 5026, 6026, 7026 };
+    private static readonly HashSet<int> EliteMonseterIds = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
+    public static bool IsEliteMonster(int id) => EliteMonseterIds.Contains(id);
+    public static bool IsBossMonster(int id) => BossMonsterIds.Contains(id);
+}
+
+public static class ColorDefine
+{
+    public static readonly Color TowerSelectUIColor = new Color(0.5058824f , 0.7921569f , 0.764706f , 1f);
+    public static readonly Color ConsumableSelectUiColor = new Color(0.6235294f, 0.654902f, 0.8196079f, 1f);
 }
 
 public static class TerraformingData

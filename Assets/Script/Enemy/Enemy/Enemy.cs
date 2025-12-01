@@ -29,11 +29,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         get
         {
-            if (isEliteMonster)
+          
+            if (EnemyTypes.IsEliteMonster(enemyData.ID))
             {
                 return EnemyType.EliteMonster;
             }
-            else if (isBoss)
+            else if (EnemyTypes.IsBossMonster(enemyData.ID))
             {
                 return EnemyType.Boss;
             }
@@ -82,12 +83,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public Action ReturnMoveAction;
 
-    public static readonly HashSet<int> EliteMonsterIDs = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
 
-    public static readonly HashSet<int> BossIDs = new HashSet<int> { 3027 };
 
-    public bool isEliteMonster => EliteMonsterIDs.Contains(enemyData.ID);   
-    public bool isBoss => BossIDs.Contains(enemyData.ID);
 
     public LineRenderer enemyLineRenderer;
 
@@ -137,12 +134,14 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         ResetActions();
         ability?.SetEnemy(this);
 #if DEBUG_MODE
-        if (isBoss) this.transform.localScale = new Vector2(1f, 1f);
-        if( isEliteMonster) this.transform.localScale = new Vector2(0.7f, 0.7f);    
+    
+        if( EnemyTypes.IsBossMonster(data.ID)) this.transform.localScale = new Vector2(1f, 1f);    
+        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector2(0.7f, 0.7f);
 #endif
         ReturnMoveAction = () =>
         {
-            if (!IsDead && (enemyType == EnemyType.EliteMonster|| enemyType == EnemyType.Boss))
+           
+            if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID)||EnemyTypes.IsBossMonster(data.ID)))
             {
                 stateMachine.ChangeState(stateMachine.walkState);
             }
@@ -155,6 +154,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         abilityAction = null;
         OnBuffRemoved = null;
     }
+
 #if DEBUG_MODE
     private void SetColor(int typeEffectiveness)
     {
@@ -297,6 +297,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         OnTerraformingValueChanged?.Invoke();
         OnTerraformingValueChanged -= waveManager.UpdateTerraformingValue;  
         OnDie?.Invoke(this);       
+        OnDie?.Invoke(this);
+        OnDie = null;
     }
 
     public void SetBonusRange(int bonus)

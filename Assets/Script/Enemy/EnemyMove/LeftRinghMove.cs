@@ -28,7 +28,23 @@ public class LeftRinghMove : IMove
 
     public void Init(Enemy enemy)
     {
-        screenBounds = enemy.WaveManager.ScreenBounds;    
+        if(enemy.WaveManager != null) 
+            screenBounds = enemy.WaveManager.ScreenBounds;
+        else
+        {
+            var camera = Camera.main;
+
+            if (camera == null) return;
+
+            var zDistance = Mathf.Abs(camera.transform.position.z);
+
+            var bottomLeft = camera.ScreenToWorldPoint(new Vector3(0, 0, zDistance));
+            var topRight = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, zDistance));
+
+            screenBounds = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+        }
+
+
         enemyCollider = enemy.GetComponent<Collider2D>();
         enemyBounds = enemyCollider.bounds;
         target = enemy.GetTarget();

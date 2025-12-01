@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using System.Linq;
 
 public class PopupManager : MonoBehaviour
 {
@@ -17,8 +18,8 @@ public class PopupManager : MonoBehaviour
     {
         foreach (var popup in popups)
         {
-            popupTable.Add(popup.PoopupId, popup);
             popup.Init(this);
+            popupTable.Add(popup.PoopupId, popup);
             popup.ForcingClose();
         }
         UpdateBackGroundPanel().Forget();
@@ -62,6 +63,13 @@ public class PopupManager : MonoBehaviour
         {
             Variable.IsJoyStickActive = true;
         }
+        UpdateBackGroundPanel().Forget();
+    }
+
+    public void ForceClose()
+    {
+        var popup = popupStack.Pop();
+        popup.Close();
         UpdateBackGroundPanel().Forget();
     }
 
