@@ -15,6 +15,7 @@ public enum WindowIds
     TitleBookWindow = 8,
     TitleBookInfomationWindow = 9,
     TerraformingWindow = 10,
+    WaveWindow = 11,
 }
 
 public enum PopupIds
