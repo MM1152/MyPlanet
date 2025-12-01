@@ -21,6 +21,7 @@ public static class DataTableManager
     public static SpriteTable SpriteTable => Get<SpriteTable>("SpriteTable");
     public static OptionTable OptionTable => Get<OptionTable>(DataTableIds.OptionTable);
     public static PlanetLevelUpTable PlanetLevelUpTable => Get<PlanetLevelUpTable>(DataTableIds.PlanetLevelUpTable);
+    public static TerraformingTable TerraformingTable => Get<TerraformingTable>(DataTableIds.TerraformingTable);
 
     static DataTableManager()
     {
@@ -42,6 +43,7 @@ public static class DataTableManager
         var spriteTable = new SpriteTable();
         var optionTable = new OptionTable();
         var planetLevelUpTable = new PlanetLevelUpTable();
+        var terraformingTable = new TerraformingTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -58,6 +60,7 @@ public static class DataTableManager
             spriteTable.LoadAsync(DataTableIds.ElementSpriteTable),
             optionTable.LoadAsync(DataTableIds.OptionTable),
             planetLevelUpTable.LoadAsync(DataTableIds.PlanetLevelUpTable),
+            terraformingTable.LoadAsync(DataTableIds.TerraformingTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

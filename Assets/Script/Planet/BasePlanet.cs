@@ -13,8 +13,9 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     public int BonusDEF => bonusDEF;
     public int FullDEF => planetData.DEF + bonusDEF;
+
     public int FullHp => hp + shield;
-    public int ATK => planetData.ATK;
+    public int ATK => PlanetData.ATK + bonusATK;
 
     protected StatusEffect statusEffect = new StatusEffect();
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
@@ -26,12 +27,13 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     private bool isDead = false;
 
     private int bonusDEF = 0;
-    private List<(int value , float duration)> bonusDEFList = new List<(int value, float duration)>();
+    private int bonusATK = 0;
+    private List<(int value, float duration)> bonusDEFList = new List<(int value, float duration)>();
 
     [Header("On Reference In inspector")]
     [SerializeField] private SliderValue hpSlider;
     [SerializeField] private SliderValue shieldSlider;
-    
+
     [Header("Test Datas")]
     public ElementType elementType;
     public int maxHp;
@@ -39,9 +41,13 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public int shield;
     private TextSpawnManager textSpawnManager;
 
+    private float healthRegenerationValue;
+
+    private bool isRegenerating = false;
+
     protected virtual void Awake()
     {
-        textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>(); 
+        textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>();
     }
 
     protected virtual void Start()
@@ -55,9 +61,9 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         planetData = DataTableManager.PlanetTable.Get(FirebaseManager.Instance.PresetData.GetGameData().PlanetId);
         typeEffectiveness.Init((ElementType)planetData.Attribute);
         passiveSystem.Init(planetData.Skill_ID);
-
-        maxHp = planetData.HP;
         hp = (int)(maxHp);
+        healthRegenerationValue = 0f;
+        isRegenerating = false;
     }
 
     public void RepairHp(int amount)
@@ -77,11 +83,11 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     public void OnDamage(int damage)
     {
-        if(shield > 0)
+        if (shield > 0)
         {
             int damageToShield = shield - damage;
             shield -= damage;
-            if(damageToShield < 0)
+            if (damageToShield < 0)
             {
                 shield = 0;
                 damage = damageToShield;
@@ -107,9 +113,17 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         passiveSystem?.Update(Time.deltaTime);
         passiveSystem?.CheckUseAblePassive(null, this, null);
 
-        if(bonusDEFList.Count > 0)
+        if (isRegenerating && healthRegenerationValue > 0f)
         {
-            foreach ( var bonus in bonusDEFList.ToArray())
+            float healPerFrame = maxHp * (healthRegenerationValue / 100f) * Time.deltaTime;
+            hp += (int)healPerFrame;
+            hp = Mathf.Clamp(hp, 0, maxHp);
+            OnChanageHP();
+        }
+
+        if (bonusDEFList.Count > 0)
+        {
+            foreach (var bonus in bonusDEFList.ToArray())
             {
                 float newDuration = bonus.duration - Time.deltaTime;
                 if (newDuration <= 0f)
@@ -127,7 +141,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         }
     }
 
-    public void AddShield (int amount)
+    public void AddShield(int amount)
     {
         shield += amount;
         OnChanageHP();
@@ -136,10 +150,10 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public void OnChanageHP()
     {
         hpSlider?.UpdateSlider(hp, maxHp, FullHp / maxHp * 100, FullHp, maxHp);
-        shieldSlider?.UpdateSlider(shield, maxHp, "" , "");
+        shieldSlider?.UpdateSlider(shield, maxHp, "", "");
     }
 
-    public void AddBonusDFSPercent(float percent , float duration)
+    public void AddBonusDFSPercent(float percent, float duration)
     {
         bonusDEF += (int)(planetData.DEF * percent);
         bonusDEFList.Add(((int)(planetData.DEF * percent), duration));
@@ -157,7 +171,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     {
         if (collision.CompareTag(TagIds.EnemyTag))
         {
-            if ( collision.GetComponent<Enemy>() is Enemy enemy)
+            if (collision.GetComponent<Enemy>() is Enemy enemy)
             {
                 passiveSystem.CheckUseAblePassive(null, this, enemy);
             }
@@ -171,4 +185,22 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         }
     }
 
+    public void IncreaseMaxHealth(float effectValue)
+    {
+        float previousHpPercent = (float)hp / maxHp;
+        maxHp = (int)(maxHp * (1f + effectValue / 100f));
+        hp = (int)(maxHp * previousHpPercent);
+        OnChanageHP();
+    }
+
+    public void DefenseUpgrade(float effectValue)
+    {
+        bonusDEF += (int)(planetData.DEF * (effectValue / 100f));
+    }
+
+    public void HealthRegenerationUpgrade(float effectValue)
+    {
+        healthRegenerationValue += effectValue;
+        isRegenerating = true;
+    }
 }
