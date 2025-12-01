@@ -3,17 +3,15 @@ using UnityEngine;
 
 public class MoveManager 
 {
-  private Dictionary<int, IMove> moveTable = new Dictionary<int, IMove>()
+  private Dictionary<EnemyType, IMove> moveTable = new Dictionary<EnemyType, IMove>()
     {        
-        { 0, new SimpleMove() },                
-        { 4026, new UpDownMove() },
-        { 5026, new LeftRinghMove() },
-        { 3026, new LeftRinghMove() },
-        { 6026, new LeftRinghMove() },
-        { 7026, new CornerWrapMove() },
+        { EnemyType.Melee, new SimpleMove() },                
+        { EnemyType.Ranged, new SimpleMove() },
+        { EnemyType.EliteMonster, new BaseElementalMove() },
+        { EnemyType.Boss, new BossSimpleMove() },   
     };
 
-    public IMove GetMove(int Id)
+    public IMove GetMove(EnemyType Id)
     {
         if (moveTable.ContainsKey(Id))
         {

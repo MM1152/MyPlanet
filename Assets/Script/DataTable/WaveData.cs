@@ -13,10 +13,9 @@ public class WaveData : DataTable
     public class Data
     {
         public int ID { get; set; }
-        public int MON_ID { get; set; }
-        //스폰까지의 시간
+        public int MON_ID { get; set; }        
         public float SPON_TIME { get; set; }
-        //한번에 소환될 몬스터 수
+        
         public int SPON_COUNT { get; set; }
         public float INTERVAL { get; set; }
         public int SPON_POINT { get; set; }

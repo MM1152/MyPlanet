@@ -8,6 +8,7 @@ public class AttackManager
         { EnemyType.Melee, new OneTimeMeleeAttacker() },
         { EnemyType.Ranged  , new ShotAttack() },
         {EnemyType.EliteMonster, new EliteMonsterAttack() },
+        {EnemyType.Boss, new BossAttack() },
     };
     public IAttack GetAttack(EnemyType key)
     {
