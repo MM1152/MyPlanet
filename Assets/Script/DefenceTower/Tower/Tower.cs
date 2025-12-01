@@ -6,7 +6,8 @@ using UnityEngine.AddressableAssets;
 public abstract class Tower
 {
     public int FullDamage => towerData.ATK + BonusDamage ;
-    public int BaseDamage => towerData.ATK;
+    public int BaseDamage => towerData.ATK;   
+    
 
     public float FullAttackSpeed => towerData.Fire_Rate + BonusAttackSpeed;
     public float BaseAttackSpeed => towerData.Fire_Rate;
@@ -107,7 +108,7 @@ public abstract class Tower
         this.manager = manager;
         this.towerData = data;
         this.tower = tower;
-        this.slotIndex = slotIndex;
+        this.slotIndex = slotIndex;        
         try
         {
             var gameData = FirebaseManager.Instance.PresetData.GetGameData();
@@ -326,5 +327,6 @@ public abstract class Tower
     {
         this.statusEffect = statusEffect;
     }
+   
     protected abstract BaseAttackPrefab CreateAttackPrefab();
 }
