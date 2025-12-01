@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-
+using Cysharp.Threading.Tasks;
 public class WaveManager : MonoBehaviour
 {
     public class SpawnPoint
     {
         public Vector2 position;
         public int enemyId;
-      
+
         public int spawnCount;
 
         public int maxSpawnCount;
-     
+
         public float spawnStartDelayTime;
-  
+
         public float spawnDelayTime;
         public float timer = 0f;
         public int currentSpawnEnemyCount;
@@ -22,8 +23,19 @@ public class WaveManager : MonoBehaviour
     private Dictionary<int, List<SpawnPoint>> waves = new Dictionary<int, List<SpawnPoint>>();
     private List<SpawnPoint> currentWave = new List<SpawnPoint>();
     private List<Vector2> spawnPoints = new List<Vector2>();
+
+    [SerializeField]
+    private SliderValue sliderValue;
+
+    [SerializeField]
+    private Terraforming terraforming;
+    //현재량 
+    private int waveTerraformingValue = 0;
+    //총량
+    private int totalTerraformingValue = 0;
+
     private Rect screenBounds;
-    public Rect ScreenBounds => screenBounds;   
+    public Rect ScreenBounds => screenBounds;
 
     private float spawnOffset = 1.0f;
     private int topPointCount = 3;
@@ -31,7 +43,7 @@ public class WaveManager : MonoBehaviour
     private int bottomPointCount = 3;
     private int rightPointCount = 4;
 
-    private int currentWaveIndex;
+    private int currentWaveIndex = 1;
     public int CurrentWaveIndex => currentWaveIndex;
     private float waveDuration = 90f;
     public float WaveDuration => waveDuration;
@@ -47,6 +59,10 @@ public class WaveManager : MonoBehaviour
 #if DEBUG_MODE
     public bool UIUpdateTest = false;
 #endif
+
+    public int[] monsterStage = new int[2] { 25, 30 };
+
+    public GameObject warringWindow;
 
     private int stageId = 1;
     public int SetStageId(int id)
@@ -68,6 +84,9 @@ public class WaveManager : MonoBehaviour
 #if DEBUG_MODE
         UIUpdateTest = true;
 #endif
+        waveTerraformingValue = 0;
+
+        sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, waveTerraformingValue * 100 / totalTerraformingValue);
     }
 
     private void ResetWave()
@@ -121,6 +140,26 @@ public class WaveManager : MonoBehaviour
                 waves[waveNumber].Add(spawnPoint);
             }
         }
+
+
+
+        if (stageData != null)
+        {
+            foreach (var waveGroup in stageData.waveGroups)
+            {
+                for (int i = 0; i < 56; i++)
+                {
+                    if (waveGroup.waveDatas.Count <= i) break;
+                    totalTerraformingValue += waveGroup.waveDatas[i].MAX_SPON;
+                }
+            }
+        }
+        else
+        {
+            totalTerraformingValue = 0;
+        }
+
+
     }
 
     private void InitScreenBounds()
@@ -177,15 +216,15 @@ public class WaveManager : MonoBehaviour
         if (!waves.ContainsKey(currentWaveIndex))
         {
 #if DEBUG_MODE
-            currentWaveIndex = 1;   
+            currentWaveIndex = 1;
             currentWave = waves[currentWaveIndex];
 
             foreach (var spawnPoint in currentWave)
-        {
-            spawnPoint.timer = 0f;
-            spawnPoint.isStart = false;
-            waveClearCount += spawnPoint.maxSpawnCount;
-        }
+            {
+                spawnPoint.timer = 0f;
+                spawnPoint.isStart = false;
+                waveClearCount += spawnPoint.maxSpawnCount;
+            }
             Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
 #endif
             return;
@@ -227,7 +266,6 @@ public class WaveManager : MonoBehaviour
 
             if (spawnPoint.timer >= spawnPoint.spawnDelayTime && spawnPoint.isStart)
             {
-                Debug.Log($"Spawn Enemy ID : {spawnPoint.enemyId} Count : {spawnPoint.spawnCount}");
                 var remainingToSpawn = spawnPoint.maxSpawnCount - spawnPoint.currentSpawnEnemyCount;
                 var minCount = Mathf.Min(spawnPoint.spawnCount, remainingToSpawn);
                 var enemys = enemySpawnManager.SpawnEnemy(spawnPoint.enemyId, minCount);
@@ -240,6 +278,10 @@ public class WaveManager : MonoBehaviour
                         var offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
                         enemy.transform.position = spawnPoint.position + offset;
                         enemy.move.Init(enemy);
+                        enemy.OnTerraformingValueChanged += () =>
+                        {
+                            UpdateTerraformingValue();
+                        };
                     }
                     spawnPoint.timer = 0f;
                 }
@@ -253,6 +295,27 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    public void UpdateTerraformingValue()
+    {
+        waveTerraformingValue++;
+        var percent = waveTerraformingValue * 100 / totalTerraformingValue;
+        sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, percent);
+
+        for (int i = 0; i < TerraformingData.terrformingOpenValues.Length; i++)
+        {
+            if (percent >= TerraformingData.terrformingOpenValues[i])
+            {
+                if (!TerraformingData.terraformingUnlockPoints.Contains(TerraformingData.terrformingOpenValues[i]))
+                {
+                    TerraformingData.terraformingUnlockPoints.Add(TerraformingData.terrformingOpenValues[i]);
+                    terraforming.SetPoint(i + 1);
+                    Time.timeScale = 0f;
+                    return;
+                }
+            }
+        }
+    }
+
     private void NextWave()
     {
         int nextWaveIndex = currentWaveIndex + 1;
@@ -260,7 +323,7 @@ public class WaveManager : MonoBehaviour
         if (!waves.ContainsKey(nextWaveIndex))
         {
 #if DEBUG_MODE
-            currentWaveIndex = 0;
+            currentWaveIndex = 1;
             currentWave = waves[currentWaveIndex];
 
             foreach (var spawnPoint in currentWave)
@@ -278,6 +341,13 @@ public class WaveManager : MonoBehaviour
             return;
         }
 
+        if (monsterStage.Contains(nextWaveIndex))
+        {
+            warringWindow.SetActive(true);
+            ShowWarringWindow().Forget();
+            Time.timeScale = 0f;
+        }
+
         currentWave.Clear();
         currentWave = waves[nextWaveIndex];
         currentWaveIndex = nextWaveIndex;
@@ -292,5 +362,13 @@ public class WaveManager : MonoBehaviour
     private void EndGame()
     {
         // 여기에 게임 종료 로직 추가
+    }
+
+    private async UniTask ShowWarringWindow()
+    {
+        await UniTask.Delay(1000,true,cancellationToken: this.GetCancellationTokenOnDestroy());
+        Debug.Log("경고창 종료");
+        Time.timeScale = 1.0f;
+        warringWindow.SetActive(false);
     }
 }
