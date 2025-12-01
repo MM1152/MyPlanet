@@ -348,14 +348,6 @@ public class WaveManager : MonoBehaviour
 
         if (!waves.ContainsKey(nextWaveIndex))
         {
-#if DEBUG_MODE
-           
-
-            isFinalWaveEnded = true;
-
-        
-            Debug.Log("다음 웨이브가 없습니다.");
-#endif
             return;
         }
 
@@ -373,11 +365,11 @@ public class WaveManager : MonoBehaviour
         {
             warringWindow.SetActive(true);
             var monsterId = currentWave[0].enemyId;
-            if (Enemy.EliteMonsterIDs.Contains(monsterId))
+            if (EnemyTypes.IsEliteMonster(monsterId))
             {
                 warringText.text = $"엘리트 보스 몬스터 출현!";
             }
-            else if (Enemy.BossIDs.Contains(monsterId))
+            else if (EnemyTypes.IsBossMonster(monsterId))
             {
                 warringText.text = $"보스 몬스터 출현!";
             }

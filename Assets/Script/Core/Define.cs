@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 public enum WindowIds
@@ -212,7 +213,6 @@ public static class DataBasePaths
     public static string ExpPath => UserPath + FirebaseManager.Instance.UserId + "/exp";
 
     public static string PlanetDataPathFormating => PlanetPath + FirebaseManager.Instance.UserId + "/{0}";
-    public static string PlanetLevelPathFormating => PlanetDataPathFormating + "/level";
     public static string PlanetLevelPathFormating => PlanetDataPathFormating + "/level";
     public static string PlanetPeiceCountPathFormating => PlanetDataPathFormating + "/count";
     public static string PlanetStarCountPathFormating => PlanetDataPathFormating + "/star";

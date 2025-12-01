@@ -2,9 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.Rendering;
 
 public class EnemySpawnManager : MonoBehaviour
 {
@@ -18,23 +16,10 @@ public class EnemySpawnManager : MonoBehaviour
 
     public bool isDebugMode = false;
 
-    private void InitalizedAsync()
-    {
-        await DataTableManager.WaitForInitalizeAsync();
-        var enemy = await Addressables.LoadAssetAsync<GameObject>("Enemy").ToUniTask();
-        enemyPrefab = enemy.GetComponent<Enemy>();
-
-        //init = true;
-#if DEBUG_MODE
-        testButton?.gameObject.SetActive(true);
-        testButton?.onClick.AddListener(() => SpawnEnemy(1));
-#endif
-    }
     private void Awake()
     {
         windowManager = GameObject.FindWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
         poolManager = Managers.ObjectPoolManager;
-        InitalizedAsync();
     }
  
     public List<Enemy> SpawnEnemy(int id, int count = 1)
