@@ -35,7 +35,7 @@ public class SpreadBullet : EnemyProjectileSimple
     {
         if(Vector2.Distance(transform.position,Enemy.transform.position)<range)
         {
-            transform.position += movedir * enemyData.bulletSpeed * Time.deltaTime;
+            transform.position += movedir * currentSpeed * Time.deltaTime;
         }
         else
         {

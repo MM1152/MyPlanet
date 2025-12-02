@@ -51,7 +51,11 @@ public class TerraformingWindow : Window
 
     public override void Open()
     {
+        if (Variable.IsTutorialActive) return;
+
+        Time.timeScale = 0f;
         base.Open();
     }
+
 }
 

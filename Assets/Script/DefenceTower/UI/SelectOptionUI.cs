@@ -58,4 +58,9 @@ public class SelectOptionUI : MonoBehaviour
     {
         outLine.enabled = false;
     }
+
+    public void SetInteractive(bool active)
+    {
+        toggle.interactable = active;
+    }
 }

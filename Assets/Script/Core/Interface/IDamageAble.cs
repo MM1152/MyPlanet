@@ -9,3 +9,4 @@ public interface IDamageAble
     public void OnDamage(int damage);
     public void OnDead();
 }
+    

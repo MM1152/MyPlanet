@@ -73,9 +73,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #if DEBUG_MODE
     public TextSpawnManager textSpawnManager;
 #endif
-#if DEBUG_MODE
     public SpriteRenderer spriteRenderer { get; private set; }
-#endif
     public ZoneSearch zone;
     public Action abilityAction;
 
@@ -93,7 +91,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         stateMachine = new StateMachine(this);
         spriteRenderer = GetComponent<SpriteRenderer>();
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag)?.GetComponent<WaveManager>();
+#if DEBUG_MODE
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag)?.GetComponent<TextSpawnManager>();
+#endif
         enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag)?.GetComponent<EnemySpawnManager>();
         zone = GetComponentInChildren<ZoneSearch>();
         typeEffectiveness = new TypeEffectiveness();
@@ -119,7 +119,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         attackRange = baseRange;
 #if DEBUG_MODE
         SetColor(enemyData.Attribute);
-#endif      
+#endif
         target = GameObject.FindGameObjectWithTag(TargetTag);
         stateMachine.Init(stateMachine.idleState);
         typeEffectiveness.Init(ElementType);
@@ -140,12 +140,18 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #endif
         ReturnMoveAction = () =>
         {
-           
             if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID)||EnemyTypes.IsBossMonster(data.ID)))
             {
+  
                 stateMachine.ChangeState(stateMachine.walkState);
             }
         };
+
+        if (Variable.IsTutorialActive && EnemyTypes.IsEliteMonster(data.ID))
+        {
+            TutorialManager tutorialManager = GameObject.FindWithTag(TagIds.TutorialManagerTag).GetComponent<TutorialManager>();
+            OnDie += (enemy) => tutorialManager.ForceUpdateTutorial();
+        }
     }
 
 
@@ -294,9 +300,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();
-        OnTerraformingValueChanged?.Invoke();
-        OnTerraformingValueChanged -= waveManager.UpdateTerraformingValue;  
-        OnDie?.Invoke(this);       
+        if(waveManager != null)
+        {
+            OnTerraformingValueChanged?.Invoke();
+            OnTerraformingValueChanged -= waveManager.UpdateTerraformingValue;
+        }
+
         OnDie?.Invoke(this);
         OnDie = null;
     }

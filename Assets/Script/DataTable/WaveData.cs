@@ -93,4 +93,9 @@ public class WaveData : DataTable
     {
         return waveTable;
     }
+
+    public int GetStageCount()
+    {
+        return stageDatas.Count;
+    }
 }

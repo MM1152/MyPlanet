@@ -42,7 +42,13 @@ public class ConsumableManager : MonoBehaviour
         int rand = Random.Range(0, useAbleConsumList.Count);
         return useAbleConsumList[rand];
     }
-  
+
+    public ConsumalbeTable.Data GetData(int index)
+    {
+        if (useAbleConsumList == null) Init();
+        return useAbleConsumList[index];
+    }
+
     public void SetConsumable(ConsumalbeTable.Data data)
     {
         Consumable consumable = consumableFactory.CreateInstance(data.Item_id);

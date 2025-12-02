@@ -19,6 +19,10 @@ public class VictoryWindow : Window
         base.Init(manager);
         windowId = (int)WindowIds.VictoryWindow;
 
+        if(Variable.IsTutorialActive)
+        {
+            replayButton.interactable = false;
+        }
         replayButton.onClick.AddListener(OnClickReplayButton);
         exitButton.onClick.AddListener(OnClickExitButton);
     }

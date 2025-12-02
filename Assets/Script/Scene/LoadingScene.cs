@@ -45,6 +45,11 @@ public class LoadingScene : MonoBehaviour
             return;
         }
 
+        Variable.IsSpawnActive = true;
+        Variable.IsTutorialActive = false;
+        Variable.IsJoyStickActive = true;
+
+
         Managers.Instance.Release();
 
         currentProgress.text = "테이블 불러오는 중";

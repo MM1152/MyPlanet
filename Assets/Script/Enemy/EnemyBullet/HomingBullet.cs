@@ -30,7 +30,7 @@ public class HomingBullet : EnemyProjectileSimple
                 Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
                 return;
             }
-            transform.position = Vector2.MoveTowards(transform.position, target.position, enemyData.bulletSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, target.position, currentSpeed * Time.deltaTime);
         }
     }
 
@@ -42,7 +42,7 @@ public class HomingBullet : EnemyProjectileSimple
 
         while (Vector3.Distance(transform.position, offsetTarget) > 0.01f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, offsetTarget, enemyData.bulletSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, offsetTarget, currentSpeed * Time.deltaTime);
             await UniTask.Yield(this.gameObject.GetCancellationTokenOnDestroy());
         }
         await UniTask.Delay(500, cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
