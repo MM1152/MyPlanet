@@ -36,9 +36,9 @@ public class PlaceTowerWindow : Window
     {
         base.Init(manager);
         
-        for (int i = 0; i < selectTowerUICount; i++)
+        for (int i = 0; i < selectTowerUIRoot.childCount; i++)
         {
-            SelectTowerUI obj = Instantiate(selectTowerUI, selectTowerUIRoot);
+            SelectTowerUI obj = selectTowerUIRoot.GetChild(i).GetComponent<SelectTowerUI>();
             obj.Initalized(i , (value) => selectTowerIndex = value);
             selectTowerUIs.Add(obj);
         }
@@ -67,25 +67,135 @@ public class PlaceTowerWindow : Window
         manager.Close();
     }
 
+    public override void TutorialTowerOpen1()
+    {
+        selectTowerIndex = -1;
+        levelText.text = $"Lv. {towerManager.CurrentLevel}";
+
+        var towerCount = towerManager.GetAllTower().Count;
+        for (int i = 0; i < towerCount; i++)
+        {
+            if (towerManager.Towers[i] == null) continue;
+            var tower = towerManager.GetTower(i);
+            selectTowerUIs[i].SetInteractive(true);
+            selectTowerUIs[i].SetTowerData(tower);
+        }
+
+        selectTowerUIs[1].SetInteractive(false);
+        selectTowerUIs[2].SetInteractive(false);
+        
+        Time.timeScale = 0f;
+        base.TutorialTowerOpen1();
+    }
+
+    public override void TutorialTowerOpen2()
+    {
+        selectTowerIndex = -1;
+        levelText.text = $"Lv. {towerManager.CurrentLevel}";
+
+        var towerCount = towerManager.GetAllTower().Count;
+        for (int i = 0; i < towerCount; i++)
+        {
+            if (towerManager.Towers[i] == null) continue;
+            var tower = towerManager.GetTower(i);
+            selectTowerUIs[i].SetTowerData(tower);
+            selectTowerUIs[i].SetInteractive(true);
+        }
+
+        selectTowerUIs[0].SetInteractive(false);
+        selectTowerUIs[2].SetInteractive(false);
+
+        Time.timeScale = 0f;
+        base.TutorialTowerOpen1();
+    }
+
+    public override void TutorialTowerOpen3()
+    {
+        selectTowerIndex = -1;
+        levelText.text = $"Lv. {towerManager.CurrentLevel}";
+
+        var towerCount = towerManager.GetAllTower().Count;
+        for (int i = 0; i < towerCount; i++)
+        {
+            if (towerManager.Towers[i] == null) continue;
+            var tower = towerManager.GetTower(i);
+            selectTowerUIs[i].SetTowerData(tower);
+            selectTowerUIs[i].SetInteractive(true);
+        }
+
+        selectTowerUIs[0].SetInteractive(false);
+        selectTowerUIs[1].SetInteractive(false);
+
+        Time.timeScale = 0f;
+        base.TutorialTowerOpen1();
+    }
+
+    public override void TutorialTowerOpen4()
+    {
+        selectTowerIndex = -1;
+        levelText.text = $"Lv. {towerManager.CurrentLevel}";
+
+        var towerCount = towerManager.GetAllTower().Count;
+        for (int i = 0; i < towerCount; i++)
+        {
+            if (towerManager.Towers[i] == null) continue;
+            var tower = towerManager.GetTower(i);
+            selectTowerUIs[i].SetInteractive(true);
+            selectTowerUIs[i].SetTowerData(tower);
+        }
+
+        selectTowerUIs[1].SetInteractive(false);
+        selectTowerUIs[2].SetInteractive(false);
+        Time.timeScale = 0f;
+        base.TutorialTowerOpen1();
+    }
+
+    public override void TutorialTowerOpen5()
+    {
+        selectTowerIndex = -1;
+        levelText.text = $"Lv. {towerManager.CurrentLevel}";
+
+        var towerCount = towerManager.GetAllTower().Count;
+        for (int i = 0; i < towerCount; i++)
+        {
+            if (i == 0)
+            {
+                selectTowerUIs[i].SetConsumableData(consumableManager.GetData(0));
+                selectTowerUIs[i].SetInteractive(true);
+                continue;
+            }
+            if (towerManager.Towers[i] == null) continue;
+            var tower = towerManager.GetTower(i);
+            selectTowerUIs[i].SetTowerData(tower);
+            selectTowerUIs[i].SetInteractive(true);
+        }
+
+        selectTowerUIs[1].SetInteractive(false);
+        selectTowerUIs[2].SetInteractive(false);
+
+        Time.timeScale = 0f;
+        base.TutorialTowerOpen1();
+    }
+
+
     public override void Open()
     {
+        if (Variable.IsTutorialActive) return;
         selectTowerIndex = -1;
         levelText.text = $"Lv. {towerManager.CurrentLevel}";
 
         for (int i = 0; i < selectTowerUICount; i++)
         {
+            selectTowerUIs[i].SetInteractive(true);
             var percent = Random.Range(0f, 1f);
-            if(percent < towerSpawnPercent)
+            if (percent < towerSpawnPercent)
             {
-                var tower = towerManager.GetRandomTower();
-                selectTowerUIs[i].SetTowerData(tower);
+                selectTowerUIs[i].SetTowerData(towerManager.GetRandomTower());
             }
             else
             {
-                var consumable = consumableManager.GetRandomData();
-                selectTowerUIs[i].SetConsumableData(consumable);
+                selectTowerUIs[i].SetConsumableData(consumableManager.GetRandomData());
             }
-            
         }
         Time.timeScale = 0f;
         base.Open();
@@ -97,7 +207,6 @@ public class PlaceTowerWindow : Window
         {
             selectTowerUIs[i].ResetOutline();
         }
-        Time.timeScale = 1f;
         base.Close();
     }
 }

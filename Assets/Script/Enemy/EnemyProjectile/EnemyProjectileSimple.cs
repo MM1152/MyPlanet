@@ -26,8 +26,8 @@ public class EnemyProjectileSimple : EnemyProjectileBase
 
     protected virtual void Move()
     {
-        Vector3 dir = (target.transform.position - transform.position).normalized;
-        transform.position += dir * enemyData.bulletSpeed * Time.deltaTime;
+        Vector3 dir = (target.transform.position - transform.position).normalized;  
+        transform.position += dir * currentSpeed * Time.deltaTime;
     }
 
     protected override void BlockedHit(Collider2D collision)

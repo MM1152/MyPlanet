@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-
 public enum WindowIds
 {
     None = -1,
@@ -50,6 +49,8 @@ public enum ElementType
 public static class Variable
 {
     public static bool IsJoyStickActive;
+    public static bool IsTutorialActive;
+    public static bool IsSpawnActive;
 }
 
 public static class AddressableLabelIds
@@ -87,6 +88,7 @@ public enum PoolsId
     Surge = 218,
     BlackMineBullet = 219,
     ShadowSurge = 220,
+    GravityWrap = 221,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -140,6 +142,7 @@ public static class AddressableNames
         { "Surge" , PoolsId.Surge },
         { "BlackMineBullet" , PoolsId.BlackMineBullet },
         { "ShadowSurge" , PoolsId.ShadowSurge },
+        { "GravityWrap" , PoolsId.GravityWrap },
         { "SwitchDirectionBullet", PoolsId.SwitchDirectionBullet },
         { "RainBullet", PoolsId.RainBullet },   
     };
@@ -166,6 +169,7 @@ public static class TagIds
     public readonly static string EnemyTag = "Enemy";
     public readonly static string EnemyProjectileTag = "EnemyProjectile";
     public readonly static string IronMineTag = "IronMine";
+    public readonly static string TutorialManagerTag = "TutorialManager";
 }
 
 public static class DataTableIds

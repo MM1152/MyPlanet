@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     public void TouchJoyStick(InputAction.CallbackContext context)
     {
         Vector3 inputPos = Touchscreen.current.position.ReadValue();
-        bool isOnUI = Utils.IsPointerOverUI(inputPos);
+        isOnUI = Utils.IsPointerOverUI(inputPos);
         
         if (joyStick != null && context.started && Variable.IsJoyStickActive && !isOnUI)
         {

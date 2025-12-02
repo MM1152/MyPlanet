@@ -58,8 +58,11 @@ public class WaveManager : MonoBehaviour
     private EnemySpawnManager enemySpawnManager;
     public EnemySpawnManager EnemySpawnManager => enemySpawnManager;
 
+
     [Header("References")]
     [SerializeField] private WindowManager windowManager;
+    [SerializeField] private TutorialManager tutorialManager;
+    public int NextTutorialWaveIndex { get; set; } = 5;
 
     private float playTimeTimer;
 #if DEBUG_MODE
@@ -80,14 +83,10 @@ public class WaveManager : MonoBehaviour
     private WaveWindow waveWindow;
 
     private int stageId = 1;
-    public int SetStageId(int id)
-    {
-        stageId = id;
-        return stageId;
-    }
 
     private void Awake()
     {
+        stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
         enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag).GetComponent<EnemySpawnManager>();
     }
 
@@ -229,6 +228,7 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
+        if (!Variable.IsSpawnActive) return;
         playTimeTimer += Time.deltaTime;
         if (!isFinalWaveEnded)
         {
@@ -255,7 +255,7 @@ public class WaveManager : MonoBehaviour
         StartSpawnWave(Time.deltaTime);
     }
 
-    private void StartSpawnWave(float deltaTime)
+    public void StartSpawnWave(float deltaTime)
     {
         foreach (var spawnPoint in currentWave)
         {
@@ -321,17 +321,23 @@ public class WaveManager : MonoBehaviour
                 {
                     TerraformingData.terraformingUnlockPoints.Add(TerraformingData.terrformingOpenValues[i]);
                     terraforming.SetPoint(i + 1);
-                    Time.timeScale = 0f;
                     return;
                 }
             }
         }
     }
-
-    private void NextWave()
+    //Tutorial
+    public void StartWave()
     {
-        nextWaveIndex = currentWaveIndex + 1;
-
+        StartSpawnWave(Time.deltaTime);
+    }
+    public void NextWave()
+    {
+        int nextWaveIndex = currentWaveIndex + 1;
+        if (tutorialManager != null && NextTutorialWaveIndex == currentWaveIndex)
+        {
+            tutorialManager.SetSectorTutorial(NextTutorialWaveIndex);
+        }
         if (!waves.ContainsKey(nextWaveIndex))
         {        
             return;

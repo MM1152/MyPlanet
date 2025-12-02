@@ -16,7 +16,9 @@ public abstract class RangeCheckDeathHandler : BaseDie
     protected void RangeCheck()
     {        
         targetColliders = Physics2D.OverlapCircleAll(enemy.transform.position, enemy.TestRangeRadius, LayerMask.GetMask(targets));
+#if DEBUG_MODE
         RangeCheckDelay().Forget();
+#endif
         if (targetColliders.Length > 0)
         {
             AbilltyToTarget(targetColliders);
@@ -32,7 +34,7 @@ public abstract class RangeCheckDeathHandler : BaseDie
                 continue;
             }
 #if DEBUG_MODE
-#endif            
+#endif
             DieAbility(collider);
         }
     }

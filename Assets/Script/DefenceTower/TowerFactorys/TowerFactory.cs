@@ -21,6 +21,7 @@ public class TowerFactory : BaseFactory<Tower>
         { 2014,  new BlackMineTowerCreator() },
         { 2015,  new SurgeTowerCreator() },
         { 2016,  new ShadowSurgeTowerCreator() },
+        { 2017,  new GravityWrapTowerCreator() },
         //{ 7,  new GravityControlTowerCreator() },
         //{ 8,  new ShockWaveTowerCreator() },
     };
@@ -194,6 +195,14 @@ public class ShadowSurgeTowerCreator : ITowerCreateor
     public Tower CreateTower()
     {
         var tower = new ShadowSurgeTower();
+        return tower;
+    }
+}
+public class GravityWrapTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new GravityWarpTower();
         return tower;
     }
 }

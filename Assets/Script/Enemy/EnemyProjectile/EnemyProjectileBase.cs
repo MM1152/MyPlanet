@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class EnemyProjectileBase : MonoBehaviour
+public abstract class EnemyProjectileBase : MonoBehaviour , IMoveAble
 {
     [SerializeField]
     private Sprite sprite;
@@ -14,6 +14,10 @@ public abstract class EnemyProjectileBase : MonoBehaviour
     protected TypeEffectiveness typeEffectiveness;
     public ElementType ElementType => typeEffectiveness.Type;
 
+    public bool IsStun { get; set; }
+    public float BaseSpeed => enemyData.bulletSpeed;
+    public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
+    protected float currentSpeed = 0f;
     public virtual void Init(Enemy data, TypeEffectiveness typeEffectiveness)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -24,6 +28,7 @@ public abstract class EnemyProjectileBase : MonoBehaviour
         }
         this.enemyData = data;
         this.typeEffectiveness = typeEffectiveness;
+        currentSpeed = BaseSpeed;
     }
 
     public virtual void SetTarget(Transform target)

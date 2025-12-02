@@ -51,7 +51,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             HitTarget(collision);
-            if (basePlaent != null)
+            if (basePlaent != null && tower.FullDamage != 0)
             {
                 basePlaent.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
             }
