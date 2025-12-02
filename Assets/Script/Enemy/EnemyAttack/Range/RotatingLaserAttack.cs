@@ -34,7 +34,7 @@ public class RotatingLaserAttack : IShotStrategy
 
     private float delayTimer = 0f;
 
-    private float damageTimer = 0f;
+    private float damageTimer = 0.1f;
 
     public void Shot(Enemy enemy, GameObject target)
     {
