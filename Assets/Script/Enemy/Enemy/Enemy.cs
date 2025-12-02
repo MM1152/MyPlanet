@@ -294,8 +294,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();
-        OnTerraformingValueChanged?.Invoke();
-        OnTerraformingValueChanged -= waveManager.UpdateTerraformingValue;  
+        if(waveManager != null)
+        {
+            OnTerraformingValueChanged?.Invoke();
+            OnTerraformingValueChanged -= waveManager.UpdateTerraformingValue;
+        }
+
         OnDie?.Invoke(this);       
         OnDie?.Invoke(this);
         OnDie = null;
