@@ -1,14 +1,12 @@
 using UnityEngine;
 
 public class RapidFireAttack : IShotStrategy
-{
-    private Enemy body;
+{    
     private float baseAngle = 90f;
     public int spawnCount = 10;
 
     public void Shot(Enemy enemy, GameObject target)
-    {
-        body = enemy;
+    {        
         Vector3 toTarget = (target.transform.position - enemy.transform.position).normalized;
 
         for (int i = 0; i < spawnCount; i++)

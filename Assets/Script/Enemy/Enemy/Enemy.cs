@@ -1,7 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+﻿using System;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
@@ -57,10 +54,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public event Action<Enemy> OnDie;
 
     public event Action OnTerraformingValueChanged;
-    private AttackManager attackManager;
-    private DieManager dieManager;
-    private MoveManager moveManager;
-    private AbilityManager abilityManager;
     public IAttack attack;
     public BaseDie die;
     public IMove move;
@@ -96,11 +89,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag)?.GetComponent<TextSpawnManager>();
         enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag)?.GetComponent<EnemySpawnManager>();
         zone = GetComponentInChildren<ZoneSearch>();
-        typeEffectiveness = new TypeEffectiveness();
-        dieManager = new DieManager();
-        abilityManager = new AbilityManager();
-        attackManager = new AttackManager();
-        moveManager = new MoveManager();
+        typeEffectiveness = new TypeEffectiveness();       
         enemyLineRenderer = GetComponent<LineRenderer>();
     }
 
@@ -126,10 +115,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         statusEffect.Init();
         isKilledByPlayer = true;
         IsDead = false;
-        attack = attackManager.GetAttack(enemyType);
-        die = dieManager.GetDie(enemyData.ID);
-        ability = abilityManager.GetAbility(enemyData.ID);
-        move = moveManager.GetMove(enemyType);
+        attack = AttackManager.GetAttack(enemyType);
+        die = DieManager.GetDie(enemyData.ID);
+        ability = AbilityManager.GetAbility(enemyData.ID);
+        move = MoveManager.GetMove(enemyType);
         zone?.Init(this);
         ResetActions();
         ability?.SetEnemy(this);
@@ -196,8 +185,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
         if (collision.CompareTag(TargetTag))
         {
-#if DEBUG_MODE
-#endif
             isKilledByPlayer = false;
             SetState(stateMachine.attackState);
         }

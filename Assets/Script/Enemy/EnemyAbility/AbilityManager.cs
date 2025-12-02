@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AbilityManager
+public static class AbilityManager
 {
-    public Dictionary<int, BaseAbility> abilityTable = new Dictionary<int, BaseAbility>()
+    public static Dictionary<int, BaseAbility> abilityTable = new Dictionary<int, BaseAbility>()
     {
          { 3008, new BarrierAbility() },
          { 3021, new HealZoneAbility() },
@@ -13,7 +13,7 @@ public class AbilityManager
          { 3025, new  PlayerKillSplitAbility() },
     };
 
-    public BaseAbility GetAbility(int key)
+    public static BaseAbility GetAbility(int key)
     {
         if (abilityTable.ContainsKey(key))
         {

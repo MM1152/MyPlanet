@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackManager
+public static class AttackManager
 {
-    public Dictionary<EnemyType, IAttack> attackTable = new Dictionary<EnemyType, IAttack>()
+    public static Dictionary<EnemyType, IAttack> attackTable = new Dictionary<EnemyType, IAttack>()
     {
         { EnemyType.Melee, new OneTimeMeleeAttacker() },
         { EnemyType.Ranged  , new ShotAttack() },
         {EnemyType.EliteMonster, new EliteMonsterAttack() },
         {EnemyType.Boss, new BossAttack() },
     };
-    public IAttack GetAttack(EnemyType key)
+    public static  IAttack GetAttack(EnemyType key)
     {
         if (attackTable.ContainsKey(key))
         {
