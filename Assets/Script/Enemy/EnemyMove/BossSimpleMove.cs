@@ -19,7 +19,23 @@ public class BossSimpleMove : IMove
     public void Init(Enemy enemy)
     {
         target = enemy.GetTarget();
-        screenBounds = enemy.WaveManager.ScreenBounds;
+        if(enemy.WaveManager != null)
+        {
+            screenBounds = enemy.WaveManager.ScreenBounds;
+        }
+        else
+        {
+            var camera = Camera.main;
+
+            if (camera == null) return;
+
+            var zDistance = Mathf.Abs(camera.transform.position.z);
+
+            var bottomLeft = camera.ScreenToWorldPoint(new Vector3(0, 0, zDistance));
+            var topRight = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, zDistance));
+
+            screenBounds = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+        }
         var centerY = (target.transform.position.y + screenBounds.yMax) / 2;
         centerPoint = new Vector2(target.transform.position.x, centerY);
         currentPattern = BossMoveState.MoveToCenter;

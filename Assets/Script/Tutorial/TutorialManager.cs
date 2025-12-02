@@ -35,7 +35,9 @@ public class TutorialManager : MonoBehaviour
     public bool isPlayWordAnimation = false;
     private StringBuilder sb = new StringBuilder();
     private Tutorial currentTutorial;
-    private Image tutorialBackGroundImage; 
+    private Image tutorialBackGroundImage;
+
+    private int currentSectorIdx = 0;
     private int currentTutorialIdx = -1;
     private void Awake()
     {
@@ -98,7 +100,7 @@ public class TutorialManager : MonoBehaviour
         tutorialHighLightImage.gameObject.SetActive(false);
         tutorialBackGround.SetActive(false);
 
-        if (currentTutorialIdx >= tutorials.Count)
+        if (currentSectorIdx >= tutorials.Count || currentTutorialIdx >= tutorials[currentSectorIdx].data.Count)
         {
             currentTutorial?.Exit();
             currentTutorial = null;
@@ -108,7 +110,7 @@ public class TutorialManager : MonoBehaviour
         }
         isPlayWordAnimation = true;
         currentTutorial?.Exit();
-        currentTutorial = tutorials[0].data[currentTutorialIdx];
+        currentTutorial = tutorials[currentSectorIdx].data[currentTutorialIdx];
         currentTutorial?.Excute();
     }
     public async UniTask WordAnimationAsync(string msg)
@@ -168,6 +170,7 @@ public class TutorialManager : MonoBehaviour
     public void SetSectorTutorial(int wave)
     {
         currentTutorialIdx = -1;
+        currentSectorIdx++;
         ForceUpdateTutorial();
 
         if (waveManager != null && nextTutorialStartIndex != null)

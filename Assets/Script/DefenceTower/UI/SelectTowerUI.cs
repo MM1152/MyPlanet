@@ -32,6 +32,7 @@ public class SelectTowerUI : MonoBehaviour
 
         toggle.onValueChanged.AddListener((isOn) =>
         {
+            Debug.Log($"Current Toggle IsOn : {isOn}", gameObject);
             if (isOn)
             {
                 outLine.enabled = true;
