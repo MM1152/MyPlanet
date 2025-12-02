@@ -9,7 +9,7 @@ public class EnemyProjectileSimple : EnemyProjectileBase
         if (find != null)
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
-            find.OnDamage((int)(enemyData.atk * percent));
+            find.OnDamage(Mathf.Clamp((int)((Enemy.atk - find.Defense) * percent), 1, int.MaxValue));
         }
     }
 
@@ -26,7 +26,7 @@ public class EnemyProjectileSimple : EnemyProjectileBase
 
     protected virtual void Move()
     {
-        Vector3 dir = (target.transform.position - transform.position).normalized;  
+        Vector3 dir = (target.transform.position - transform.position).normalized;
         transform.position += dir * enemyData.bulletSpeed * Time.deltaTime;
     }
 

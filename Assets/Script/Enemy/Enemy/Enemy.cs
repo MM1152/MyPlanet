@@ -6,8 +6,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private static readonly string TargetTag = "Player";
 
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
-    public TypeEffectiveness typeEffectiveness;
-    public int FullDamage => atk;
+    public TypeEffectiveness typeEffectiveness;    
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
@@ -75,9 +74,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public Action OnBuffRemoved;
 
     public Action ReturnMoveAction;
-
-
-
 
     public LineRenderer enemyLineRenderer;
 

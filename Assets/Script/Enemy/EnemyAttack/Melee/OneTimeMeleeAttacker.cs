@@ -6,10 +6,10 @@ public class OneTimeMeleeAttacker : IAttack
     public void Attack(Enemy enemy)
     {
         var target = enemy.GetTarget();
-        var findTarget = target.GetComponent<IDamageAble>();
+        var find = target.GetComponent<IDamageAble>();
 
-        float bonus = enemy.typeEffectiveness.GetDamagePercent(findTarget.ElementType);  
-        findTarget.OnDamage((int)(enemy.atk*bonus));              
+        float percent = enemy.typeEffectiveness.GetDamagePercent(find.ElementType);  
+        find.OnDamage(Mathf.Clamp((int)((enemy.atk-find.Defense)* percent), 1, int.MaxValue));             
         enemy.OnDead();
     }
 }
