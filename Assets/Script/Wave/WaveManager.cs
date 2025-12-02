@@ -83,14 +83,10 @@ public class WaveManager : MonoBehaviour
     private WaveWindow waveWindow;
 
     private int stageId = 1;
-    public int SetStageId(int id)
-    {
-        stageId = id;
-        return stageId;
-    }
 
     private void Awake()
     {
+        stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
         enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag).GetComponent<EnemySpawnManager>();
     }
 

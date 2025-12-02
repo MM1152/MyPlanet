@@ -7,7 +7,7 @@ public class PresetData
 {
     public bool Init { get; set; }
     private List<Data> presetDatas = new List<Data>();
-    private InGameData inGameData;
+    private InGameData inGameData = new InGameData();
     public event Action<int> OnChangePresetData;
 
     public class InGameData
@@ -30,10 +30,14 @@ public class PresetData
         }
     }
 
-    public void SetGameData(Data InGameData , int stageId)
+    public void SetGameDataStageId(int stageId)
     {
-        inGameData = new InGameData();
-        if(stageId == 1)
+        inGameData.stageId = stageId;
+    }
+
+    public void SetGameData(Data InGameData)
+    {
+        if (inGameData.stageId == 1)
         {
             Data tutorialData = new Data();
             tutorialData.PlanetId = 1001;
@@ -46,7 +50,6 @@ public class PresetData
         {
             inGameData.data = InGameData;
         }
-        inGameData.stageId = stageId;
     } 
 
     public InGameData GetGameData()

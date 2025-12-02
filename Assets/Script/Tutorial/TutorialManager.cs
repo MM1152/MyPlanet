@@ -61,7 +61,7 @@ public class TutorialManager : MonoBehaviour
             waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[0];
         }
 
-        if(startTutorialIndex != -1)
+        if(FirebaseManager.Instance.PresetData.GetGameData().stageId == 1)
         {
             Variable.IsTutorialActive = true;
             Variable.IsSpawnActive = false;
@@ -71,7 +71,7 @@ public class TutorialManager : MonoBehaviour
     private async UniTaskVoid Start()
     {
         await UniTask.Delay(100 , cancellationToken : gameObject.GetCancellationTokenOnDestroy());
-        if (startTutorialIndex != -1)
+        if (FirebaseManager.Instance.PresetData.GetGameData().stageId == 1)
         {
             currentTutorial = tutorials[0].data[startTutorialIndex];
             currentTutorialIdx = startTutorialIndex;
@@ -86,7 +86,7 @@ public class TutorialManager : MonoBehaviour
             currentTutorial.Update();
         }
 
-        if(currentTutorial != null && currentTutorial.IsSelectTarget && Managers.TouchManager.TouchType == TouchTypes.Tab && !isPlayWordAnimation)
+        if(currentTutorial != null && !currentTutorial.IsSelectTarget && Managers.TouchManager.TouchType == TouchTypes.Tab && !isPlayWordAnimation)
         {
             ForceUpdateTutorial();
         }   

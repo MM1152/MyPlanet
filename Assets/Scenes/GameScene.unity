@@ -1443,7 +1443,157 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8f123fae46f494fb0d1c65779b541d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tutorials: []
+  tutorials:
+  - data:
+    - hilightPanels:
+      - {fileID: 1468996429}
+      delay: 0
+      stringTableId: 6102
+      activeTimeScale: 1
+      disAbleTutorialBackGorund: 0
+      isSelectOnTarget: 0
+      isWaitDelay: 0
+      enableJoystick: 0
+      enableSpawn: 0
+      action:
+        m_PersistentCalls:
+          m_Calls: []
+      currentDelay: 0
+    - hilightPanels:
+      - {fileID: 1468996430}
+      delay: 0
+      stringTableId: 6103
+      activeTimeScale: 1
+      disAbleTutorialBackGorund: 0
+      isSelectOnTarget: 0
+      isWaitDelay: 0
+      enableJoystick: 0
+      enableSpawn: 0
+      action:
+        m_PersistentCalls:
+          m_Calls: []
+      currentDelay: 0
+    - hilightPanels:
+      - {fileID: 1468996427}
+      delay: 0
+      stringTableId: 6104
+      activeTimeScale: 1
+      disAbleTutorialBackGorund: 0
+      isSelectOnTarget: 0
+      isWaitDelay: 0
+      enableJoystick: 0
+      enableSpawn: 0
+      action:
+        m_PersistentCalls:
+          m_Calls: []
+      currentDelay: 0
+    - hilightPanels:
+      - {fileID: 1468996428}
+      delay: 0
+      stringTableId: 6105
+      activeTimeScale: 1
+      disAbleTutorialBackGorund: 0
+      isSelectOnTarget: 0
+      isWaitDelay: 0
+      enableJoystick: 0
+      enableSpawn: 0
+      action:
+        m_PersistentCalls:
+          m_Calls: []
+      currentDelay: 0
+    - hilightPanels:
+      - {fileID: 1468996426}
+      delay: 0
+      stringTableId: 6106
+      activeTimeScale: 1
+      disAbleTutorialBackGorund: 0
+      isSelectOnTarget: 0
+      isWaitDelay: 0
+      enableJoystick: 0
+      enableSpawn: 0
+      action:
+        m_PersistentCalls:
+          m_Calls: []
+      currentDelay: 0
+    - hilightPanels:
+      - {fileID: 50785747}
+      delay: 0
+      stringTableId: 6107
+      activeTimeScale: 1
+      disAbleTutorialBackGorund: 0
+      isSelectOnTarget: 0
+      isWaitDelay: 0
+      enableJoystick: 0
+      enableSpawn: 0
+      action:
+        m_PersistentCalls:
+          m_Calls: []
+      currentDelay: 0
+    - hilightPanels: []
+      delay: 0
+      stringTableId: 6108
+      activeTimeScale: 1
+      disAbleTutorialBackGorund: 0
+      isSelectOnTarget: 0
+      isWaitDelay: 0
+      enableJoystick: 0
+      enableSpawn: 0
+      action:
+        m_PersistentCalls:
+          m_Calls: []
+      currentDelay: 0
+    - hilightPanels:
+      - {fileID: 1893264662}
+      delay: 0
+      stringTableId: 0
+      activeTimeScale: 1
+      disAbleTutorialBackGorund: 0
+      isSelectOnTarget: 1
+      isWaitDelay: 0
+      enableJoystick: 0
+      enableSpawn: 0
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 620590076}
+            m_TargetAssemblyTypeName: WindowManager, Assembly-CSharp
+            m_MethodName: TutorialOpen1
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      currentDelay: 0
+    - hilightPanels:
+      - {fileID: 59441367}
+      delay: 0
+      stringTableId: 0
+      activeTimeScale: 1
+      disAbleTutorialBackGorund: 0
+      isSelectOnTarget: 1
+      isWaitDelay: 0
+      enableJoystick: 0
+      enableSpawn: 0
+      action:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 620590076}
+            m_TargetAssemblyTypeName: WindowManager, Assembly-CSharp
+            m_MethodName: TutorialOpen1
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      currentDelay: 0
   tutorialBackGround: {fileID: 698927945}
   tutorialText: {fileID: 1365304224}
   tutorialHighLightImage: {fileID: 1351260234}
@@ -3566,6 +3716,10 @@ PrefabInstance:
     - target: {fileID: 1337078565178784847, guid: 127acfc000d04e648a809d8c01523c51, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4003122050277354659, guid: 127acfc000d04e648a809d8c01523c51, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -76.07153
       objectReference: {fileID: 0}
     - target: {fileID: 5481831888637964398, guid: 127acfc000d04e648a809d8c01523c51, type: 3}
       propertyPath: m_Name
@@ -9566,6 +9720,31 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1468996426 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8322259990483700167, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1468996427 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2650288019686525702, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1468996428 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5927815253484111473, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1468996429 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6957981674972474037, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1468996430 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2617659369263009375, guid: ed9e77c98505d9049ba916962e21a83f, type: 3}
+  m_PrefabInstance: {fileID: 790478612}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1475336643
 GameObject:
   m_ObjectHideFlags: 0
@@ -12557,6 +12736,11 @@ PrefabInstance:
 --- !u!224 &1893264661 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8729310991654920869, guid: 27bad646717a35b4bbb327863237ac3f, type: 3}
+  m_PrefabInstance: {fileID: 1893264660}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1893264662 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6728240041708952483, guid: 27bad646717a35b4bbb327863237ac3f, type: 3}
   m_PrefabInstance: {fileID: 1893264660}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1905586157
