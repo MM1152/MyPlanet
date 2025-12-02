@@ -20,7 +20,7 @@ public class RotatingLaserAttack : IShotStrategy
 
     public float rotationInterval = 10f;
 
-    private float rotationSpeed = 1f;
+    private float rotationSpeed = 0.5f;
     private float rotationAngle = 90f;
 
     private float currentAngle = 0f;
@@ -38,10 +38,10 @@ public class RotatingLaserAttack : IShotStrategy
 
     public void Shot(Enemy enemy, GameObject target)
     {
-        damageTimer += Time.deltaTime;
-        if (damageTimer > enemy.fireInterval)
+        if (hit.collider != null)
         {
-            if (hit.collider != null)
+            damageTimer += Time.deltaTime;
+            if (damageTimer > enemy.fireInterval)
             {
                 if (hit.collider.gameObject.layer == target.layer)
                 {
@@ -52,8 +52,8 @@ public class RotatingLaserAttack : IShotStrategy
                         find.OnDamage(Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue));
                     }
                 }
+                damageTimer = 0f;
             }
-            damageTimer = 0f;
         }
 
     }
@@ -80,6 +80,7 @@ public class RotatingLaserAttack : IShotStrategy
             maxdistance = Mathf.Max(screenBounds.width, screenBounds.height) * 1.5f;
             startAngle = 0f;
             delayTimer = 0f;
+            damageTimer = enemy.fireInterval;
         }
 
         if (delayTimer < delayTime)

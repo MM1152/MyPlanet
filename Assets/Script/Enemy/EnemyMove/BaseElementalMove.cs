@@ -11,7 +11,7 @@ public class BaseElementalMove : IMove
         { ElementType.Light, new LeftRinghMove() },
         { ElementType.Dark, new CornerWrapMove() },
     };  
-    protected IMove currentStrategy;
+    public IMove currentStrategy {get; protected set;}
 
     public virtual void Init(Enemy enemy)
     {

@@ -114,7 +114,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         attack = AttackManager.GetAttack(enemyType);
         die = DieManager.GetDie(enemyData.ID);
         ability = AbilityManager.GetAbility(enemyData.ID);
-        move = MoveManager.GetMove(enemyType);
+        move = MoveManager.GetMove(enemyType);  
         zone?.Init(this);
         ResetActions();
         ability?.SetEnemy(this);
@@ -197,8 +197,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             nextInterval = Time.time + abilityInterval;
         }
 
-        if (move is LeftRinghMove)
-        {
+        if (move is BaseElementalMove elementalMove && elementalMove.currentStrategy is LeftRinghMove)
+        { 
             attackInterval += Time.deltaTime;
             if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval - 0.4f))
             {
@@ -216,7 +216,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
                 }
             }
             else if (attackInterval >= fireInterval)
-            {
+            {      
                 attack.Attack(this);
             }
         }
