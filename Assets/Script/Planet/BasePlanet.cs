@@ -10,7 +10,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public ElementType ElementType => elementType;
     public StatusEffect StatusEffect => statusEffect;
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
-
+    public int Defense => FullDEF;  
     public int BonusDEF => bonusDEF;
     public int FullDEF => planetLevelData.DEF + bonusDEF;
     public int FullHp => hp + shield;
@@ -215,7 +215,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     public void DefenseUpgrade(float effectValue)
     {
-        bonusDEF += (int)(planetData.DEF * effectValue);
+        bonusDEF += (int)(planetLevelData.DEF * effectValue);
     }
 
     public void HealthRegenerationUpgrade(float effectValue)

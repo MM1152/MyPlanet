@@ -239,26 +239,7 @@ public class WaveManager : MonoBehaviour
         {
             waveWindow.SetWaveTimerText(0f);
         }
-
-        
-        // 웨이브 무한으로 돌게 처리하는 부분
-        if (!waves.ContainsKey(currentWaveIndex))
-        {
-#if DEBUG_MODE
-            currentWaveIndex = 1;
-            currentWave = waves[currentWaveIndex];
-
-            foreach (var spawnPoint in currentWave)
-            {
-                spawnPoint.timer = 0f;
-                spawnPoint.isStart = false;
-                waveClearCount += spawnPoint.maxSpawnCount;
-            }
-            Debug.Log($"Wave {currentWaveIndex} 데이터 없음");
-#endif
-            return;
-        }
-
+      
 
         if ((!isFinalWaveEnded && waveElapsedTime >= waveDuration) || waveClearCount <= 0)
         {
@@ -358,7 +339,7 @@ public class WaveManager : MonoBehaviour
             tutorialManager.SetSectorTutorial(NextTutorialWaveIndex);
         }
         if (!waves.ContainsKey(nextWaveIndex))
-        {
+        {        
             return;
         }
 

@@ -1,9 +1,9 @@
  using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveManager 
+public static class MoveManager 
 {
-  private Dictionary<EnemyType, IMove> moveTable = new Dictionary<EnemyType, IMove>()
+  private static Dictionary<EnemyType, IMove> moveTable = new Dictionary<EnemyType, IMove>()
     {        
         { EnemyType.Melee, new SimpleMove() },                
         { EnemyType.Ranged, new SimpleMove() },
@@ -11,7 +11,7 @@ public class MoveManager
         { EnemyType.Boss, new BossSimpleMove() },   
     };
 
-    public IMove GetMove(EnemyType Id)
+    public static IMove GetMove(EnemyType Id)
     {
         if (moveTable.ContainsKey(Id))
         {

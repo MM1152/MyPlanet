@@ -6,7 +6,7 @@ public abstract class BaseShotAttack : IAttack
     public bool isAttackColliderOn => false;
 
     protected Dictionary<ElementType, IShotStrategy> shotStrategies;
-    public void Attack(Enemy enemy)
+    public virtual void Attack(Enemy enemy)
     {
         enemy.attackInterval += Time.deltaTime;
 

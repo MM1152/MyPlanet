@@ -1,7 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+﻿using System;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
@@ -9,8 +6,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private static readonly string TargetTag = "Player";
 
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
-    public TypeEffectiveness typeEffectiveness;
-    public int FullDamage => atk;
+    public TypeEffectiveness typeEffectiveness;    
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
@@ -57,10 +53,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public event Action<Enemy> OnDie;
 
     public event Action OnTerraformingValueChanged;
-    private AttackManager attackManager;
-    private DieManager dieManager;
-    private MoveManager moveManager;
-    private AbilityManager abilityManager;
     public IAttack attack;
     public BaseDie die;
     public IMove move;
@@ -81,9 +73,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public Action ReturnMoveAction;
 
-
-
-
     public LineRenderer enemyLineRenderer;
 
     private void Awake()
@@ -96,11 +85,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #endif
         enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag)?.GetComponent<EnemySpawnManager>();
         zone = GetComponentInChildren<ZoneSearch>();
-        typeEffectiveness = new TypeEffectiveness();
-        dieManager = new DieManager();
-        abilityManager = new AbilityManager();
-        attackManager = new AttackManager();
-        moveManager = new MoveManager();
+        typeEffectiveness = new TypeEffectiveness();       
         enemyLineRenderer = GetComponent<LineRenderer>();
     }
 
@@ -126,10 +111,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         statusEffect.Init();
         isKilledByPlayer = true;
         IsDead = false;
-        attack = attackManager.GetAttack(enemyType);
-        die = dieManager.GetDie(enemyData.ID);
-        ability = abilityManager.GetAbility(enemyData.ID);
-        move = moveManager.GetMove(enemyType);
+        attack = AttackManager.GetAttack(enemyType);
+        die = DieManager.GetDie(enemyData.ID);
+        ability = AbilityManager.GetAbility(enemyData.ID);
+        move = MoveManager.GetMove(enemyType);  
         zone?.Init(this);
         ResetActions();
         ability?.SetEnemy(this);
@@ -202,8 +187,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
         if (collision.CompareTag(TargetTag))
         {
-#if DEBUG_MODE
-#endif
             isKilledByPlayer = false;
             SetState(stateMachine.attackState);
         }
@@ -220,8 +203,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             nextInterval = Time.time + abilityInterval;
         }
 
-        if (move is LeftRinghMove)
-        {
+        if (move is BaseElementalMove elementalMove && elementalMove.currentStrategy is LeftRinghMove)
+        { 
             attackInterval += Time.deltaTime;
             if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval - 0.4f))
             {
@@ -239,7 +222,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
                 }
             }
             else if (attackInterval >= fireInterval)
-            {
+            {      
                 attack.Attack(this);
             }
         }

@@ -21,7 +21,7 @@ public class LaserShot : IShotStrategy
             if (find != null)
             {
                 float percent = enemy.TypeEffectiveness.GetDamagePercent(find.ElementType);
-                find.OnDamage((int)(enemy.atk * percent));
+               find.OnDamage(Mathf.Clamp((int)((enemy.atk-find.Defense)* percent), 1, int.MaxValue));    
             }
         }
     }

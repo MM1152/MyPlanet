@@ -94,6 +94,7 @@ public enum PoolsId
     HomingBullet = 301,
     SpreadBullet = 302,
     SwitchDirectionBullet = 303,
+    RainBullet = 304,
 
     Exp = 400,
     DamageText = 600,
@@ -143,6 +144,7 @@ public static class AddressableNames
         { "ShadowSurge" , PoolsId.ShadowSurge },
         { "GravityWrap" , PoolsId.GravityWrap },
         { "SwitchDirectionBullet", PoolsId.SwitchDirectionBullet },
+        { "RainBullet", PoolsId.RainBullet },   
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -225,15 +227,15 @@ public static class DataBasePaths
 
 public static class EnemyTypes
 {
-    private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 4027, 5027, 6027, 7027 };
-    private static readonly HashSet<int> EliteMonseterIds = new HashSet<int> { 3026, 4026, 5026, 6026, 7026 };
+    private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 3032 };
+    private static readonly HashSet<int> EliteMonseterIds = new HashSet<int> { 3026 };
     public static bool IsEliteMonster(int id) => EliteMonseterIds.Contains(id);
     public static bool IsBossMonster(int id) => BossMonsterIds.Contains(id);
 }
 
 public static class ColorDefine
 {
-    public static readonly Color TowerSelectUIColor = new Color(0.5058824f , 0.7921569f , 0.764706f , 1f);
+    public static readonly Color TowerSelectUIColor = new Color(0.5058824f, 0.7921569f, 0.764706f, 1f);
     public static readonly Color ConsumableSelectUiColor = new Color(0.6235294f, 0.654902f, 0.8196079f, 1f);
 }
 

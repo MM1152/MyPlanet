@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DieManager
+public static class DieManager
 {
-    public Dictionary<int, BaseDie> dieTable = new Dictionary<int, BaseDie>()
+    public static Dictionary<int, BaseDie> dieTable = new Dictionary<int, BaseDie>()
     {
          { 0, new BaseDie() },
          { 3006, new ExplosionDie() },
@@ -12,7 +12,7 @@ public class DieManager
          { 3015, new SplitbornDie()},
     };
 
-    public BaseDie GetDie(int key)
+    public static BaseDie GetDie(int key)
     {
         if (dieTable.ContainsKey(key))
         {

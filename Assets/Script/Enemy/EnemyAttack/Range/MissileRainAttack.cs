@@ -1,33 +1,32 @@
 using UnityEngine;
 
-public class RapidFireAttack : IShotStrategy
+public class MissileRainAttack : IShotStrategy
 {
-    private Enemy body;
     private float baseAngle = 90f;
-    public int spawnCount = 10;
-
+    public int spawnCount = 4;
+   
     public void Shot(Enemy enemy, GameObject target)
-    {
-        body = enemy;
-        Vector3 toTarget = (target.transform.position - enemy.transform.position).normalized;
+    {        
+        Vector3 toTarget = -((target.transform.position - enemy.transform.position).normalized);
 
         for (int i = 0; i < spawnCount; i++)
         {
             float rnadomAngle = Random.Range(-baseAngle, baseAngle);
             Vector2 dir = RotateVector(toTarget, rnadomAngle);
 
-            var Bullet = CreateProjectile(PoolsId.SwitchDirectionBullet);
+            var Bullet = CreateProjectile(PoolsId.RainBullet);
             Bullet.transform.position = enemy.transform.position;
             Bullet.Init(enemy, enemy.typeEffectiveness);
+            Bullet.SetRectLind(enemy);
             Bullet.SetTarget(target.transform);
             Bullet.SetDirection(dir);
         }
     }
 
-    private SwitchDirectionBullet CreateProjectile(PoolsId poolsId)
+    private RainBullet CreateProjectile(PoolsId poolsId)
     {
-        var projectileObj = Managers.ObjectPoolManager.SpawnObject<SwitchDirectionBullet>(poolsId);
-        SwitchDirectionBullet projectile = projectileObj.GetComponent<SwitchDirectionBullet>();
+        var projectileObj = Managers.ObjectPoolManager.SpawnObject<RainBullet>(poolsId);
+        RainBullet projectile = projectileObj.GetComponent<RainBullet>();
         return projectile;
     }
 
