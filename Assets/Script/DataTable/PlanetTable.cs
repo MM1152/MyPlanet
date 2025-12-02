@@ -59,6 +59,14 @@ public class PlanetTable : DataTable
             "S" => DataTableManager.OptionTable.GetValueDataToInt(5005),
             _ => 0f
         };
+        public Color GradeToColor => grade switch
+        {
+            "S" => new Color32(0xff, 0xbf, 0x00, 0xff), // #ffbf00
+            "A" => new Color32(0xcc, 0xa8, 0xf7, 0xff), // #cca8f7
+            "B" => new Color32(0x58, 0xcc, 0xff, 0xff), // #58ccff
+            "C" => new Color32(0xaf, 0xd4, 0x85, 0xff), // #afd485
+            _ => Color.white
+        };
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)

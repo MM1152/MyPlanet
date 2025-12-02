@@ -334,7 +334,8 @@ public class WaveManager : MonoBehaviour
     public void NextWave()
     {
         int nextWaveIndex = currentWaveIndex + 1;
-        if (tutorialManager != null && NextTutorialWaveIndex == currentWaveIndex)
+
+        if (Variable.IsTutorialActive && tutorialManager != null && NextTutorialWaveIndex == currentWaveIndex)
         {
             tutorialManager.SetSectorTutorial(NextTutorialWaveIndex);
         }

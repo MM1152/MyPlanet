@@ -16,9 +16,6 @@ public class TitleSelectPlanetWindow : Window
     [Header("Description")]
     [SerializeField] private TextMeshProUGUI planetNameText;
     [SerializeField] private TextMeshProUGUI descriptionText;
-    [SerializeField] private TextMeshProUGUI hpText;
-    [SerializeField] private TextMeshProUGUI attackText;
-    [SerializeField] private TextMeshProUGUI defenceText;
 
     private PlanetTable.Data planetData;
     private PresetData.Data presetData;
@@ -84,10 +81,6 @@ public class TitleSelectPlanetWindow : Window
     {
         planetNameText.text = planetData.Name;
         descriptionText.text = planetData.Explanation;
-
-        hpText.text = planetData.HP.ToString();
-        attackText.text = planetData.ATK.ToString();
-        defenceText.text = planetData.DEF.ToString();
     }
 
     public void SetPresetData(PresetData.Data presetData , int presetIndex)

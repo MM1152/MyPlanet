@@ -53,8 +53,9 @@ public class PlanetInfomation : MonoBehaviour
 
         planetNameText.text = data.Name;
         planetGradeText.text = data.grade;
+        planetGradeText.color = data.GradeToColor;
         planetElemetImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, data.Attribute);
-        planetTypeText.text = data.AttributeType;
+        planetTypeText.text = data.PlanetType;
 
         ResetStar();
         UpdateStar(userData.star);
