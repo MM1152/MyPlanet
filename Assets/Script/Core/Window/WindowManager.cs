@@ -61,6 +61,22 @@ public class WindowManager : MonoBehaviour
         cureentWindow.TutorialTowerOpen3();
     }
 
+    public void TutorialOpen4(int id)
+    {
+        Variable.IsJoyStickActive = false;
+        cureentWindow?.Close();
+        cureentWindow = windowTable[id];
+        cureentWindow.TutorialTowerOpen4();
+    }
+
+    public void TutorialOpen5(int id)
+    {
+        Variable.IsJoyStickActive = false;
+        cureentWindow?.Close();
+        cureentWindow = windowTable[id];
+        cureentWindow.TutorialTowerOpen5();
+    }
+
     public Window Open(WindowIds id)
     {
         Variable.IsJoyStickActive = false;

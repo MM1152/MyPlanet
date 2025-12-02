@@ -25,9 +25,9 @@ public class OptionUpgradeWindow : Window
         base.Init(manager);
         windowId = (int)WindowIds.OptionUpgradeWindow;
 
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < selectOptionUIRoot.childCount; i++)
         {
-            var optionUi = Instantiate(selectOptionUI, selectOptionUIRoot);
+            var optionUi = selectOptionUIRoot.GetChild(i).GetComponent<SelectOptionUI>();
             int index = i;
             optionUi.Initalized(index, (idx) => selectIndex = idx);
             selectOptionUIs.Add(optionUi);
@@ -38,16 +38,34 @@ public class OptionUpgradeWindow : Window
 
     public override void Open()
     {
+        if (Variable.IsTutorialActive) return;
         base.Open();
         Time.timeScale = 0f;
         for(int i = 0; i < selectOptionUIs.Count; i++)
         {
             var towerData = towerManager.GetRandomTower();
+            selectOptionUIs[i].SetInteractive(true);
             selectOptionUIs[i].ResetOutline();
             selectOptionUIs[i].SetTowerData(towerData);
         }
 
         selectIndex = -1;
+    }
+
+    public override void TutorialTowerOpen1()
+    {
+        Time.timeScale = 0f;
+        for (int i = 0; i < selectOptionUIs.Count; i++)
+        {
+            var towerData = towerManager.GetRandomTower();
+            selectOptionUIs[i].SetInteractive(true);
+            selectOptionUIs[i].ResetOutline();
+            selectOptionUIs[i].SetTowerData(towerData);
+        }
+        selectOptionUIs[1].SetInteractive(false);
+        selectOptionUIs[2].SetInteractive(false);
+        selectIndex = -1;
+        base.TutorialTowerOpen1();
     }
 
     private void OnClickSelectButton()

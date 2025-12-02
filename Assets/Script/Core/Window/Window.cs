@@ -34,4 +34,12 @@ public class  Window : MonoBehaviour
     {
         gameObject.SetActive(true);
     }
+    public virtual void TutorialTowerOpen4()
+    {
+        gameObject.SetActive(true);
+    }
+    public virtual void TutorialTowerOpen5()
+    {
+        gameObject.SetActive(true);
+    }
 }

@@ -112,6 +112,5 @@ public class Tutorial
 
     public void Exit()
     {
-        manager.SetTutorialBackGroundActive(true);
     }
 }

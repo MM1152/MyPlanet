@@ -167,6 +167,7 @@ public static class TagIds
     public readonly static string EnemyTag = "Enemy";
     public readonly static string EnemyProjectileTag = "EnemyProjectile";
     public readonly static string IronMineTag = "IronMine";
+    public readonly static string TutorialManagerTag = "TutorialManager";
 }
 
 public static class DataTableIds

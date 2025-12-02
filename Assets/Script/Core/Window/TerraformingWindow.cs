@@ -56,5 +56,6 @@ public class TerraformingWindow : Window
         Time.timeScale = 0f;
         base.Open();
     }
+
 }
 

@@ -39,6 +39,10 @@ public class TutorialManager : MonoBehaviour
 
     private int currentSectorIdx = 0;
     private int currentTutorialIdx = -1;
+
+#if DEBUG_MODE
+    public int foreceStartTutorialSector = -1;
+#endif
     private void Awake()
     {
         tutorialHighLightImage.gameObject.SetActive(false);
@@ -60,10 +64,18 @@ public class TutorialManager : MonoBehaviour
 
         if (waveManager != null && nextTutorialStartIndex != null)
         {
-            waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[0];
+#if DEBUG_MODE
+            if(foreceStartTutorialSector != -1)
+            {
+                waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[foreceStartTutorialSector];
+                currentSectorIdx = foreceStartTutorialSector;
+            }
+            else
+#endif
+                waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[0];
         }
 
-        if(FirebaseManager.Instance.PresetData.GetGameData().stageId == 1)
+        if (FirebaseManager.Instance.PresetData.GetGameData().stageId == 1)
         {
             Variable.IsTutorialActive = true;
             Variable.IsSpawnActive = false;
@@ -75,6 +87,15 @@ public class TutorialManager : MonoBehaviour
         await UniTask.Delay(100 , cancellationToken : gameObject.GetCancellationTokenOnDestroy());
         if (FirebaseManager.Instance.PresetData.GetGameData().stageId == 1)
         {
+#if DEBUG_MODE
+            if(foreceStartTutorialSector != -1)
+            {
+                currentTutorial = tutorials[currentSectorIdx].data[startTutorialIndex];
+                currentTutorialIdx = startTutorialIndex;
+                currentTutorial.Excute();
+                return;
+            }
+#endif
             currentTutorial = tutorials[0].data[startTutorialIndex];
             currentTutorialIdx = startTutorialIndex;
             currentTutorial.Excute();
@@ -146,7 +167,7 @@ public class TutorialManager : MonoBehaviour
         tutorialHighLightImage.anchorMax = Vector2.one * 0.5f;
         tutorialHighLightImage.pivot = Vector2.one * 0.5f;
 
-        Vector2 targetSize = new Vector2(target.rect.width , target.rect.height);
+        Vector2 targetSize = new Vector2(target.rect.width + 50f , target.rect.height + 50f);
         Debug.Log(target.position);
         tutorialHighLightImage.sizeDelta = targetSize;
         tutorialHighLightImage.position = target.position;
@@ -172,10 +193,18 @@ public class TutorialManager : MonoBehaviour
         currentTutorialIdx = -1;
         currentSectorIdx++;
         ForceUpdateTutorial();
-
-        if (waveManager != null && nextTutorialStartIndex != null)
+        var index = 0;
+        for(int i = 0; i < nextTutorialStartIndex.Count; i++)
         {
-            waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[1];
+            if(wave == nextTutorialStartIndex[i])
+            {
+                index = i + 1;
+                break;
+            }
+        }   
+        if (index < nextTutorialStartIndex.Count && waveManager != null && nextTutorialStartIndex != null)
+        {
+            waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[index];
         }
     }
   

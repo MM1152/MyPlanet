@@ -140,12 +140,18 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #endif
         ReturnMoveAction = () =>
         {
-           
             if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID)||EnemyTypes.IsBossMonster(data.ID)))
             {
+  
                 stateMachine.ChangeState(stateMachine.walkState);
             }
         };
+
+        if (Variable.IsTutorialActive && EnemyTypes.IsEliteMonster(data.ID))
+        {
+            TutorialManager tutorialManager = GameObject.FindWithTag(TagIds.TutorialManagerTag).GetComponent<TutorialManager>();
+            OnDie += (enemy) => tutorialManager.ForceUpdateTutorial();
+        }
     }
 
 
@@ -300,7 +306,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             OnTerraformingValueChanged -= waveManager.UpdateTerraformingValue;
         }
 
-        OnDie?.Invoke(this);       
         OnDie?.Invoke(this);
         OnDie = null;
     }

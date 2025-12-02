@@ -89,5 +89,6 @@ public class SelectTowerUI : MonoBehaviour
         towerData = null;
         consumeData = null;
         outLine.enabled = false;
+        toggle.isOn = false;
     }
 }
