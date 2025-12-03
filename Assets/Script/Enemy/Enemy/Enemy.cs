@@ -297,7 +297,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (waveManager != null)
         {
             OnTerraformingValueChanged?.Invoke();
-            OnTerraformingValueChanged -= waveManager.UpdateTerraformingValue;
+            OnTerraformingValueChanged = null;
         }
 
         OnDie?.Invoke(this);

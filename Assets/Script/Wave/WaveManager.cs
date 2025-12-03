@@ -110,6 +110,7 @@ public class WaveManager : MonoBehaviour
         {
             spawnPoint.timer = 0f;
             spawnPoint.isStart = false;
+            spawnPoint.currentSpawnEnemyCount = 0;
             waveClearCount += spawnPoint.maxSpawnCount;
         }
     }
@@ -154,17 +155,14 @@ public class WaveManager : MonoBehaviour
 
         if (stageData != null)
         {
-            foreach (var waveGroup in stageData.waveGroups)
+            for (int i = 1; i <= terraformingValueCount; i++)
             {
-                for (int i = 1; i <= terraformingValueCount; i++)
-                {
-                    if (!waves.ContainsKey(i)) continue;
+                if (!waves.ContainsKey(i)) continue;
 
-                    var wave = waves[i];
-                    foreach (var spawnPoint in wave)
-                    {
-                        totalTerraformingValue += spawnPoint.maxSpawnCount;                 
-                    }
+                var wave = waves[i];
+                foreach (var spawnPoint in wave)
+                {
+                    totalTerraformingValue += spawnPoint.maxSpawnCount;
                 }
             }
             waveTerraformingValue = 0;
@@ -307,12 +305,17 @@ public class WaveManager : MonoBehaviour
 
     public void UpdateTerraformingValue()
     {
+        // terraformingValueCount 범위 내의 웨이브에서만 terraforming 값 증가
+        // if (currentWaveIndex > terraformingValueCount)
+        //     return;
+
         if (waveTerraformingValue >= totalTerraformingValue)
             return;
 
         waveTerraformingValue++;
-        var percent = Mathf.Min(waveTerraformingValue * 100 / totalTerraformingValue, 100);
-        sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, percent, 100);
+        float percent = Mathf.Min((float)waveTerraformingValue / totalTerraformingValue, 1f) * 100f;
+        sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, (int)(percent));
+        Debug.Log($"Terraforming Value Updated: {waveTerraformingValue}/{totalTerraformingValue} ({percent}%)");
 
         for (int i = 0; i < TerraformingData.terrformingOpenValues.Length; i++)
         {
@@ -351,10 +354,10 @@ public class WaveManager : MonoBehaviour
         foreach (var currentPoint in currentWave)
         {
             waveClearCount += currentPoint.maxSpawnCount;
+            currentPoint.timer = 0f;
+            currentPoint.isStart = false;
         }
         waveElapsedTime = 0f;
-
-
 
         var monsterId = currentWave[0].enemyId;
         if (EnemyTypes.IsEliteMonster(monsterId))
