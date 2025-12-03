@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private static readonly string TargetTag = "Player";
 
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
-    public TypeEffectiveness typeEffectiveness;    
+    public TypeEffectiveness typeEffectiveness;
     private GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         get
         {
-          
+
             if (EnemyTypes.IsEliteMonster(enemyData.ID))
             {
                 return EnemyType.EliteMonster;
@@ -75,6 +75,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public LineRenderer enemyLineRenderer;
 
+    private WaveWindow bossUi;
+
     private void Awake()
     {
         stateMachine = new StateMachine(this);
@@ -85,7 +87,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #endif
         enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag)?.GetComponent<EnemySpawnManager>();
         zone = GetComponentInChildren<ZoneSearch>();
-        typeEffectiveness = new TypeEffectiveness();       
+        typeEffectiveness = new TypeEffectiveness();
         enemyLineRenderer = GetComponent<LineRenderer>();
     }
 
@@ -114,20 +116,26 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         attack = AttackManager.GetAttack(enemyType);
         die = DieManager.GetDie(enemyData.ID);
         ability = AbilityManager.GetAbility(enemyData.ID);
-        move = MoveManager.GetMove(enemyType);  
+        move = MoveManager.GetMove(enemyType);
         zone?.Init(this);
         ResetActions();
         ability?.SetEnemy(this);
 #if DEBUG_MODE
-    
-        if( EnemyTypes.IsBossMonster(data.ID)) this.transform.localScale = new Vector2(1f, 1f);    
+
+        if (EnemyTypes.IsBossMonster(data.ID))
+        {
+            this.transform.localScale = new Vector2(1f, 1f);
+            bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag).GetComponent<WaveWindow>();
+            bossUi.ShowBossUI(enemyData.HP);
+        }
+
         if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector2(0.7f, 0.7f);
 #endif
         ReturnMoveAction = () =>
         {
-            if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID)||EnemyTypes.IsBossMonster(data.ID)))
+            if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID) || EnemyTypes.IsBossMonster(data.ID)))
             {
-  
+
                 stateMachine.ChangeState(stateMachine.walkState);
             }
         };
@@ -204,17 +212,17 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
 
         if (move is BaseElementalMove elementalMove && elementalMove.currentStrategy is LeftRinghMove)
-        { 
+        {
             attackInterval += Time.deltaTime;
             if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval - 0.4f))
             {
                 trailShotAttack.ShotLineDraw(this, target);
             }
-  
+
             if (attack is EliteMonsterAttack rotatingLaserAttack && rotatingLaserAttack.GetShotStrategy(ElementType) is RotatingLaserAttack laserAttack)
             {
                 if (attackInterval >= laserAttack.rotationInterval)
-                {                  
+                {
                     laserAttack.UpdateLaser(this, target);
                     laserAttack.Shot(this, target);
 
@@ -222,7 +230,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
                 }
             }
             else if (attackInterval >= fireInterval)
-            {      
+            {
                 attack.Attack(this);
             }
         }
@@ -248,6 +256,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (damage <= 0) damage = 1;
 
         currentHP -= damage;
+        if(bossUi != null)
+            bossUi.UpdateBossHP(currentHP, enemyData.HP);
 
 #if DEBUG_MODE
         if (damage > 0)
@@ -259,6 +269,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (currentHP <= 0)
         {
             OnDead();
+            bossUi?.HideBossUI();
         }
     }
 
@@ -278,12 +289,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public void OnDead()
     {
         IsDead = true;
-        this.transform.localScale = new Vector3(0.35f, 0.35f, 1f);    
+        this.transform.localScale = new Vector3(0.35f, 0.35f, 1f);
         ReturnMoveAction = null;
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();
-        if(waveManager != null)
+        if (waveManager != null)
         {
             OnTerraformingValueChanged?.Invoke();
             OnTerraformingValueChanged -= waveManager.UpdateTerraformingValue;

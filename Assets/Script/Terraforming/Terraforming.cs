@@ -128,7 +128,7 @@ public class Terraforming : MonoBehaviour
         if (Keyboard.current.digit4Key.wasPressedThisFrame)
         {
             Debug.Log("체력재생 증가");
-            HealthRegenerationUpgrade(1f);
+            HealthRegenerationUpgrade(0.01f);
         }
 
         if (Keyboard.current.digit5Key.wasPressedThisFrame)

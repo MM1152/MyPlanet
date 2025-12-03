@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
+
 
 public class BasePlanet : MonoBehaviour, IDamageAble
 {
@@ -10,7 +11,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public ElementType ElementType => elementType;
     public StatusEffect StatusEffect => statusEffect;
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
-    public int Defense => FullDEF;  
+    public int Defense => FullDEF;
     public int BonusDEF => bonusDEF;
     public int FullDEF => planetLevelData.DEF + bonusDEF;
     public int FullHp => hp + shield;
@@ -44,8 +45,9 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     private TextSpawnManager textSpawnManager;
 
     private float healthRegenerationValue;
-
     private bool isRegenerating = false;
+    private float regenCooldown = 1f;
+    private float regenTimer = 0f;
 
     protected virtual void Awake()
     {
@@ -118,15 +120,27 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     private void Update()
     {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            OnDamage(100);
+        }
+
         passiveSystem?.Update(Time.deltaTime);
         passiveSystem?.CheckUseAblePassive(null, this, null);
 
         if (isRegenerating && healthRegenerationValue > 0f)
         {
-            float healPerFrame = maxHp * healthRegenerationValue * Time.deltaTime;
-            hp += (int)healPerFrame;
-            hp = Mathf.Clamp(hp, 0, maxHp);
-            OnChanageHP();
+            regenTimer += Time.deltaTime;
+            if (regenTimer >= regenCooldown)
+            {
+                regenTimer = 0f;
+                float healPerFrame = maxHp * healthRegenerationValue;
+                hp += (int)healPerFrame;
+                Debug.Log($"Regenerated HP: {(int)healPerFrame}");
+                hp = Mathf.Clamp(hp, 0, maxHp);
+                Debug.Log($"Current HP after regeneration: {hp}/{maxHp}");
+                OnChanageHP();
+            }
         }
 
         if (bonusDEFList.Count > 0)
@@ -170,7 +184,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public void OnChanageHP()
     {
         hpSlider?.UpdateSlider(hp, maxHp, $"{((float)FullHp / maxHp) * 100f:F2}", FullHp, maxHp);
-        shieldSlider?.UpdateSlider(shield, maxHp, "" , "");
+        shieldSlider?.UpdateSlider(shield, maxHp, "", "");
     }
 
     public void AddBonusDFSPercent(float percent, float duration)
@@ -207,8 +221,8 @@ public class BasePlanet : MonoBehaviour, IDamageAble
 
     public void IncreaseMaxHealth(float effectValue)
     {
-        int oldMaxHp = maxHp;        
-        maxHp += (int)(maxHp * effectValue );
+        int oldMaxHp = maxHp;
+        maxHp += (int)(maxHp * effectValue);
         hp = (int)((float)hp / oldMaxHp * maxHp);
         OnChanageHP();
     }

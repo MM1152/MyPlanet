@@ -10,6 +10,10 @@ public class WaveWindow : Window
     [SerializeField] private TextMeshProUGUI waveGoldText;
 
     [SerializeField] private Button backSceneButton;
+    [SerializeField] private SliderValue bossHealthSlider;
+    [SerializeField] private TextMeshProUGUI bosscurrentHpText;
+    [SerializeField] private TextMeshProUGUI bossNameText;
+    [SerializeField] private TextMeshProUGUI bossTotalHpText;
 
     public override void Init(WindowManager manager)
     {
@@ -37,5 +41,32 @@ public class WaveWindow : Window
     public void SetWaveTimerText(float timeRemaining)
     {
         waveTimerText.text = $"{timeRemaining:00}";
-    } 
+    }
+
+    public void ShowBossUI(int maxHP)
+    {
+        bosscurrentHpText?.gameObject.SetActive(true);
+        bossHealthSlider?.gameObject.SetActive(true);
+        bossNameText?.gameObject.SetActive(true);
+        bossTotalHpText?.gameObject.SetActive(true);
+        bosscurrentHpText.text = maxHP.ToString();        
+        bossTotalHpText.text = maxHP.ToString();
+    }
+
+    public void UpdateBossHP(int currentHP, int maxHP)
+    {
+        if (bossHealthSlider != null)
+        {
+            int hp = Mathf.Clamp(currentHP, 0, maxHP);
+            bossHealthSlider.UpdateSlider(hp, maxHP, hp);
+        }
+    }
+
+    public void HideBossUI()
+    {
+        bosscurrentHpText?.gameObject.SetActive(false);
+        bossHealthSlider?.gameObject.SetActive(false);
+        bossNameText?.gameObject.SetActive(false);
+        bossTotalHpText?.gameObject.SetActive(false);
+    }
 }
