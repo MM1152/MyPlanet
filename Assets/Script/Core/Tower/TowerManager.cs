@@ -18,6 +18,7 @@ public class TowerManager : MonoBehaviour
     protected List<Tower> towers = new List<Tower>();
     public List<Tower> Towers => towers;
     protected TowerFactory towerFactory = new TowerFactory();
+    public TowerFactory TowerFactory => towerFactory;
 
     private int totalExp = 0;
     private int currentLevel = 1;

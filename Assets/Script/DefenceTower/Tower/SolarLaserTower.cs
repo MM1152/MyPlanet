@@ -70,7 +70,7 @@ public class SolarLaserTower : Tower
         }
     }
 
-    public override void PlaceTower()
+    public override void PlaceTower(bool isHelper = false)
     {
         base.PlaceTower();
         for(int i = 0; i < solarLaser.Count; i++) 

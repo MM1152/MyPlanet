@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 public class TowerFactory : BaseFactory<Tower>
 {
@@ -25,6 +26,12 @@ public class TowerFactory : BaseFactory<Tower>
         //{ 7,  new GravityControlTowerCreator() },
         //{ 8,  new ShockWaveTowerCreator() },
     };
+
+    public (int id , Tower tower) GetRandomTower()
+    {
+        int rand = Random.Range(2001, 2018);
+        return (rand , towerCreator[rand].CreateTower());
+    }
 
     public bool ContainTower(int id)
     {

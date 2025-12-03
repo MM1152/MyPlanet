@@ -106,6 +106,29 @@ public abstract class Tower
         this.planetData = userData.PlanetLevelData;
     }
 
+    //Helper 용 타워 설치
+    public void Init(GameObject tower , TowerManager towerManager , TowerTable.Data data)
+    {
+        this.manager = towerManager;
+        this.towerData = data;
+        this.tower = tower;
+
+        try
+        {
+            var gameData = FirebaseManager.Instance.PresetData.GetGameData().data;
+            if (gameData != null)
+            {
+                var planetId = gameData.PlanetId;
+                var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetId);
+                this.planetData = userData.PlanetLevelData;
+            }
+        }
+        finally
+        {
+            typeEffectiveness.Init((ElementType)this.towerData.Attribute);
+        }
+    }
+
     public virtual void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
     {
         statusEffect = null;
@@ -343,10 +366,11 @@ public abstract class Tower
         BonusAttackSpeedPercent -= percent;
     }
 
-    public virtual void PlaceTower()
+    public virtual void PlaceTower(bool isHelper = false)
     {
         useAble = true;
-        baseRandomOption.SetRandomOption();
+        if(!isHelper)
+           baseRandomOption.SetRandomOption();
     }
 
     public virtual void UnPlaceTower()
