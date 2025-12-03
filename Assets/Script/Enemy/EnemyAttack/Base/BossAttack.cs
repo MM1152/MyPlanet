@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class BossAttack : BaseShotAttack
 {
     private Dictionary<(ElementType, int), IShotStrategy> bossShotStrategies;
-
     public BossAttack()
     {
         bossShotStrategies = new Dictionary<(ElementType, int), IShotStrategy>()
