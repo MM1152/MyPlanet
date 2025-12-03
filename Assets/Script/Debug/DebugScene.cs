@@ -11,6 +11,5 @@ public class DebugScene : MonoBehaviour
 
     public void Start()
     {
-        openDebugTowerPlaceWindowButton.onClick.AddListener(() => windowManager.Open(WindowIds.DebugTowerPlaceWIndow));
     }
 }

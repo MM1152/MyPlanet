@@ -10,7 +10,7 @@ public abstract class Tower
     public int BaseDamage => towerData.ATK;   
     
 
-    public float FullAttackSpeed => (towerData.Fire_Rate + BonusAttackSpeed) * (1 + BonusAttackSpeedPercent);
+    public float FullAttackSpeed => (towerData.Fire_Rate + BonusAttackSpeed + BonusFireRate) * (1 + BonusAttackSpeedPercent);
     public float BaseAttackSpeed => towerData.Fire_Rate;
     public float FullAttackRange => towerData.Attack_Range + BonusAttackRange;
     public float BaseAttackRange => towerData.Attack_Range;
@@ -104,6 +104,29 @@ public abstract class Tower
         var planetId = planetData.ID;
         var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetId);
         this.planetData = userData.PlanetLevelData;
+    }
+
+    //Helper 용 타워 설치
+    public void Init(GameObject tower , TowerManager towerManager , TowerTable.Data data)
+    {
+        this.manager = towerManager;
+        this.towerData = data;
+        this.tower = tower;
+
+        try
+        {
+            var gameData = FirebaseManager.Instance.PresetData.GetGameData().data;
+            if (gameData != null)
+            {
+                var planetId = gameData.PlanetId;
+                var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetId);
+                this.planetData = userData.PlanetLevelData;
+            }
+        }
+        finally
+        {
+            typeEffectiveness.Init((ElementType)this.towerData.Attribute);
+        }
     }
 
     public virtual void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
@@ -222,6 +245,38 @@ public abstract class Tower
         CheckLevelUpVariable(var4, this.levelUpData.Val4);
     }
 
+    public virtual void LevelDown(LevelUpTable.Data levelUpData)
+    {
+        var var1 = 0;
+        var var2 = 0;
+        var var3 = 0;
+        var var4 = 0;
+        if (level != 0)
+        {
+            BonusDamage -= this.levelUpData.Damage;
+            var1 = this.levelUpData.Var1;
+            var2 = this.levelUpData.Var2;
+            var3 = this.levelUpData.Var3;
+            var4 = this.levelUpData.Var4;
+            CheckLevelUpVariable(var1, -this.levelUpData.Val1);
+            CheckLevelUpVariable(var2, -this.levelUpData.Val2);
+            CheckLevelUpVariable(var3, -this.levelUpData.Val3);
+            CheckLevelUpVariable(var4, -this.levelUpData.Val4);
+        }
+
+        level--;
+        this.levelUpData = levelUpData;
+        BonusDamage += this.levelUpData.Damage;
+        var1 = this.levelUpData.Var1;
+        var2 = this.levelUpData.Var2;
+        var3 = this.levelUpData.Var3;
+        var4 = this.levelUpData.Var4;
+        CheckLevelUpVariable(var1, this.levelUpData.Val1);
+        CheckLevelUpVariable(var2, this.levelUpData.Val2);
+        CheckLevelUpVariable(var3, this.levelUpData.Val3);
+        CheckLevelUpVariable(var4, this.levelUpData.Val4);
+    }
+
     private void CheckLevelUpVariable(int variable, int value)
     {
         switch (variable)
@@ -311,10 +366,11 @@ public abstract class Tower
         BonusAttackSpeedPercent -= percent;
     }
 
-    public virtual void PlaceTower()
+    public virtual void PlaceTower(bool isHelper = false)
     {
         useAble = true;
-        baseRandomOption.SetRandomOption();
+        if(!isHelper)
+           baseRandomOption.SetRandomOption();
     }
 
     public virtual void UnPlaceTower()
