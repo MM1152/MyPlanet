@@ -7,8 +7,8 @@ public static class AttackManager
     {
         { EnemyType.Melee, new OneTimeMeleeAttacker() },
         { EnemyType.Ranged  , new ShotAttack() },
-        {EnemyType.EliteMonster, new EliteMonsterAttack() },
-        {EnemyType.Boss, new BossAttack() },
+        { EnemyType.EliteMonster, new EliteMonsterAttack() },
+        { EnemyType.Boss, new BossAttack() },
     };
     public static  IAttack GetAttack(EnemyType key)
     {
