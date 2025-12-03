@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Firebase.Database;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 public class DataBase 
 {
@@ -144,7 +145,7 @@ public class DataBase
     /// <summary>
     /// 해당 path의 모든 데이터를 T형식 리스트로 변환
     /// </summary>
-    public async UniTask<(List<T> data, bool success)> GetDatas<T>(string path) where T : JsonSerialized
+    public async UniTask<(List<T> data, bool success)> GetDatas<T>(string path , CancellationTokenSource ctr = null) where T : JsonSerialized
     {
         List<T> data = new List<T>();
 
@@ -154,7 +155,8 @@ public class DataBase
 
         try
         {
-            DataSnapshot snapshot = await newReference.GetValueAsync().AsUniTask();
+            CancellationToken cancellationToken = ctr?.Token ?? CancellationToken.None;
+            DataSnapshot snapshot = await newReference.GetValueAsync().AsUniTask().AttachExternalCancellation(cancellationToken);
             if (!snapshot.Exists)
                 throw new System.Exception($"Empty Value in Firebase database : {path}");
 

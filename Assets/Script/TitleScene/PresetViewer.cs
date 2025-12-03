@@ -10,7 +10,8 @@ public class PresetViewer : MonoBehaviour
     [SerializeField] private Transform towerInfomationRoot;
     [SerializeField] private Button editButton;
     [SerializeField] private Button selectPresetButton;
-
+    [SerializeField] private Sprite enableSprite;
+    [SerializeField] private Sprite disableSprite;
     [Header("Planet Viewer Reference")]
     [SerializeField] private PlanetInfomation planetInfomation;
 
@@ -71,19 +72,11 @@ public class PresetViewer : MonoBehaviour
     {
         if(active)
         {
-            var image = selectPresetButton.GetComponent<Image>();
-            if(image != null)
-            {
-                image.color = Color.yellow;
-            }
+            selectPresetButton.image.sprite = enableSprite;
         }
         else
         {
-            var image = selectPresetButton.GetComponent<Image>();
-            if (image != null)
-            {
-                image.color = Color.white;
-            }
+            selectPresetButton.image.sprite = disableSprite;
         }
     }
 }

@@ -43,6 +43,16 @@ public class TowerTable : DataTable
             _ => "정의되지 않음"
         };
         [CsvHelper.Configuration.Attributes.Ignore]
+        public (Color outlineColor, Color backGroundColor) AttributeToColor => Attribute switch
+        {
+            3 => (new Color(0xA5/255f, 0xC1/255f, 0xBB/255f, 1f), new Color(0x4B/255f, 0x4B/255f, 0x4B/255f, 1f)), // 금속 속성
+            1 => (new Color(0xFF/255f, 0x00/255f, 0x00/255f, 1f), new Color(0x6F/255f, 0x1B/255f, 0x1B/255f, 1f)), // 불 속성
+            2 => (new Color(0x64/255f, 0xCB/255f, 0xFF/255f, 1f), new Color(0x1A/255f, 0x6C/255f, 0xA6/255f, 1f)), // 냉기 속성
+            4 => (new Color(0xFF/255f, 0xCE/255f, 0x00/255f, 1f), new Color(0x87/255f, 0x7C/255f, 0x40/255f, 1f)), // 빛 속성
+            5 => (new Color(0xC7/255f, 0xA3/255f, 0xFF/255f, 1f), new Color(0x5C/255f, 0x38/255f, 0x95/255f, 1f)), // 어둠 속성
+            _ => (Color.white , Color.white)
+        };
+        [CsvHelper.Configuration.Attributes.Ignore]
         public float optionValue;
         [CsvHelper.Configuration.Attributes.Ignore]
         public float FullOptionValue => optionValue;

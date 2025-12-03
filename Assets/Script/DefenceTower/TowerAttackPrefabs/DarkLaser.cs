@@ -27,8 +27,6 @@ public class DarkLaser : BaseAttackPrefab
         //var startPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenRect.x, Random.Range(screenRect.y,screenRect.height) , -Camera.main.transform.position.z));
         //var endPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenRect.width, Random.Range(screenRect.y, screenRect.height), -Camera.main.transform.position.z));
 
-        Debug.Log($"StartPoint : {startPoint} , EndPoint : {endPoint}");
-        
         transform.position = (startPoint + endPoint) / 2; 
         //transform.position = new Vector3(0f, endPoint.y - startPoint.y, 0f);
         transform.eulerAngles = Vector3.forward * 90f;

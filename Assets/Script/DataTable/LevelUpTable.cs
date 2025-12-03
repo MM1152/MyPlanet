@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 public class LevelUpTable : DataTable
@@ -62,6 +63,12 @@ public class LevelUpTable : DataTable
         return (filename, this);
     }
 
+    public int GetTowerIDAndLevelToId(int towerId , int level)
+    {
+        int id = tableId + towerId * 100 + level;
+        return id;
+    }
+
     public Data Get(int towerId , int level)
     {
         int id = tableId + towerId * 100 + level;
@@ -71,4 +78,46 @@ public class LevelUpTable : DataTable
         }
         return null;
     }
+
+    public Dictionary<int, Data> GetAllDataToDeepCopy()
+    {
+        Dictionary<int, Data> copy = new Dictionary<int, Data>(levelUpTable);
+        return copy;
+    }
+
+
+#if UNITY_EDITOR
+    public async UniTask<bool> SaveData(string filename, List<Data> datas)
+    {
+        try
+        {
+            var path = string.Format(FormatPath, filename);
+            var textAsset = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
+
+            var assetPath = AssetDatabase.GetAssetPath(textAsset);
+            var fullPath = Path.Combine(Application.dataPath, assetPath.Substring("Assets/".Length));
+
+            using (var writer = new StreamWriter(fullPath))
+            using (var csv = new CsvWriter(writer, culture: CultureInfo.InvariantCulture))
+            {
+                await csv.WriteRecordsAsync(datas);
+            }
+#if UNITY_EDITOR 
+            AssetDatabase.Refresh();
+#endif
+            for (int i = 0; i < datas.Count; i++)
+            {
+                int id = tableId + datas[i].ID * 100 + datas[i].LV;
+                levelUpTable[id] = datas[i];
+            }
+
+            return true;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError(e.Message);
+            return false;
+        }
+    }
+#endif
 }

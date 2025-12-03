@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class TowerInfomation : MonoBehaviour
 {
+    [SerializeField] private Image backgroundImage;
+    [SerializeField] private Image outlineImage;
+
     [SerializeField] private Image typeImage;
     [SerializeField] private Image effectiveImage;
-    [SerializeField] private TextMeshProUGUI towerTypeText;
+    [SerializeField] private Image towerAttackType;
     [SerializeField] private TextMeshProUGUI towerNameText;
     private TowerTable.Data data;
 
@@ -20,11 +23,11 @@ public class TowerInfomation : MonoBehaviour
     {
         data = DataTableManager.TowerTable.Get(towerId);
         towerNameText.text = data.Name; 
-        towerTypeText.text= data.AttackType;
         typeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable , data.Type);
         effectiveImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable , data.Attribute);
-        effectiveImage.color = Color.black;
-        typeImage.color = Color.black;
+
+        backgroundImage.color = data.AttributeToColor.backGroundColor;
+        outlineImage.color = data.AttributeToColor.outlineColor;
     }
 
     public TowerTable.Data GetTowerData()

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 
 public class DebugTowerManager : TowerManager
 {
+    private Tower currentPlaceTower;
     protected override void Awake()
     {
         List<TowerTable.Data> towerDatas = DataTableManager.TowerTable.GetAll();
@@ -25,15 +26,30 @@ public class DebugTowerManager : TowerManager
 
     public override void PlaceTower(TowerTable.Data towerData)
     {
+        if (currentPlaceTower != null)
+            currentPlaceTower.UnPlaceTower();
+
         int index = FindTowerPlaceIndex(towerData);
-        towers[index].PlaceTower();
+        currentPlaceTower = towers[index];
+        currentPlaceTower.PlaceTower();
     }
 
     public void LevelUpTower(TowerTable.Data towerData)
     {
         int index = FindTowerPlaceIndex(towerData);
         var levelUpData = DataTableManager.LevelUpTable.Get(towerData.ID, towers[index].Level + 1);
+        if(levelUpData == null)
+            return;
         towers[index].LevelUp(levelUpData);
+    }
+
+    public void LevelDownTower(TowerTable.Data towerData)
+    {
+        int index = FindTowerPlaceIndex(towerData);
+        var levelDownData = DataTableManager.LevelUpTable.Get(towerData.ID, towers[index].Level - 1);
+        if(levelDownData == null)
+            return;
+        towers[index].LevelDown(levelDownData);
     }
 
     public void UnPlaceTower(TowerTable.Data towerData)

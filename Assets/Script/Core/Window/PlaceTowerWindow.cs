@@ -188,6 +188,7 @@ public class PlaceTowerWindow : Window
         {
             selectTowerUIs[i].SetInteractive(true);
             var percent = Random.Range(0f, 1f);
+            if (towerManager.CurrentLevel == 1) percent = 0f;
             if (percent < towerSpawnPercent)
             {
                 selectTowerUIs[i].SetTowerData(towerManager.GetRandomTower());
