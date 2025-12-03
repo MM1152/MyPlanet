@@ -10,7 +10,7 @@ public abstract class Tower
     public int BaseDamage => towerData.ATK;   
     
 
-    public float FullAttackSpeed => (towerData.Fire_Rate + BonusAttackSpeed) * (1 + BonusAttackSpeedPercent);
+    public float FullAttackSpeed => (towerData.Fire_Rate + BonusAttackSpeed + BonusFireRate) * (1 + BonusAttackSpeedPercent);
     public float BaseAttackSpeed => towerData.Fire_Rate;
     public float FullAttackRange => towerData.Attack_Range + BonusAttackRange;
     public float BaseAttackRange => towerData.Attack_Range;
@@ -210,6 +210,38 @@ public abstract class Tower
         }
 
         level++;
+        this.levelUpData = levelUpData;
+        BonusDamage += this.levelUpData.Damage;
+        var1 = this.levelUpData.Var1;
+        var2 = this.levelUpData.Var2;
+        var3 = this.levelUpData.Var3;
+        var4 = this.levelUpData.Var4;
+        CheckLevelUpVariable(var1, this.levelUpData.Val1);
+        CheckLevelUpVariable(var2, this.levelUpData.Val2);
+        CheckLevelUpVariable(var3, this.levelUpData.Val3);
+        CheckLevelUpVariable(var4, this.levelUpData.Val4);
+    }
+
+    public virtual void LevelDown(LevelUpTable.Data levelUpData)
+    {
+        var var1 = 0;
+        var var2 = 0;
+        var var3 = 0;
+        var var4 = 0;
+        if (level != 0)
+        {
+            BonusDamage -= this.levelUpData.Damage;
+            var1 = this.levelUpData.Var1;
+            var2 = this.levelUpData.Var2;
+            var3 = this.levelUpData.Var3;
+            var4 = this.levelUpData.Var4;
+            CheckLevelUpVariable(var1, -this.levelUpData.Val1);
+            CheckLevelUpVariable(var2, -this.levelUpData.Val2);
+            CheckLevelUpVariable(var3, -this.levelUpData.Val3);
+            CheckLevelUpVariable(var4, -this.levelUpData.Val4);
+        }
+
+        level--;
         this.levelUpData = levelUpData;
         BonusDamage += this.levelUpData.Damage;
         var1 = this.levelUpData.Var1;

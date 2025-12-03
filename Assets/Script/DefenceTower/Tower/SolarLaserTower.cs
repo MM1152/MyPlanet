@@ -30,6 +30,25 @@ public class SolarLaserTower : Tower
         LaserUpdate();
     }
 
+    public override void LevelDown(LevelUpTable.Data levelUpData)
+    {
+        base.LevelDown(levelUpData);
+        if (solarLaser.Count != BonusProjectileCount)
+        {
+            var removeCount = solarLaser.Count - BonusProjectileCount;
+            for (int i = BonusProjectileCount; i < solarLaser.Count; i++)
+            {
+                Managers.ObjectPoolManager.Despawn(PoolsId.SolarLaser, solarLaser[i].gameObject);
+            }
+
+            for(int i = 0; i < removeCount; i++)
+            {
+                solarLaser.RemoveAt(solarLaser.Count - 1);
+            }
+        }
+        LaserUpdate();
+    }
+
     public override void Update(float deltaTime)
     {
         return;
