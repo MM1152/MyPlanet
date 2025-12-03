@@ -10,6 +10,7 @@ public class MagmaBoomFregment : FragmentBullet
         base.Init(data);
         moveTimer = tower.BonusFregmentRange / speed;
         coolTimer = tower.BonusCoolTime;
+        poolsId = PoolsId.MagmaBoomFregment;
     }
 
     public override void SetTarget(Transform target, float noise)

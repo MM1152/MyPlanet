@@ -33,7 +33,7 @@ public class Helper : MonoBehaviour
     public void MoveHelper(Vector3 startPos , Vector3 endPos)
     {
         this.endPos = endPos;
-        this.startPos = startPos;
+        this.startPos = startPos;   
         gameObject.SetActive(true);
         transform.position = startPos;
 
