@@ -4,11 +4,9 @@ using UnityEngine.UI;
 
 public class TowerPlaceHold : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI indexText;
     [SerializeField] private GameObject disAbleSlot;
     [SerializeField] private GameObject unlockSlot;
-    [SerializeField] private Image towerImage;
-    [SerializeField] private Image towerImageBackGround;
+    [SerializeField] private TowerInfomation towerInfo;
     private Outline outline;
     private Image image;
     [HideInInspector] public Button button;
@@ -53,7 +51,6 @@ public class TowerPlaceHold : MonoBehaviour
     public void UpdateText(int index)
     {
         this.index = index;
-        indexText.text = (index + 1).ToString();
     }
 
     public void PlaceTower(TowerTable.Data tower)
@@ -61,14 +58,13 @@ public class TowerPlaceHold : MonoBehaviour
         towerData = tower;
         if(towerData == null)
         {
-            towerImageBackGround.gameObject.SetActive(false);
+            towerInfo.gameObject.SetActive(false);
         }
         else
         {
-            towerImage.gameObject.SetActive(true);
-            towerImageBackGround.gameObject.SetActive(true);
+            towerInfo.gameObject.SetActive(true);
+            towerInfo.Init(tower.ID);
         }
-        image.color = Color.white;
     }
 
     public void SetUnLockAble(bool unlockAble)

@@ -11,6 +11,7 @@ public class PlanetInfomation : MonoBehaviour
     [SerializeField] private TextMeshProUGUI planetTypeText;
     [SerializeField] private TextMeshProUGUI planetGradeText;
     [SerializeField] private TextMeshProUGUI planetNameText;
+    [SerializeField] private TextMeshProUGUI planetLevelText;
     
     [Header("Image")]
     [SerializeField] private Image planetElemetImage;
@@ -56,7 +57,7 @@ public class PlanetInfomation : MonoBehaviour
         planetGradeText.color = data.GradeToColor;
         planetElemetImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, data.Attribute);
         planetTypeText.text = data.PlanetType;
-
+        planetLevelText.text = $"Lv. {userData.level:D2}";
         ResetStar();
         UpdateStar(userData.star);
 

@@ -25,6 +25,7 @@ public enum PopupIds
     None = -1,
     TowerInfomationPopup = 0,
     UnLockPopup = 1,
+    PlayGamePopup = 2,
 }
 
 public static class SceneIds

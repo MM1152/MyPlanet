@@ -17,6 +17,11 @@ public class TitleSelectPlanetWindow : Window
     [SerializeField] private TextMeshProUGUI planetNameText;
     [SerializeField] private TextMeshProUGUI descriptionText;
 
+    [Header("Status")]
+    [SerializeField] private TextMeshProUGUI hpText;
+    [SerializeField] private TextMeshProUGUI atkText;
+    [SerializeField] private TextMeshProUGUI defText;
+
     private PlanetTable.Data planetData;
     private PresetData.Data presetData;
     private PlanetInfomation currentSelectInfomation;
@@ -81,6 +86,13 @@ public class TitleSelectPlanetWindow : Window
     {
         planetNameText.text = planetData.Name;
         descriptionText.text = planetData.Explanation;
+
+        var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
+        var data = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID , userData.level == 0 ? 1 : userData.level);
+
+        hpText.text = data.hp;
+        atkText.text = data.atk;
+        defText.text = data.def;
     }
 
     public void SetPresetData(PresetData.Data presetData , int presetIndex)
