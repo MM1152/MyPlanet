@@ -47,7 +47,7 @@ public class WaveManager : MonoBehaviour
     private int nextWaveIndex = 1;
     private int currentWaveIndex = 1;
     public int CurrentWaveIndex => currentWaveIndex;
-    private float waveDuration = 20f;
+    private float waveDuration = 10f;
     public float WaveDuration => waveDuration;
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;
@@ -68,16 +68,13 @@ public class WaveManager : MonoBehaviour
 #if DEBUG_MODE
     public bool UIUpdateTest = false;
 #endif
-
-    public int terrformingValueCount = 56;
-
-    // public int[] monsterStage = new int[2] { 2, 3 };
+    private float terraformingPercentThreshold = 0.94f;
+    public int terraformingValueCount => (int)(waves.Count * terraformingPercentThreshold) < 1 ? 1 : (int)(waves.Count * terraformingPercentThreshold);
 
     [SerializeField]
     private GameObject warringWindow;
     [SerializeField]
     private TextMeshProUGUI warringText;
-
 
     [SerializeField]
     private WaveWindow waveWindow;
@@ -98,10 +95,7 @@ public class WaveManager : MonoBehaviour
         TerraformingData.terraformingUnlockPoints.Clear();
 #if DEBUG_MODE
         UIUpdateTest = true;
-#endif
-        waveTerraformingValue = 0;
-
-        sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, waveTerraformingValue * 100 / totalTerraformingValue);
+#endif        
     }
 
     private void ResetWave()
@@ -162,12 +156,19 @@ public class WaveManager : MonoBehaviour
         {
             foreach (var waveGroup in stageData.waveGroups)
             {
-                for (int i = 0; i < terrformingValueCount; i++)
+                for (int i = 1; i <= terraformingValueCount; i++)
                 {
-                    if (waveGroup.waveDatas.Count <= i) break;
-                    totalTerraformingValue += waveGroup.waveDatas[i].MAX_SPON;
+                    if (!waves.ContainsKey(i)) continue;
+
+                    var wave = waves[i];
+                    foreach (var spawnPoint in wave)
+                    {
+                        totalTerraformingValue += spawnPoint.maxSpawnCount;                 
+                    }
                 }
             }
+            waveTerraformingValue = 0;
+            sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, waveTerraformingValue * 100 / totalTerraformingValue);
         }
         else
         {
@@ -239,7 +240,7 @@ public class WaveManager : MonoBehaviour
         {
             waveWindow.SetWaveTimerText(0f);
         }
-      
+
 
         if ((!isFinalWaveEnded && waveElapsedTime >= waveDuration) || waveClearCount <= 0)
         {
@@ -334,13 +335,12 @@ public class WaveManager : MonoBehaviour
     public void NextWave()
     {
         int nextWaveIndex = currentWaveIndex + 1;
-
         if (Variable.IsTutorialActive && tutorialManager != null && NextTutorialWaveIndex == currentWaveIndex)
         {
             tutorialManager.SetSectorTutorial(NextTutorialWaveIndex);
         }
         if (!waves.ContainsKey(nextWaveIndex))
-        {        
+        {
             return;
         }
 

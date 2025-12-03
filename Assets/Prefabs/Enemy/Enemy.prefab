@@ -110,10 +110,12 @@ MonoBehaviour:
   attackRange: 0
   attackInterval: 0
   currentHP: 0
+  enemySpawnManager: {fileID: 0}
   TestRangeRadius: 1
   textSpawnManager: {fileID: 0}
   zone: {fileID: 0}
   enemyLineRenderer: {fileID: 0}
+  circleCollider2D: {fileID: -8144497166182082810}
 --- !u!58 &-8144497166182082810
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -144,7 +146,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -158,7 +160,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5214412531816242307}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

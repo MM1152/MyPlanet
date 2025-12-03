@@ -169,7 +169,8 @@ public static class TagIds
     public readonly static string EnemyTag = "Enemy";
     public readonly static string EnemyProjectileTag = "EnemyProjectile";
     public readonly static string IronMineTag = "IronMine";
-    public readonly static string TutorialManagerTag = "TutorialManager";
+    public readonly static string TutorialManagerTag = "TutorialManager"; 
+    public readonly static string WaveWindowTag = "WaveWindow";
 }
 
 public static class DataTableIds
@@ -228,7 +229,7 @@ public static class DataBasePaths
 public static class EnemyTypes
 {
     private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 3032 };
-    private static readonly HashSet<int> EliteMonseterIds = new HashSet<int> { 3026 };
+    private static readonly HashSet<int> EliteMonseterIds = new HashSet<int> { 3026,3028,3029,3030,3031 };
     public static bool IsEliteMonster(int id) => EliteMonseterIds.Contains(id);
     public static bool IsBossMonster(int id) => BossMonsterIds.Contains(id);
 }
