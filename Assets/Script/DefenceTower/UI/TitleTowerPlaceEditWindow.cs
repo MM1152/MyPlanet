@@ -1,12 +1,10 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using Cysharp.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using UnityEditor;
 using System.Linq;
 using Unity.VisualScripting;
-using System.Threading.Tasks;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class TitleTowerPlaceEditWindow : Window
 {
@@ -18,6 +16,12 @@ public class TitleTowerPlaceEditWindow : Window
     [SerializeField] private Button saveButton;
     [SerializeField] private Button closeButton;
     [SerializeField] private PopupManager popupManager;
+    [SerializeField] private GameObject linear;
+
+    [Header("Images")]
+    [SerializeField] private Image firstImage;
+    [SerializeField] private Image secondImage;
+    [SerializeField] private Sprite[] numbers; 
 
     private Vector2 circleSize;
     private int placeCount;
@@ -186,6 +190,15 @@ public class TitleTowerPlaceEditWindow : Window
         float startAngle = 90f;
         for (int i = 0; i < placeCount; i++)
         {
+            var linear = Instantiate(this.linear, circle.transform);
+            var linearRect = linear.GetComponent<RectTransform>();
+            linearRect.anchoredPosition = new Vector3
+            (
+                Mathf.Cos(Mathf.Deg2Rad * startAngle),
+                Mathf.Sin(Mathf.Deg2Rad * startAngle)
+            ) * circleSize * 0.44f;
+            linearRect.eulerAngles = new Vector3(0, 0, angle * i + 1 + 90f);
+
             var placeHold = Instantiate(towerPlaceObject, circle.transform);
 
             placeHold.Init();
@@ -193,12 +206,11 @@ public class TitleTowerPlaceEditWindow : Window
             placeHold.UpdateSlot(planetData.openSlot[i]);
 
             RectTransform rect = placeHold.GetComponent<RectTransform>();
-
             rect.anchoredPosition = new Vector3
             (
                 Mathf.Cos(Mathf.Deg2Rad * startAngle),
                 Mathf.Sin(Mathf.Deg2Rad * startAngle)
-            ) * circleSize * 0.4f;
+            ) * circleSize * 0.6f;
 
             startAngle += angle;
             rect.eulerAngles = new Vector3(0, 0, angle * i + 1);
@@ -217,6 +229,8 @@ public class TitleTowerPlaceEditWindow : Window
                 if (placeHold.DisAble) return;
                 RotateCircle(idx);
                 FindOptionApplyTower(placeHolds[idx].TowerData);
+                firstImage.sprite = numbers[(idx + 1) % 10];
+                secondImage.sprite = numbers[(idx + 1) /10];
             });
         }
 

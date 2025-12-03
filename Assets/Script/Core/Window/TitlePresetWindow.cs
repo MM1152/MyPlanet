@@ -10,6 +10,7 @@ public class TitlePresetWindow : Window
     [SerializeField] private PresetViewer presetViewer;
     [SerializeField] private Transform presetDataRoot;
     [SerializeField] private Button gameStartButton;
+    [SerializeField] private PopupManager popupManger;
 
     private List<PresetViewer> presetViewers = new List<PresetViewer>();
     private int currentSelectPresetIndex = -1;
@@ -45,7 +46,8 @@ public class TitlePresetWindow : Window
 
             LoadingScene.sceneId = SceneIds.GameScene;
             FirebaseManager.Instance.PresetData.SetGameData(presetData);
-            SceneManager.LoadScene(SceneIds.LoadingScene);
+            var popup = popupManger.Open<PlayGamePopup>(PopupIds.PlayGamePopup);
+            popup.UpdatePresetData(FirebaseManager.Instance.PresetData.GetGameData());
         });
     }
 
