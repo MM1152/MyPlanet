@@ -86,11 +86,18 @@ public class EnemySpawnManager : MonoBehaviour
     }
 
     public void ClearAllEnemy()
-    {
-        foreach (var enemy in spawnEnemys)
+    {        
+        var enemiesToKill = new List<Enemy>(spawnEnemys);
+        
+        foreach (var enemy in enemiesToKill)
         {
-            poolManager.Despawn(PoolsId.Enemy, enemy.gameObject);
+          if(enemy == null) continue; 
+          if(!enemy.gameObject.activeSelf) continue;
+          if(enemy.IsDead) continue; 
+          
+          enemy.isKilledByPlayer = false;
+        //   enemy.OnDead();          
+        enemy.stateMachine.ChangeState(enemy.stateMachine.dieState); 
         }
-        spawnEnemys.Clear();
     }
 }

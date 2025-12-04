@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public EnemySpawnManager enemySpawnManager;
 
     public float TestRangeRadius;
-    public bool isKilledByPlayer { get; private set; }
+    public bool isKilledByPlayer { get; set; }
 
 #if DEBUG_MODE
     public TextSpawnManager textSpawnManager;
@@ -294,6 +294,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();
+        
         if (waveManager != null)
         {
             OnTerraformingValueChanged?.Invoke();
