@@ -35,12 +35,12 @@ public class WaveWindow : Window
 
     public void SetWaveText(int waveNumber)
     {
-        waveNumberText.text = $"Wave {waveNumber}";
+        waveNumberText.text = $"WAVE {waveNumber}";
     }
 
     public void SetWaveTimerText(float timeRemaining)
     {
-        waveTimerText.text = $"{timeRemaining:00}";
+        waveTimerText.text = $"{(int)(timeRemaining/60):00}:{(int)(timeRemaining%60):00}";
     }
 
     public void ShowBossUI(int maxHP)
