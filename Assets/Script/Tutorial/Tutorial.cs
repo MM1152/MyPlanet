@@ -38,6 +38,7 @@ public class Tutorial
     private RectTransform highlightRect;
     private TutorialManager manager;
     public float currentDelay;
+    public bool IsWaitDelay => isWaitDelay;
     public bool IsNext { get; set; } = false;
     public void Init(TutorialManager manager)
     {
