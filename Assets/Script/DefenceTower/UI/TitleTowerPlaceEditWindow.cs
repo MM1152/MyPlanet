@@ -79,6 +79,8 @@ public class TitleTowerPlaceEditWindow : Window
         selectIndex = 0;
         circle.transform.eulerAngles = Vector3.zero;
         isRotate = false;
+        firstImage.sprite = numbers[(1) % 10];
+        secondImage.sprite = numbers[(1) / 10];
         base.Open();
     }
 

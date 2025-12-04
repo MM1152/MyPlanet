@@ -20,7 +20,7 @@ public class EnemySpawnManager : MonoBehaviour
         windowManager = GameObject.FindWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
         poolManager = Managers.ObjectPoolManager;
     }
- 
+
     public List<Enemy> SpawnEnemy(int id, int count = 1)
     {
         //if (!init) return null;
@@ -37,14 +37,14 @@ public class EnemySpawnManager : MonoBehaviour
                 {
                     spawnEnemy.OnDie += (enemy) => windowManager?.Open(WindowIds.OptionUpgradeWindow);
                 }
-                spawnEnemy.Initallized(data);      
-                if(Variable.IsDebugMode)
+                spawnEnemy.Initallized(data);
+                if (Variable.IsDebugMode)
                 {
                     spawnEnemy.DebugToolsInit();
                 }
                 spawnEnemy.OnDie += CheckDieEnemy;
                 spawnEnemys.Add(spawnEnemy);
-                spawnedEnemies.Add(spawnEnemy); 
+                spawnedEnemies.Add(spawnEnemy);
             }
             return spawnedEnemies;
         }
@@ -53,7 +53,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     private void CheckDieEnemy(Enemy enemy)
     {
-        enemy.OnDie -= CheckDieEnemy;        
+        enemy.OnDie -= CheckDieEnemy;
         spawnEnemys.Remove(enemy);
     }
 
@@ -85,18 +85,19 @@ public class EnemySpawnManager : MonoBehaviour
     }
 
     public void ClearAllEnemy()
-    {        
+    {
         var enemiesToKill = new List<Enemy>(spawnEnemys);
-        
+
         foreach (var enemy in enemiesToKill)
         {
-          if(enemy == null) continue; 
-          if(!enemy.gameObject.activeSelf) continue;
-          if(enemy.IsDead) continue; 
-          
-            enemy.isKilledByPlayer = false;
-            //   enemy.OnDead();          
-            enemy.stateMachine.ChangeState(enemy.stateMachine.dieState); 
+            if (enemy == null) continue;
+            if (!enemy.gameObject.activeSelf) continue;
+            if (enemy.IsDead) continue;
+
+            enemy.isKilledByPlayer = false;               
+            enemy.IsDead = true;
+            enemy.stateMachine.ChangeState(enemy.stateMachine.dieState);
+            spawnEnemys.Remove(enemy);  
         }
     }
 }
