@@ -50,7 +50,7 @@ public class PopupManager : MonoBehaviour
         if (popupStack.Count == 0) return;
 
         var closePopup = popupStack.Peek();
-        if(Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(clickToCloseUI) && closePopup.Close())
+        if(Managers.TouchManager.TouchType == TouchTypes.Tab && !Managers.TouchManager.OnTargetUI(closePopup.gameObject) && closePopup.Close())
         {
             popupStack.Pop();
         }

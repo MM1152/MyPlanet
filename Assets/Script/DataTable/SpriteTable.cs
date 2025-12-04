@@ -43,6 +43,10 @@ public class SpriteTable : DataTable
 
     public Sprite Get(string filename , int id)
     {
-        return spriteTable[filename][id];
+        if(spriteTable[filename].ContainsKey(id))
+        {
+            return spriteTable[filename][id];
+        }
+        return null;
     }
 }

@@ -26,6 +26,10 @@ public class TowerTable : DataTable
         public float Min_Value { get; set; }
         public float Max_Value { get; set; }
         public float Attack_Range { get; set; }
+        [Name("Buff_Explantion")]
+        public int buff_Explantion { get; set; }
+        [Name("Explanation")]
+        public int explanation { get; set; }
 
         [CsvHelper.Configuration.Attributes.Ignore]
         public string Name => DataTableManager.StringTable.Get(name);
@@ -40,6 +44,17 @@ public class TowerTable : DataTable
             6 => "폭탄",
             7 => "기뢰",
             8 => "방전",
+            _ => "정의되지 않음"
+        };
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public string Explanatoin => DataTableManager.StringTable.Get(explanation);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public string Buff_Explanation => DataTableManager.StringTable.Get(buff_Explantion);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public string TypeToString => Type switch
+        {
+            1 => "공격",
+            2 => "유틸",
             _ => "정의되지 않음"
         };
         [CsvHelper.Configuration.Attributes.Ignore]
