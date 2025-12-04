@@ -14,9 +14,8 @@ public class EnemySpawnManager : MonoBehaviour
     public Button testButton;
 #endif
 
-    public bool isDebugMode = false;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         windowManager = GameObject.FindWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
         poolManager = Managers.ObjectPoolManager;
@@ -39,7 +38,7 @@ public class EnemySpawnManager : MonoBehaviour
                     spawnEnemy.OnDie += (enemy) => windowManager?.Open(WindowIds.OptionUpgradeWindow);
                 }
                 spawnEnemy.Initallized(data);      
-                if(isDebugMode)
+                if(Variable.IsDebugMode)
                 {
                     spawnEnemy.DebugToolsInit();
                 }
