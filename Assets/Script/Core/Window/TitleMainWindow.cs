@@ -38,6 +38,7 @@ public class TitleMainWindow : Window
             LoadingScene.sceneId = SceneIds.DebugModeScene;
             SceneManager.LoadScene(SceneIds.LoadingScene);
         });
+        debugModeSceneButton.gameObject.SetActive(true);
 #endif
         bookOpenButton.interactable = true;
         bookOpenButton.onClick.AddListener(() =>

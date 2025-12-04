@@ -70,10 +70,12 @@ public class DebugTowerInfomation : MonoBehaviour
 
         levelUPButton.onClick.AddListener(OnClickLevelUpButton);
         levelDownButton.onClick.AddListener(OnClickLevelDownButton);
+#if UNITY_EDITOR
         saveButton.onClick.AddListener(() =>
         {
             DataTableManager.LevelUpTable.SaveData(DataTableIds.LevelUpTable, levelUpTable.Values.ToList()).Forget();
         });
+#endif
     }
 
     private void OnClickLevelUpButton()
