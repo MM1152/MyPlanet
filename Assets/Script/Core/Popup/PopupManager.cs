@@ -75,7 +75,7 @@ public class PopupManager : MonoBehaviour
 
     private async UniTaskVoid UpdateBackGroundPanel()
     {
-        await UniTask.Yield();
+        await UniTask.Yield(this.gameObject.GetCancellationTokenOnDestroy());
 
         if (popupStack.Count > 0)
         {
