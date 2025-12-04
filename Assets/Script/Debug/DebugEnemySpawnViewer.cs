@@ -34,6 +34,7 @@ public class DebugEnemySpawnViewer : MonoBehaviour
 
         spawnEnemy[0].transform.position = Camera.main.ScreenToWorldPoint(spawnPosition);
         spawnEnemy[0].Initallized(enemyData);
+        spawnEnemy[0].DebugToolsInit();
 
         debugEnemySpawnPanel.UpdateInputFiled(enemyData);
     }
