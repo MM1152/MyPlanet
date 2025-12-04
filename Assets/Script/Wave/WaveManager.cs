@@ -363,14 +363,14 @@ public class WaveManager : MonoBehaviour
         if (EnemyTypes.IsEliteMonster(monsterId))
         {
             warringWindow.SetActive(true);
-            warringText.text = $"엘리트 보스 몬스터 출현!";
+            warringText.text = $"<i>엘리트 보스 몬스터 출현!<i>";
             ShowWarringWindow().Forget();
             Time.timeScale = 0f;
         }
         else if (EnemyTypes.IsBossMonster(monsterId))
         {
             warringWindow.SetActive(true);
-            warringText.text = $"보스 몬스터 출현!";
+            warringText.text = $"<i>보스 몬스터 출현!<i>";
             ShowWarringWindow().Forget();
             Time.timeScale = 0f;
         }

@@ -48,7 +48,7 @@ public class LoadingScene : MonoBehaviour
         Variable.IsSpawnActive = true;
         Variable.IsTutorialActive = false;
         Variable.IsJoyStickActive = true;
-
+        Variable.IsDebugMode = false;
 
         Managers.Instance.Release();
 

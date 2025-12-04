@@ -52,6 +52,7 @@ public static class Variable
     public static bool IsJoyStickActive;
     public static bool IsTutorialActive;
     public static bool IsSpawnActive;
+    public static bool IsDebugMode;
 }
 
 public static class AddressableLabelIds

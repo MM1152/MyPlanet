@@ -30,7 +30,7 @@ public class PlayGamePopup : Popup
         gamePlayButton.onClick.AddListener(() =>
         {
             LoadingScene.sceneId = SceneIds.GameScene;
-            SceneManager.LoadScene(LoadingScene.sceneId);
+            SceneManager.LoadScene(SceneIds.LoadingScene);
         });
     }
 
