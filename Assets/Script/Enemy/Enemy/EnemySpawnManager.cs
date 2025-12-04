@@ -94,9 +94,9 @@ public class EnemySpawnManager : MonoBehaviour
           if(!enemy.gameObject.activeSelf) continue;
           if(enemy.IsDead) continue; 
           
-          enemy.isKilledByPlayer = false;
-        //   enemy.OnDead();          
-        enemy.stateMachine.ChangeState(enemy.stateMachine.dieState); 
+            enemy.isKilledByPlayer = false;
+            //   enemy.OnDead();          
+            enemy.stateMachine.ChangeState(enemy.stateMachine.dieState); 
         }
     }
 }

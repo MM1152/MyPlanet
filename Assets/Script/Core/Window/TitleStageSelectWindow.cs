@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 public class TitleStageSelectWindow : Window
 {
     [SerializeField] private Button backButton;    
@@ -27,6 +28,13 @@ public class TitleStageSelectWindow : Window
             if(currentStageLayout != null)
             {
                 FirebaseManager.Instance.PresetData.SetGameDataStageId(currentStageLayout.StageIdx);
+                if(currentStageLayout.StageIdx == 1)
+                {
+                    FirebaseManager.Instance.PresetData.SetGameData(null);
+                    LoadingScene.sceneId = SceneIds.GameScene;
+                    SceneManager.LoadScene(SceneIds.LoadingScene);
+                    return;
+                }
                 manager.Open(WindowIds.TitlePresetWindow);
             }
         });
@@ -45,6 +53,7 @@ public class TitleStageSelectWindow : Window
     {
         if (currentStageLayout != null)
             currentStageLayout.UpdateStageLayout(false, false, false);
+
         currentSelectStage = idx - 1;
         currentStageLayout = stageLayouts[currentSelectStage];
         bool activeLeftArrow = currentSelectStage > 0;  

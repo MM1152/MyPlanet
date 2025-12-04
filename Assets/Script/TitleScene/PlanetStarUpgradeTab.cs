@@ -30,7 +30,6 @@ public class PlanetStarUpgradeTab : MonoBehaviour
     private void Awake()
     {
         upgradeButton.onClick.AddListener(() => {
-            upgradeButton.interactable = false;
             OnClickUpgradeButton().Forget();
         });    
     }
@@ -101,6 +100,7 @@ public class PlanetStarUpgradeTab : MonoBehaviour
 
         if (needPieceCount <= currentPieceCount)
         {
+            upgradeButton.interactable = false;
             var tasks = FirebaseManager.Instance.PlanetData.UpgradeStarAsync(planetTableData.ID , needPieceCount);
             await Managers.Instance.WaitForLoadingAsync(tasks);
             upgradeButton.interactable = true;
