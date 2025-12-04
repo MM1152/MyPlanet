@@ -9,10 +9,12 @@ public class BurstBlasterTower : Tower
         {
             for (int i = 0; i < BonusPelletCount; i++)
             {
-                var attackPrefab = CreateAttackPrefab();
-                attackPrefab.Init(this);
-                attackPrefab.SetTarget(target, FullNoise * 0.5f);
-                attackPrefab.transform.position = this.tower.transform.position;
+                base.Attack();
+                attackAble = true;
+                //var attackPrefab = CreateAttackPrefab();
+                //attackPrefab.Init(this);
+                //attackPrefab.SetTarget(target, FullNoise * 0.5f);
+                //attackPrefab.transform.position = this.tower.transform.position;
             }
             attackAble = false;
             currentAttackInterval = 0f;
