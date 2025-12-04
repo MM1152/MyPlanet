@@ -385,6 +385,7 @@ public class WaveManager : MonoBehaviour
             var window = windowManager.Open(WindowIds.VictoryWindow);
             if (window is VictoryWindow victoryWindow)
             {
+                victoryWindow.SetVictoryUI(isClear);
                 victoryWindow.UpdateText(playTimeTimer, isClear);
             }
         }

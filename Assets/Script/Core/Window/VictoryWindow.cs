@@ -7,12 +7,18 @@ public class VictoryWindow : Window
 {
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI playTimeText;
-    [SerializeField] private TextMeshProUGUI victoryText;
+    // [SerializeField] private TextMeshProUGUI victoryText;
 
     [Header("Buttons")]
     [SerializeField] private Button replayButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private Button nextStageButton;
+
+    [SerializeField] private GameObject victoryTitle;
+    [SerializeField] private GameObject victoryTextBackground;
+    [SerializeField] private GameObject failTitle;
+    [SerializeField] private GameObject failTextBackground;
+    [SerializeField] private GameObject nextStageButtonObject;
 
     public override void Init(WindowManager manager)
     {
@@ -51,17 +57,37 @@ public class VictoryWindow : Window
         SceneManager.LoadScene(SceneIds.LoadingScene);
     }
 
+    public void SetVictoryUI(bool isClear)
+    {
+        if(isClear)
+        {
+            victoryTitle.SetActive(true);
+            victoryTextBackground.SetActive(true);
+            failTitle.SetActive(false);
+            failTextBackground.SetActive(false);
+            nextStageButtonObject.SetActive(true);
+        }
+        else
+        {
+            victoryTitle.SetActive(false);
+            victoryTextBackground.SetActive(false);
+            failTitle.SetActive(true);
+            failTextBackground.SetActive(true);
+            nextStageButtonObject.SetActive(false);    
+        }
+    }
+
     public void UpdateText(float timer, bool isClear)
     {
         if(isClear)
         {
-            victoryText.text = "Victory!";
-            playTimeText.text = string.Format("«√∑π¿Ã ≈∏¿” {0:F2}", timer);
+            // victoryText.text = "Victory!";
+            playTimeText.text = string.Format("ÌîåÎ†àÏù¥ ÌÉÄÏûÑ | {0:F2}", timer);
         }
         else
         {
-            victoryText.text = "Fail!";
-            playTimeText.text = string.Format("«√∑π¿Ã ≈∏¿” {0:F2}", timer);
+            // victoryText.text = "Fail!";
+            playTimeText.text = string.Format("ÌîåÎ†àÏù¥ ÌÉÄÏûÑ | {0:F2}", timer);
         }
     }
 }
