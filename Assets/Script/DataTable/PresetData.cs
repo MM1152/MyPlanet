@@ -144,7 +144,7 @@ public class PresetData
     public void Release()
     {
         presetDatas.Clear();
-        inGameData = null;
+        inGameData = new InGameData();
         Init = false;
     }
 }

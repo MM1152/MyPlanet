@@ -18,7 +18,6 @@ public class PlaceTowerWindow : Window
 
     [Header("타워와 소모품 선택지에서 나올 확률")]
     [SerializeField] private float towerSpawnPercent;
-    [SerializeField] private float consumableSpawnPercent;
 
     private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>();
     private int selectTowerIndex = -1;
