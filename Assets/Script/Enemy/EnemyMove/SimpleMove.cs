@@ -3,6 +3,9 @@ using UnityEngine;
 public class SimpleMove : IMove
 {
     private GameObject target;
+    private Vector2 direction;
+
+    public Vector2 Direction => direction;
 
     public void Init(Enemy enemy)
     {
@@ -14,13 +17,14 @@ public class SimpleMove : IMove
         if (target == null)
         {
             enemy.stateMachine.ChangeState(enemy.stateMachine.idleState);
+            direction = Vector2.zero;
             return;
         }
         enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target.transform.position, enemy.CurrentSpeed * Time.deltaTime);
         var distance = Vector3.Distance(enemy.transform.position, target.transform.position);
 
-        Vector2 dir = target.transform.position - enemy.transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        direction = (target.transform.position - enemy.transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         
         if (distance <= enemy.attackRange && enemy.enemyType != EnemyType.Melee)

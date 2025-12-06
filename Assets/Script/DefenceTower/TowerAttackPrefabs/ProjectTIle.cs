@@ -5,8 +5,13 @@ public class ProjectTile : BaseAttackPrefab
     [SerializeField] protected float speed = 5f;
     public float FullBulletSpeed => speed + tower.BonusBulletSpeed;
 
+    protected float duration;
     protected Vector3 dir;
-    
+
+    private float predictionLimitTime = 2f;
+    private float targetSpeed;
+    private float targetDir;
+
     public override void SetTarget(Transform target , float noise)
     {
         base.SetTarget(target , noise);
@@ -14,11 +19,22 @@ public class ProjectTile : BaseAttackPrefab
 
         float rad = Mathf.Atan2(dir.y, dir.x);
         transform.rotation = Quaternion.Euler(0f, 0f, rad * Mathf.Rad2Deg);
+        duration = tower.FullAttackRange / FullBulletSpeed;
     }
 
     protected virtual Vector3 SetDir()
     {
-        dir = (target.transform.position - transform.position).normalized;
+        if(enemy != null)
+        {
+            float predictionTime = (target.position - transform.position).magnitude / FullBulletSpeed;
+            Vector3 preditionPos = enemy.enemyPredictionPoisition.GetPredictionPosition(predictionTime);
+            dir = (preditionPos - transform.position).normalized;
+        }
+        else
+        {
+            dir = (target.transform.position - transform.position).normalized;
+        }
+
         if (noise != 0)
         {
             float currentAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -41,10 +57,16 @@ public class ProjectTile : BaseAttackPrefab
     
     protected virtual void Update()
     {
+        duration -= Time.deltaTime;
         if (target == null || targetDamageAble.IsDead)
         {
             Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
-            //Destroy(gameObject);
+            return;
+        }
+
+        if(duration < 0f)
+        {
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
             return;
         }
 
