@@ -24,7 +24,7 @@ public class TowerManager : MonoBehaviour
     private int currentLevel = 1;
     public int CurrentLevel => currentLevel;
     private int maxLevel = 999;
-    public int levelUpExp => currentLevel * 100;
+    public int levelUpExp => currentLevel * 50;
 
     private bool isLevelUp = false;
 
