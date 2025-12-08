@@ -43,10 +43,14 @@ public class InfomationTab : MonoBehaviour
     public void UpdateData(PlanetTable.Data planetTableData)
     {
         if (this.planetTableData != null)
-            FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetPeiceCountPathFormating, this.planetTableData.ID) , OnValueChangedPieceCount);
+        {
+            FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetPeiceCountPathFormating, this.planetTableData.ID), OnValueChangedPieceCount);
+            FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetStarCountPathFormating, this.planetTableData.ID), OnValueChangedStarCount);
+        }
 
         this.planetTableData = planetTableData; 
         FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetPeiceCountPathFormating, this.planetTableData.ID) , OnValueChangedPieceCount);
+        FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetStarCountPathFormating, this.planetTableData.ID), OnValueChangedStarCount);
 
         planetGradeText.text = planetTableData.grade;
         planetTypeText.text = planetTableData.PlanetType;
@@ -62,7 +66,7 @@ public class InfomationTab : MonoBehaviour
             debugAddPieceButton.interactable = false;
         }
 #endif
-            ResetStar();
+        ResetStar();
         var starCount = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID).star;
         for(int i = 0; i < starCount; i++)
         {
@@ -90,6 +94,16 @@ public class InfomationTab : MonoBehaviour
             pieceCountText.text = $"조각 개수 : {pieceCount}/{maxPieceCount}";
 
         pieceCountSlider.value = (float)pieceCount / maxPieceCount;
+    }
+
+    private void OnValueChangedStarCount(object sender, ValueChangedEventArgs args)
+    {
+        ResetStar();
+        var starCount = int.Parse(args.Snapshot.Value.ToString());
+        for (int i = 0; i < starCount; i++)
+        {
+            startsImages[i].sprite = starOnEnAbleSprite;
+        }
     }
 #if DEBUG_MODE
     private async UniTaskVoid OnClickAddPiece()

@@ -203,8 +203,8 @@ public abstract class Tower
             currentAttackInterval = 0;
 
             BaseAttackPrefab attackPrefabs = CreateAttackPrefab();
-            attackPrefabs.Init(this);
             attackPrefabs.transform.position = tower.transform.position;
+            attackPrefabs.Init(this);
             if (target != null)
                 attackPrefabs.SetTarget(target , FullNoise);
             return true;

@@ -25,6 +25,8 @@ public class FragmentBullet : ProjectTile
 
     protected override void HitTarget(Collider2D collision)
     {
+        var find = collision.GetComponent<IDamageAble>();
+        if (find != null && find.IsDead) return;
         base.HitTarget(collision);
         Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
     }

@@ -17,6 +17,7 @@ public class ShadowSurge : BaseAttackPrefab
     public override void Init(Tower data)
     {
         base.Init(data);
+        poolsId = PoolsId.ShadowSurge;
         screenRect = Screen.safeArea;
 
         var xPos = Random.Range(screenRect.xMin, screenRect.xMax);

@@ -79,6 +79,8 @@ public class TitleTowerPlaceEditWindow : Window
         selectIndex = 0;
         circle.transform.eulerAngles = Vector3.zero;
         isRotate = false;
+        firstImage.sprite = numbers[(1) % 10];
+        secondImage.sprite = numbers[(1) / 10];
         base.Open();
     }
 
@@ -151,6 +153,12 @@ public class TitleTowerPlaceEditWindow : Window
         }
     }
 
+    private void SwapTower(int idx , TowerTable.Data data)
+    {
+        UnPlace(selectIndex);
+        Place(data);
+    }
+
     private void UnPlace(int idx)
     {
         if (isRotate) return;
@@ -167,6 +175,12 @@ public class TitleTowerPlaceEditWindow : Window
         if (!placeHolds[selectIndex].Placed())
         {
             placeHolds[selectIndex].PlaceTower(data);
+            showIndexPanels[data.ID].UpdatePlace(selectIndex + 1);
+            FindOptionApplyTower(data);
+        }
+        else
+        {
+            SwapTower(selectIndex, data);
             showIndexPanels[data.ID].UpdatePlace(selectIndex + 1);
             FindOptionApplyTower(data);
         }
@@ -226,7 +240,14 @@ public class TitleTowerPlaceEditWindow : Window
             int idx = i;
             placeHold.button.onClick.AddListener(() => {
                 OpenUnLockSlotPopup(idx);
+
                 if (placeHold.DisAble) return;
+                if (idx == selectIndex)
+                {
+                    UnPlace(idx);
+                    return;
+                }
+
                 RotateCircle(idx);
                 FindOptionApplyTower(placeHolds[idx].TowerData);
                 firstImage.sprite = numbers[(idx + 1) % 10];

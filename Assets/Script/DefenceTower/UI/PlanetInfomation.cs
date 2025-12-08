@@ -44,11 +44,15 @@ public class PlanetInfomation : MonoBehaviour
             isSetting = false;
 
         var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
+        var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
         FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangedStar);
+        FirebaseManager.Instance.Database.RemoveListner(levelPath, OnValueChangedLevel);
         this.data = data;
 
         path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
+        levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
         FirebaseManager.Instance.Database.AddListner(path, OnValueChangedStar);
+        FirebaseManager.Instance.Database.AddListner(levelPath, OnValueChangedLevel);
 
         userData = FirebaseManager.Instance.PlanetData.GetOrigin(data.ID);
 
@@ -83,6 +87,11 @@ public class PlanetInfomation : MonoBehaviour
         }
     }
 
+    private void UpdateLevel(int level)
+    {
+        planetLevelText.text = $"Lv. {level:D2}";
+    }
+
     public PlanetTable.Data GetData()
     {
         return data;
@@ -107,5 +116,10 @@ public class PlanetInfomation : MonoBehaviour
     private void OnValueChangedStar(object sender , ValueChangedEventArgs args)
     {
         UpdateStar(int.Parse(args.Snapshot.Value.ToString()));
+    }
+
+    private void OnValueChangedLevel(object sender, ValueChangedEventArgs args)
+    {
+        UpdateLevel(int.Parse(args.Snapshot.Value.ToString()));
     }
 }
