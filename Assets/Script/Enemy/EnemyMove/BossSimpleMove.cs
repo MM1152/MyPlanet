@@ -9,12 +9,12 @@ public enum BossMoveState
 public class BossSimpleMove : IMove
 {
     private GameObject target;
-
     private Rect screenBounds;
-
     private BossMoveState currentPattern;
-
     private Vector2 centerPoint;
+    private Vector2 direction;
+
+    public Vector2 Direction => direction;
 
     public void Init(Enemy enemy)
     {
@@ -46,6 +46,7 @@ public class BossSimpleMove : IMove
         if (target == null)
         {
             enemy.stateMachine.ChangeState(enemy.stateMachine.idleState);
+            direction = Vector2.zero;
             return;
         }
   
@@ -62,17 +63,19 @@ public class BossSimpleMove : IMove
                 break;
         }
     }
+    
     private void RotateTowardsTarget(Enemy enemy)
     {
         if (target == null) return;
 
-        Vector2 dir = target.transform.position - enemy.transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        direction = (target.transform.position - enemy.transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     private void MoveToCenter(Enemy enemy, float step)
     {
+        direction = (centerPoint - (Vector2)enemy.transform.position).normalized;
         enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, centerPoint, step);
 
         if (Vector2.Distance(enemy.transform.position, centerPoint) < 0.1f)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
@@ -76,7 +77,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public LineRenderer enemyLineRenderer;
 
     private WaveWindow bossUi;
-
+    public EnemyPredictionPoisition enemyPredictionPoisition = new EnemyPredictionPoisition();
     private void Awake()
     {
         stateMachine = new StateMachine(this);
@@ -89,6 +90,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         zone = GetComponentInChildren<ZoneSearch>();
         typeEffectiveness = new TypeEffectiveness();
         enemyLineRenderer = GetComponent<LineRenderer>();
+        enemyPredictionPoisition.Init(this);
     }
 
     public void DebugToolsInit()
@@ -183,7 +185,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
     }
 #endif
-
+        
     public void SetState(IState newState)
     {
         stateMachine.ChangeState(newState);

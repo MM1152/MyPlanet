@@ -26,6 +26,10 @@ public class LeftRinghMove : IMove
 
     private GameObject target;
 
+    private Vector2 direction;
+
+    public Vector2 Direction => direction;
+
     public void Init(Enemy enemy)
     {
         if(enemy.WaveManager != null) 
@@ -81,6 +85,7 @@ public class LeftRinghMove : IMove
     private void EnemyMoving(Enemy enemy, float step)
     {
         var targetPos = isMovingRight ? rightPoint : leftPoint;
+        direction = (targetPos - (Vector2)enemy.transform.position).normalized;
         enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, targetPos, step);
         if(Vector2.Distance(enemy.transform.position, targetPos) < 0.1f)
         {
@@ -93,8 +98,8 @@ public class LeftRinghMove : IMove
     {
         if (target == null) return;
 
-        Vector2 dir = target.transform.position - enemy.transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        direction = target.transform.position - enemy.transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 }

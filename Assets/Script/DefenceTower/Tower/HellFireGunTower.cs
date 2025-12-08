@@ -3,15 +3,19 @@ using System;
 
 public class HellFireGunTower : Tower
 {
+
+
     public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data , int slotIndex)
     {
         base.Init(tower, manager, data , slotIndex);
     }
 
     public override bool Attack(bool useTarget = true)
-    {
+    { 
         Target = manager.FindTarget()?.transform;
-        return base.Attack(useTarget);
+        base.Attack(useTarget);
+
+        return true;
     }
 
     protected override BaseAttackPrefab CreateAttackPrefab()

@@ -3,12 +3,10 @@ using UnityEngine;
 
 public class Bullet : ProjectTile
 {
-    private float duration;
     public override void Init(Tower data)
     {
         base.Init(data);
         poolsId = PoolsId.Bullet;
-        duration = data.FullAttackRange / (speed + data.BonusBulletSpeed);
     }
 
     protected override void Update()

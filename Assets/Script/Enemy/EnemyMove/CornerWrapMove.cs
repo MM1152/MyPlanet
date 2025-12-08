@@ -12,17 +12,11 @@ public enum CornerMovePattern
 public class CornerWrapMove : IMove
 {
     private Rect screenBounds;
-
     private GameObject target;
-
     private float delayTime = 3f;
-
     private Collider2D enemyCollider;
-
     private Bounds enemyBounds;
-
     private float centerY;
-
     private float upY;
     private float downY;
 
@@ -38,13 +32,12 @@ public class CornerWrapMove : IMove
 
     private bool isLeftMoving = false;
     private bool isMovingUp = false;
-
     private CornerMovePattern currentPattern;    
-
     private Vector2 attackTargetPos;
-
     private Dictionary<Vector2, Vector2> cornerExitPoints;
+    private Vector2 direction;
 
+    public Vector2 Direction => direction;
 
     public void Init(Enemy enemy)
     {
@@ -112,8 +105,8 @@ public class CornerWrapMove : IMove
     {
         if (target == null) return;
 
-        Vector2 dir = target.transform.position - enemy.transform.position;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        direction = (target.transform.position - enemy.transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
@@ -126,6 +119,7 @@ public class CornerWrapMove : IMove
 
     private void MoveToAttackPoint(Enemy enemy, float step)
     {
+        direction = (attackTargetPos - (Vector2)enemy.transform.position).normalized;
         enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, attackTargetPos, step);
         if (Vector2.Distance(enemy.transform.position, attackTargetPos) < 0.1f)
         {
@@ -137,6 +131,7 @@ public class CornerWrapMove : IMove
     private void MoveNextPoint(Enemy enemy, float step)
     {
         Vector2 moveToPos = enemy.transform.position.x > leftUpExitPoint.x ? Vector2.left : Vector2.right;
+        direction = moveToPos;
         enemy.transform.position += (Vector3)(moveToPos * step);
         if (enemy.transform.position.x < leftUpExitPoint.x ||
          enemy.transform.position.x > rightUpExitPoint.x)
@@ -144,12 +139,14 @@ public class CornerWrapMove : IMove
             currentPattern = CornerMovePattern.Waiting;
             enemy.transform.position = GetExitPoint(attackTargetPos);
             delayTime = 3f;
+            direction = Vector2.zero;
             return;
         }
     }
 
     private void WaitAtPoint()
     {
+        direction = Vector2.zero;
         delayTime -= Time.deltaTime;
         if (delayTime <= 0f)
         {
