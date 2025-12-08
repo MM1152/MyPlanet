@@ -7,7 +7,6 @@ public class VictoryWindow : Window
 {
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI playTimeText;
-    // [SerializeField] private TextMeshProUGUI victoryText;
 
     [Header("Buttons")]
     [SerializeField] private Button replayButton;
@@ -25,7 +24,7 @@ public class VictoryWindow : Window
         base.Init(manager);
         windowId = (int)WindowIds.VictoryWindow;
 
-        if(Variable.IsTutorialActive)
+        if (Variable.IsTutorialActive)
         {
             replayButton.interactable = false;
         }
@@ -52,20 +51,22 @@ public class VictoryWindow : Window
 
     private void OnClickExitButton()
     {
-        Time.timeScale = 1f;
+        // Time.timeScale = 1f;
+        manager.Close();
         LoadingScene.sceneId = SceneIds.TitleScene;
         SceneManager.LoadScene(SceneIds.LoadingScene);
     }
 
-    public void SetVictoryUI(bool isClear)
+    public void SetVictoryUI(float timer, bool isClear,bool lastStage)
     {
-        if(isClear)
+        bool isTutorial = Variable.IsTutorialActive;
+
+        if (isClear)
         {
             victoryTitle.SetActive(true);
             victoryTextBackground.SetActive(true);
             failTitle.SetActive(false);
             failTextBackground.SetActive(false);
-            nextStageButtonObject.SetActive(true);
         }
         else
         {
@@ -73,21 +74,10 @@ public class VictoryWindow : Window
             victoryTextBackground.SetActive(false);
             failTitle.SetActive(true);
             failTextBackground.SetActive(true);
-            nextStageButtonObject.SetActive(false);    
         }
-    }
 
-    public void UpdateText(float timer, bool isClear)
-    {
-        if(isClear)
-        {
-            // victoryText.text = "Victory!";
-            playTimeText.text = string.Format("플레이 타임 | {0:F2}", timer);
-        }
-        else
-        {
-            // victoryText.text = "Fail!";
-            playTimeText.text = string.Format("플레이 타임 | {0:F2}", timer);
-        }
+        replayButton.interactable = !isTutorial;    
+        nextStageButton.interactable = (isClear && !lastStage && !isTutorial);
+        playTimeText.text = $"플레이 타임 | {(int)(timer / 60):00}분 {(int)(timer % 60):00}초";
     }
 }

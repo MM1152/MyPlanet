@@ -50,6 +50,7 @@ public class StatusWindow : Window
             if (statusViewers[i] == null) continue;
             statusViewers[i].UpdateStatus();
         }
+         Time.timeScale = 0f;
     }
 
     public override void Close()

@@ -1,37 +1,18 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-public class WaveWindow : Window
+public class WaveWindow : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI waveNumberText;
 
     [SerializeField] private TextMeshProUGUI waveTimerText;
 
-    [SerializeField] private TextMeshProUGUI waveGoldText;
+    // [SerializeField] private TextMeshProUGUI waveGoldText;
 
-    [SerializeField] private Button backSceneButton;
     [SerializeField] private SliderValue bossHealthSlider;
     [SerializeField] private TextMeshProUGUI bosscurrentHpText;
     [SerializeField] private TextMeshProUGUI bossNameText;
     [SerializeField] private TextMeshProUGUI bossTotalHpText;
-
-    public override void Init(WindowManager manager)
-    {
-        base.Init(manager);
-        windowId = (int)WindowIds.WaveWindow;
-
-        backSceneButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
-    }
-
-    public override void Open()
-    {
-        base.Open();
-    }
-
-    public override void Close()
-    {
-        base.Close();
-    }
 
     public void SetWaveText(int waveNumber)
     {
