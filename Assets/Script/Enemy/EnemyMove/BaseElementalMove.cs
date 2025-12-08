@@ -13,6 +13,8 @@ public class BaseElementalMove : IMove
     };  
     public IMove currentStrategy {get; protected set;}
 
+    public Vector2 Direction => currentStrategy?.Direction ?? Vector2.zero;
+
     public virtual void Init(Enemy enemy)
     {
         if (moveStrategies.TryGetValue(enemy.ElementType, out var strategy))

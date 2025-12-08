@@ -9,6 +9,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     protected TypeEffectiveness typeEffectiveness;
     protected Transform target;
+    protected Enemy enemy;
     protected IDamageAble targetDamageAble;
     protected Tower tower;
 
@@ -40,6 +41,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
     public virtual void SetTarget(Transform target, float noise)
     {
         this.target = target;
+        enemy = target?.GetComponent<Enemy>();
         this.noise = UnityEngine.Random.Range(-noise, noise);
         targetDamageAble = target?.GetComponent<IDamageAble>();
     }

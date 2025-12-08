@@ -10,7 +10,7 @@ public class BlackMineBullet : Bullet
     {
         base.Init(data);
         poolsId = PoolsId.BlackMineBullet;
-        duration = tower.BonusAttackRange / FullBulletSpeed;
+        duration = tower.FullAttackRange / FullBulletSpeed;
         attackTimer = 0;
         transform.localScale = new Vector3(tower.BonusExplosionRange, tower.BonusExplosionRange);
     }

@@ -53,8 +53,18 @@ public class TitleStageSelectWindow : Window
     {
         if (currentStageLayout != null)
             currentStageLayout.UpdateStageLayout(false, false, false);
+        
+        //FIX : TutorialSecne 막아놓음
+        if(idx == 1)
+        {
+            selectButton.interactable = false;
+        }
+        else
+        {
+            selectButton.interactable = true;
+        }
 
-        currentSelectStage = idx - 1;
+            currentSelectStage = idx - 1;
         currentStageLayout = stageLayouts[currentSelectStage];
         bool activeLeftArrow = currentSelectStage > 0;  
         bool activeRightArrow = currentSelectStage < stageLayouts.Count - 1;
