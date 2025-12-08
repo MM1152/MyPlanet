@@ -1,12 +1,19 @@
+using System.Data;
 using UnityEngine;
 
 public class ProjectTile : BaseAttackPrefab
 {
     [SerializeField] protected float speed = 5f;
     public float FullBulletSpeed => speed + tower.BonusBulletSpeed;
-
+    private float duration;
     protected Vector3 dir;
-    
+
+    public override void Init(Tower data)
+    {
+        base.Init(data);
+        duration = data.FullAttackRange / FullBulletSpeed;
+    }
+
     public override void SetTarget(Transform target , float noise)
     {
         base.SetTarget(target , noise);
@@ -47,13 +54,18 @@ public class ProjectTile : BaseAttackPrefab
             //Destroy(gameObject);
             return;
         }
-
         Move();
     }
 
     protected void Move()
     {
         transform.position += dir * FullBulletSpeed * Time.deltaTime;
+        duration -= Time.deltaTime;
+
+        if(duration <= 0f)
+        {
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        }
     }
 
     protected override void HitTarget(Collider2D collision)

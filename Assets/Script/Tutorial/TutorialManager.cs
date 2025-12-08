@@ -109,7 +109,8 @@ public class TutorialManager : MonoBehaviour
             currentTutorial.Update();
         }
 
-        if(currentTutorial != null && !currentTutorial.IsWaitDelay && !currentTutorial.IsSelectTarget && Managers.TouchManager.TouchType == TouchTypes.Tab && !isPlayWordAnimation)
+        bool isTab = Managers.TouchManager.TouchType == TouchTypes.Tab || Managers.TouchManager.TouchType == TouchTypes.LongTab;
+        if (currentTutorial != null && !currentTutorial.IsWaitDelay && !currentTutorial.IsSelectTarget && isTab && !isPlayWordAnimation)
         {
             ForceUpdateTutorial();
         }   

@@ -53,7 +53,8 @@ public class TitlePresetWindow : Window
 
     private void ChangeSelectPresetIndex(int changeIdx)
     {
-        if(currentSelectPresetIndex != -1)
+
+        if (currentSelectPresetIndex != -1)
         {
             presetViewers[currentSelectPresetIndex].UpdateSelectButton(false);
         }

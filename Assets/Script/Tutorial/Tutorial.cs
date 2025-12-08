@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -23,6 +24,8 @@ public class Tutorial
     [SerializeField] private bool isSelectOnTarget;
     [Header("단순히 딜레이만 주고싶을 때 켜기")]
     [SerializeField] private bool isWaitDelay;
+    [Header("버튼 조작 막고 싶을 애들 넣기 해당 튜토리얼 끝나면 켜짐")]
+    [SerializeField] private List<Selectable> disableButtons;
 
     [Header("게임 씬 용")]
     [Header("조이스틱 키고 싶을 때 켜기")]
@@ -54,6 +57,11 @@ public class Tutorial
         Variable.IsJoyStickActive = enableJoystick;
         currentDelay = delay;
         manager.SetTutorialBackGroundActive(!disAbleTutorialBackGorund);
+
+        for (int i = 0; i < disableButtons.Count; i++)
+        {
+            disableButtons[i].interactable = false;
+        }
 
         var msg = DataTableManager.StringTable.Get(stringTableId);
         if(!string.IsNullOrEmpty(msg))
@@ -87,8 +95,10 @@ public class Tutorial
 
     public void Update()
     {
-        if(delay == 0 && isSelectOnTarget && hilightPanels.Count > 0 && Managers.TouchManager.OnTargetUI(hilightPanels[0]))
+        bool isTab = Managers.TouchManager.TouchType == TouchTypes.Tab || Managers.TouchManager.TouchType == TouchTypes.LongTab;
+        if (delay == 0 && isSelectOnTarget && hilightPanels.Count > 0 && isTab && Managers.TouchManager.OnTargetUI(hilightPanels[0]))
         {
+            manager.ForceUpdateTutorial();
             isSelectOnTarget = false;
         }
 
@@ -100,7 +110,9 @@ public class Tutorial
                 manager.ForceUpdateTutorial();
             }
         }
-        else if (isSelectOnTarget && delay != 0 && highlightRect != null && Managers.TouchManager.TouchPhase == TouchPhase.Performed && RectTransformUtility.RectangleContainsScreenPoint(highlightRect, Managers.TouchManager.endTouchPosition))
+        else if (isSelectOnTarget && delay != 0 && highlightRect != null 
+            && Managers.TouchManager.TouchPhase == TouchPhase.Performed 
+            && RectTransformUtility.RectangleContainsScreenPoint(highlightRect, Managers.TouchManager.endTouchPosition))
         {
             currentDelay -= Time.unscaledDeltaTime;
             if (currentDelay <= 0f)
@@ -113,5 +125,9 @@ public class Tutorial
 
     public void Exit()
     {
+        for(int i = 0; i < disableButtons.Count; i++)
+        {
+            disableButtons[i].interactable = true;
+        }
     }
 }

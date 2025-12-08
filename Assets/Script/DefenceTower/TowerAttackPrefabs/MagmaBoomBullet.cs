@@ -13,6 +13,7 @@ public class MagmaBoomBullet : ProjectTile
         base.Init(data);
         poolsId = PoolsId.MagmaBoomBullet;
         currentDuration = duration;
+        spawnFragmentCount = data.BonusFregmentCount;
     }
 
     protected override void HitTarget(Collider2D collision)
