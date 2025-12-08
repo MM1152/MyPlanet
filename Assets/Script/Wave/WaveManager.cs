@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
 using TMPro;
 public class WaveManager : MonoBehaviour
 {
@@ -65,9 +63,6 @@ public class WaveManager : MonoBehaviour
     public int NextTutorialWaveIndex { get; set; } = 5;
 
     private float playTimeTimer;
-#if DEBUG_MODE
-    public bool UIUpdateTest = false;
-#endif
     private float terraformingPercentThreshold = 0.94f;
     public int terraformingValueCount => (int)(waves.Count * terraformingPercentThreshold) < 1 ? 1 : (int)(waves.Count * terraformingPercentThreshold);
 
@@ -80,6 +75,7 @@ public class WaveManager : MonoBehaviour
     private WaveWindow waveWindow;
 
     private int stageId = 1;
+    private bool isFinalStage => stageId >= DataTableManager.WaveTable.GetStageCount();
 
     private void Awake()
     {
@@ -92,10 +88,7 @@ public class WaveManager : MonoBehaviour
         InitPoint();
         DataInit();
         ResetWave();
-        TerraformingData.terraformingUnlockPoints.Clear();
-#if DEBUG_MODE
-        UIUpdateTest = true;
-#endif        
+        TerraformingData.terraformingUnlockPoints.Clear();    
     }
 
     private void ResetWave()
@@ -286,6 +279,7 @@ public class WaveManager : MonoBehaviour
                         var offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
                         enemy.transform.position = spawnPoint.position + offset;
                         enemy.move.Init(enemy);
+                        ShowWarring(enemy.enemyType);
                         enemy.OnTerraformingValueChanged += () =>
                         {
                             UpdateTerraformingValue();
@@ -305,17 +299,12 @@ public class WaveManager : MonoBehaviour
 
     public void UpdateTerraformingValue()
     {
-        // terraformingValueCount 범위 내의 웨이브에서만 terraforming 값 증가
-        // if (currentWaveIndex > terraformingValueCount)
-        //     return;
-
         if (waveTerraformingValue >= totalTerraformingValue)
             return;
 
         waveTerraformingValue++;
         float percent = Mathf.Min((float)waveTerraformingValue / totalTerraformingValue, 1f) * 100f;
         sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, (int)(percent));
-        Debug.Log($"Terraforming Value Updated: {waveTerraformingValue}/{totalTerraformingValue} ({percent}%)");
 
         for (int i = 0; i < TerraformingData.terrformingOpenValues.Length; i++)
         {
@@ -358,49 +347,43 @@ public class WaveManager : MonoBehaviour
             currentPoint.isStart = false;
         }
         waveElapsedTime = 0f;
+    }
 
-        var monsterId = currentWave[0].enemyId;
-        if (EnemyTypes.IsEliteMonster(monsterId))
-        {
-            warringWindow.SetActive(true);
-            warringText.text = $"<i>엘리트 보스 몬스터 출현!<i>";
-            ShowWarringWindow().Forget();
-            Time.timeScale = 0f;
-        }
-        else if (EnemyTypes.IsBossMonster(monsterId))
-        {
-            warringWindow.SetActive(true);
-            warringText.text = $"<i>보스 몬스터 출현!<i>";
-            ShowWarringWindow().Forget();
-            Time.timeScale = 0f;
-        }
+    private void ShowWarring(EnemyType enemyType)
+    {
+        if (enemyType != EnemyType.Boss && enemyType != EnemyType.EliteMonster)
+            return;
 
+        if (windowManager != null)
+        {
+            var window = windowManager.Open(WindowIds.WarringWindow);
+            if (window is WarringWindow warringWindow)
+            {
+                warringWindow.SetWarringUI(enemyType);
+            }
+        }
     }
 
     public void EndGame(bool isClear)
     {
-        // 여기에 게임 종료 로직 추가
         if (windowManager != null)
         {
             var window = windowManager.Open(WindowIds.VictoryWindow);
             if (window is VictoryWindow victoryWindow)
             {
-                victoryWindow.SetVictoryUI(isClear);
-                victoryWindow.UpdateText(playTimeTimer, isClear);
+                victoryWindow.SetVictoryUI(playTimeTimer, isClear,isFinalStage);
             }
         }
-        Time.timeScale = 0f;
-        Debug.Log("게임 종료");
     }
 
-    private async UniTask ShowWarringWindow()
-    {
-        await UniTask.Delay(1000, true, cancellationToken: this.GetCancellationTokenOnDestroy());
-        Time.timeScale = 1.0f;
-        warringWindow.SetActive(false);
-        if (waves.Count <= currentWaveIndex)
-        {
-            enemySpawnManager.ClearAllEnemy();
-        }
-    }
+    // private async UniTask ShowWarringWindow()
+    // {
+    //     await UniTask.Delay(1000, true, cancellationToken: this.GetCancellationTokenOnDestroy());
+    //     Time.timeScale = 1.0f;
+    //     warringWindow.SetActive(false);
+    //     if (waves.Count <= currentWaveIndex)
+    //     {
+    //         enemySpawnManager.ClearAllEnemy();
+    //     }
+    // }
 }

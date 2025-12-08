@@ -18,6 +18,8 @@ public enum WindowIds
     OptionUpgradeWindow = 11,
     TerraformingWindow = 12,
     WaveWindow = 13,
+    WarringWindow = 14, 
+    PauseWindow = 15,   
 }
 
 public enum PopupIds
@@ -181,6 +183,7 @@ public static class DataTableIds
     public static readonly string CrewRankTable = "CrewRankTable";
     public static readonly string TowerTable = "TowerTable";
     public static readonly string WaveTable = "WaveTable";
+    public static readonly string StageTable = "StageTable";
     public static readonly string PresetTable = "PresetTable";
     public static readonly string PlanetTable = "PlanetTable";
     public static readonly string StringTable = "StringTable";

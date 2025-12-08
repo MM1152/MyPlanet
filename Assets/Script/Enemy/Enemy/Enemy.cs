@@ -124,12 +124,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
         if (EnemyTypes.IsBossMonster(data.ID))
         {
-            this.transform.localScale = new Vector2(1f, 1f);
+            this.transform.localScale = new Vector2(2f, 2f);
             bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag)?.GetComponent<WaveWindow>();
             bossUi?.ShowBossUI(enemyData.HP);
         }
 
-        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector2(0.7f, 0.7f);
+        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector2(1.3f, 1.3f);
 #endif
         ReturnMoveAction = () =>
         {

@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Button lobbyButton;
-
     public JoyStick joyStick;
     public InputAction action;
     private bool isOnUI;
@@ -16,11 +14,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Variable.IsJoyStickActive = true;
-        lobbyButton.onClick.AddListener(() =>
-        {
-            LoadingScene.sceneId = SceneIds.TitleScene;
-            SceneManager.LoadScene(SceneIds.LoadingScene);
-        });
     }
 
     public void TouchJoyStick(InputAction.CallbackContext context)
