@@ -230,9 +230,6 @@ public class TowerManager : MonoBehaviour
 #endif
         var sumExp = Mathf.Min(totalExp += exp, levelUpExp);
 
-#if DEBUG_MODE
-        Debug.Log($"Current Exp : {sumExp} / {levelUpExp}");
-#endif
         if (sumExp >= levelUpExp)
         {
 #if DEBUG_MODE

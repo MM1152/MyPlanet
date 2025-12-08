@@ -17,6 +17,7 @@ public class TrailShotAttack : IShotStrategy
 
     private float growTime;
 
+
     public void Shot(Enemy enemy, GameObject target)
     {
         if (lineRenderer != null)
@@ -59,8 +60,9 @@ public class TrailShotAttack : IShotStrategy
             Vector2 offsetPoint = hit.point + dir * offset;
             lineRenderer.SetPosition(1, offsetPoint);
         }
+        float lineDrawDuration = enemy.fireInterval * 0.4f;
         growTime += Time.deltaTime;
-        float t = growTime / 0.4f;
+        float t = growTime / lineDrawDuration;
         lineWidth = Mathf.Lerp(endWidth, startWidth, t);
         lineRenderer.startWidth = lineWidth;
         lineRenderer.endWidth = lineWidth;

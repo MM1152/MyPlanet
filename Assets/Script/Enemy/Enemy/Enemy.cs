@@ -214,7 +214,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (move is BaseElementalMove elementalMove && elementalMove.currentStrategy is LeftRinghMove)
         {
             attackInterval += Time.deltaTime;
-            if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval - 0.4f))
+            if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval -(fireInterval * 0.4f)))
             {
                 trailShotAttack.ShotLineDraw(this, target);
             }
