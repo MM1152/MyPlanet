@@ -10,6 +10,7 @@ public class WindowManager : MonoBehaviour
     [SerializeField] private Window cureentWindow;
     [Header("Button Settings")]
     [SerializeField] private Button openStatusViewButton;
+    [SerializeField] private Button pauseViewButton;
 
     private Dictionary<int, Window> windowTable = new Dictionary<int, Window>();
     
@@ -31,6 +32,9 @@ public class WindowManager : MonoBehaviour
                 cureentWindow = windowTable[(int)startWindow];
             }
         }
+
+        if(pauseViewButton != null)
+            pauseViewButton.onClick.AddListener(() => Open(WindowIds.PauseWindow));
 
         if(openStatusViewButton != null)
             openStatusViewButton.onClick.AddListener(() => Open(WindowIds.StatusWindow));
