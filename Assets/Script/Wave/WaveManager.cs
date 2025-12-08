@@ -315,7 +315,6 @@ public class WaveManager : MonoBehaviour
         waveTerraformingValue++;
         float percent = Mathf.Min((float)waveTerraformingValue / totalTerraformingValue, 1f) * 100f;
         sliderValue.UpdateSlider(waveTerraformingValue, totalTerraformingValue, (int)(percent));
-        Debug.Log($"Terraforming Value Updated: {waveTerraformingValue}/{totalTerraformingValue} ({percent}%)");
 
         for (int i = 0; i < TerraformingData.terrformingOpenValues.Length; i++)
         {
