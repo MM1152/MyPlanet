@@ -61,4 +61,11 @@ public class TowerInfomation : MonoBehaviour
             gameObject.SetActive(true);
         }
     }
+
+    private void OnDestroy()
+    {
+        OnTab = null;
+        OnLongTab = null;
+        FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.TowerUnlockPathFormating, data.ID),OnUnlockValueChanged);
+    }
 }
