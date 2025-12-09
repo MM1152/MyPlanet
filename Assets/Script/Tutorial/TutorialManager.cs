@@ -118,7 +118,7 @@ public class TutorialManager : MonoBehaviour
     public void ForceUpdateTutorial()
     {
         currentTutorialIdx++;
-        Time.timeScale = 1f;
+        Time.timeScale = GameSpeed.ResetGameSpeed();
         tutorialHighLightImage.gameObject.SetActive(false);
         tutorialBackGround.SetActive(false);
 

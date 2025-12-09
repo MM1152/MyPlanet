@@ -9,14 +9,10 @@ public class Bullet : ProjectTile
         poolsId = PoolsId.Bullet;
     }
 
-    protected override void Update()
-    {
-        Move();
-    }
-
     protected override void HitTarget(Collider2D collision)
     {
         base.HitTarget(collision);
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);        
+        if(gameObject.activeSelf) 
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);        
     }
 }

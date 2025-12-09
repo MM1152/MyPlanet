@@ -40,7 +40,7 @@ public class PlanetInfomation : MonoBehaviour
 
     public void UpdateTexts(PlanetTable.Data data)
     {
-        if (data.ID == 1011 || data.ID == 1012)
+        if (data.ID == 1011)
             isSetting = false;
 
         var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);

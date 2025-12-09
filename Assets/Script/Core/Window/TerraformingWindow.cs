@@ -22,7 +22,7 @@ public class TerraformingWindow : Window
     public override void Close()
     {
         base.Close();
-        Time.timeScale = 1f;
+        Time.timeScale = (int)GameSpeed.CurrentSpeed;
     }
 
     public override void Init(WindowManager manager)

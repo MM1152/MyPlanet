@@ -205,7 +205,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     // 이벤트 활성화 
     private void Update()
     {
+
         stateMachine.currentState.Execute();
+
+         if(IsDead) return; 
 
         if (ability != null && ability.abilityType == AbilityType.OnUpdate && abilityAction != null && Time.time >= nextInterval)
         {
@@ -290,6 +293,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public void OnDead()
     {
+        if(enemyLineRenderer != null)
+        {
+            enemyLineRenderer.enabled = false;
+            enemyLineRenderer.positionCount = 0;
+        }
         IsDead = true;
         this.transform.localScale = new Vector3(0.35f, 0.35f, 1f);
         ReturnMoveAction = null;

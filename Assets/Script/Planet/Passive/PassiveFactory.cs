@@ -18,8 +18,9 @@ public class PassiveFacotry : BaseFactory<IPassive>
         { 10009 , new NeptunePassive() },
         { 10010 , new AmerionPassive() },
         { 10013 , new ErisPassive() },
-        {10014 , new CeresPassive() },
-        {10015 , new LumicillaPassive() }
+        { 10014 , new CeresPassive() },
+        { 10015 , new LumicillaPassive() },
+        {10012 , new SednaPassive() },
     };
     public override IPassive CreateInstance(int id)
     {
@@ -445,6 +446,39 @@ public class AmerionPassive : IPassive
     public IPassive CreateInstance()
     {
         return new AmerionPassive();
+    }
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData, PassiveSystem passiveSystem)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
+        this.passiveSystem = passiveSystem;
+        towerManager = GameObject.FindWithTag(TagIds.TowerManagerTag).GetComponent<TowerManager>();
+    }
+}
+
+public class SednaPassive : IPassive
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+    private PassiveSystem passiveSystem;
+    private TowerManager towerManager;
+
+    public void ApplyPassive(Tower tower, BasePlanet basePlanet, Enemy enemy)
+    {
+        if (tower != null && enemy != null)
+        {
+            float rand = UnityEngine.Random.Range(0f, 1f);
+            if(rand < 0.2f)
+            {
+                enemy.StatusEffect.Apply(new SlowStatusEffect(passiveData.Time , Mathf.Abs(passiveData.Val / 100f)) , enemy);
+            }
+        }
+    }
+
+    public IPassive CreateInstance()
+    {
+        return new SednaPassive();
     }
 
     public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData, PassiveSystem passiveSystem)

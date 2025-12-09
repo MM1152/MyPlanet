@@ -95,6 +95,6 @@ public class WindowManager : MonoBehaviour
         Variable.IsJoyStickActive = true;
         cureentWindow?.Close();
         cureentWindow = null;
-        Time.timeScale = 1f;
+        Time.timeScale = (int)GameSpeed.CurrentSpeed;
     }
 }
