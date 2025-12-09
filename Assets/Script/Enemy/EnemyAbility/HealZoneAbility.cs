@@ -1,20 +1,18 @@
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class HealZoneAbility : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnUpdate;
-    public int healAmount = 10;
+    public int healAmount => DataTableManager.OptionTable.GetValueDataToInt(5037);
 
     private ZoneSearch zoneSearch;
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        healAmount = enemy.enemyData.ATK;
         zoneSearch = enemy.zone;
         enemy.abilityAction += OnUpdate;
     }
-
-
 
     public override void OnUpdate()
     {
@@ -23,7 +21,7 @@ public class HealZoneAbility : BaseAbility
         foreach (var targetEnemy in zoneSearch.enemiesInZone)
         {
             if (targetEnemy == null || targetEnemy.IsDead) continue;
-
+            Debug.Log($"HealZoneAbility Healed {healAmount} HP to {targetEnemy.name}");
             targetEnemy.OnHeal(healAmount);
         }
     }

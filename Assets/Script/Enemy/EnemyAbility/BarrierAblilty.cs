@@ -5,8 +5,7 @@ public class BarrierAbility : BaseAbility
     public override AbilityType abilityType => AbilityType.OnDamage;
 
     public int maxBarrierAmount = 100;
-    public int barrierAmount = 100;
-
+    public int barrierAmount;
     private bool active = true;
 
 #if DEBUG_MODE
@@ -17,6 +16,11 @@ public class BarrierAbility : BaseAbility
     {
         get { return active; }
         set { active = value; }
+    }
+    public override void SetEnemy(Enemy enemy)
+    {
+        base.SetEnemy(enemy);
+        barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);
     }
     public override int OnDamage(int damage)
     {
@@ -39,9 +43,6 @@ public class BarrierAbility : BaseAbility
 #endif
 
         barrierAmount -= damage;
-#if DEBUG_MODE
-        Debug.Log($"BarrierAbility: Barrier remaining {barrierAmount}");
-#endif
 
         if (barrierAmount < 0)
         {
@@ -66,9 +67,6 @@ public class BarrierAbility : BaseAbility
 #endif
         if (barrierAmount > maxBarrierAmount)
         {
-#if DEBUG_MODE
-            Debug.Log("배리어 꽉참");
-#endif
             barrierAmount = maxBarrierAmount;
         }
         active = true;

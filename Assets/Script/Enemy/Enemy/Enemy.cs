@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public BaseAbility ability;
     public EnemySpawnManager enemySpawnManager;
 
-    public float TestRangeRadius;
+    // public float TestRangeRadius;
     public bool isKilledByPlayer { get; set; }
 
 #if DEBUG_MODE
@@ -76,6 +76,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public LineRenderer enemyLineRenderer;
 
+    public CircleCollider2D enemyCollider;
+     
     private WaveWindow bossUi;
     public EnemyPredictionPoisition enemyPredictionPoisition = new EnemyPredictionPoisition();
     private void Awake()
@@ -90,6 +92,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         zone = GetComponentInChildren<ZoneSearch>();
         typeEffectiveness = new TypeEffectiveness();
         enemyLineRenderer = GetComponent<LineRenderer>();
+        enemyCollider = GetComponent<CircleCollider2D>();
         enemyPredictionPoisition.Init(this);
     }
 
@@ -122,6 +125,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         zone?.Init(this);
         ResetActions();
         ability?.SetEnemy(this);
+        if(enemyLineRenderer != null)
+        {
+            enemyLineRenderer.enabled = false;
+            enemyLineRenderer.positionCount = 0;
+        }  
 #if DEBUG_MODE
 
         if (EnemyTypes.IsBossMonster(data.ID))

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-
 public static class DieManager
 {
     public static Dictionary<int, Func<BaseDie>> dieTable = new Dictionary<int, Func<BaseDie>>()

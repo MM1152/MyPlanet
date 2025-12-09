@@ -5,18 +5,28 @@ using UnityEngine;
 public class SpreadShot : IShotStrategy
 {
     private Enemy body;
-    private int baseProjectiles = 3;
-    public int numberOfProjectiles = 3;
+    private int baseProjectiles => SetProjectileCount(body);
 
+    public int numberOfProjectiles => baseProjectiles + bonus;  
+    private int bonus = 0;
     private float baseAngle = 90f;
-
     private bool bonusApplied = false;
-
     List<Vector3> spreadAngles = new List<Vector3>();
+
+    private int SetProjectileCount(Enemy body)
+    {
+        return body.enemyData.ID switch
+        {
+            3012 => DataTableManager.OptionTable.GetValueDataToInt(5034),
+            3022 => DataTableManager.OptionTable.GetValueDataToInt(5038),
+            _ => 3,
+        };
+    }
 
     public void Shot(Enemy enemy, GameObject target)
     {
         body = enemy;
+      
         Vector3 dir = (target.transform.position - enemy.transform.position).normalized;
         SetSpreadAngle(dir);
         for (int i = 0; i < numberOfProjectiles; i++)
@@ -56,14 +66,13 @@ public class SpreadShot : IShotStrategy
     public void SetBonusPellet(int bonus)
     {
         if (bonusApplied) return;
-
-        numberOfProjectiles = baseProjectiles + bonus;
+        this.bonus += bonus;    
         bonusApplied = true;
     }
 
     public void ResetPellet()
     {
-        numberOfProjectiles = baseProjectiles;
+        bonus = 0;
         bonusApplied = false;
     }
 }

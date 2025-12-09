@@ -113,7 +113,7 @@ public class UpDownMove : IMove
         enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, targetPos, step);
         if (Vector2.Distance(enemy.transform.position, targetPos) < 0.1f)
         {
-            delayTime = 3f;
+            delayTime = DataTableManager.OptionTable.GetValueDataToFloat(5018);
             isMovingUp = !isMovingUp;
             enemy.transform.position = isMovingUp ? upPoint : downPoint;
             currentPattern = UpDownPattern.Waiting;
