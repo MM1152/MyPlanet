@@ -1,5 +1,8 @@
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class TextPopup : Popup
 {
@@ -8,8 +11,14 @@ public class TextPopup : Popup
     [SerializeField] private TextMeshProUGUI redButtonText;
     [SerializeField] private TextMeshProUGUI blueButtonText;
 
+    [SerializeField] private Button redButton;
+    [SerializeField] private Button blueButton;
+
     public override bool Close()
     {
+        redButton.onClick.RemoveAllListeners();
+        blueButton.onClick.RemoveAllListeners();
+
         return base.Close();
     }
 
@@ -30,5 +39,11 @@ public class TextPopup : Popup
         this.bodyText.text = body;
         this.redButtonText.text = redButtonText;
         this.blueButtonText.text = blueButtonText;
+    }
+
+    public void SetButtonAction(UnityAction blueButtonAction = null, UnityAction redButtonAction = null)
+    {
+        redButton.onClick.AddListener(redButtonAction);
+        blueButton.onClick.AddListener(blueButtonAction);
     }
 }

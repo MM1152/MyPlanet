@@ -11,12 +11,14 @@ public class FirebaseManager
     private Auth auth = new Auth();
     private PresetData presetData = new PresetData();
     private PlanetData planetData = new PlanetData();
+    private TowerData towerData = new TowerData();
     private UserData userData;
 
     public string UserId => auth.UserId;
     public UserData UserData => userData;
     public PresetData PresetData => presetData;
     public PlanetData PlanetData => planetData;
+    public TowerData TowerData => towerData;
 
     private bool initialize = false;
 
@@ -62,6 +64,7 @@ public class FirebaseManager
             version = result.version;
             planetData.LoadAllDataAsync().Forget();
             presetData.LoadAsync().Forget();
+            towerData.LoadAsync().Forget();
 
             initialize = true;
         }
@@ -132,6 +135,7 @@ public class FirebaseManager
         userData = null;
         presetData.Release();
         planetData.Release();
+        towerData.Release();
         InitAsync().Forget();
 
         LoadingScene.sceneId = SceneIds.TitleScene;
@@ -165,6 +169,20 @@ public class UserData : JsonSerialized
     public async UniTask SaveGoodsAsync(string path , UserData userData)
     {
         var success = await FirebaseManager.Instance.Database.OverwriteJsonData<UserData>(path , userData);
+    }
+
+    public async UniTask<bool> CheckGoodsAsync(string path , int goods)
+    {
+        var data = await FirebaseManager.Instance.Database.GetDataToValue(path);
+
+        if(data.success)
+        {
+            if(goods <= int.Parse(data.data.ToString()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

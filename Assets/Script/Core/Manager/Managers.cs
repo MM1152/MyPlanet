@@ -43,7 +43,7 @@ public class Managers
         await this.objectPoolManager.Init();
 
         var loadingProgress = await Addressables.LoadAssetAsync<GameObject>("LoadingPanel1").ToUniTask();
-        this.loadingProgress = GameObject.Instantiate(loadingProgress, go.transform);
+        this.loadingProgress = GameObject.Instantiate(loadingProgress, go.transform).transform.GetChild(0).gameObject;
 
         Application.targetFrameRate = 60;
 
@@ -81,5 +81,14 @@ public class Managers
         loadingProgress.SetActive(true);
         await UniTask.WhenAll(task);
         loadingProgress.SetActive(false);
+    }
+
+    public async UniTask<T> WaitForLoadingAsync<T>(UniTask<T> task)
+    {
+        loadingProgress.SetActive(true);
+        var data = await UniTask.WhenAll(task);
+        loadingProgress.SetActive(false);
+
+        return data[0];
     }
 }   

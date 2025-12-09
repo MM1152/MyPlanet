@@ -29,4 +29,9 @@ public class ShopItemLayout : MonoBehaviour
     {
         //FIX : 추후에 막기 기능 추가
     }
+
+    private void OnDestroy()
+    {
+        OnClick = null;
+    }
 }
