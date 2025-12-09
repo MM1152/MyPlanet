@@ -29,7 +29,12 @@ public class EnemySpawnManager : MonoBehaviour
         var data = DataTableManager.EnemyTable.GetData(id);
 
         if (data != null)
-        {
+        {           
+            if (EnemyTypes.IsBossMonster(id))
+            {
+                ClearAllEnemy();
+            }
+            
             for (int i = 0; i < count; i++)
             {
                 var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy);
