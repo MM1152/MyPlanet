@@ -45,7 +45,7 @@ public class VictoryWindow : Window
 
     private void OnClickReplayButton()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = (int)GameSpeed.CurrentSpeed;;
         SceneManager.LoadScene(SceneIds.LoadingScene);
     }
 
@@ -79,5 +79,6 @@ public class VictoryWindow : Window
         replayButton.interactable = !isTutorial;    
         nextStageButton.interactable = (isClear && !lastStage && !isTutorial);
         playTimeText.text = $"플레이 타임 | {(int)(timer / 60):00}분 {(int)(timer % 60):00}초";
+        
     }
 }

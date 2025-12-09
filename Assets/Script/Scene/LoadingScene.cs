@@ -45,7 +45,7 @@ public class LoadingScene : MonoBehaviour
             return;
         }
 
-        Time.timeScale = 1f;
+        Time.timeScale = GameSpeed.ResetGameSpeed();
         Variable.IsSpawnActive = true;
         Variable.IsTutorialActive = false;
         Variable.IsJoyStickActive = true;
