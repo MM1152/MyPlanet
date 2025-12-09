@@ -15,7 +15,7 @@ public class Move : MonoBehaviour
  
     public float rotaspeed = 90f; // 초당 90도 회전
  
-   public float speed = 2f;
+   public float speed = 1f;
  
     public float selfRotaspeed = 10f;
  
@@ -26,6 +26,11 @@ public class Move : MonoBehaviour
     private float targetAngle = 0f;
  
     private bool isMoving = false;
+
+    private void Awake()
+    {
+        speed = DataTableManager.OptionTable.GetValueDataToInt(5012);
+    }
 
     private void Start()
     {

@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class ZoneSearch : MonoBehaviour
 {
-    Enemy enemy;
-    CircleCollider2D circleCollider;
+    private Enemy enemy;
+    private CircleCollider2D circleCollider;
     public List<Enemy> enemiesInZone = new List<Enemy>();
 
     private void Awake()
@@ -17,8 +17,21 @@ public class ZoneSearch : MonoBehaviour
     {
         if (circleCollider == null) return;
 
-        float scale = transform.lossyScale.x;  
-        circleCollider.radius = enemy.attackRange / scale;
+        float scale = transform.lossyScale.x;
+        circleCollider.radius = SetScaledRadius();
+    }
+
+    private float SetScaledRadius()
+    {
+        return enemy.ElementType switch
+        {
+            ElementType.Fire => DataTableManager.OptionTable.GetValueDataToFloat(5036),
+            ElementType.Ice => DataTableManager.OptionTable.GetValueDataToFloat(5036),
+            ElementType.Steel => DataTableManager.OptionTable.GetValueDataToFloat(5036),
+            ElementType.Light => DataTableManager.OptionTable.GetValueDataToFloat(5036),
+            ElementType.Dark => DataTableManager.OptionTable.GetValueDataToFloat(5036),
+            _ => 0f,
+        };
     }
 
     private void OnEnable()
@@ -30,7 +43,7 @@ public class ZoneSearch : MonoBehaviour
     {
         Enemy enemy = collision.GetComponent<Enemy>();
         if (enemy != null && !enemiesInZone.Contains(enemy))
-        {           
+        {
             enemiesInZone.Add(enemy);
         }
     }
@@ -39,7 +52,7 @@ public class ZoneSearch : MonoBehaviour
     {
         Enemy enemy = collision.GetComponent<Enemy>();
         if (enemy != null && enemiesInZone.Contains(enemy))
-        {   
+        {
             enemiesInZone.Remove(enemy);
         }
     }
