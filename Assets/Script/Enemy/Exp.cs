@@ -9,8 +9,14 @@ public class Exp : MonoBehaviour
     [SerializeField]
     private GameObject towerManager;
     private bool isWaiting = false;
+    [SerializeField]
     private float speed = 1f;
     public int exp;
+
+    private void Awake()
+    {
+        speed = DataTableManager.OptionTable.GetValueDataToInt(5013);
+    } 
 
     private void Start()
     {

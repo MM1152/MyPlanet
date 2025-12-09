@@ -111,13 +111,10 @@ MonoBehaviour:
   attackInterval: 0
   currentHP: 0
   enemySpawnManager: {fileID: 0}
-  TestRangeRadius: 1
   textSpawnManager: {fileID: 0}
   zone: {fileID: 0}
   enemyLineRenderer: {fileID: 0}
-  enemyPredictionPoisition:
-    predictionLimitTime: 1.5
-    predictionPos: {x: 0, y: 0, z: 0}
+  enemyCollider: {fileID: 0}
 --- !u!58 &-8144497166182082810
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -153,7 +150,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.35
+  m_Radius: 0.5
 --- !u!50 &2161898406493775824
 Rigidbody2D:
   serializedVersion: 5

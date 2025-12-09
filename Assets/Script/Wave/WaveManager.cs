@@ -78,6 +78,7 @@ public class WaveManager : MonoBehaviour
     private int stageId = 1;
     private bool isFinalStage => stageId >= DataTableManager.WaveTable.GetStageCount();
     private bool isGameEnded = false;
+    public bool isBossKilled = false;  
 
 #if DEBUG_MODE
     [SerializeField] private Button skipWaveButton;
@@ -241,10 +242,22 @@ public class WaveManager : MonoBehaviour
         {
             waveWindow.SetWaveTimerText(0f);
         }
+        StartSpawnWave(Time.deltaTime);
 
-        if (waveClearCount <= 0)
+        bool allSpawned = true;
+
+        foreach (var point in currentWave)
         {
-            if (isFinalWaveEnded)
+            if (point.currentSpawnEnemyCount < point.maxSpawnCount)
+            {
+                allSpawned = false;
+                break;
+            }
+        }
+
+        if (waveClearCount <= 0 && allSpawned)
+        {
+            if (isFinalWaveEnded&&isBossKilled)
             {
                 EndGame(true);
             }
@@ -253,11 +266,10 @@ public class WaveManager : MonoBehaviour
                 NextWave();
             }
         }
-        else if (!isFinalWaveEnded && waveElapsedTime >= waveDuration)
+        else if (!isFinalWaveEnded && waveElapsedTime >= waveDuration && allSpawned)
         {
             NextWave();
         }
-        StartSpawnWave(Time.deltaTime);
     }
 
     public void StartSpawnWave(float deltaTime)
@@ -283,10 +295,10 @@ public class WaveManager : MonoBehaviour
                 var minCount = Mathf.Min(spawnPoint.spawnCount, remainingToSpawn);
 
                 var enemys = enemySpawnManager.SpawnEnemy(spawnPoint.enemyId, minCount);
-                spawnPoint.currentSpawnEnemyCount += minCount;
-                totalEnemyCount += minCount;
                 if (enemys != null)
                 {
+                    spawnPoint.currentSpawnEnemyCount += minCount;
+                    totalEnemyCount += minCount;
                     foreach (var enemy in enemys)
                     {
                         var offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
@@ -300,7 +312,6 @@ public class WaveManager : MonoBehaviour
                     }
                     spawnPoint.timer = 0f;
                 }
-                return;
             }
         }
     }
@@ -421,6 +432,7 @@ public class WaveManager : MonoBehaviour
                 waveClearCount += currentPoint.maxSpawnCount;
                 currentPoint.timer = 0f;
                 currentPoint.isStart = false;
+                currentPoint.currentSpawnEnemyCount = 0;
             }
             waveElapsedTime = 0f;
             break;
