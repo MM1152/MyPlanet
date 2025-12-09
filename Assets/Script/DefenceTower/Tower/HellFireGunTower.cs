@@ -3,8 +3,6 @@ using System;
 
 public class HellFireGunTower : Tower
 {
-
-
     public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data , int slotIndex)
     {
         base.Init(tower, manager, data , slotIndex);
