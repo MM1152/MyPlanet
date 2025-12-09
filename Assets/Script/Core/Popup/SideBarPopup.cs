@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class SideBarPopup : Popup
 {
+    [Header("Buttons")]
     [SerializeField] private Button closeButton;
     [SerializeField] private Button eventButton;
     [SerializeField] private Button attendanceButton;
@@ -12,6 +13,8 @@ public class SideBarPopup : Popup
     [SerializeField] private Button optionButton;
     [SerializeField] private Button exitButton;
 
+    [Header("Reference")]
+    [SerializeField] private WindowManager windowManager;
     public override bool Close()
     {
         return base.Close();
@@ -64,7 +67,8 @@ public class SideBarPopup : Popup
 
     private void OnClickShopButton()
     {
-        //FIX
+        windowManager.Open(WindowIds.TitleShopWindow);
+        OnClickCloseButton();
     }
 
     private void OnClickOptionButton()

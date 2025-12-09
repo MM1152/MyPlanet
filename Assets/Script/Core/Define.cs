@@ -20,6 +20,7 @@ public enum WindowIds
     WaveWindow = 13,
     WarringWindow = 14, 
     PauseWindow = 15,   
+    TitleShopWindow = 16,
 }
 
 public enum PopupIds
@@ -29,6 +30,7 @@ public enum PopupIds
     UnLockPopup = 1,
     PlayGamePopup = 2,
     SideBarPopup = 3,
+    TextPopup = 4,
 }
 
 public static class SceneIds
@@ -199,6 +201,7 @@ public static class DataTableIds
     public static readonly string TerraformingTable = "TerraformingTable";
     public static readonly string ConsumableTable = "ConsumableTable";
     public static readonly string BasePlanetLevelTable = "BasePlanetLevelTable";
+    public static readonly string ShopTable = "ShopTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
