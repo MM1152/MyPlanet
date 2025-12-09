@@ -65,13 +65,15 @@ public class ProjectTile : BaseAttackPrefab
         {
             if (target == null || targetDamageAble.IsDead)
             {
-                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+                if (gameObject.activeSelf)
+                    Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
                 return;
             }
 
             if (duration < 0f)
             {
-                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+                if (gameObject.activeSelf)
+                    Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
                 return;
             }
         }

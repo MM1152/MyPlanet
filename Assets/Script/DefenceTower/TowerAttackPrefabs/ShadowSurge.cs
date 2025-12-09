@@ -46,7 +46,8 @@ public class ShadowSurge : BaseAttackPrefab
         duration -= Time.deltaTime;
         if(duration <= 0f)
         {
-            Managers.ObjectPoolManager.Despawn(PoolsId.ShadowSurge , gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(PoolsId.ShadowSurge , gameObject);
         }
 
     }

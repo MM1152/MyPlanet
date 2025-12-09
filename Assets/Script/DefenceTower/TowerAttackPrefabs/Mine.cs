@@ -36,8 +36,8 @@ public class Mine : BaseAttackPrefab
 
         if(currentDuration >= duration)
         {
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
-            //Destroy(gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
             return;
         }
 
@@ -53,7 +53,8 @@ public class Mine : BaseAttackPrefab
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
             find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
             find.StatusEffect.Apply(effect, find);
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
 
             var explosion = CreateExplosion();
             explosion.Init(tower);

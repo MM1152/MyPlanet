@@ -39,7 +39,8 @@ public class Surge : BaseAttackPrefab
 
         if(duration >= tower.BonusDuration)
         {
-            Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
         }
     }
 
