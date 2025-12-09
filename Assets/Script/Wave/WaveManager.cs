@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 public class WaveManager : MonoBehaviour
 {
     public class SpawnPoint
@@ -76,11 +77,19 @@ public class WaveManager : MonoBehaviour
 
     private int stageId = 1;
     private bool isFinalStage => stageId >= DataTableManager.WaveTable.GetStageCount();
+    private bool isGameEnded = false;
+
+#if DEBUG_MODE
+    [SerializeField] private Button skipWaveButton;
+#endif
 
     private void Awake()
     {
         stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
         enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag).GetComponent<EnemySpawnManager>();
+#if DEBUG_MODE
+        skipWaveButton?.onClick.AddListener(() => SkipToWave());
+#endif
     }
 
     private void Start()
@@ -88,7 +97,7 @@ public class WaveManager : MonoBehaviour
         InitPoint();
         DataInit();
         ResetWave();
-        TerraformingData.terraformingUnlockPoints.Clear();    
+        TerraformingData.terraformingUnlockPoints.Clear();
     }
 
     private void ResetWave()
@@ -220,8 +229,9 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        if (!Variable.IsSpawnActive) return;
-        playTimeTimer += Time.deltaTime;
+        if (!Variable.IsSpawnActive || isGameEnded) return;
+
+        playTimeTimer += Time.unscaledDeltaTime;
         if (!isFinalWaveEnded)
         {
             waveElapsedTime += Time.deltaTime;
@@ -232,8 +242,7 @@ public class WaveManager : MonoBehaviour
             waveWindow.SetWaveTimerText(0f);
         }
 
-
-        if ((!isFinalWaveEnded && waveElapsedTime >= waveDuration) || waveClearCount <= 0)
+        if (waveClearCount <= 0)
         {
             if (isFinalWaveEnded)
             {
@@ -243,6 +252,10 @@ public class WaveManager : MonoBehaviour
             {
                 NextWave();
             }
+        }
+        else if (!isFinalWaveEnded && waveElapsedTime >= waveDuration)
+        {
+            NextWave();
         }
         StartSpawnWave(Time.deltaTime);
     }
@@ -287,12 +300,7 @@ public class WaveManager : MonoBehaviour
                     }
                     spawnPoint.timer = 0f;
                 }
-                else
-                {
-#if DEBUG_MODE
-                    return;
-#endif
-                }
+                return;
             }
         }
     }
@@ -319,7 +327,7 @@ public class WaveManager : MonoBehaviour
             }
         }
     }
-    //Tutorial
+
     public void StartWave()
     {
         StartSpawnWave(Time.deltaTime);
@@ -366,24 +374,59 @@ public class WaveManager : MonoBehaviour
 
     public void EndGame(bool isClear)
     {
+        if (isGameEnded) return;
+        isGameEnded = true;
+
         if (windowManager != null)
         {
             var window = windowManager.Open(WindowIds.VictoryWindow);
+
             if (window is VictoryWindow victoryWindow)
             {
-                victoryWindow.SetVictoryUI(playTimeTimer, isClear,isFinalStage);
+                victoryWindow.SetVictoryUI(playTimeTimer, isClear, isFinalStage);
             }
         }
     }
 
-    // private async UniTask ShowWarringWindow()
-    // {
-    //     await UniTask.Delay(1000, true, cancellationToken: this.GetCancellationTokenOnDestroy());
-    //     Time.timeScale = 1.0f;
-    //     warringWindow.SetActive(false);
-    //     if (waves.Count <= currentWaveIndex)
-    //     {
-    //         enemySpawnManager.ClearAllEnemy();
-    //     }
-    // }
+#if DEBUG_MODE
+    public void SkipToWave()
+    {
+        foreach (var wave in waves)
+        {
+            if (wave.Key <= currentWaveIndex)
+                continue;
+
+            bool hasBoss = false;
+            foreach (var point in wave.Value)
+            {
+                var enemyData = DataTableManager.EnemyTable.GetData(point.enemyId);
+                if (enemyData != null && (EnemyTypes.IsBossMonster(enemyData.ID) || EnemyTypes.IsEliteMonster(enemyData.ID)))
+                {
+                    hasBoss = true;
+                    break;
+                }
+            }
+            if (!hasBoss)
+                continue;
+
+            enemySpawnManager.ClearAllEnemy();
+            waveClearCount = 0;
+
+            currentWave.Clear();
+            currentWave = wave.Value;
+            currentWaveIndex = wave.Key;
+            waveWindow.SetWaveText(currentWaveIndex);
+            foreach (var currentPoint in currentWave)
+            {
+                waveClearCount += currentPoint.maxSpawnCount;
+                currentPoint.timer = 0f;
+                currentPoint.isStart = false;
+            }
+            waveElapsedTime = 0f;
+            break;
+        }
+    }
+#endif
+
+
 }
