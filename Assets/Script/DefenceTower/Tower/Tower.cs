@@ -127,7 +127,7 @@ public abstract class Tower
         }
         finally
         {
-            typeEffectiveness.Init((ElementType)this.towerData.Attribute);
+            typeEffectiveness.Init((ElementType)this.towerData.attribute);
         }
     }
 
@@ -150,7 +150,7 @@ public abstract class Tower
         }
         finally
         {
-            typeEffectiveness.Init((ElementType)this.towerData.Attribute);
+            typeEffectiveness.Init((ElementType)this.towerData.attribute);
             SetRandomOption();
         }
     }

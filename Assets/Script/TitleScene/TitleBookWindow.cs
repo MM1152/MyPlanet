@@ -30,6 +30,9 @@ public class TitleBookWindow : Window
     [SerializeField] private GameObject planetBook;
     [SerializeField] private GameObject towerBook;
 
+    [Header("References")]
+    [SerializeField] private WindowManager windowManager;
+
     private List<PlanetInfomation> planetInfomationList = new List<PlanetInfomation>();
     private List<TowerInfomation> towerInfomationList = new List<TowerInfomation>();
     private GameObject currentOpenBook;
@@ -126,6 +129,9 @@ public class TitleBookWindow : Window
             {
                 towerInfo.gameObject.SetActive(false);
             }
+
+            towerInfo.OnTab += OnTabTowerInfomation;
+
             var path = string.Format(DataBasePaths.TowerUnlockPathFormating , towerDatas[i].ID);
             FirebaseManager.Instance.Database.AddListner(path, towerInfo.OnUnlockValueChanged);
         }
@@ -138,6 +144,16 @@ public class TitleBookWindow : Window
         if(window is TitleBookInfomationWindow bookInfoWindow)
         {
             bookInfoWindow.UpdatePlanetData(planetData);
+        }
+    }
+
+    private void OnTabTowerInfomation(TowerTable.Data towerData)
+    {
+        var window = windowManager.Open(WindowIds.TowerInfomationWindow);
+        
+        if(window is TowerInfomationWindow tower)
+        {
+            tower.SettingTowerData(towerData);
         }
     }
 }
