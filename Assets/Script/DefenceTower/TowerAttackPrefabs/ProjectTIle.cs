@@ -60,7 +60,7 @@ public class ProjectTile : BaseAttackPrefab
     
     protected virtual void Update()
     {
-        duration -= Time.deltaTime;
+        Move();
         if (gameObject.activeSelf)
         {
             if (target == null || targetDamageAble.IsDead)
@@ -68,20 +68,21 @@ public class ProjectTile : BaseAttackPrefab
                 Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
                 return;
             }
+        }
+    }
 
+    protected void Move()
+    {
+        transform.position += dir * FullBulletSpeed * Time.deltaTime;
+        duration -= Time.deltaTime;
+        if (gameObject.activeSelf)
+        {
             if (duration < 0f)
             {
                 Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
                 return;
             }
         }
-
-        Move();
-    }
-
-    protected void Move()
-    {
-        transform.position += dir * FullBulletSpeed * Time.deltaTime;
     }
 
     protected override void HitTarget(Collider2D collision)

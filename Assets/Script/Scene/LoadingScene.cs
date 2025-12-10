@@ -75,6 +75,7 @@ public class LoadingScene : MonoBehaviour
         FirebaseManager.Instance.Release();
         await FirebaseManager.Instance.PresetData.WaitForInitalizeAsync();
         await FirebaseManager.Instance.PlanetData.WaitForInitalizeAsync();
+        await FirebaseManager.Instance.TowerData.WaitForInitializeAsync();
 
         currentProgress.text = "Managers 초기화 중";
         await Managers.Instance.WaitForManagerInitalizedAsync();

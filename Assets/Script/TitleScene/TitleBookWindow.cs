@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using Firebase.Database;
 
 public class TitleBookWindow : Window
 {
@@ -101,7 +102,7 @@ public class TitleBookWindow : Window
     private void InitPlanetInfoList()
     {
         var planetDatas = DataTableManager.PlanetTable.GetAllData();
-
+        
         for(int i = 0; i < planetDatas.Count; i++)
         {
             var planetInfo = Instantiate(planetInfomation , planetInfomationRoot);
@@ -120,6 +121,13 @@ public class TitleBookWindow : Window
             var towerInfo = Instantiate(towerInfomation, towerInfomationRoot);
             towerInfomationList.Add(towerInfo);
             towerInfo.Init(towerDatas[i].ID);
+
+            if (!FirebaseManager.Instance.TowerData.Get(towerDatas[i].ID).Unlock)
+            {
+                towerInfo.gameObject.SetActive(false);
+            }
+            var path = string.Format(DataBasePaths.TowerUnlockPathFormating , towerDatas[i].ID);
+            FirebaseManager.Instance.Database.AddListner(path, towerInfo.OnUnlockValueChanged);
         }
     }
 
@@ -131,15 +139,5 @@ public class TitleBookWindow : Window
         {
             bookInfoWindow.UpdatePlanetData(planetData);
         }
-    }
-
-    private void UpdatePlanetInfoList()
-    {
-
-    }
-
-    private void UpdateTowerInfoList()
-    {
-
     }
 }

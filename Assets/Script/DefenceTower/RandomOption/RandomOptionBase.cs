@@ -10,7 +10,7 @@ public abstract class RandomOptionBase
     protected List<Tower> towers;
     protected int level = 0;
     protected int bonusValue = 0;
-    public float FullOptionValue => baseTowerData.optionValue + bonusValue;
+    public float FullOptionValue => baseTowerData.OptionValue + bonusValue;
     protected string FormatingString;
     // Deep Copy 된 대상에서 사용하기
     public virtual void Init(TowerManager towerManager, TowerTable.Data baseTowerData , RandomOptionData.Data optionData)

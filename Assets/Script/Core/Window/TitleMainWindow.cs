@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Firebase.Database;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,6 +24,8 @@ public class TitleMainWindow : Window
     {
         base.Init(manager);
         windowId = (int)WindowIds.TitleMainWindow;
+
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath, OnChangeGoldValue);
 
         selectStageButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
         userNickNameText.text = FirebaseManager.Instance.UserData.nickName;
@@ -51,4 +54,9 @@ public class TitleMainWindow : Window
     {
         base.Open();
     }
+
+    private void OnChangeGoldValue(object sender , ValueChangedEventArgs args)
+    {
+        userGold.text = args.Snapshot.Value.ToString();
+    } 
 }

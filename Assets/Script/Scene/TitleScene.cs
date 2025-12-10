@@ -1,16 +1,22 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TitleScene : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private PopupManager popupManager;
+    [SerializeField] private List<Button> sideBarButtons;
+
+    private void Start()
     {
-        
+        foreach(var bnt in sideBarButtons)
+        {
+            bnt.onClick.AddListener(OnClickSideBarButton);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnClickSideBarButton()
     {
-        
+        popupManager.Open<Popup>(PopupIds.SideBarPopup);
     }
 }
