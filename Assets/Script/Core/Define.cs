@@ -21,6 +21,7 @@ public enum WindowIds
     WarringWindow = 14, 
     PauseWindow = 15,   
     TitleShopWindow = 16,
+    TowerInfomationWindow = 17,
 }
 
 public enum PopupIds

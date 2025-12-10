@@ -38,6 +38,7 @@ public class TitleTowerPlaceEditWindow : Window
     private PresetData.Data presetData;
     private PlanetData.Data planetData;
     private int presetIndex;
+    private WindowIds prevWindow;
     private (int left, int right) prevApplyOptionSlots = (-1, -1);
 
     public override void Close()
@@ -72,7 +73,10 @@ public class TitleTowerPlaceEditWindow : Window
         var task = FirebaseManager.Instance.PresetData.Save(presetData, presetIndex);
         await Managers.Instance.WaitForLoadingAsync(task);
         saveButton.interactable = true;
-        manager.Open(WindowIds.TitlePresetWindow);
+        if (prevWindow != WindowIds.None)
+            manager.Open(prevWindow);
+        else
+            manager.Open(WindowIds.TitlePresetWindow);
     }
 
     public override void Open()
@@ -384,4 +388,8 @@ public class TitleTowerPlaceEditWindow : Window
         placeHolds[idx].SetUnLockAble(false);
     }
 
+    public void SetPrevWindow(WindowIds windowId)
+    {
+        prevWindow = windowId;
+    }
 }
