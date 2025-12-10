@@ -1,8 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Video;
+﻿using UnityEngine;
 
 public abstract class Tower
 {
@@ -27,7 +23,7 @@ public abstract class Tower
     public int BonusAttackRange { get; set; }
     public int BonusWidthSize { get; set; }
     public float BonusDuration { get; set; }
-    public int BonusCoolTime { get; set; }
+    public float BonusCoolTime { get; set; }
     public int BonusFireRate { get; set; }
     public int BonusPelletCount { get; set; }
     public int BonusFregmentRange { get; set; }
@@ -298,7 +294,7 @@ public abstract class Tower
                 BonusDuration += value;
                 break;
             case 5:
-                BonusCoolTime += (int)value;
+                BonusCoolTime += value;
                 break;
             case 6:
                 BonusFireRate += (int)value;

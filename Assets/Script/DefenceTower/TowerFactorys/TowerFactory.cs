@@ -24,6 +24,9 @@ public class TowerFactory : BaseFactory<Tower>
         { 2016,  new ShadowSurgeTowerCreator() },
         //{ 2017,  new GravityWrapTowerCreator() },
         { 23001,  new GravityFieldTowerCreator() },
+        { 23002,  new GravitySinkTowerCreator() },
+        { 23003,  new DelayFieldTowerCreator() },
+        { 23004,  new AbyssCoreTowerCreator() },
         //{ 7,  new GravityControlTowerCreator() },
         //{ 8,  new ShockWaveTowerCreator() },
     };
@@ -224,6 +227,33 @@ public class GravityFieldTowerCreator : ITowerCreateor
     public Tower CreateTower()
     {
         var tower = new GravityFieldTower();
+        return tower;
+    }
+}
+
+public class GravitySinkTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new GravitySinkTower();
+        return tower;
+    }
+}
+
+public class DelayFieldTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new DelayFieldTower();
+        return tower;
+    }
+}
+
+public class AbyssCoreTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new AbyssCoreTower();
         return tower;
     }
 }

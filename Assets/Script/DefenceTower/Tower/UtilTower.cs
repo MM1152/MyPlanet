@@ -7,7 +7,7 @@ public class UtilTower : Tower
     public TowerTable.UtilTower UtilTowerData => utiltowerData;
     protected Transform planet;
     protected Transform defenseTower;
-    private float FullDuration => utiltowerData.Duration + utiltowerData.Cooltime;
+    private float FullDuration => BonusDuration + BonusCoolTime;
     private float timer = 0f;
     
     public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
@@ -21,6 +21,8 @@ public class UtilTower : Tower
 
     public override void Update(float deltaTime)
     {
+        if (!UseAble) return;
+
         timer += deltaTime;
         if(FullDuration <= timer) 
         {
