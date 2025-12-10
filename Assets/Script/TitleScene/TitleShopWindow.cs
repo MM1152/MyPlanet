@@ -1,6 +1,10 @@
 using Cysharp.Threading.Tasks;
+using Firebase.Database;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +14,9 @@ public class TitleShopWindow : Window
     [SerializeField] private Transform towerInfomationRoot;
     [SerializeField] private PopupManager popupManager;
     [SerializeField] private Button backButton;
+    [SerializeField] private TextMeshProUGUI goldText;
+
+    private List<ShopItemLayout> itemLayouts = new List<ShopItemLayout>();
     public override void Close()
     {
         base.Close();
@@ -21,14 +28,24 @@ public class TitleShopWindow : Window
         windowId = (int)WindowIds.TitleShopWindow;
 
         var items = DataTableManager.ShopTable.GetAllData();
+        var gold = FirebaseManager.Instance.UserData.gold;
 
-        foreach(var item in items)
+        foreach (var item in items)
         {
             var itemList = Instantiate(towerInfomation, towerInfomationRoot);
             itemList.Init(item);
             itemList.OnClick += OnClickItemList;
+
+            if (item.Price > gold)
+                itemList.Disable();
+            else
+                itemList.Enable();
+
+            itemLayouts.Add(itemList);
         }
 
+        goldText.text = gold.ToString("N0");
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath , OnChangeGoldValue);
         backButton.onClick.AddListener(() => manager.Open(WindowIds.TitleMainWindow));
     }
 
@@ -88,5 +105,19 @@ public class TitleShopWindow : Window
              Debug.Log("타워 데이터 저장성공");
 #endif
         popupManager.ForceClose();
+    }
+
+    private void OnChangeGoldValue(object sender , ValueChangedEventArgs args)
+    {
+        var gold = int.Parse(args.Snapshot.Value.ToString());
+        goldText.text = $"{gold:N0}";
+
+        foreach(var layout in itemLayouts)
+        {
+            if(layout.GetPrice() > gold)
+                layout.Disable();
+            else
+                layout.Enable();
+        }
     }
 }

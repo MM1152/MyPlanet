@@ -6,10 +6,11 @@ public class ShopItemLayout : MonoBehaviour
 {
     [SerializeField] private TowerInfomation towerinfomation;
     [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private GameObject disablePanel;
 
     public event Action<ShopTable.Data> OnClick;
     private ShopTable.Data itemData;
-
+    private bool isDisabled = false;
     public void Init(ShopTable.Data itemData)
     {
         this.itemData = itemData;
@@ -19,7 +20,7 @@ public class ShopItemLayout : MonoBehaviour
 
     private void Update()
     {
-        if(Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(this.gameObject)) 
+        if(!isDisabled && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(this.gameObject)) 
         {
             OnClick?.Invoke(itemData);
         }
@@ -27,7 +28,26 @@ public class ShopItemLayout : MonoBehaviour
 
     public void Disable()
     {
-        //FIX : 추후에 막기 기능 추가
+        disablePanel.SetActive(true);
+        priceText.color = Color.red;
+        isDisabled = true;
+    }
+
+    public void Enable()
+    {
+        disablePanel.SetActive(true);
+        priceText.color = Color.white;
+        isDisabled = false;
+    }
+
+    public int GetPrice()
+    {
+        return itemData.Price;
+    }   
+
+    public int GetTowerID()
+    {
+        return itemData.Tower_ID;
     }
 
     private void OnDestroy()
