@@ -58,6 +58,23 @@ public class TowerData
 
         if(userTowerDatas.success) 
         {
+            if (FirebaseManager.Instance.ChangeVersion)
+            {
+                // 버전 변경 시 기존 데이터 초기화
+                var allTowerData = DataTableManager.TowerTable.GetAll();
+                foreach (var tower in allTowerData)
+                {
+                    if (!userTowerDatas.data.Any(x => x.TowerId == tower.ID))
+                    {
+                        Data newTowerData = new Data(tower.ID);
+                        string newPath = path + tower.ID;
+                        var sucssess = await FirebaseManager.Instance.Database.OverwriteJsonData<Data>(newPath, newTowerData);
+
+                        userTowerDatas.data.Add(newTowerData);
+                    }
+                }
+            }
+
             foreach(var data in userTowerDatas.data)
             {
                 towerDatas.Add(data.TowerId, data);

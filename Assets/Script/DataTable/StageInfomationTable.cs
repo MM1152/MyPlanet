@@ -39,6 +39,10 @@ public class StageInfomationTable : DataTable
     public Data Get(int stageIndex)
     {
         int stageId = 22000 + stageIndex;
-        return stageTable[stageId];
+        if(stageTable.ContainsKey(stageIndex))
+        {
+            return stageTable[stageId];
+        }
+        return null;
     }
 }

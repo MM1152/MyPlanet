@@ -26,7 +26,7 @@ public abstract class Tower
     public int BonusProjectileCount { get; set; }
     public int BonusAttackRange { get; set; }
     public int BonusWidthSize { get; set; }
-    public int BonusDuration { get; set; }
+    public float BonusDuration { get; set; }
     public int BonusCoolTime { get; set; }
     public int BonusFireRate { get; set; }
     public int BonusPelletCount { get; set; }
@@ -34,11 +34,13 @@ public abstract class Tower
     public int BonusFregmentCount { get; set; }
     public int BonusExplosionRange { get; set; }
     public int BonusTargetingCount { get; set; }
-    public int BonusSlowPercent { get; set; }
-    public int BonusSlowBulletSpeed { get; set; }
-    public int BonusStopTime { get; set; }
+    public float BonusSlowPercent { get; set; }
+    public float BonusSlowBulletSpeed { get; set; }
+    public float BonusStopTime { get; set; }
     public int BonuseNoise { get; set; }
     public int BonusBulletSpeed { get; set; }
+    public int BonusDroneCount { get; set; }
+    public int BonusDroneHp { get; set; }
 
     public float AttackRange => towerData.Attack_Range;
     public int SlotIndex => slotIndex;
@@ -279,42 +281,42 @@ public abstract class Tower
         CheckLevelUpVariable(var4, this.levelUpData.Val4);
     }
 
-    private void CheckLevelUpVariable(int variable, int value)
+    private void CheckLevelUpVariable(int variable, float value)
     {
         switch (variable)
         {
             case 1:
-                BonusProjectileCount += value;
+                BonusProjectileCount += (int)value;
                 break;
             case 2:
-                BonusAttackRange += value;
+                BonusAttackRange += (int)value;
                 break;
             case 3:
-                BonusWidthSize += value;
+                BonusWidthSize += (int)value;
                 break;
             case 4:
                 BonusDuration += value;
                 break;
             case 5:
-                BonusCoolTime += value;
+                BonusCoolTime += (int)value;
                 break;
             case 6:
-                BonusFireRate += value;
+                BonusFireRate += (int)value;
                 break;
             case 7:
-                BonusPelletCount += value;
+                BonusPelletCount += (int)value;
                 break;
             case 8:
-                BonusFregmentRange += value;
+                BonusFregmentRange += (int)value;
                 break;
             case 9:
-                BonusFregmentCount += value;
+                BonusFregmentCount += (int)value;
                 break;
             case 10:
-                BonusExplosionRange += value;
+                BonusExplosionRange += (int)value;
                 break;
             case 11:
-                BonusTargetingCount += value;
+                BonusTargetingCount += (int)value;
                 break;
             case 12:
                 BonusSlowPercent += value;
@@ -326,10 +328,10 @@ public abstract class Tower
                 BonusStopTime += value;
                 break;
             case 15:
-                BonuseNoise += value;
+                BonuseNoise += (int)value;
                 break;
             case 16:
-                BonusBulletSpeed += value;
+                BonusBulletSpeed += (int)value;
                 break;
         }
     }

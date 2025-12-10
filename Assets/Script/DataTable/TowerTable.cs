@@ -8,9 +8,34 @@ public class TowerTable : DataTable
 {
     private Dictionary<int, Data> towerTable = new Dictionary<int, Data>();
 
+    public class UtilTower : Data
+    {
+        public int Tower_ID { get; set; }
+        public int Tower_Name_ID { get; set; }
+        public int drone_recall { get; set; }
+        public int drone_count { get; set; }
+        public int drone_hp { get; set; }
+        public int Effect_Type { get; set; }
+        public int Target_Type { get; set; }
+        public int Range_Shape { get; set; }
+        public int range { get; set; }
+        public float Duration { get; set; }
+        public float Cooltime { get; set; }
+        public int Description { get; set; }
+
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override string Name => DataTableManager.StringTable.Get(Tower_Name_ID);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override int ID => Tower_ID;
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override PassiveTable.Data Passive => DataTableManager.PassiveTable.GetData(Effect_Type);
+    }
+
+
     public class Data
     {
-        public int ID { get; set; }
+        [Name("ID")]
+        public int id { get; set; }
         [Name("Name")]
         public int name { get; set; }
         public int Type { get; set; }
@@ -33,7 +58,9 @@ public class TowerTable : DataTable
         public int explanation { get; set; }
 
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string Name => DataTableManager.StringTable.Get(name);
+        public virtual int ID => id;
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public virtual string Name => DataTableManager.StringTable.Get(name);
         [CsvHelper.Configuration.Attributes.Ignore]
         public string AttackType => ATK_Type switch
         {
@@ -89,6 +116,8 @@ public class TowerTable : DataTable
         public float OptionValue => FirebaseManager.Instance.TowerData.GetOptionValue(ID);
         [CsvHelper.Configuration.Attributes.Ignore]
         public bool Unlock => FirebaseManager.Instance.TowerData.IsUnlocked(ID);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public virtual PassiveTable.Data Passive => null;
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -102,6 +131,18 @@ public class TowerTable : DataTable
             towerTable.Add(data.ID, data);
         }
 
+        return (filename, this as DataTable);
+    }
+
+    public async UniTask<(string, DataTable)> LoadUtilTowerAsync(string filename)
+    {
+        var path = string.Format(FormatPath, filename);
+        var textAsset = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
+        var datas = await LoadCSV<UtilTower>(textAsset.text);
+        foreach (var data in datas)
+        {
+            towerTable.Add(data.Tower_ID, data);
+        }
         return (filename, this as DataTable);
     }
 

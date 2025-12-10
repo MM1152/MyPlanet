@@ -21,11 +21,14 @@ public class PassiveTable : DataTable
         public int Explanation { get; set; }
         
         [CsvHelper.Configuration.Attributes.Ignore]
-        public int Val => DataTableManager.PlanetPassiveLevelUpTable.Get((PlanetId , FirebaseManager.Instance.PlanetData.GetOrigin(PlanetId).star)).Value;
+        public int Val => DataTableManager.PlanetPassiveLevelUpTable.Get((PlanetId , FirebaseManager.Instance.PlanetData.GetOrigin(PlanetId).star)) == null ? 
+            val : DataTableManager.PlanetPassiveLevelUpTable.Get((PlanetId, FirebaseManager.Instance.PlanetData.GetOrigin(PlanetId).star)).Value;
         [CsvHelper.Configuration.Attributes.Ignore]
-        public int Time => DataTableManager.PlanetPassiveLevelUpTable.Get((PlanetId , FirebaseManager.Instance.PlanetData.GetOrigin(PlanetId).star)).Time;
+        public int Time => DataTableManager.PlanetPassiveLevelUpTable.Get((PlanetId , FirebaseManager.Instance.PlanetData.GetOrigin(PlanetId).star)) == null ?
+            time : DataTableManager.PlanetPassiveLevelUpTable.Get((PlanetId, FirebaseManager.Instance.PlanetData.GetOrigin(PlanetId).star)).Time;
         [CsvHelper.Configuration.Attributes.Ignore]
-        public int Cool_Time => DataTableManager.PlanetPassiveLevelUpTable.Get((PlanetId , FirebaseManager.Instance.PlanetData.GetOrigin(PlanetId).star)).Cool_Time;
+        public int Cool_Time => DataTableManager.PlanetPassiveLevelUpTable.Get((PlanetId , FirebaseManager.Instance.PlanetData.GetOrigin(PlanetId).star)) == null ?
+            cool_Time : DataTableManager.PlanetPassiveLevelUpTable.Get((PlanetId, FirebaseManager.Instance.PlanetData.GetOrigin(PlanetId).star)).Cool_Time;
         [CsvHelper.Configuration.Attributes.Ignore]
         public int PlanetId => (ID % 100) + 1000;
 

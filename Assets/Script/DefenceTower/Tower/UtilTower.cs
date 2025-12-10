@@ -1,0 +1,37 @@
+using System.Threading;
+using UnityEngine;
+
+public class UtilTower : Tower
+{
+    private TowerTable.UtilTower utiltowerData;
+    public TowerTable.UtilTower UtilTowerData => utiltowerData;
+    protected Transform planet;
+    protected Transform defenseTower;
+    private float FullDuration => utiltowerData.Duration + utiltowerData.Cooltime;
+    private float timer = 0f;
+    
+    public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
+    {
+        base.Init(tower, manager, data, slotIndex);
+        utiltowerData = data as TowerTable.UtilTower;
+
+        planet = GameObject.FindWithTag(TagIds.PlayerTag).transform;
+        defenseTower = GameObject.FindWithTag(TagIds.DefenseTowerTag).transform;
+    }
+
+    public override void Update(float deltaTime)
+    {
+        timer += deltaTime;
+        if(FullDuration <= timer) 
+        {
+            timer = 0;
+            Attack();
+        }
+    }
+
+    protected override BaseAttackPrefab CreateAttackPrefab()
+    {
+        Debug.Log("상속받아서 써야함");
+        return null;
+    }
+}

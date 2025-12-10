@@ -107,8 +107,13 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         this.enemyData = data;
 
-        var percent = DataTableManager.StageInfomationTable.Get(stageId).DIFFICULTY_MULTIPLES;
-        percent = Mathf.Clamp(percent, 1, float.MaxValue);
+        var stageData = DataTableManager.StageInfomationTable.Get(stageId);
+        var percent = 1f;
+        if (stageData != null)
+        {
+            percent = stageData.DIFFICULTY_MULTIPLES;
+            percent = Mathf.Clamp(percent, 1, float.MaxValue);
+        }
 
         currentHP = (int)(enemyData.HP * percent);
         atk = (int)(enemyData.ATK * percent);

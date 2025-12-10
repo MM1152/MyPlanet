@@ -188,6 +188,7 @@ public static class DataTableIds
     public static readonly string EnemyTable = "EnemyTable";
     public static readonly string CrewRankTable = "CrewRankTable";
     public static readonly string TowerTable = "TowerTable";
+    public static readonly string UtilTowerTable = "UtilTowerTable";
     public static readonly string WaveTable = "WaveTable";
     public static readonly string StageTable = "StageTable";
     public static readonly string PresetTable = "PresetTable";

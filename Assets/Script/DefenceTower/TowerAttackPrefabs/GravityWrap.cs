@@ -4,22 +4,28 @@ public class GravityWrap : BaseAttackPrefab
 {
     protected string targetTag;
     protected Transform followTarget;
+    protected float slowSpeedPercent;
 
     protected float duration;
+    
 
     protected List<IMoveAble> moveAbles = new List<IMoveAble>();
+    private UtilTower utiltower;
     public override void Init(Tower data)
     {
         base.Init(data);
+
+        utiltower = data as UtilTower;
         poolsId = PoolsId.GravityWrap;
-        transform.localScale = new Vector3(tower.FullAttackRange , tower.FullAttackRange , 0f);
+        transform.localScale = new Vector3(utiltower.UtilTowerData.range, utiltower.UtilTowerData.range, utiltower.UtilTowerData.range);
         duration = tower.BonusDuration;
     }
 
-    public void Setting(Transform followTarget , string targetTag)
+    public void Setting(Transform followTarget , string targetTag , float slowSpeedPercent)
     {
         this.targetTag = targetTag;
         this.followTarget = followTarget;
+        this.slowSpeedPercent = slowSpeedPercent;
     }
 
     protected override void HitTarget(Collider2D collision)
@@ -46,7 +52,7 @@ public class GravityWrap : BaseAttackPrefab
             var moveAble = collision.GetComponent<IMoveAble>();
             if(moveAble != null)
             {
-                moveAble.CurrentSpeed = moveAble.BaseSpeed - (moveAble.BaseSpeed * (tower.BonusSlowBulletSpeed / 100f));
+                moveAble.CurrentSpeed = moveAble.BaseSpeed - (moveAble.BaseSpeed * (slowSpeedPercent / 100f));
                 moveAbles.Add(moveAble);
             }
         }

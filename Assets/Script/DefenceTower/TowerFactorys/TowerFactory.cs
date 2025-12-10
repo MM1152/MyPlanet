@@ -22,7 +22,8 @@ public class TowerFactory : BaseFactory<Tower>
         { 2014,  new BlackMineTowerCreator() },
         { 2015,  new SurgeTowerCreator() },
         { 2016,  new ShadowSurgeTowerCreator() },
-        { 2017,  new GravityWrapTowerCreator() },
+        //{ 2017,  new GravityWrapTowerCreator() },
+        { 23001,  new GravityFieldTowerCreator() },
         //{ 7,  new GravityControlTowerCreator() },
         //{ 8,  new ShockWaveTowerCreator() },
     };
@@ -40,6 +41,10 @@ public class TowerFactory : BaseFactory<Tower>
 
     public override Tower CreateInstance(int id)
     {
+        if(!towerCreator.ContainsKey(id))
+        {
+            return null;
+        }
         return towerCreator[id].CreateTower();
     }
 }
@@ -210,6 +215,15 @@ public class GravityWrapTowerCreator : ITowerCreateor
     public Tower CreateTower()
     {
         var tower = new GravityWarpTower();
+        return tower;
+    }
+}
+
+public class GravityFieldTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new GravityFieldTower();
         return tower;
     }
 }

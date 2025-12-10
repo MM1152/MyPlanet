@@ -59,6 +59,7 @@ public static class DataTableManager
         {
             enemyDatatable.LoadAsync(DataTableIds.EnemyTable),
             towerTable.LoadAsync(DataTableIds.TowerTable),
+            towerTable.LoadUtilTowerAsync(DataTableIds.UtilTowerTable),
             waveTable.LoadAsync(DataTableIds.WaveTable),
             planetTable.LoadAsync(DataTableIds.PlanetTable),
             stringTable.LoadAsync(DataTableIds.StringTable),

@@ -19,6 +19,8 @@ public class DebugTowerManager : TowerManager
     public override void AddTower(TowerTable.Data data, int slotIndex)
     {
         Tower instanceTower = towerFactory.CreateInstance(data.ID);
+        if (instanceTower == null) return;
+
         towers.Add(instanceTower);
         instanceTower.Init(tower, this, data, slotIndex);
         instanceTower.SetPlanetData(basePlanet.PlanetData);
