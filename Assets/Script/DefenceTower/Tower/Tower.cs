@@ -49,9 +49,9 @@ public abstract class Tower
     public GameObject TowerGameObject => tower;
     public TowerTable.Data TowerData => towerData;
     public TowerManager towerManager => manager;
-    protected Transform Target
+    public Transform Target
     {
-        set
+        protected set
         {
             target = value;
 
@@ -64,6 +64,8 @@ public abstract class Tower
                 targetDamageAble = null;
             }
         }
+
+        get => target;
     }
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     public RandomOptionData RandomOptionData => randomOptionData;
@@ -389,5 +391,10 @@ public abstract class Tower
         this.statusEffect = statusEffect;
     }
    
+    // 명왕성 용
+    public ElementType GetPlanetElement()
+    {
+        return (ElementType)DataTableManager.PlanetTable.Get(planetData.ID).Attribute;
+    }
     protected abstract BaseAttackPrefab CreateAttackPrefab();
 }

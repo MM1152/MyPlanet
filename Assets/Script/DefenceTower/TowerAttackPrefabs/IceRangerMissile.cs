@@ -26,6 +26,7 @@ public class IceRangerMissile : Missile
             fregment.SetDirNoNoise(fregmentDir.normalized);
         }
 
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        if(gameObject.activeSelf)
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
     }
 }

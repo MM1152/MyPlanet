@@ -28,6 +28,7 @@ public class FragmentBullet : ProjectTile
         var find = collision.GetComponent<IDamageAble>();
         if (find != null && find.IsDead) return;
         base.HitTarget(collision);
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        if(gameObject.activeSelf)
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
     }
 }

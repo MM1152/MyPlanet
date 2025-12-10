@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class  ConditionFactory : BaseFactory<ICondition>
 {
@@ -16,7 +17,8 @@ public class  ConditionFactory : BaseFactory<ICondition>
         {7, new AttackDarkElemetCondition() },
         {6, new AttackLightElemetCondition() },
         {5, new AttackSteelElemetCondition()  },
-        {14, new OnDamageCondition()  }
+        {14, new OnDamageCondition()  },
+        {15, new OnDamge300Condition()  }
     };
 
     public override ICondition CreateInstance(int id)
@@ -336,5 +338,42 @@ public class OnDamageCondition : ICondition
     public ICondition CreateInstance()
     {
         return new OnDamageCondition();
+    }
+}
+
+public class OnDamge300Condition : ICondition
+{
+    private PassiveTable.Data passiveData;
+    private EffectTable.Data effectData;
+
+    private int addDamage;
+    public bool CheckCondition(Tower tower, BasePlanet planet, Enemy enemy)
+    {
+        if(tower == null || enemy == null) return false;
+
+        var percent = tower.TypeEffectiveness.GetDamagePercent(enemy.ElementType);
+        addDamage += (int)(tower.CalcurateAttackDamage * percent);
+
+        Debug.Log($"누적 데미지 {addDamage}");
+        if (addDamage >= 300)
+        {
+            addDamage = 0;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public ICondition CreateInstance()
+    {
+        return new OnDamge300Condition();
+    }
+
+    public void Init(PassiveTable.Data passiveData, EffectTable.Data effectData)
+    {
+        this.passiveData = passiveData;
+        this.effectData = effectData;
     }
 }
