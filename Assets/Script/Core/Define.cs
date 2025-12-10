@@ -96,6 +96,7 @@ public enum PoolsId
     BlackMineBullet = 219,
     ShadowSurge = 220,
     GravityWrap = 221,
+    PlutoBullet = 222,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -152,6 +153,7 @@ public static class AddressableNames
         { "GravityWrap" , PoolsId.GravityWrap },
         { "SwitchDirectionBullet", PoolsId.SwitchDirectionBullet },
         { "RainBullet", PoolsId.RainBullet },   
+        { "PlutoBullet", PoolsId.PlutoBullet },   
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -202,6 +204,7 @@ public static class DataTableIds
     public static readonly string ConsumableTable = "ConsumableTable";
     public static readonly string BasePlanetLevelTable = "BasePlanetLevelTable";
     public static readonly string ShopTable = "ShopTable";
+    public static readonly string PlanetPassiveLevelUpTable = "PlanetPassiveLevelUpTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

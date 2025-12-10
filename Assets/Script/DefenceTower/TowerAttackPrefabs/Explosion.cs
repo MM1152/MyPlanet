@@ -37,7 +37,10 @@ public class Explosion : BaseAttackPrefab
 
         if (timer >= duration)
         {
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if(gameObject.activeSelf)
+            {
+               Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            }
         }
     }
 }

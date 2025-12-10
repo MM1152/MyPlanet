@@ -10,7 +10,8 @@ public class IronMine : Mine
 
     public void ForcingBoom()
     {
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        if (gameObject.activeSelf)
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
 
         var explosion = CreateExplosion();
         explosion.Init(tower);

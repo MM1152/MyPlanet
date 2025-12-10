@@ -23,7 +23,8 @@ public class LuminaSniperBullet : Bullet
             SetDir();
         else
         {
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
 
@@ -52,12 +53,14 @@ public class LuminaSniperBullet : Bullet
             }
             else
             {
-                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+                if (gameObject.activeSelf)
+                    Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
             }
         }
         else
         {
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
 

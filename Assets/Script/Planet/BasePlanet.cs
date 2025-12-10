@@ -49,6 +49,10 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     private float regenCooldown = 1f;
     private float regenTimer = 0f;
 
+    public GameObject basicPlanet;
+    public GameObject plutoPlanet;
+    public GameObject assistantPlanet;
+
     protected virtual void Awake()
     {
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag).GetComponent<TextSpawnManager>();
@@ -73,6 +77,15 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         hp = (int)(maxHp);
         healthRegenerationValue = 0f;
         isRegenerating = false;
+
+        if(planetData.ID == 1011)
+        {
+            plutoPlanet.SetActive(true);
+        }
+        else
+        {
+            basicPlanet.SetActive(true);
+        }
     }
 
     public void RepairHp(int amount)

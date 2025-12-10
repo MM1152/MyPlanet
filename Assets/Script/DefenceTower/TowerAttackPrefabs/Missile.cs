@@ -56,10 +56,10 @@ public class Missile : ProjectTile
     protected override void HitTarget(Collider2D collision)
     {
         base.HitTarget(collision);
-        Managers.ObjectPoolManager.Despawn(PoolsId.Missile, this.gameObject);
+        if (gameObject.activeSelf)
+            Managers.ObjectPoolManager.Despawn(PoolsId.Missile, this.gameObject);
         var explosion = Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);
         explosion.Init(tower);
         explosion.transform.position = this.transform.position;
-        //Destroy(gameObject);
     }
 }
