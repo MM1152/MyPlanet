@@ -27,6 +27,7 @@ public class TowerFactory : BaseFactory<Tower>
         { 23002,  new GravitySinkTowerCreator() },
         { 23003,  new DelayFieldTowerCreator() },
         { 23004,  new AbyssCoreTowerCreator() },
+        { 23005,  new DroneTowerCreator() },
         //{ 7,  new GravityControlTowerCreator() },
         //{ 8,  new ShockWaveTowerCreator() },
     };
@@ -254,6 +255,15 @@ public class AbyssCoreTowerCreator : ITowerCreateor
     public Tower CreateTower()
     {
         var tower = new AbyssCoreTower();
+        return tower;
+    }
+}
+
+public class DroneTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new DroneTower();
         return tower;
     }
 }

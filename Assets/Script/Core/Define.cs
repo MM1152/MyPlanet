@@ -98,6 +98,7 @@ public enum PoolsId
     ShadowSurge = 220,
     GravityWrap = 221,
     PlutoBullet = 222,
+    Drone = 223,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -155,6 +156,7 @@ public static class AddressableNames
         { "SwitchDirectionBullet", PoolsId.SwitchDirectionBullet },
         { "RainBullet", PoolsId.RainBullet },   
         { "PlutoBullet", PoolsId.PlutoBullet },   
+        { "Drone", PoolsId.Drone },   
     };
 
     public static PoolsId GetPoolsId(string name)

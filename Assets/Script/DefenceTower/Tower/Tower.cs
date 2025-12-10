@@ -37,6 +37,7 @@ public abstract class Tower
     public int BonusBulletSpeed { get; set; }
     public int BonusDroneCount { get; set; }
     public int BonusDroneHp { get; set; }
+    public int BonusDroneTargetedPercent { get; set; }
 
     public float AttackRange => towerData.Attack_Range;
     public int SlotIndex => slotIndex;
@@ -328,6 +329,15 @@ public abstract class Tower
                 break;
             case 16:
                 BonusBulletSpeed += (int)value;
+                break;
+            case 17:
+                BonusDroneCount += (int)value;
+                break;
+            case 18:
+                BonusDroneHp += (int)value;
+                break;
+            case 19:
+                BonusDroneTargetedPercent += (int)value;
                 break;
         }
     }

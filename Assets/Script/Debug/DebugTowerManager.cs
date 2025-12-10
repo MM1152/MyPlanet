@@ -24,6 +24,8 @@ public class DebugTowerManager : TowerManager
         towers.Add(instanceTower);
         instanceTower.Init(tower, this, data, slotIndex);
         instanceTower.SetPlanetData(basePlanet.PlanetData);
+        instanceTower.LevelUp(DataTableManager.LevelUpTable.Get(data.ID, instanceTower.Level + 1));
+
     }
 
     public override void PlaceTower(TowerTable.Data towerData)
