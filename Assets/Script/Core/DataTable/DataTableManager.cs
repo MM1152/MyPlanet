@@ -26,6 +26,7 @@ public static class DataTableManager
     public static BasePlanetLevelTable BasePlanetLevelTable => Get<BasePlanetLevelTable>(DataTableIds.BasePlanetLevelTable);
     public static ShopTable ShopTable => Get<ShopTable>(DataTableIds.ShopTable);
     public static PlanetPassiveLevelTable PlanetPassiveLevelUpTable => Get<PlanetPassiveLevelTable>(DataTableIds.PlanetPassiveLevelUpTable);
+    public static StageInfomationTable StageInfomationTable => Get<StageInfomationTable>(DataTableIds.StageInfomationTable);
 
     static DataTableManager()
     {
@@ -52,6 +53,7 @@ public static class DataTableManager
         var basePlanetLevelTable = new BasePlanetLevelTable();
         var shopTable = new ShopTable();
         var planetPassiveLevelUpTable = new PlanetPassiveLevelTable();
+        var stageInfomationTable = new StageInfomationTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -73,6 +75,7 @@ public static class DataTableManager
             basePlanetLevelTable.LoadAsync(DataTableIds.BasePlanetLevelTable),
             shopTable.LoadAsync(DataTableIds.ShopTable),
             planetPassiveLevelUpTable.LoadAsync(DataTableIds.PlanetPassiveLevelUpTable),
+            stageInfomationTable.LoadAsync(DataTableIds.StageInfomationTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

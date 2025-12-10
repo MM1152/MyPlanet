@@ -78,6 +78,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     private WaveWindow bossUi;
     public EnemyPredictionPoisition enemyPredictionPoisition = new EnemyPredictionPoisition();
+
+    private int stageId;
+
     private void Awake()
     {
         stateMachine = new StateMachine(this);
@@ -91,6 +94,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         typeEffectiveness = new TypeEffectiveness();
         enemyLineRenderer = GetComponent<LineRenderer>();
         enemyPredictionPoisition.Init(this);
+
+        stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
     }
 
     public void DebugToolsInit()
@@ -101,9 +106,13 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public void Initallized(EnemyData.Data data)
     {
         this.enemyData = data;
-        currentHP = enemyData.HP;
-        atk = enemyData.ATK;
-        speed = enemyData.Speed;
+
+        var percent = DataTableManager.StageInfomationTable.Get(stageId).DIFFICULTY_MULTIPLES;
+        percent = Mathf.Clamp(percent, 1, float.MaxValue);
+
+        currentHP = (int)(enemyData.HP * percent);
+        atk = (int)(enemyData.ATK * percent);
+        speed = enemyData.Speed * percent;
         baseRange = enemyData.Range;
         attackRange = baseRange;
 #if DEBUG_MODE

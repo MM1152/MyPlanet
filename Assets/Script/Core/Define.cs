@@ -206,6 +206,7 @@ public static class DataTableIds
     public static readonly string BasePlanetLevelTable = "BasePlanetLevelTable";
     public static readonly string ShopTable = "ShopTable";
     public static readonly string PlanetPassiveLevelUpTable = "PlanetPassiveLevelUpTable";
+    public static readonly string StageInfomationTable = "StageInfomationTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
