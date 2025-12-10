@@ -51,16 +51,18 @@ public class ProjectTile : BaseAttackPrefab
     public void SetDirWithNoise(Vector3 dir)
     {
         this.dir = dir + new Vector3(noise, 0f, 0f);
+        duration = tower.FullAttackRange / FullBulletSpeed;
     }
 
     public void SetDirNoNoise(Vector3 dir)
     {
         this.dir = dir;
+        duration = tower.FullAttackRange / FullBulletSpeed;
     }
     
     protected virtual void Update()
     {
-        duration -= Time.deltaTime;
+        Move();
         if (gameObject.activeSelf)
         {
             if (target == null || targetDamageAble.IsDead)
@@ -69,7 +71,15 @@ public class ProjectTile : BaseAttackPrefab
                     Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
                 return;
             }
+        }
+    }
 
+    protected void Move()
+    {
+        transform.position += dir * FullBulletSpeed * Time.deltaTime;
+        duration -= Time.deltaTime;
+        if (gameObject.activeSelf)
+        {
             if (duration < 0f)
             {
                 if (gameObject.activeSelf)
@@ -77,13 +87,6 @@ public class ProjectTile : BaseAttackPrefab
                 return;
             }
         }
-
-        Move();
-    }
-
-    protected void Move()
-    {
-        transform.position += dir * FullBulletSpeed * Time.deltaTime;
     }
 
     protected override void HitTarget(Collider2D collision)

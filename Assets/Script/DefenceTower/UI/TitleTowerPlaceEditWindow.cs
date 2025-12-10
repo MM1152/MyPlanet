@@ -69,7 +69,8 @@ public class TitleTowerPlaceEditWindow : Window
     private async UniTaskVoid WaitForSaveAsync()
     {
         presetData.TowerId = placeHolds.Select(x => x.TowerData != null ? x.TowerData.ID : -1).ToList();
-        await FirebaseManager.Instance.PresetData.Save(presetData, presetIndex);
+        var task = FirebaseManager.Instance.PresetData.Save(presetData, presetIndex);
+        await Managers.Instance.WaitForLoadingAsync(task);
         saveButton.interactable = true;
         manager.Open(WindowIds.TitlePresetWindow);
     }
@@ -126,6 +127,9 @@ public class TitleTowerPlaceEditWindow : Window
             towerInfo.OnTab += Place;
             towerInfo.OnLongTab += ShowInfomationTower;
 
+            var path = string.Format(DataBasePaths.TowerUnlockPathFormating, towerList[i].ID);
+            FirebaseManager.Instance.Database.AddListner(path, towerInfo.OnUnlockValueChanged);
+
             var showIndexPanel = Instantiate(this.showIndexPanel, towerInfo.transform);
             showIndexPanel.OnTab += UnPlace;
 
@@ -141,6 +145,9 @@ public class TitleTowerPlaceEditWindow : Window
             showIndexPanel.UpdatePlace(curIdx);
 
             showIndexPanels.Add(towerList[i].ID, showIndexPanel);
+
+            if (!FirebaseManager.Instance.TowerData.Get(towerList[i].ID).Unlock)
+                towerInfo.gameObject.SetActive(false);
         }
     }
 

@@ -20,6 +20,7 @@ public enum WindowIds
     WaveWindow = 13,
     WarringWindow = 14, 
     PauseWindow = 15,   
+    TitleShopWindow = 16,
 }
 
 public enum PopupIds
@@ -28,6 +29,8 @@ public enum PopupIds
     TowerInfomationPopup = 0,
     UnLockPopup = 1,
     PlayGamePopup = 2,
+    SideBarPopup = 3,
+    TextPopup = 4,
 }
 
 public static class SceneIds
@@ -93,6 +96,7 @@ public enum PoolsId
     BlackMineBullet = 219,
     ShadowSurge = 220,
     GravityWrap = 221,
+    PlutoBullet = 222,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -149,6 +153,7 @@ public static class AddressableNames
         { "GravityWrap" , PoolsId.GravityWrap },
         { "SwitchDirectionBullet", PoolsId.SwitchDirectionBullet },
         { "RainBullet", PoolsId.RainBullet },   
+        { "PlutoBullet", PoolsId.PlutoBullet },   
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -197,6 +202,9 @@ public static class DataTableIds
     public static readonly string PlanetLevelUpTable = "PlanetLevelUpTable";
     public static readonly string TerraformingTable = "TerraformingTable";
     public static readonly string ConsumableTable = "ConsumableTable";
+    public static readonly string BasePlanetLevelTable = "BasePlanetLevelTable";
+    public static readonly string ShopTable = "ShopTable";
+    public static readonly string PlanetPassiveLevelUpTable = "PlanetPassiveLevelUpTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
@@ -220,6 +228,7 @@ public static class DataBasePaths
     public static string UserPath => "users/";
     public static string PresetPath => "preset/";
     public static string PlanetPath => "planet/";
+    public static string TowerPath => "tower/";
 
     public static string GoldPath => UserPath + FirebaseManager.Instance.UserId + "/gold";
     public static string ExpPath => UserPath + FirebaseManager.Instance.UserId + "/exp";
@@ -229,6 +238,9 @@ public static class DataBasePaths
     public static string PlanetPeiceCountPathFormating => PlanetDataPathFormating + "/count";
     public static string PlanetStarCountPathFormating => PlanetDataPathFormating + "/star";
     public static string PlanetOpenSlotPathFormating => PlanetDataPathFormating + "/openSlot";
+
+    public static string TowerDataPathFormating => TowerPath + FirebaseManager.Instance.UserId + "/{0}";
+    public static string TowerUnlockPathFormating => TowerDataPathFormating + "/Unlock";
 }
 
 public static class EnemyTypes

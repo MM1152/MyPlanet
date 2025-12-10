@@ -24,5 +24,14 @@ public static class Utils
 
         return index;
     }
+
+    public static string FormatText(string text, params (string key, string value)[] replacements)
+    {
+        foreach (var (key, value) in replacements)
+        {
+            text = text.Replace($"[{key}]", value);
+        }
+        return text;
+    }
 }
 

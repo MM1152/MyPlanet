@@ -68,9 +68,9 @@ public class TowerTable : DataTable
             _ => (Color.white , Color.white)
         };
         [CsvHelper.Configuration.Attributes.Ignore]
-        public float optionValue;
+        public float OptionValue => FirebaseManager.Instance.TowerData.GetOptionValue(ID);
         [CsvHelper.Configuration.Attributes.Ignore]
-        public float FullOptionValue => optionValue;
+        public bool Unlock => FirebaseManager.Instance.TowerData.IsUnlocked(ID);
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -81,7 +81,6 @@ public class TowerTable : DataTable
 
         foreach (var data in datas)
         {
-            data.optionValue = (int)Random.Range(data.Min_Value , data.Max_Value);
             towerTable.Add(data.ID, data);
         }
 
