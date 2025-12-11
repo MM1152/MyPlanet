@@ -83,7 +83,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     private int stageId;
     private bool isPushed;
-
+    private bool isChaos;
+    private float chaosDuration;
+    private BasePlanet basePlanet;
     private CancellationTokenSource disAbleCtr;
     private void Awake()
     {
@@ -98,7 +100,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         typeEffectiveness = new TypeEffectiveness();
         enemyLineRenderer = GetComponent<LineRenderer>();
         enemyPredictionPoisition.Init(this);
-
+        basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
         stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
     }
 
@@ -127,6 +129,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #if DEBUG_MODE
         SetColor(enemyData.Attribute);
 #endif
+        isChaos = false;
         target = GameObject.FindGameObjectWithTag(TargetTag);
         stateMachine.Init(stateMachine.idleState);
         typeEffectiveness.Init(ElementType);
@@ -227,7 +230,22 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private void Update()
     {
         if (isPushed) return;
+        if (isChaos)
+        {
+            chaosDuration -= Time.deltaTime;
+            SetTarget(enemySpawnManager.GetEnemyChaose(transform.position)?.gameObject);
+            
+            if(target == null)
+            {
+                SetTarget(basePlanet.gameObject);
+            }
 
+            if(chaosDuration <= 0)
+            {
+                isChaos = false;
+                SetTarget(GameObject.FindWithTag(TagIds.PlayerTag));
+            }
+        }
         stateMachine.currentState.Execute();
 
          if(IsDead) return; 
@@ -276,6 +294,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public void SetTarget(GameObject target)
     {
         this.target = target;
+        move.Init(this);
     }
 
     public void OnDamage(int damage)
@@ -325,6 +344,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             enemyLineRenderer.enabled = false;
             enemyLineRenderer.positionCount = 0;
         }
+        isChaos = false;
         IsDead = true;
         this.transform.localScale = new Vector3(0.35f, 0.35f, 1f);
         ReturnMoveAction = null;
@@ -354,6 +374,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         attackRange = baseRange;
         bonusApplied = false;
+    }
+
+    public void SetChaos(float duration)
+    {
+        isChaos = true;
+        chaosDuration = duration;
     }
 
     public void PushEnemy(Vector3 dir, float force , float duration)

@@ -22,6 +22,8 @@ public enum WindowIds
     PauseWindow = 15,   
     TitleShopWindow = 16,
     TowerInfomationWindow = 17,
+    RandomPickUpWindow = 18,
+    TitlePickUpResultWindow = 19,
 }
 
 public enum PopupIds
@@ -32,6 +34,7 @@ public enum PopupIds
     PlayGamePopup = 2,
     SideBarPopup = 3,
     TextPopup = 4,
+    RandomOptionPopup = 5,
 }
 
 public static class SceneIds
@@ -100,6 +103,7 @@ public enum PoolsId
     PlutoBullet = 222,
     Drone = 223,
     Repulsor = 224,
+    ChaosBeacon = 225,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -159,6 +163,7 @@ public static class AddressableNames
         { "PlutoBullet", PoolsId.PlutoBullet },   
         { "Drone", PoolsId.Drone },   
         { "Repulsor", PoolsId.Repulsor },   
+        { "ChaosBeacon", PoolsId.ChaosBeacon },   
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -213,6 +218,8 @@ public static class DataTableIds
     public static readonly string ShopTable = "ShopTable";
     public static readonly string PlanetPassiveLevelUpTable = "PlanetPassiveLevelUpTable";
     public static readonly string StageInfomationTable = "StageInfomationTable";
+    public static readonly string RandomPickUpTable = "RandomPickUpTable";
+    public static readonly string ItemTable = "ItemTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
@@ -246,6 +253,7 @@ public static class DataBasePaths
     public static string PlanetPeiceCountPathFormating => PlanetDataPathFormating + "/count";
     public static string PlanetStarCountPathFormating => PlanetDataPathFormating + "/star";
     public static string PlanetOpenSlotPathFormating => PlanetDataPathFormating + "/openSlot";
+    public static string PlanetUnlockPathFormating => PlanetDataPathFormating + "/unlocked";
 
     public static string TowerDataPathFormating => TowerPath + FirebaseManager.Instance.UserId + "/{0}";
     public static string TowerUnlockPathFormating => TowerDataPathFormating + "/Unlock";

@@ -1,20 +1,17 @@
-using JetBrains.Annotations;
 using UnityEngine;
 
-public class Repulsor : BaseAttackPrefab
+public class ChaosBeacon : BaseAttackPrefab
 {
+    private float angle = 90f;
+    private float duration;
     private TowerTable.UtilTower data;
-    private new EffectTable.Data effect;
-
-    private float duration = 1f;
     public override void Init(Tower data)
     {
         base.Init(data);
         poolsId = PoolsId.Repulsor;
         this.data = data.TowerData as TowerTable.UtilTower;
-        effect = this.data.Effect;
-        duration = 1f;
-        transform.localScale = new Vector3(data.BonusAttackRange , data.BonusAttackRange , data.BonusAttackRange);
+        duration = this.data.Duration;
+        transform.localScale = new Vector3(this.data.range, this.data.range, this.data.range);
     }
 
     public void SetDir(Vector3 dir)
@@ -24,17 +21,12 @@ public class Repulsor : BaseAttackPrefab
         transform.rotation = Quaternion.Euler(0, 0, angleDeg);
     }
 
-    protected override void HitTarget(Collider2D collision)
-    {
-        return;
-    }
-
     private void Update()
     {
         duration -= Time.deltaTime;
         if (duration <= 0f)
         {
-            if(gameObject.activeSelf)
+            if (gameObject.activeSelf)
                 Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
@@ -50,15 +42,24 @@ public class Repulsor : BaseAttackPrefab
             var dir = (collision.transform.position - tower.TowerGameObject.transform.position).normalized;
             var angleRad = Mathf.Atan2(dir.y, dir.x);
             var angleDeg = angleRad * Mathf.Rad2Deg;
-
             float normalizedAngleDeg = (angleDeg + 360f) % 360f;
-            bool isInAngle = Mathf.Abs(normalizedAngleDeg - transform.rotation.eulerAngles.z) < tower.BonuseNoise / 2f;
 
-            if(isInAngle )
+            bool isInAngle = Mathf.Abs(normalizedAngleDeg - transform.rotation.eulerAngles.z) < angle / 2f;
+
+            if (isInAngle)
             {
-                float force = effect.Val;
-                enemy.PushEnemy(dir , force , 1f);
+                enemy.SetChaos(data.Duration);
             }
         }
+    }
+
+    public override void SetTarget(Transform target, float noise)
+    {
+        base.SetTarget(target, noise);
+    }
+
+    protected override void HitTarget(Collider2D collision)
+    {
+        throw new System.NotImplementedException();
     }
 }

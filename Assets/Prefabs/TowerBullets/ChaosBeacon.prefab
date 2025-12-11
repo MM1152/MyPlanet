@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 567413617129298466}
   - component: {fileID: 8051712723154666204}
   - component: {fileID: -2870926493854624173}
-  - component: {fileID: -4800808646147548141}
+  - component: {fileID: 228051802792674581}
   m_Layer: 0
-  m_Name: Repulsor
+  m_Name: ChaosBeacon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -2
+  m_SortingOrder: -3
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0.5396226, g: 0.5396226, b: 0.5396226, a: 1}
   m_FlipX: 0
@@ -126,7 +126,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &-4800808646147548141
+--- !u!114 &228051802792674581
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4389979587362728574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f9d19ea4b88d8141b7c225e34295764, type: 3}
+  m_Script: {fileID: 11500000, guid: 5bb276e4b39ae3244a12f6190a6dc897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 0}
@@ -214,7 +214,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: -2
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 0, g: 0.35854053, b: 1, a: 1}
   m_FlipX: 0

@@ -49,7 +49,12 @@ public abstract class EnemyProjectileBase : MonoBehaviour , IMoveAble
             BlockedHit(collision);
         }
 
-        if (collision.CompareTag("Player") || collision.CompareTag(TagIds.DroneTag))
+        if(collision.gameObject.transform == target)
+        {
+            HitTarget(collision);
+        }
+
+        if (collision.CompareTag(TagIds.DroneTag))
         {
             HitTarget(collision);
         }

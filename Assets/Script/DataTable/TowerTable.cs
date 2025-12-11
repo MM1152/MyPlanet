@@ -103,7 +103,7 @@ public class TowerTable : DataTable
             2 => (new Color(0x64/255f, 0xCB/255f, 0xFF/255f, 1f), new Color(0x1A/255f, 0x6C/255f, 0xA6/255f, 1f)), // 냉기 속성
             4 => (new Color(0xFF/255f, 0xCE/255f, 0x00/255f, 1f), new Color(0x87/255f, 0x7C/255f, 0x40/255f, 1f)), // 빛 속성
             5 => (new Color(0xC7/255f, 0xA3/255f, 0xFF/255f, 1f), new Color(0x5C/255f, 0x38/255f, 0x95/255f, 1f)), // 어둠 속성
-            _ => (Color.white , Color.white)
+            _ => (Color.blue , Color.blue)
         };
         [CsvHelper.Configuration.Attributes.Ignore]
         public Sprite TypeImage => DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable, Type);

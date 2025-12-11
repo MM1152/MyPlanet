@@ -32,7 +32,7 @@ public class StringTable : DataTable
     {
         if(stringTable.ContainsKey(id) == false)
         {
-            return "";
+            return "StringTable에 존재하지 않음";
         }
         return stringTable[id].String_kor;
     }

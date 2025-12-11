@@ -22,7 +22,7 @@ public class RainBullet : EnemyProjectileSimple
 
     public void SetRectLind(Enemy enemy)
     {
-        rectYMax = enemy.WaveManager.ScreenBounds.yMax + bulletBounds.extents.y + Vector2.up.y;
+        rectYMax = Utils.GetScreenBounds().yMax + bulletBounds.extents.y + Vector2.up.y;
     }
 
     public void SetDirection(Vector3 direction)

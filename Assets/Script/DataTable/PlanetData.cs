@@ -15,16 +15,17 @@ public class PlanetData
         public int level;
         public int count;
         public int star;
-
-        public bool UseAble => level != 0;
+        public bool unlocked;
+        public bool UseAble => unlocked;
         // -1 : 닫혀있음 , 0 : 열려있음
         public List<int> openSlot;
         public Data(int id)
         {
             this.id = id;
-            level = 0;
+            level = 1;
             count = 0;
             star = 0;
+            unlocked = false;
             openSlot = new List<int>();
 
             var cnt = DataTableManager.PlanetTable.Get(id).InitOpenSlotCount;
@@ -68,6 +69,8 @@ public class PlanetData
         if(success.success)
         {
             // 데이터가 있다면
+
+            // 버전이 다르다면 갱신
             if(FirebaseManager.Instance.ChangeVersion)
             {
                 Debug.Log("Update Planet Data Version : ");
@@ -111,7 +114,7 @@ public class PlanetData
         var saveData = new Data(planetId);
         if(planetId == 1001)
         {
-            saveData.level = 1;
+            saveData.unlocked = true;
         }
         var success = await FirebaseManager.Instance.Database.OverwriteJsonData(path, saveData);
 
@@ -160,6 +163,13 @@ public class PlanetData
     {
         var path = string.Format(DataBasePaths.PlanetDataPathFormating, planetId);
         planetsTable[planetId].count += amountPieceCount;
+        await FirebaseManager.Instance.Database.OverwriteJsonData(path, planetsTable[planetId]);
+    }
+
+    public async UniTask UnlockPlanetAsync(int planetId)
+    {
+        var path = string.Format(DataBasePaths.PlanetDataPathFormating, planetId);
+        planetsTable[planetId].unlocked = true;
         await FirebaseManager.Instance.Database.OverwriteJsonData(path, planetsTable[planetId]);
     }
 

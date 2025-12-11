@@ -28,7 +28,7 @@ public class TowerData
         {
             TowerId = towerId;
             OptionValue = 0f;
-            Unlock = false;
+            Unlock = true;
         }
     }
 

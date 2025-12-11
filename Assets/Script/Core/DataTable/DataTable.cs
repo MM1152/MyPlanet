@@ -20,14 +20,14 @@ public abstract class DataTable
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HeaderValidated = null,
-            MissingFieldFound = null
+            MissingFieldFound = null,
         };
 
         using (var reader = new StringReader(csvText))
         using (var csvReader = new CsvReader(reader, config))
         {
             var records = new List<T>();
-
+            
             await foreach (var data in csvReader.GetRecordsAsync<T>())
             {
                 records.Add(data);
