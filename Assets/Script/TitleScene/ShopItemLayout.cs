@@ -35,7 +35,7 @@ public class ShopItemLayout : MonoBehaviour
 
     public void Enable()
     {
-        disablePanel.SetActive(true);
+        disablePanel.SetActive(false);
         priceText.color = Color.white;
         isDisabled = false;
     }

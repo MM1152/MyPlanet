@@ -13,6 +13,7 @@ public class DebugEnemySpawnPanel : MonoBehaviour
 
     [Header("Debug ¿ë")]
     public TextMeshProUGUI idText;
+    public TMP_InputField damageInput;
     public TMP_InputField speedInput;
     public TMP_InputField hpInput;
     public TMP_InputField expInput;
@@ -37,6 +38,7 @@ public class DebugEnemySpawnPanel : MonoBehaviour
         firerateInput.onValidateInput += ValidateNumericInput;
         rangeInput.onValidateInput += ValidateNumericInput;
         bulletSpeedInput.onValidateInput += ValidateNumericInput;
+        damageInput.onValidateInput += ValidateNumericInput;
 
         speedInput.onEndEdit.AddListener((x) => UpdateEnemyData(currentEnemyData));
         hpInput.onEndEdit.AddListener((x) => UpdateEnemyData(currentEnemyData));
@@ -44,6 +46,7 @@ public class DebugEnemySpawnPanel : MonoBehaviour
         firerateInput.onEndEdit.AddListener((x) => UpdateEnemyData(currentEnemyData));
         rangeInput.onEndEdit.AddListener((x) => UpdateEnemyData(currentEnemyData));
         bulletSpeedInput.onEndEdit.AddListener((x) => UpdateEnemyData(currentEnemyData));
+        damageInput.onEndEdit.AddListener((x) => UpdateEnemyData(currentEnemyData));
 
         saveButton.onClick.AddListener(() =>
         {
@@ -63,7 +66,7 @@ public class DebugEnemySpawnPanel : MonoBehaviour
         firerateInput.text = enemyData.Fire_Rate.ToString();
         rangeInput.text = enemyData.Range.ToString();
         bulletSpeedInput.text = enemyData.Bullet_Speed.ToString();
-
+        damageInput.text = enemyData.ATK.ToString();
         this.currentEnemyData = enemyData;
     }
 
@@ -75,7 +78,7 @@ public class DebugEnemySpawnPanel : MonoBehaviour
         enemyData.Fire_Rate = int.Parse(firerateInput.text);
         enemyData.Range = float.Parse(rangeInput.text);
         enemyData.Bullet_Speed = int.Parse(bulletSpeedInput.text);
-
+        enemyData.ATK = int.Parse(damageInput.text);
     }
 
     public async UniTaskVoid SaveEnemyData()

@@ -6,6 +6,7 @@ public abstract class EnemyProjectileBase : MonoBehaviour , IMoveAble
     private Sprite sprite;
     private SpriteRenderer spriteRenderer;
     protected PoolsId poolsId;
+    public PoolsId PoolsId => poolsId;
     protected Enemy enemyData;
     public Enemy Enemy => enemyData;
     protected Transform target;
@@ -48,7 +49,12 @@ public abstract class EnemyProjectileBase : MonoBehaviour , IMoveAble
             BlockedHit(collision);
         }
 
-        if (collision.CompareTag("Player"))
+        if(collision.gameObject.transform == target)
+        {
+            HitTarget(collision);
+        }
+
+        if (collision.CompareTag(TagIds.DroneTag))
         {
             HitTarget(collision);
         }

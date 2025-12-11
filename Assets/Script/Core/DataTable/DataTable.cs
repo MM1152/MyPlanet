@@ -1,11 +1,12 @@
 ﻿using CsvHelper;
-using System.Globalization;
-using System.IO;
-using System.Collections.Generic;
+using CsvHelper.Configuration;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Linq;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 
 
 public abstract class DataTable
@@ -16,11 +17,17 @@ public abstract class DataTable
 
     public static async UniTask<List<T>> LoadCSV<T>(string csvText)
     {
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+            HeaderValidated = null,
+            MissingFieldFound = null,
+        };
+
         using (var reader = new StringReader(csvText))
-        using (var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
+        using (var csvReader = new CsvReader(reader, config))
         {
             var records = new List<T>();
-
+            
             await foreach (var data in csvReader.GetRecordsAsync<T>())
             {
                 records.Add(data);

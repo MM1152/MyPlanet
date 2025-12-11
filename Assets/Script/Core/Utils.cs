@@ -4,6 +4,18 @@ using UnityEngine.EventSystems;
 
 public static class Utils
 {
+    private static Rect screenRect;
+    static Utils()
+    {
+        var camera = Camera.main;
+        var zDistance = Mathf.Abs(camera.transform.position.z);
+
+        var bottomLeft = camera.ScreenToWorldPoint(new Vector3(0, 0, zDistance));
+        var topRight = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, zDistance));
+
+        screenRect = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+    }
+
     public static bool IsPointerOverUI(Vector2 screenPosition)
     {
         var pointerData = new PointerEventData(EventSystem.current)
@@ -32,6 +44,11 @@ public static class Utils
             text = text.Replace($"[{key}]", value);
         }
         return text;
+    }
+
+    public static Rect GetScreenBounds()
+    {
+        return screenRect;
     }
 }
 

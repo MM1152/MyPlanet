@@ -20,7 +20,7 @@ public class GravityWarpTower : Tower
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         GravityWrap gravityWrap = Managers.ObjectPoolManager.SpawnObject<GravityWrap>(PoolsId.GravityWrap);
-        gravityWrap.Setting(tower.transform, TagIds.EnemyProjectileTag);
+
         return gravityWrap;
     }
 }

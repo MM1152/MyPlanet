@@ -15,6 +15,11 @@ public class WalkState : IState
 
     public void Execute()
     {       
+        if(enemy.GetTarget() != null && Vector3.Distance(enemy.GetTarget().transform.position , enemy.transform.position) <= enemy.attackRange)
+        {
+            enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
+            return;
+        }
         enemy.move.Move(enemy);
     }
 

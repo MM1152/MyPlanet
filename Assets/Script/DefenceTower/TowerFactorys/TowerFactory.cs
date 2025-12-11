@@ -22,7 +22,15 @@ public class TowerFactory : BaseFactory<Tower>
         { 2014,  new BlackMineTowerCreator() },
         { 2015,  new SurgeTowerCreator() },
         { 2016,  new ShadowSurgeTowerCreator() },
-        { 2017,  new GravityWrapTowerCreator() },
+        //{ 2017,  new GravityWrapTowerCreator() },
+        { 23001,  new GravityFieldTowerCreator() },
+        { 23002,  new GravitySinkTowerCreator() },
+        { 23003,  new DelayFieldTowerCreator() },
+        { 23004,  new AbyssCoreTowerCreator() },
+        { 23005,  new DroneTowerCreator() },
+        { 23006,  new RepulsorTowerCreator() },
+        { 23007,  new ShockWaveTowerCreator() },
+        { 23008,  new ChaosTowerCreator() },
         //{ 7,  new GravityControlTowerCreator() },
         //{ 8,  new ShockWaveTowerCreator() },
     };
@@ -40,6 +48,10 @@ public class TowerFactory : BaseFactory<Tower>
 
     public override Tower CreateInstance(int id)
     {
+        if(!towerCreator.ContainsKey(id))
+        {
+            return null;
+        }
         return towerCreator[id].CreateTower();
     }
 }
@@ -210,6 +222,69 @@ public class GravityWrapTowerCreator : ITowerCreateor
     public Tower CreateTower()
     {
         var tower = new GravityWarpTower();
+        return tower;
+    }
+}
+
+public class GravityFieldTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new GravityFieldTower();
+        return tower;
+    }
+}
+
+public class GravitySinkTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new GravitySinkTower();
+        return tower;
+    }
+}
+
+public class DelayFieldTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new DelayFieldTower();
+        return tower;
+    }
+}
+
+public class AbyssCoreTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new AbyssCoreTower();
+        return tower;
+    }
+}
+
+public class DroneTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new DroneTower();
+        return tower;
+    }
+}
+
+public class RepulsorTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new RepulsorTower();
+        return tower;
+    }
+}
+
+public class ChaosTowerCreator : ITowerCreateor
+{
+    public Tower CreateTower()
+    {
+        var tower = new ChaosBeaconTower();
         return tower;
     }
 }

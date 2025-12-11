@@ -8,9 +8,36 @@ public class TowerTable : DataTable
 {
     private Dictionary<int, Data> towerTable = new Dictionary<int, Data>();
 
+    public class UtilTower : Data
+    {
+        public int Tower_ID { get; set; }
+        public int Tower_Name_ID { get; set; }
+        public int drone_recall { get; set; }
+        public int drone_count { get; set; }
+        public int drone_hp { get; set; }
+        public int Effect_Type { get; set; }
+        public int Target_Type { get; set; }
+        public int Range_Shape { get; set; }
+        public int range { get; set; }
+        public float Duration { get; set; }
+        public float Cooltime { get; set; }
+        public int Description { get; set; }
+
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override string Name => DataTableManager.StringTable.Get(Tower_Name_ID);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override int ID => Tower_ID;
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override EffectTable.Data Effect => DataTableManager.EffectTable.Get(Effect_Type);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override string Explanatoin => DataTableManager.StringTable.Get(Description);
+    }
+
+
     public class Data
     {
-        public int ID { get; set; }
+        [Name("ID")]
+        public int id { get; set; }
         [Name("Name")]
         public int name { get; set; }
         public int Type { get; set; }
@@ -33,7 +60,9 @@ public class TowerTable : DataTable
         public int explanation { get; set; }
 
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string Name => DataTableManager.StringTable.Get(name);
+        public virtual int ID => id;
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public virtual string Name => DataTableManager.StringTable.Get(name);
         [CsvHelper.Configuration.Attributes.Ignore]
         public string AttackType => ATK_Type switch
         {
@@ -48,7 +77,7 @@ public class TowerTable : DataTable
             _ => "정의되지 않음"
         };
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string Explanatoin => DataTableManager.StringTable.Get(explanation);
+        public virtual string Explanatoin => DataTableManager.StringTable.Get(explanation);
         [CsvHelper.Configuration.Attributes.Ignore]
         public string Buff_Explanation => string.Format(DataTableManager.StringTable.Get(buff_Explantion) , OptionValue);
         [CsvHelper.Configuration.Attributes.Ignore]
@@ -76,7 +105,7 @@ public class TowerTable : DataTable
             2 => (new Color(0x64/255f, 0xCB/255f, 0xFF/255f, 1f), new Color(0x1A/255f, 0x6C/255f, 0xA6/255f, 1f)), // 냉기 속성
             4 => (new Color(0xFF/255f, 0xCE/255f, 0x00/255f, 1f), new Color(0x87/255f, 0x7C/255f, 0x40/255f, 1f)), // 빛 속성
             5 => (new Color(0xC7/255f, 0xA3/255f, 0xFF/255f, 1f), new Color(0x5C/255f, 0x38/255f, 0x95/255f, 1f)), // 어둠 속성
-            _ => (Color.white , Color.white)
+            _ => (Color.blue , Color.blue)
         };
         [CsvHelper.Configuration.Attributes.Ignore]
         public Sprite TypeImage => DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable, Type);
@@ -89,6 +118,8 @@ public class TowerTable : DataTable
         public float OptionValue => FirebaseManager.Instance.TowerData.GetOptionValue(ID);
         [CsvHelper.Configuration.Attributes.Ignore]
         public bool Unlock => FirebaseManager.Instance.TowerData.IsUnlocked(ID);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public virtual EffectTable.Data Effect => null;
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -102,6 +133,18 @@ public class TowerTable : DataTable
             towerTable.Add(data.ID, data);
         }
 
+        return (filename, this as DataTable);
+    }
+
+    public async UniTask<(string, DataTable)> LoadUtilTowerAsync(string filename)
+    {
+        var path = string.Format(FormatPath, filename);
+        var textAsset = await Addressables.LoadAssetAsync<TextAsset>(path).ToUniTask();
+        var datas = await LoadCSV<UtilTower>(textAsset.text);
+        foreach (var data in datas)
+        {
+            towerTable.Add(data.Tower_ID, data);
+        }
         return (filename, this as DataTable);
     }
 

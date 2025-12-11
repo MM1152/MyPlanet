@@ -26,6 +26,9 @@ public static class DataTableManager
     public static BasePlanetLevelTable BasePlanetLevelTable => Get<BasePlanetLevelTable>(DataTableIds.BasePlanetLevelTable);
     public static ShopTable ShopTable => Get<ShopTable>(DataTableIds.ShopTable);
     public static PlanetPassiveLevelTable PlanetPassiveLevelUpTable => Get<PlanetPassiveLevelTable>(DataTableIds.PlanetPassiveLevelUpTable);
+    public static StageInfomationTable StageInfomationTable => Get<StageInfomationTable>(DataTableIds.StageInfomationTable);
+    public static RandomPickUpTable RandomPickUpTable => Get<RandomPickUpTable>(DataTableIds.RandomPickUpTable);
+    public static ItemTable ItemTable => Get<ItemTable>(DataTableIds.ItemTable);
 
     static DataTableManager()
     {
@@ -52,11 +55,15 @@ public static class DataTableManager
         var basePlanetLevelTable = new BasePlanetLevelTable();
         var shopTable = new ShopTable();
         var planetPassiveLevelUpTable = new PlanetPassiveLevelTable();
+        var stageInfomationTable = new StageInfomationTable();
+        var randomPickUpTable = new RandomPickUpTable();
+        var itemTable = new ItemTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
             enemyDatatable.LoadAsync(DataTableIds.EnemyTable),
             towerTable.LoadAsync(DataTableIds.TowerTable),
+            towerTable.LoadUtilTowerAsync(DataTableIds.UtilTowerTable),
             waveTable.LoadAsync(DataTableIds.WaveTable),
             planetTable.LoadAsync(DataTableIds.PlanetTable),
             stringTable.LoadAsync(DataTableIds.StringTable),
@@ -73,6 +80,9 @@ public static class DataTableManager
             basePlanetLevelTable.LoadAsync(DataTableIds.BasePlanetLevelTable),
             shopTable.LoadAsync(DataTableIds.ShopTable),
             planetPassiveLevelUpTable.LoadAsync(DataTableIds.PlanetPassiveLevelUpTable),
+            stageInfomationTable.LoadAsync(DataTableIds.StageInfomationTable),
+            randomPickUpTable.LoadAsync(DataTableIds.RandomPickUpTable),
+            itemTable.LoadAsync(DataTableIds.ItemTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

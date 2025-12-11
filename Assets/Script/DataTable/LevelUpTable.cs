@@ -9,7 +9,7 @@ using UnityEngine.AddressableAssets;
 public class LevelUpTable : DataTable
 {
     private readonly int tableId = 11000000;
-    private Dictionary<int, Data> levelUpTable = new Dictionary<int, Data>();
+    private Dictionary<(int towerId , int level), Data> levelUpTable = new Dictionary<(int towerId, int level), Data>();
     /*
         1   발사체 개수
         2	사거리
@@ -27,6 +27,8 @@ public class LevelUpTable : DataTable
         14	정지시간
         15	퍼지는 각도
         16	탄환 속도
+        17  드론 갯수
+        18  드론 체력
     */
     public class Data
     {
@@ -36,16 +38,16 @@ public class LevelUpTable : DataTable
         public int LV { get; set; }
 
         public int Var1 { get; set; }
-        public int Val1 { get; set; }
+        public float Val1 { get; set; }
 
         public int Var2 { get; set; }
-        public int Val2 { get; set; }
+        public float Val2 { get; set; }
 
         public int Var3 { get; set; }
-        public int Val3 { get; set; }
+        public float Val3 { get; set; }
 
         public int Var4 { get; set; }
-        public int Val4 { get; set; }
+        public float Val4 { get; set; }
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -57,31 +59,24 @@ public class LevelUpTable : DataTable
 
         foreach(var data in result)
         {
-            levelUpTable.Add(data.ID, data);
+            levelUpTable.Add((data.Tower_ID , data.LV), data);
         }
 
         return (filename, this);
     }
 
-    public int GetTowerIDAndLevelToId(int towerId , int level)
-    {
-        int id = tableId + towerId * 100 + level;
-        return id;
-    }
-
     public Data Get(int towerId , int level)
     {
-        int id = tableId + towerId * 100 + level;
-        if(levelUpTable.TryGetValue(id, out var data))
+        if(levelUpTable.TryGetValue((towerId , level), out var data))
         {
             return data;
         }
         return null;
     }
 
-    public Dictionary<int, Data> GetAllDataToDeepCopy()
+    public Dictionary<(int towerId, int level), Data> GetAllDataToDeepCopy()
     {
-        Dictionary<int, Data> copy = new Dictionary<int, Data>(levelUpTable);
+        Dictionary<(int towerId, int level), Data> copy = new Dictionary<(int towerId, int level), Data>(levelUpTable);
         return copy;
     }
 
@@ -107,8 +102,7 @@ public class LevelUpTable : DataTable
 #endif
             for (int i = 0; i < datas.Count; i++)
             {
-                int id = tableId + datas[i].ID * 100 + datas[i].LV;
-                levelUpTable[id] = datas[i];
+                levelUpTable[(datas[i].Tower_ID , datas[i].LV)] = datas[i];
             }
 
             return true;

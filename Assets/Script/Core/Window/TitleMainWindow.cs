@@ -11,6 +11,7 @@ public class TitleMainWindow : Window
     [SerializeField] private Button logoutButton;
     [SerializeField] private Button debugModeSceneButton;
     [SerializeField] private Button bookOpenButton;
+    [SerializeField] private Button randomPickUpButton;
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI userNickNameText;
     [SerializeField] private TextMeshProUGUI userGold;
@@ -34,7 +35,7 @@ public class TitleMainWindow : Window
         {
             FirebaseManager.Instance.Logout();
         });
-
+        randomPickUpButton.onClick.AddListener(() => manager.Open(WindowIds.RandomPickUpWindow));
 #if UNITY_EDITOR
         debugModeSceneButton.onClick.AddListener(() =>
         {

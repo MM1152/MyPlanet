@@ -37,7 +37,7 @@ public class ObjectPoolManager : MonoBehaviour
           actionOnGet: OnGetObject,
           actionOnRelease: OnReleaseObject,
           actionOnDestroy: OnDestoryObject,
-          collectionCheck: true,
+          collectionCheck: false,
           defaultCapacity: 10,
           maxSize: 1000
         );
@@ -121,7 +121,7 @@ public class ObjectPoolManager : MonoBehaviour
     private void ClearAllPools()
     {
 #if DEBUG_MODE
-        Debug.Log($"모든 풀 클리어 시작 - 총 {ObjPools.Count}개 풀");
+        Debug.Log($"모든 풀 클리어 시작 - 총 {ObjPools.Count}개 풀"); 
 #endif
         // Dictionary를 순회하면서 모든 풀 제거
         foreach (var pool in ObjPools)

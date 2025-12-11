@@ -24,7 +24,7 @@ public class DebugTowerInfomation : MonoBehaviour
     public Button saveButton;
 
     private Tower currentTower;
-    private Dictionary<int,LevelUpTable.Data> levelUpTable;
+    private Dictionary<(int towerId , int level),LevelUpTable.Data> levelUpTable;
     private readonly string[] towerStatusTitle = new string[]
     {
         "공격 속도",
@@ -143,7 +143,7 @@ public class DebugTowerInfomation : MonoBehaviour
     private void OnValueChangeToInputField(int index , float value)
     {
         if (currentTower == null) return;
-        var levelUpData = levelUpTable[DataTableManager.LevelUpTable.GetTowerIDAndLevelToId(currentTower.ID, currentTower.Level)];
+        var levelUpData = levelUpTable[(currentTower.ID, currentTower.Level)];
 
         if(index != 0 && index != 1)
         {

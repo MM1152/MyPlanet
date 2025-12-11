@@ -28,19 +28,16 @@ public class BlackMineBullet : Bullet
         return base.SetDir();
     }
 
-    //private void FixedUpdate()
-    //{
-    //    if(attackTimer >= attackInterval)
-    //    {
-    //        attackTimer = 0f;
-    //    }
-
-    //    attackTimer += Time.deltaTime;
-    //}
-
     protected override void Update()
     {
         base.Update();
+
+        if (attackTimer >= attackInterval)
+        {
+            attackTimer = 0f;
+        }
+
+        attackTimer += Time.deltaTime;
     }
 
     private void OnTriggerStay2D(Collider2D collision)

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,7 +10,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     public TypeEffectiveness typeEffectiveness;
-    private GameObject target;
+    public GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
     public WaveManager WaveManager => waveManager;
@@ -80,6 +82,13 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
      
     private WaveWindow bossUi;
     public EnemyPredictionPoisition enemyPredictionPoisition = new EnemyPredictionPoisition();
+
+    private int stageId;
+    private bool isPushed;
+    private bool isChaos;
+    private float chaosDuration;
+    private BasePlanet basePlanet;
+    private CancellationTokenSource disAbleCtr;
     private void Awake()
     {
         stateMachine = new StateMachine(this);
@@ -94,6 +103,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         enemyLineRenderer = GetComponent<LineRenderer>();
         enemyCollider = GetComponent<CircleCollider2D>();
         enemyPredictionPoisition.Init(this);
+        basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
+        stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
     }
 
     public void DebugToolsInit()
@@ -104,14 +115,24 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public void Initallized(EnemyData.Data data)
     {
         this.enemyData = data;
-        currentHP = enemyData.HP;
-        atk = enemyData.ATK;
-        speed = enemyData.Speed;
+
+        var stageData = DataTableManager.StageInfomationTable.Get(stageId);
+        var percent = 1f;
+        if (stageData != null)
+        {
+            percent = stageData.DIFFICULTY_MULTIPLES;
+            percent = Mathf.Clamp(percent, 1, float.MaxValue);
+        }
+
+        currentHP = (int)(enemyData.HP * percent);
+        atk = (int)(enemyData.ATK * percent);
+        speed = enemyData.Speed * percent;
         baseRange = enemyData.Range;
         attackRange = baseRange;
 #if DEBUG_MODE
         SetColor(enemyData.Attribute);
 #endif
+        isChaos = false;
         target = GameObject.FindGameObjectWithTag(TargetTag);
         stateMachine.Init(stateMachine.idleState);
         typeEffectiveness.Init(ElementType);
@@ -205,6 +226,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         if (!attack.isAttackColliderOn) return;
 
+
         if (collision.CompareTag(TargetTag))
         {
             isKilledByPlayer = false;
@@ -212,9 +234,28 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
         return;
     }
+
+
     // 이벤트 활성화 
     private void Update()
     {
+        if (isPushed) return;
+        if (isChaos)
+        {
+            chaosDuration -= Time.deltaTime;
+            SetTarget(enemySpawnManager.GetEnemyChaose(transform.position)?.gameObject);
+            
+            if(target == null)
+            {
+                SetTarget(basePlanet.gameObject);
+            }
+
+            if(chaosDuration <= 0)
+            {
+                isChaos = false;
+                SetTarget(GameObject.FindWithTag(TagIds.PlayerTag));
+            }
+        }
         stateMachine.currentState.Execute();
 
          if(IsDead) return; 
@@ -232,7 +273,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             {
                 trailShotAttack.ShotLineDraw(this, target);
             }
-
+            
             if (attack is EliteMonsterAttack rotatingLaserAttack && rotatingLaserAttack.GetShotStrategy(ElementType) is RotatingLaserAttack laserAttack)
             {
                 if (attackInterval >= laserAttack.rotationInterval)
@@ -258,6 +299,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public GameObject GetTarget()
     {
         return target;
+    }
+
+    public void SetTarget(GameObject target)
+    {
+        this.target = target;
+        move.Init(this);
     }
 
     public void OnDamage(int damage)
@@ -307,6 +354,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             enemyLineRenderer.enabled = false;
             enemyLineRenderer.positionCount = 0;
         }
+        isChaos = false;
         IsDead = true;
         this.transform.localScale = new Vector3(0.35f, 0.35f, 1f);
         ReturnMoveAction = null;
@@ -336,5 +384,71 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         attackRange = baseRange;
         bonusApplied = false;
+    }
+
+    public void SetChaos(float duration)
+    {
+        isChaos = true;
+        chaosDuration = duration;
+    }
+
+    public void PushEnemy(Vector3 dir, float force , float duration)
+    {
+        isPushed = true;
+
+        if(disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
+        {
+            disAbleCtr.Cancel();
+            disAbleCtr.Dispose();
+        }
+        disAbleCtr = new CancellationTokenSource();
+        PushEnemyAsync(dir , force , duration , disAbleCtr).Forget();
+    }
+    
+    private async UniTaskVoid PushEnemyAsync(Vector3 dir , float force , float duration , CancellationTokenSource ctr)
+    {
+        var speed = (dir * force).magnitude / duration;
+        try
+        {
+            while (duration > 0)
+            {
+                duration -= Time.deltaTime;
+                this.transform.position += dir * speed * Time.deltaTime;
+                if (ctr.Token.IsCancellationRequested)
+                {
+                    throw new Exception();
+                }
+                await UniTask.Yield();
+            }
+        }
+        catch (Exception)
+        {
+            Debug.Log("Push Cancelled");
+        }
+        finally
+        {
+            isPushed = false;
+        }
+
+    }
+
+    private void OnDisable()
+    {
+        if(disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
+        {
+            disAbleCtr.Cancel();
+            disAbleCtr.Dispose();
+            disAbleCtr = null;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
+        {
+            disAbleCtr.Cancel();
+            disAbleCtr.Dispose();
+            disAbleCtr = null;
+        }
     }
 }

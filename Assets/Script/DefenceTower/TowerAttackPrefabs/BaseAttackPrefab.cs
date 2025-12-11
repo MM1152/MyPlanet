@@ -12,6 +12,7 @@ public abstract class BaseAttackPrefab : MonoBehaviour
     protected Enemy enemy;
     protected IDamageAble targetDamageAble;
     protected Tower tower;
+    public Tower Tower => tower;
 
     protected float noise;
 

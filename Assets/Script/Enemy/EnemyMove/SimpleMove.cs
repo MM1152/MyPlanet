@@ -20,16 +20,18 @@ public class SimpleMove : IMove
             direction = Vector2.zero;
             return;
         }
-        enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target.transform.position, enemy.CurrentSpeed * Time.deltaTime);
         var distance = Vector3.Distance(enemy.transform.position, target.transform.position);
 
-        direction = (target.transform.position - enemy.transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-        
         if (distance <= enemy.attackRange && enemy.enemyType != EnemyType.Melee)
         {
             enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
+            return;
         }
+
+        enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, target.transform.position, enemy.CurrentSpeed * Time.deltaTime);
+        direction = (target.transform.position - enemy.transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
     }
 }
