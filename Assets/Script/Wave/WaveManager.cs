@@ -23,6 +23,7 @@ public class WaveManager : MonoBehaviour
     private Dictionary<int, List<SpawnPoint>> waves = new Dictionary<int, List<SpawnPoint>>();
     private List<SpawnPoint> currentWave = new List<SpawnPoint>();
     private List<Vector2> spawnPoints = new List<Vector2>();
+    public List<Vector2> SpawnPoints => spawnPoints;    
 
     [SerializeField]
     private SliderValue sliderValue;
@@ -175,8 +176,6 @@ public class WaveManager : MonoBehaviour
         {
             totalTerraformingValue = 0;
         }
-
-
     }
 
     private void InitScreenBounds()
@@ -211,12 +210,12 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < rightPointCount; i++)
         {
             var x = screenBounds.xMax + spawnOffset;
-            var y = screenBounds.yMin + rightInterval * (i + 1);
+            var y = screenBounds.yMax - rightInterval * (i + 1);
             spawnPoints.Add(new Vector2(x, y));
         }
         for (int i = 0; i < bottomPointCount; i++)
         {
-            var x = screenBounds.xMin + bottomInterval * (i + 1);
+            var x = screenBounds.xMax - bottomInterval * (i + 1);
             var y = screenBounds.yMin - spawnOffset;
             spawnPoints.Add(new Vector2(x, y));
         }
