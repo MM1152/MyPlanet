@@ -23,6 +23,9 @@ public static class DataTableManager
     public static PlanetLevelUpTable PlanetLevelUpTable => Get<PlanetLevelUpTable>(DataTableIds.PlanetLevelUpTable);
     public static ConsumalbeTable ConsumalbeTable => Get<ConsumalbeTable>(DataTableIds.ConsumableTable);
     public static TerraformingTable TerraformingTable => Get<TerraformingTable>(DataTableIds.TerraformingTable);
+    public static BasePlanetLevelTable BasePlanetLevelTable => Get<BasePlanetLevelTable>(DataTableIds.BasePlanetLevelTable);
+    public static ShopTable ShopTable => Get<ShopTable>(DataTableIds.ShopTable);
+    public static PlanetPassiveLevelTable PlanetPassiveLevelUpTable => Get<PlanetPassiveLevelTable>(DataTableIds.PlanetPassiveLevelUpTable);
 
     static DataTableManager()
     {
@@ -46,12 +49,15 @@ public static class DataTableManager
         var planetLevelUpTable = new PlanetLevelUpTable();
         var consumalbeTable = new ConsumalbeTable();
         var terraformingTable = new TerraformingTable();
+        var basePlanetLevelTable = new BasePlanetLevelTable();
+        var shopTable = new ShopTable();
+        var planetPassiveLevelUpTable = new PlanetPassiveLevelTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
             enemyDatatable.LoadAsync(DataTableIds.EnemyTable),
             towerTable.LoadAsync(DataTableIds.TowerTable),
-            waveTable.LoadAsync(DataTableIds.WaveTable),  
+            waveTable.LoadAsync(DataTableIds.WaveTable),
             planetTable.LoadAsync(DataTableIds.PlanetTable),
             stringTable.LoadAsync(DataTableIds.StringTable),
             skillTable.LoadAsync(DataTableIds.PassiveTable),
@@ -64,6 +70,9 @@ public static class DataTableManager
             planetLevelUpTable.LoadAsync(DataTableIds.PlanetLevelUpTable),
             consumalbeTable.LoadAsync(DataTableIds.ConsumableTable),
             terraformingTable.LoadAsync(DataTableIds.TerraformingTable),
+            basePlanetLevelTable.LoadAsync(DataTableIds.BasePlanetLevelTable),
+            shopTable.LoadAsync(DataTableIds.ShopTable),
+            planetPassiveLevelUpTable.LoadAsync(DataTableIds.PlanetPassiveLevelUpTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

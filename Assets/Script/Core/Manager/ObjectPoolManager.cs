@@ -37,7 +37,7 @@ public class ObjectPoolManager : MonoBehaviour
           actionOnGet: OnGetObject,
           actionOnRelease: OnReleaseObject,
           actionOnDestroy: OnDestoryObject,
-          collectionCheck: false,
+          collectionCheck: true,
           defaultCapacity: 10,
           maxSize: 1000
         );
@@ -80,7 +80,7 @@ public class ObjectPoolManager : MonoBehaviour
 #endif
             return default;
         }
-
+       
         GameObject obj = ObjPools[id].Get();
         if (obj != null)
         {

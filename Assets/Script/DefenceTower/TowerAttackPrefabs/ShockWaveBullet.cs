@@ -37,7 +37,8 @@ public class ShockWaveBullet : BaseAttackPrefab
         var shockWave = Managers.ObjectPoolManager.SpawnObject<ShockWave>(PoolsId.ShockWave);
         shockWave.transform.position = transform.position;
         shockWave.Init(tower);
-        Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
+        if (gameObject.activeSelf)
+            Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
     }
 
     protected override void HitTarget(Collider2D collision)

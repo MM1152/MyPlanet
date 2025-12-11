@@ -40,9 +40,6 @@ public class PlanetInfomation : MonoBehaviour
 
     public void UpdateTexts(PlanetTable.Data data)
     {
-        if (data.ID == 1011 || data.ID == 1012)
-            isSetting = false;
-
         var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
         var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
         FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangedStar);

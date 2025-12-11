@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Firebase.Database;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +25,7 @@ public class TowerInfomation : MonoBehaviour
         data = DataTableManager.TowerTable.Get(towerId);
         towerNameText.text = data.Name; 
         typeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable , data.Type);
-        effectiveImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable , data.Attribute);
+        effectiveImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable , data.attribute);
 
         backgroundImage.color = data.AttributeToColor.backGroundColor;
         outlineImage.color = data.AttributeToColor.outlineColor;
@@ -50,5 +51,21 @@ public class TowerInfomation : MonoBehaviour
 
         if (Managers.TouchManager.TouchType == TouchTypes.None)
             isPressed = false;
+    }
+
+    public void OnUnlockValueChanged(object sender, ValueChangedEventArgs args)
+    {
+        var result = bool.Parse(args.Snapshot.Value.ToString());
+        if (result)
+        {
+            gameObject.SetActive(true);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        OnTab = null;
+        OnLongTab = null;
+        FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.TowerUnlockPathFormating, data.ID),OnUnlockValueChanged);
     }
 }

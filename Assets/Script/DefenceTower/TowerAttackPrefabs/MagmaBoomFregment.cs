@@ -30,7 +30,6 @@ public class MagmaBoomFregment : FragmentBullet
 
     protected override void Update()
     {
-        // 사거리 / 스피드 = 시간
         moveTimer -= Time.deltaTime;
         if(moveTimer > 0f)
         {
@@ -44,7 +43,8 @@ public class MagmaBoomFregment : FragmentBullet
                 var explosion = Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);
                 explosion.transform.position = this.transform.position;
                 explosion.Init(tower);
-                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+                if (gameObject.activeSelf)
+                    Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
             }
         }
         else
@@ -52,7 +52,8 @@ public class MagmaBoomFregment : FragmentBullet
             var explosion = Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);
             explosion.transform.position = this.transform.position;
             explosion.Init(tower);
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
 }

@@ -22,20 +22,20 @@ public class HelperManager : MonoBehaviour
     private float curInterval;
     private async UniTaskVoid Start()
     {
-        if (Variable.IsTutorialActive) return;
-        await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex == 1 , cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
-        await GetRandomUserData();
-        if(userDatas != null && userDatas.Count > 2)
-        {
-            for(int i = 0; i < spawnHelperCount; i++) 
-            {
-                var rand = UnityEngine.Random.Range(0, userDatas.Count);
-                var helper = Instantiate(this.helper);
-                helper.Init(userDatas[rand], this);
-                helpers.Add(helper);
-            }
-            SpawnHelpers().Forget();
-        }
+        //if (Variable.IsTutorialActive) return;
+        //await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex == 1 , cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
+        //await GetRandomUserData();
+        //if(userDatas != null && userDatas.Count > 2)
+        //{
+        //    for(int i = 0; i < spawnHelperCount; i++) 
+        //    {
+        //        var rand = UnityEngine.Random.Range(0, userDatas.Count);
+        //        var helper = Instantiate(this.helper);
+        //        helper.Init(userDatas[rand], this);
+        //        helpers.Add(helper);
+        //    }
+        //    SpawnHelpers().Forget();
+        //}
     }
 
     private async UniTask GetRandomUserData()

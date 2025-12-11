@@ -9,7 +9,9 @@ public class IceRangerMissile : Missile
     }
     protected override void HitTarget(Collider2D collision)
     {
-        base.HitTarget(collision);
+        var explosion = Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);
+        explosion.Init(tower);
+        explosion.transform.position = this.transform.position;
 
         var dir = this.dir;
         float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -26,6 +28,7 @@ public class IceRangerMissile : Missile
             fregment.SetDirNoNoise(fregmentDir.normalized);
         }
 
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        if(gameObject.activeSelf)
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
     }
 }

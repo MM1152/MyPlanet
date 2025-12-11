@@ -21,6 +21,8 @@ public class PresetViewer : MonoBehaviour
     private Action<int> OnChangeIndex;
     private int index;
     
+    public WindowIds CurrentWindowId { get; set; }
+
     public void Init(PresetData.Data presetData , int index , WindowManager manager , Action<int> OnChangeIndex)
     {
         this.presetData = presetData;
@@ -35,6 +37,10 @@ public class PresetViewer : MonoBehaviour
             {
                 var presetData = FirebaseManager.Instance.PresetData.Get(index);
                 planetWindow.SetPresetData(presetData , index);
+                if(CurrentWindowId != WindowIds.None)
+                {
+                    planetWindow.SetPrevWindow(CurrentWindowId);
+                }
             }
         });
 

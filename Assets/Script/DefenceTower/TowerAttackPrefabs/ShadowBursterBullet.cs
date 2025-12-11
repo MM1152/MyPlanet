@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ShadowBursterBullet : Bullet
 {
-    private float duration = 0.3f;
     private float timer;
 
     public override void Init(Tower data)
@@ -45,7 +44,8 @@ public class ShadowBursterBullet : Bullet
                 Vector3 dir = new Vector3(Mathf.Cos(radAngle) , Mathf.Sin(radAngle));
                 fregment.SetDirWithNoise(dir);
             }
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
             timer = 0;
         }
     }

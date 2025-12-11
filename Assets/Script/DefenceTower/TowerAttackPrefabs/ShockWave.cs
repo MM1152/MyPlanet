@@ -19,7 +19,8 @@ public class ShockWave : BaseAttackPrefab
         duration -= Time.deltaTime;
         if (duration <= 0) 
         {
-            Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
         }
     }
 

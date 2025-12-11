@@ -17,7 +17,8 @@ public class TowerTable : DataTable
         public int ATK_Type { get; set; }
         public int Option_type { get; set; }
         public int Option_Range { get; set; }
-        public int Attribute { get; set; }
+        [Name("Attribute")]
+        public int attribute { get; set; }
         public int ATK { get; set; }
         public float Fire_Rate { get; set; }
         public string Image_path { get; set; }
@@ -49,7 +50,7 @@ public class TowerTable : DataTable
         [CsvHelper.Configuration.Attributes.Ignore]
         public string Explanatoin => DataTableManager.StringTable.Get(explanation);
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string Buff_Explanation => DataTableManager.StringTable.Get(buff_Explantion);
+        public string Buff_Explanation => string.Format(DataTableManager.StringTable.Get(buff_Explantion) , OptionValue);
         [CsvHelper.Configuration.Attributes.Ignore]
         public string TypeToString => Type switch
         {
@@ -58,7 +59,17 @@ public class TowerTable : DataTable
             _ => "정의되지 않음"
         };
         [CsvHelper.Configuration.Attributes.Ignore]
-        public (Color outlineColor, Color backGroundColor) AttributeToColor => Attribute switch
+        public string AttributeToString => attribute switch
+        {
+            1 => "불",
+            2 => "얼음",
+            3 => "금속",
+            4 => "빛",
+            5 => "어둠",
+            _ => "정의되지 않음"
+        };
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public (Color outlineColor, Color backGroundColor) AttributeToColor => attribute switch
         {
             3 => (new Color(0xA5/255f, 0xC1/255f, 0xBB/255f, 1f), new Color(0x4B/255f, 0x4B/255f, 0x4B/255f, 1f)), // 금속 속성
             1 => (new Color(0xFF/255f, 0x00/255f, 0x00/255f, 1f), new Color(0x6F/255f, 0x1B/255f, 0x1B/255f, 1f)), // 불 속성
@@ -68,9 +79,16 @@ public class TowerTable : DataTable
             _ => (Color.white , Color.white)
         };
         [CsvHelper.Configuration.Attributes.Ignore]
-        public float optionValue;
+        public Sprite TypeImage => DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable, Type);
         [CsvHelper.Configuration.Attributes.Ignore]
-        public float FullOptionValue => optionValue;
+        public Sprite AttackTypeImage => DataTableManager.SpriteTable.Get(DataTableIds.AttackTypeSpriteTable, ATK_Type);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public Sprite ElementImage => DataTableManager.SpriteTable.Get(DataTableIds.AttackTypeSpriteTable, attribute);
+
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public float OptionValue => FirebaseManager.Instance.TowerData.GetOptionValue(ID);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public bool Unlock => FirebaseManager.Instance.TowerData.IsUnlocked(ID);
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -81,7 +99,6 @@ public class TowerTable : DataTable
 
         foreach (var data in datas)
         {
-            data.optionValue = (int)Random.Range(data.Min_Value , data.Max_Value);
             towerTable.Add(data.ID, data);
         }
 

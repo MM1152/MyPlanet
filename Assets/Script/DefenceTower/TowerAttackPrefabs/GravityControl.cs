@@ -21,7 +21,8 @@ public class GravityControl : BaseAttackPrefab
         duration -= Time.deltaTime;
         if(duration <= 0f)
         {
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
 
