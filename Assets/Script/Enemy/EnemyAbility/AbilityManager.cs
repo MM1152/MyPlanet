@@ -12,6 +12,7 @@ public static class AbilityManager
          { 3023, () => new BarrierRefillAbility() },
          { 3024, () => new  RangeBoostAbility() },
          { 3025, () => new  PlayerKillSplitAbility() },
+         {3042, () => new FortifiedBarrierAbility() },
     };
 
     public static BaseAbility GetAbility(int key)

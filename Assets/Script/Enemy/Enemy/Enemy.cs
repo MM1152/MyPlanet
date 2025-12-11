@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private float baseRange;
     private bool bonusApplied = false;
     public float bulletSpeed => enemyData.Bullet_Speed;
-    public float fireInterval => 60f / enemyData.Fire_Rate;
+    public float fireInterval => enemyData.Fire_Rate > 0f ? 60f / enemyData.Fire_Rate : 0f ;
     public float attackInterval;
     private float abilityInterval = 1f;
     private float nextInterval = 0f;
@@ -135,6 +135,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (EnemyTypes.IsBossMonster(data.ID))
         {
             this.transform.localScale = new Vector2(2f, 2f);
+            if(data.Attribute == (int)ElementType.Fire)
+                this.transform.localScale = new Vector2(2f, 5f);
             bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag)?.GetComponent<WaveWindow>();
             bossUi?.ShowBossUI(enemyData.HP);
         }
@@ -213,7 +215,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     // 이벤트 활성화 
     private void Update()
     {
-
         stateMachine.currentState.Execute();
 
          if(IsDead) return; 
@@ -266,7 +267,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             damage = ability.OnDamage(damage);
         }
 
-        if (damage <= 0) damage = 1;
+        // if (damage <= 0) damage = 1;
 
         currentHP -= damage;
         if(bossUi != null)

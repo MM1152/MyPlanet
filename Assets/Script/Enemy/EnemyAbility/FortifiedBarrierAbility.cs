@@ -1,22 +1,20 @@
 using UnityEngine;
+using Cysharp.Threading.Tasks;
+using System;
 
-public class BarrierAbility : BaseAbility
+public class FortifiedBarrierAbility : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnDamage;
-
-    public int maxBarrierAmount = 10000;
+    public int maxBarrierAmount = 3000;// 임시값
     public int barrierAmount;
-    private bool active = true;
-
+    private float refillTimer = 5f; //임시 
+    public override bool isActive => barrierAmount > 0;
+    private float reductionDamage = 0.4f; //테이블연동필요 
 #if DEBUG_MODE
     TestRange rangePrefab;
     bool setSprite = false;
 #endif
-    public override bool isActive
-    {
-        get { return active; }
-        set { active = value; }
-    }
+
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
@@ -25,6 +23,7 @@ public class BarrierAbility : BaseAbility
     }
     public override int OnDamage(int damage)
     {
+
         if (!isActive) return damage;
 
 #if DEBUG_MODE
@@ -43,19 +42,26 @@ public class BarrierAbility : BaseAbility
         }
 #endif
 
-        barrierAmount -= damage;
-        Debug.Log("베리어 데미지 흡수 " + damage + ", 남은 베리어: " + barrierAmount);
-
-        if (barrierAmount < 0)
+        if (barrierAmount > 0)
         {
-            int overflowDamage = -barrierAmount;
+            var reduceDamageWithBarrier = damage * reductionDamage;
+            barrierAmount -= (int)reduceDamageWithBarrier;
+        }
+        Debug.Log($"베리어 데미지 흡수 {damage}, 남은 베리어: {barrierAmount}");
+
+        if (barrierAmount <= 0)
+        {
+            Debug.Log("베리어 파괴! 타이머 시작");
+            StartRefillTimer().Forget();
+            int overflowDamage = (int)(-barrierAmount / reductionDamage);
             barrierAmount = 0;
-            active = false;
+
 #if DEBUG_MODE
             rangePrefab.gameObject.SetActive(false);
 #endif
             return overflowDamage;
         }
+
         return 0;
     }
 
@@ -71,6 +77,23 @@ public class BarrierAbility : BaseAbility
         {
             barrierAmount = maxBarrierAmount;
         }
-        active = true;
+
+    }
+
+    private async UniTaskVoid StartRefillTimer()
+    {
+        if (enemy == null) return;
+        await UniTask.Delay(System.TimeSpan.FromSeconds(refillTimer), ignoreTimeScale: false, cancellationToken: enemy.GetCancellationTokenOnDestroy());
+        RefillBarrier(maxBarrierAmount);
+
+#if DEBUG_MODE
+        if (rangePrefab != null)
+        {
+            rangePrefab.gameObject.SetActive(true);
+            float radius = enemy.transform.localScale.x;
+            float visualScale = radius * 10f;
+            rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
+        }
+#endif
     }
 }
