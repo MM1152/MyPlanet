@@ -6,16 +6,24 @@ public abstract class RangeCheckDeathHandler : BaseDie
 {
     Collider2D[] targetColliders;
 
-#if DEBUG_MODE
-    TestRange rangePrefab;
-#endif
-
+    protected CircleCollider2D enemyCollider => enemy.enemyCollider;    
+    protected float ridus;
     protected abstract string[] targets { get; }
 
+    private float SetRadius()
+    {
+        return enemy.ElementType switch
+        {
+           ElementType.Fire => DataTableManager.OptionTable.GetValueDataToFloat(5029),
+           ElementType.Ice => DataTableManager.OptionTable.GetValueDataToFloat(5031),
+           _=> 0f,
+        };
+    }
     //범위 체크 
     protected void RangeCheck()
     {        
-        targetColliders = Physics2D.OverlapCircleAll(enemy.transform.position, enemy.TestRangeRadius, LayerMask.GetMask(targets));
+        ridus = enemy.enemyCollider.radius * SetRadius();    
+        targetColliders = Physics2D.OverlapCircleAll(enemy.transform.position, ridus, LayerMask.GetMask(targets));
 #if DEBUG_MODE
         RangeCheckDelay().Forget();
 #endif
@@ -56,8 +64,7 @@ public abstract class RangeCheckDeathHandler : BaseDie
         spr.color = enemy.spriteRenderer.color;
         spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
         
-        float radius = enemy.TestRangeRadius;
-        float visualScale = radius * 2f; 
+        float visualScale = ridus * 2f; 
         rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
         await UniTask.Delay(1000);
         if(rangePrefab != null)

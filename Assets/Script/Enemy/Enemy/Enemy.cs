@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private float baseRange;
     private bool bonusApplied = false;
     public float bulletSpeed => enemyData.Bullet_Speed;
-    public float fireInterval => 60f / enemyData.Fire_Rate;
+    public float fireInterval => enemyData.Fire_Rate > 0f ? 60f / enemyData.Fire_Rate : 0f ;
     public float attackInterval;
     private float abilityInterval = 1f;
     private float nextInterval = 0f;
@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public BaseAbility ability;
     public EnemySpawnManager enemySpawnManager;
 
-    public float TestRangeRadius;
+    // public float TestRangeRadius;
     public bool isKilledByPlayer { get; set; }
 
 #if DEBUG_MODE
@@ -78,6 +78,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public LineRenderer enemyLineRenderer;
 
+    public CircleCollider2D enemyCollider;
+     
     private WaveWindow bossUi;
     public EnemyPredictionPoisition enemyPredictionPoisition = new EnemyPredictionPoisition();
 
@@ -99,6 +101,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         zone = GetComponentInChildren<ZoneSearch>();
         typeEffectiveness = new TypeEffectiveness();
         enemyLineRenderer = GetComponent<LineRenderer>();
+        enemyCollider = GetComponent<CircleCollider2D>();
         enemyPredictionPoisition.Init(this);
         basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
         stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
@@ -143,11 +146,18 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         zone?.Init(this);
         ResetActions();
         ability?.SetEnemy(this);
+        if(enemyLineRenderer != null)
+        {
+            enemyLineRenderer.enabled = false;
+            enemyLineRenderer.positionCount = 0;
+        }  
 #if DEBUG_MODE
 
         if (EnemyTypes.IsBossMonster(data.ID))
         {
             this.transform.localScale = new Vector2(2f, 2f);
+            if(data.Attribute == (int)ElementType.Fire)
+                this.transform.localScale = new Vector2(2f, 5f);
             bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag)?.GetComponent<WaveWindow>();
             bossUi?.ShowBossUI(enemyData.HP);
         }
@@ -304,7 +314,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             damage = ability.OnDamage(damage);
         }
 
-        if (damage <= 0) damage = 1;
+        // if (damage <= 0) damage = 1;
 
         currentHP -= damage;
         if(bossUi != null)

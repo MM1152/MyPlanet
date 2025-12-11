@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
+
 
 public class EnemySpawnManager : MonoBehaviour
 {
@@ -29,18 +28,34 @@ public class EnemySpawnManager : MonoBehaviour
         var data = DataTableManager.EnemyTable.GetData(id);
 
         if (data != null)
-        {           
+        {
             if (EnemyTypes.IsBossMonster(id))
             {
                 ClearAllEnemy();
             }
-            
+
             for (int i = 0; i < count; i++)
             {
                 var spawnEnemy = poolManager.SpawnObject<Enemy>(PoolsId.Enemy);
                 if (EnemyTypes.IsEliteMonster(id))
                 {
-                    spawnEnemy.OnDie += (enemy) => windowManager?.Open(WindowIds.OptionUpgradeWindow);
+                    spawnEnemy.OnDie += (enemy) =>
+                    {
+                        if (enemy.isKilledByPlayer)
+                        {
+                            windowManager?.Open(WindowIds.OptionUpgradeWindow);
+                        }
+                    };
+                }
+                if(EnemyTypes.IsBossMonster(id))
+                {
+                    spawnEnemy.OnDie += (enemy) =>
+                    {
+                        if (enemy.isKilledByPlayer)
+                        {
+                           enemy.WaveManager.isBossKilled = true;   
+                        }
+                    };
                 }
                 spawnEnemy.Initallized(data);
                 if (Variable.IsDebugMode)
@@ -110,10 +125,10 @@ public class EnemySpawnManager : MonoBehaviour
             if (!enemy.gameObject.activeSelf) continue;
             if (enemy.IsDead) continue;
 
-            enemy.isKilledByPlayer = false;               
+            enemy.isKilledByPlayer = false;
             enemy.IsDead = true;
-            enemy.stateMachine.ChangeState(enemy.stateMachine.dieState);
-            spawnEnemys.Remove(enemy);  
+            enemy.OnDead();
+            spawnEnemys.Remove(enemy);
         }
     }
 }

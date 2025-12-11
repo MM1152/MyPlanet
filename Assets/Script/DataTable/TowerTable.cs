@@ -29,6 +29,8 @@ public class TowerTable : DataTable
         public override int ID => Tower_ID;
         [CsvHelper.Configuration.Attributes.Ignore]
         public override EffectTable.Data Effect => DataTableManager.EffectTable.Get(Effect_Type);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override string Explanatoin => DataTableManager.StringTable.Get(Description);
     }
 
 
@@ -75,7 +77,7 @@ public class TowerTable : DataTable
             _ => "정의되지 않음"
         };
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string Explanatoin => DataTableManager.StringTable.Get(explanation);
+        public virtual string Explanatoin => DataTableManager.StringTable.Get(explanation);
         [CsvHelper.Configuration.Attributes.Ignore]
         public string Buff_Explanation => string.Format(DataTableManager.StringTable.Get(buff_Explantion) , OptionValue);
         [CsvHelper.Configuration.Attributes.Ignore]

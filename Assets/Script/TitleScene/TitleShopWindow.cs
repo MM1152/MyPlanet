@@ -20,6 +20,7 @@ public class TitleShopWindow : Window
     public override void Close()
     {
         base.Close();
+        FirebaseManager.Instance.Database.RemoveListner(DataBasePaths.GoldPath, OnChangeGoldValue);
     }
 
     public override void Init(WindowManager manager)
@@ -45,12 +46,12 @@ public class TitleShopWindow : Window
         }
 
         goldText.text = gold.ToString("N0");
-        FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath , OnChangeGoldValue);
         backButton.onClick.AddListener(() => manager.Open(WindowIds.TitleMainWindow));
     }
 
     public override void Open()
     {
+        FirebaseManager.Instance.Database.RemoveListner(DataBasePaths.GoldPath, OnChangeGoldValue);
         base.Open();
     }
 
@@ -120,4 +121,5 @@ public class TitleShopWindow : Window
                 layout.Enable();
         }
     }
+
 }
