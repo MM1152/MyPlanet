@@ -10,14 +10,17 @@ public abstract class BaseShotAttack : IAttack
     {
         enemy.attackInterval += Time.deltaTime;
 
-        if (GetShotStrategy(enemy.ElementType) is LaserShot laserShot)
+        var strategy = GetShotStrategy(enemy.ElementType);
+        
+        if (strategy is LaserShot laserShot)
         {
-            laserShot.laserUpdate(enemy, enemy.GetTarget());
+            laserShot.LaserUpdate(enemy, enemy.GetTarget());
         }
+      
 
         if (enemy.attackInterval >= enemy.fireInterval)
         {
-            GetShotStrategy(enemy.ElementType).Shot(enemy, enemy.GetTarget());
+            strategy.Shot(enemy, enemy.GetTarget());
             enemy.attackInterval = 0f;
             enemy.ReturnMoveAction?.Invoke();
         }

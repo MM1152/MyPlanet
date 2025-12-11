@@ -10,22 +10,32 @@ public class BossAttack : BaseShotAttack
         {
             { (ElementType.Normal, 0), new NormalStrategy() },
             { (ElementType.Fire, 0), new NormalStrategy() },
+            { (ElementType.Fire, 3037), new RandomLaserAttack() },
             { (ElementType.Ice, 0), new NormalStrategy() },
             { (ElementType.Steel, 3027), new RapidFireAttack() },
             { (ElementType.Steel, 3032), new MissileRainAttack() },
-            { (ElementType.Light, 0), new NormalStrategy() },
-            { (ElementType.Dark, 0), new NormalStrategy() },
+            { (ElementType.Steel, 3042), new HomingArcAttack() }, 
+            { (ElementType.Light, 3047), new VortexLaserAttack() }, 
+            { (ElementType.Dark, 3052), new ShadowSummonAttack() },
         };
     }
     public override void Attack(Enemy enemy)
     {
         enemy.attackInterval += Time.deltaTime;
 
+        var strategy = GetShotStrategy(enemy.ElementType, enemy.enemyData.ID);
+        
+        
+        if (strategy is RandomLaserAttack randomLaserAttack)
+        {
+            randomLaserAttack.LaserUpdate(enemy, enemy.GetTarget());
+        }
+
         if (enemy.attackInterval >= enemy.fireInterval)
         {
-            GetShotStrategy(enemy.ElementType,enemy.enemyData.ID).Shot(enemy, enemy.GetTarget());
+            strategy.Shot(enemy, enemy.GetTarget());
             enemy.attackInterval = 0f;
-            enemy.ReturnMoveAction?.Invoke();
+            // enemy.ReturnMoveAction?.Invoke();
         }
     }
 

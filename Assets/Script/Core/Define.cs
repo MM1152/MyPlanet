@@ -104,6 +104,7 @@ public enum PoolsId
     SpreadBullet = 302,
     SwitchDirectionBullet = 303,
     RainBullet = 304,
+    ArcMissileBullet = 305,
 
     Exp = 400,
     DamageText = 600,
@@ -153,6 +154,7 @@ public static class AddressableNames
         { "ShadowSurge" , PoolsId.ShadowSurge },
         { "GravityWrap" , PoolsId.GravityWrap },
         { "SwitchDirectionBullet", PoolsId.SwitchDirectionBullet },
+        { "ArcMissileBullet", PoolsId.ArcMissileBullet },
         { "RainBullet", PoolsId.RainBullet },   
         { "PlutoBullet", PoolsId.PlutoBullet },   
     };
@@ -179,7 +181,7 @@ public static class TagIds
     public readonly static string EnemyTag = "Enemy";
     public readonly static string EnemyProjectileTag = "EnemyProjectile";
     public readonly static string IronMineTag = "IronMine";
-    public readonly static string TutorialManagerTag = "TutorialManager"; 
+    public readonly static string TutorialManagerTag = "TutorialManager";
     public readonly static string WaveWindowTag = "WaveWindow";
 }
 
@@ -246,8 +248,11 @@ public static class DataBasePaths
 
 public static class EnemyTypes
 {
-    private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 3032 };
-    private static readonly HashSet<int> EliteMonseterIds = new HashSet<int> { 3026,3028,3029,3030,3031 };
+    private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 3032, 3037, 3042, 3047, 3052, 3057, 3062, 3067, 3072 };
+    private static readonly HashSet<int> EliteMonseterIds = new HashSet<int>
+    {
+         3026, 3028, 3029, 3030, 3031, 3033, 3035, 3036, 3038, 3039, 3040, 3041, 3043, 3044, 3045, 3046, 3048, 3049, 3050, 3051, 3053, 3054, 3055, 3056, 3058, 3059,
+          3060, 3061, 3063, 3064, 3065, 3066, 3068, 3069, 3070, 3071,};
     public static bool IsEliteMonster(int id) => EliteMonseterIds.Contains(id);
     public static bool IsBossMonster(int id) => BossMonsterIds.Contains(id);
 }
@@ -323,5 +328,36 @@ public static class TerraformingData
         }
         return string.Empty;
     }
-}
 
+}
+public static class LevelUpEffectDescriptions
+{
+    public static Dictionary<int, string> towerLevelUpEffectDescriptions = new Dictionary<int, string>()
+    {
+        { 1 , "발사체 개수" },
+        { 2 , "사거리" },
+        { 3 , "두께" },
+        { 4 , "지속시간" },
+        { 5 , "쿨타임" },
+        { 6 , "연사속도" },
+        { 7 , "필렛 개수" },
+        { 8 , "파편 사거리" },
+        { 9 , "파편 개수" },
+        { 10 , "폭발 범위" },
+        { 11 , "유도 횟수" },
+        { 12 , "이동속도 감소량" },
+        { 13 , "총알 속도 감소량" },
+        { 14 , "정지 시간" },
+        { 15 , "퍼지는 각도" },
+        { 16 , "탄환 속도" },
+    };
+
+    public static string GetLevelUpEffectDescription(int var)
+    {
+        if (towerLevelUpEffectDescriptions.TryGetValue(var, out string description))
+        {
+            return description;
+        }
+        return string.Empty;
+    }
+}
