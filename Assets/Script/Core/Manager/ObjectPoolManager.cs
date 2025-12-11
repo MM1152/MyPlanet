@@ -37,7 +37,7 @@ public class ObjectPoolManager : MonoBehaviour
           actionOnGet: OnGetObject,
           actionOnRelease: OnReleaseObject,
           actionOnDestroy: OnDestoryObject,
-          collectionCheck: true,
+          collectionCheck: false,
           defaultCapacity: 10,
           maxSize: 1000
         );

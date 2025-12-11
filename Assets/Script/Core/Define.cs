@@ -99,6 +99,7 @@ public enum PoolsId
     GravityWrap = 221,
     PlutoBullet = 222,
     Drone = 223,
+    Repulsor = 224,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -157,6 +158,7 @@ public static class AddressableNames
         { "RainBullet", PoolsId.RainBullet },   
         { "PlutoBullet", PoolsId.PlutoBullet },   
         { "Drone", PoolsId.Drone },   
+        { "Repulsor", PoolsId.Repulsor },   
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -183,6 +185,7 @@ public static class TagIds
     public readonly static string IronMineTag = "IronMine";
     public readonly static string TutorialManagerTag = "TutorialManager"; 
     public readonly static string WaveWindowTag = "WaveWindow";
+    public readonly static string DroneTag = "Drone";
 }
 
 public static class DataTableIds

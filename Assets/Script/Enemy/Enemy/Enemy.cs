@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Cysharp.Threading.Tasks;
+using System;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,7 +10,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     public TypeEffectiveness typeEffectiveness;
-    private GameObject target;
+    public GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
     public WaveManager WaveManager => waveManager;
@@ -80,7 +82,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public EnemyPredictionPoisition enemyPredictionPoisition = new EnemyPredictionPoisition();
 
     private int stageId;
+    private bool isPushed;
 
+    private CancellationTokenSource disAbleCtr;
     private void Awake()
     {
         stateMachine = new StateMachine(this);
@@ -209,6 +213,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         if (!attack.isAttackColliderOn) return;
 
+
         if (collision.CompareTag(TargetTag))
         {
             isKilledByPlayer = false;
@@ -216,9 +221,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
         return;
     }
+
+
     // 이벤트 활성화 
     private void Update()
     {
+        if (isPushed) return;
 
         stateMachine.currentState.Execute();
 
@@ -237,7 +245,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             {
                 trailShotAttack.ShotLineDraw(this, target);
             }
-
+            
             if (attack is EliteMonsterAttack rotatingLaserAttack && rotatingLaserAttack.GetShotStrategy(ElementType) is RotatingLaserAttack laserAttack)
             {
                 if (attackInterval >= laserAttack.rotationInterval)
@@ -263,6 +271,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public GameObject GetTarget()
     {
         return target;
+    }
+
+    public void SetTarget(GameObject target)
+    {
+        this.target = target;
     }
 
     public void OnDamage(int damage)
@@ -341,5 +354,65 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         attackRange = baseRange;
         bonusApplied = false;
+    }
+
+    public void PushEnemy(Vector3 dir, float force , float duration)
+    {
+        isPushed = true;
+
+        if(disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
+        {
+            disAbleCtr.Cancel();
+            disAbleCtr.Dispose();
+        }
+        disAbleCtr = new CancellationTokenSource();
+        PushEnemyAsync(dir , force , duration , disAbleCtr).Forget();
+    }
+    
+    private async UniTaskVoid PushEnemyAsync(Vector3 dir , float force , float duration , CancellationTokenSource ctr)
+    {
+        var speed = (dir * force).magnitude / duration;
+        try
+        {
+            while (duration > 0)
+            {
+                duration -= Time.deltaTime;
+                this.transform.position += dir * speed * Time.deltaTime;
+                if (ctr.Token.IsCancellationRequested)
+                {
+                    throw new Exception();
+                }
+                await UniTask.Yield();
+            }
+        }
+        catch (Exception)
+        {
+            Debug.Log("Push Cancelled");
+        }
+        finally
+        {
+            isPushed = false;
+        }
+
+    }
+
+    private void OnDisable()
+    {
+        if(disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
+        {
+            disAbleCtr.Cancel();
+            disAbleCtr.Dispose();
+            disAbleCtr = null;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
+        {
+            disAbleCtr.Cancel();
+            disAbleCtr.Dispose();
+            disAbleCtr = null;
+        }
     }
 }

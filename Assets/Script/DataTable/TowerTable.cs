@@ -28,7 +28,7 @@ public class TowerTable : DataTable
         [CsvHelper.Configuration.Attributes.Ignore]
         public override int ID => Tower_ID;
         [CsvHelper.Configuration.Attributes.Ignore]
-        public override PassiveTable.Data Passive => DataTableManager.PassiveTable.GetData(Effect_Type);
+        public override EffectTable.Data Effect => DataTableManager.EffectTable.Get(Effect_Type);
     }
 
 
@@ -117,7 +117,7 @@ public class TowerTable : DataTable
         [CsvHelper.Configuration.Attributes.Ignore]
         public bool Unlock => FirebaseManager.Instance.TowerData.IsUnlocked(ID);
         [CsvHelper.Configuration.Attributes.Ignore]
-        public virtual PassiveTable.Data Passive => null;
+        public virtual EffectTable.Data Effect => null;
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)

@@ -18,7 +18,7 @@ public class DroneTower : UtilTower
         }
         else if(drones.Count == BonusDroneCount)
         {
-            drones[0].ForceDead();
+            drones[0].OnDead();
             CreateAttackPrefab();
         }
 
@@ -30,7 +30,7 @@ public class DroneTower : UtilTower
         var drone = Managers.ObjectPoolManager.SpawnObject<Drone>(PoolsId.Drone);
         drone.Init(this);
         drone.transform.position = tower.transform.position;
-        drone.OnDead += OnDeadDrone;
+        drone.OnDie += OnDeadDrone;
         drones.Add(drone);
         return drone;
     }
@@ -38,6 +38,6 @@ public class DroneTower : UtilTower
     private void OnDeadDrone(Drone drone)
     {
         drones.Remove(drone);
-        drone.OnDead -= OnDeadDrone;
+        drone.OnDie -= OnDeadDrone;
     }
 }
