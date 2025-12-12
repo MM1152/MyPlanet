@@ -266,7 +266,7 @@ public static class EnemyTypes
     private static readonly HashSet<int> BossMonsterIds = new HashSet<int> { 3027, 3032, 3037, 3042, 3047, 3052, 3057, 3062, 3067, 3072 };
     private static readonly HashSet<int> EliteMonseterIds = new HashSet<int>
     {
-         3026, 3028, 3029, 3030, 3031, 3033, 3035, 3036, 3038, 3039, 3040, 3041, 3043, 3044, 3045, 3046, 3048, 3049, 3050, 3051, 3053, 3054, 3055, 3056, 3058, 3059,
+         3026, 3028, 3029, 3030, 3031, 3033,3034, 3035, 3036, 3038, 3039, 3040, 3041, 3043, 3044, 3045, 3046, 3048, 3049, 3050, 3051, 3053, 3054, 3055, 3056, 3058, 3059,
           3060, 3061, 3063, 3064, 3065, 3066, 3068, 3069, 3070, 3071,};
     public static bool IsEliteMonster(int id) => EliteMonseterIds.Contains(id);
     public static bool IsBossMonster(int id) => BossMonsterIds.Contains(id);

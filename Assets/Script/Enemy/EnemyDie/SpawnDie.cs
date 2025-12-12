@@ -25,6 +25,7 @@ public class SpawnDie : BaseDie
                     waveManager.totalEnemyCount++;
                     waveManager.waveClearCount++;
                 }
+                spawnEnemy.move.Init(spawnEnemy);
             }
         }
 

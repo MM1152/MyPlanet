@@ -156,8 +156,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (EnemyTypes.IsBossMonster(data.ID))
         {
             this.transform.localScale = new Vector2(2f, 2f);
-            if(data.Attribute == (int)ElementType.Fire)
-                this.transform.localScale = new Vector2(2f, 5f);
             bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag)?.GetComponent<WaveWindow>();
             bossUi?.ShowBossUI(enemyData.HP);
         }

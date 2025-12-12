@@ -24,6 +24,7 @@ public class SplitbornDie : BaseDie
                     waveManager.totalEnemyCount++;
                     waveManager.waveClearCount++;
                 }
+                spawnEnemy.move.Init(spawnEnemy);   
             }
             active = false;            
         }
