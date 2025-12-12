@@ -9,6 +9,12 @@ public class Missile : ProjectTile
     [SerializeField] private float trackingStrength = 0.5f;
     private float currentAngle;
     private float rlookAngleNoise = 0f;
+    private EnemySpawnManager enemySpawnManager;
+
+    private void Awake()
+    {
+        enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag).GetComponent<EnemySpawnManager>(); ;
+    }
 
     public override void Init(Tower data)
     {
@@ -47,8 +53,16 @@ public class Missile : ProjectTile
 
     protected override void Update()
     {
-        base.Update();
-
+        Move();
+        if (target == null || targetDamageAble.IsDead)
+        {
+            target = enemySpawnManager.GetEnemyData(transform.position)?.transform;
+            if(target == null)
+            {
+                dir = (new Vector3(Mathf.Cos(currentAngle), Mathf.Sin(currentAngle), 0f)).normalized;
+                return;
+            }
+        }
         dir = SetDir();
         transform.eulerAngles = new Vector3(0f , 0f , currentAngle);
     }
