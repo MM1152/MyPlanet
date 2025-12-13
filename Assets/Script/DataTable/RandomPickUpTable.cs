@@ -10,12 +10,12 @@ public class RandomPickUpTable : DataTable
     public class Data
     {
         public int reward_id { get; set; }
-        public int reward_name_id { get; set; }
+        public int? reward_name_id { get; set; }
         public int G_item_id { get; set; }
         public int item_type { get; set; }
-        public string rarity { get; set; }
+        public int? grade { get; set; }
         public int reward_type { get; set; }
-        public int amount { get; set; }
+        public int? amount { get; set; }
         public int? tower_random_id { get; set; }
         public float probability { get; set; }
         public int connection_id { get; set; }
@@ -24,17 +24,25 @@ public class RandomPickUpTable : DataTable
         {
             get
             {
-                if(reward_type == 1)
-                    return DataTableManager.StringTable.Get(reward_name_id);
+                if (reward_type == 1)
+                    return DataTableManager.StringTable.Get(reward_name_id ?? 0);
 
-                return $"{DataTableManager.StringTable.Get(reward_name_id)} {amount}개";
+                return $"{DataTableManager.StringTable.Get(reward_name_id ?? 0)} {amount}개";
             }
         }
         [CsvHelper.Configuration.Attributes.Ignore]
         public bool IsPlanetReward => reward_id == 171001;
         [CsvHelper.Configuration.Attributes.Ignore]
         public bool IsTowerReward => reward_id == 171002;
-
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public string rarityToString => grade switch
+        {
+            1 => "S",
+            2 => "A",
+            3 => "B",
+            4 => "C",
+            _ => "정의되지 않음"
+        };
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)

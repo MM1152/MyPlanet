@@ -23,6 +23,15 @@ public abstract class DataTable
             MissingFieldFound = null,
         };
 
+        config.PrepareHeaderForMatch = (args) =>
+        {
+            if (args.Header.StartsWith("//"))
+            {
+                return string.Empty;
+            }
+            return args.Header;
+        };
+
         using (var reader = new StringReader(csvText))
         using (var csvReader = new CsvReader(reader, config))
         {
