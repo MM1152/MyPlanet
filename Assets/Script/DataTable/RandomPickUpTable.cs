@@ -7,6 +7,7 @@ public class RandomPickUpTable : DataTable
 {
     private Dictionary<int , List<Data>> randomPickUpTable = new Dictionary<int, List<Data>>();
     private List<Data> sortedPlanetRandomDatas;
+    private List<Data> sortedTowerRandomDatas;
     public class Data
     {
         public int reward_id { get; set; }
@@ -24,16 +25,18 @@ public class RandomPickUpTable : DataTable
         {
             get
             {
-                if (reward_type == 1)
-                    return DataTableManager.StringTable.Get(reward_name_id ?? 0);
-
+                if(reward_type == 1)
+                    return DataTableManager.PlanetTable.Get(connection_id).Name;
+                else if (reward_type == 3)
+                    return DataTableManager.TowerTable.Get(connection_id).Name;
+                
                 return $"{DataTableManager.StringTable.Get(reward_name_id ?? 0)} {amount}°³";
             }
         }
         [CsvHelper.Configuration.Attributes.Ignore]
         public bool IsPlanetReward => reward_id == 171001;
         [CsvHelper.Configuration.Attributes.Ignore]
-        public bool IsTowerReward => reward_id == 171002;
+        public bool IsTowerReward => reward_id == 172002;
         [CsvHelper.Configuration.Attributes.Ignore]
         public string rarityToString => grade switch
         {
@@ -66,6 +69,8 @@ public class RandomPickUpTable : DataTable
 
         sortedPlanetRandomDatas = new List<Data>(randomPickUpTable[171001]);
         sortedPlanetRandomDatas.Sort((a, b) => a.probability.CompareTo(b.probability));
+        sortedTowerRandomDatas = new List<Data>(randomPickUpTable[172002]);
+        sortedTowerRandomDatas.Sort((a, b) => a.probability.CompareTo(b.probability));
 
         return (filename, this);
     }
@@ -86,6 +91,22 @@ public class RandomPickUpTable : DataTable
         return null;
     }
 
+    public Data GetRandomDataForTower()
+    {
+        float rand = Random.Range(0f, 100f);
+        float probabilityAmount = 0f;
+        foreach (var data in sortedTowerRandomDatas)
+        {
+            probabilityAmount += data.probability;
+            if (rand <= probabilityAmount)
+            {
+                return data;
+            }
+        }
+
+        return null;
+    }
+
     public List<Data> GetAllDataForPlanet()
     {
         return randomPickUpTable[171001];
@@ -93,6 +114,6 @@ public class RandomPickUpTable : DataTable
 
     public List<Data> GetRandomPickUpDatasForTower()
     {
-        return randomPickUpTable[171002];
+        return randomPickUpTable[172002];
     }
 }

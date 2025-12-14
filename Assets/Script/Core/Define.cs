@@ -222,6 +222,10 @@ public static class DataTableIds
     public static readonly string StageInfomationTable = "StageInfomationTable";
     public static readonly string RandomPickUpTable = "RandomPickUpTable";
     public static readonly string ItemTable = "ItemTable";
+    public static readonly string TowerRandomOptionValueTable = "TowerRandomOptionValueTable";
+    public static readonly string TowerRandomOptionValuePercentTable = "TowerRandomOptionValuePercentTable";
+    public static readonly string TowerDuplicationRewardTable = "TowerDuplicationRewardTable";
+    public static readonly string RewardListTable = "RewardListTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

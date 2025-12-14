@@ -19,7 +19,7 @@ public class TenPickUpItemLayout : MonoBehaviour
 
     [Header("Sliders")]
     [SerializeField] private Slider slider;
-    public void UpdateData(RandomPickUpTable.Data data , bool isNew, bool isDuplication)
+    public void UpdateData(RandomPickUpTable.Data data , bool isNew, (bool ,float) isDuplication)
     {
         itemName.text = data.RewardName;
         itemGrade.text = data.rarityToString;
@@ -28,7 +28,7 @@ public class TenPickUpItemLayout : MonoBehaviour
         var planetData = DataTableManager.PlanetTable.Get(data.connection_id);
         var userData = FirebaseManager.Instance.PlanetData.GetOrigin(data.connection_id);
 
-        rewardRoot.gameObject.SetActive(isDuplication);
+        rewardRoot.gameObject.SetActive(isDuplication.Item1);
         rewardText.text = "x10";
 
         slider.gameObject.SetActive(!isNew);

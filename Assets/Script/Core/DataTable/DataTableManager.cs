@@ -29,6 +29,10 @@ public static class DataTableManager
     public static StageInfomationTable StageInfomationTable => Get<StageInfomationTable>(DataTableIds.StageInfomationTable);
     public static RandomPickUpTable RandomPickUpTable => Get<RandomPickUpTable>(DataTableIds.RandomPickUpTable);
     public static ItemTable ItemTable => Get<ItemTable>(DataTableIds.ItemTable);
+    public static TowerRandomOptionValueTable TowerRandomOptionValueTable => Get<TowerRandomOptionValueTable>(DataTableIds.TowerRandomOptionValueTable);
+    public static TowerRandomOptionValuePercentTable TowerRandomOptionValuePercentTable => Get<TowerRandomOptionValuePercentTable>(DataTableIds.TowerRandomOptionValuePercentTable);
+    public static TowerDuplicationRewardTable TowerDuplicationRewardTable => Get<TowerDuplicationRewardTable>(DataTableIds.TowerDuplicationRewardTable);
+    public static RewardListTable RewardListTable => Get<RewardListTable>(DataTableIds.RewardListTable);
 
     static DataTableManager()
     {
@@ -58,6 +62,10 @@ public static class DataTableManager
         var stageInfomationTable = new StageInfomationTable();
         var randomPickUpTable = new RandomPickUpTable();
         var itemTable = new ItemTable();
+        var towerRandomOptionValueTable = new TowerRandomOptionValueTable();
+        var towerRandomOptionValuePercentTable = new TowerRandomOptionValuePercentTable();
+        var towerDuplicationRewardTable = new TowerDuplicationRewardTable();
+        var rewardListTable = new RewardListTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -83,6 +91,10 @@ public static class DataTableManager
             stageInfomationTable.LoadAsync(DataTableIds.StageInfomationTable),
             randomPickUpTable.LoadAsync(DataTableIds.RandomPickUpTable),
             itemTable.LoadAsync(DataTableIds.ItemTable),
+            towerRandomOptionValueTable.LoadAsync(DataTableIds.TowerRandomOptionValueTable),
+            towerRandomOptionValuePercentTable.LoadAsync(DataTableIds.TowerRandomOptionValuePercentTable),
+            towerDuplicationRewardTable.LoadAsync(DataTableIds.TowerDuplicationRewardTable),
+            rewardListTable.LoadAsync(DataTableIds.RewardListTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

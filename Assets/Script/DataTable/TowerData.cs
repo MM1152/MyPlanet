@@ -9,26 +9,32 @@ public class TowerData
     public bool Init { get; set; }
     private Dictionary<int, Data> towerDatas = new Dictionary<int, Data>();
     public event Action<int> OnChangeTowerData;
-
+     
     [Serializable]
     public class Data : JsonSerialized
     {
         public int TowerId;
         public float OptionValue;
         public bool Unlock;
+        public int TowerPartCount;
+        public int grade;
 
         public Data()
         {
             TowerId = -1;
             OptionValue = 0f;
             Unlock = false;
+            TowerPartCount = 0;
+            grade = 1;
         }
 
         public Data(int towerId)
         {
             TowerId = towerId;
             OptionValue = 0f;
-            Unlock = true;
+            Unlock = false;
+            TowerPartCount = 0;
+            grade = 1;
         }
     }
 
@@ -40,11 +46,31 @@ public class TowerData
             {
                 TowerId = data.TowerId,
                 OptionValue = data.OptionValue,
-                Unlock = data.Unlock
+                Unlock = data.Unlock,
+                TowerPartCount = data.TowerPartCount
             };
             return copyData;
-        }
+        } 
         return null;
+    }
+
+    public async UniTask AddPartCountAsync(Data towerData , int amount)
+    {
+        towerData.TowerPartCount += amount;
+        await Save(towerData);
+    }
+
+    public async UniTask UnlockAsync(Data towerData , float optionValue)
+    {
+        towerData.Unlock = true;
+        towerData.OptionValue = optionValue;
+        await Save(towerData);
+    }
+
+    public async UniTask UpdateOptionValueAsync(Data towerData , float optionValue)
+    {
+        towerData.OptionValue = optionValue;
+        await Save(towerData);
     }
 
     public async UniTask<(bool success, string msg)> LoadAsync()

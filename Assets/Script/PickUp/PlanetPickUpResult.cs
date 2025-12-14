@@ -30,7 +30,7 @@ public class PlanetPickUpResult : MonoBehaviour
         okButton.onClick.AddListener(() => windowManager.Open(WindowIds.RandomPickUpWindow));
     }
 
-    public void SetData(RandomPickUpTable.Data randomPlanetData, bool isNew , bool isDuplication)
+    public void SetData(RandomPickUpTable.Data randomPlanetData, bool isNew , (bool, float) isDuplication)
     {
         var planetData = DataTableManager.PlanetTable.Get(randomPlanetData.connection_id);
         gradeText.text = planetData.grade;

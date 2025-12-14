@@ -32,6 +32,8 @@ public abstract class DataTable
             return args.Header;
         };
 
+        csvText.Trim(' ', ',');
+
         using (var reader = new StringReader(csvText))
         using (var csvReader = new CsvReader(reader, config))
         {

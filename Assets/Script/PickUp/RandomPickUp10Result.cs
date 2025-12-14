@@ -22,7 +22,7 @@ public class RandomPickUp10Result : MonoBehaviour
         closeButton.onClick.AddListener(() => windowManager.Open(WindowIds.RandomPickUpWindow));
     }
 
-    public void SetData(List<RandomPickUpTable.Data> pickUpdatas , List<bool> isNew , List<bool> isDuplication) 
+    public void SetData(List<RandomPickUpTable.Data> pickUpdatas , List<bool> isNew , List<(bool , float)> isDuplication) 
     {
         for (int i = 0; i < pickUpdatas.Count; i++)
         {
