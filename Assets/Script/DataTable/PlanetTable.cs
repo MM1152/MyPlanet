@@ -24,6 +24,7 @@ public class PlanetTable : DataTable
         public int ATK { get; set; }
         public int DEF { get; set; }
         public int Skill_ID { get; set; }
+        public string Image_Path { get; set; }
 
         public string Name => DataTableManager.StringTable.Get(name);
         public string Explanation => DataTableManager.StringTable.Get(explanation);
@@ -67,6 +68,8 @@ public class PlanetTable : DataTable
             "C" => new Color32(0xaf, 0xd4, 0x85, 0xff), // #afd485
             _ => Color.white
         };
+        [Ignore]
+        public Sprite PlanetImage { get; set; }
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -78,6 +81,7 @@ public class PlanetTable : DataTable
         for(int i = 0; i < datas.Count; i++)
         {
             planetTable.Add(datas[i].ID, datas[i]);
+            datas[i].PlanetImage = await Addressables.LoadAssetAsync<Sprite>(datas[i].Image_Path).ToUniTask();
         }
 
         return (filename, this as DataTable);

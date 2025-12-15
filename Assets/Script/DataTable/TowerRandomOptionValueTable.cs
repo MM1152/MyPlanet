@@ -95,4 +95,20 @@ public class TowerRandomOptionValueTable : DataTable
             _ => false
         };
     }
+
+    public int GetMaxPercent(int towerId, int grade)
+    {
+        var data = GetOptionData(towerId);
+
+        var gradeId = 25000 + grade + grade * 100;
+        return gradeId switch
+        {
+            int id when id == data.tower_grade_ID_1 => data.random_max_1,
+            int id when id == data.tower_grade_ID_2 => data.random_max_2,
+            int id when id == data.tower_grade_ID_3 => data.random_max_3,
+            int id when id == data.tower_grade_ID_4 => data.random_max_4,
+            int id when id == data.tower_grade_ID_5 => data.random_max_5,
+            _ => -1
+        };
+    }
 }
