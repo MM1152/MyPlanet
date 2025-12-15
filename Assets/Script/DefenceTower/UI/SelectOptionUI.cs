@@ -22,6 +22,8 @@ public class SelectOptionUI : MonoBehaviour
     private RandomOptionBase optionBase;
     private Action<int> OnChangeIndex;
     private Tower tower;
+    private RandomOptionData.Data newRandomOption;
+    private int bonusAmount;
 
     public void Initalized(int index, Action<int> callback)
     {
@@ -54,11 +56,37 @@ public class SelectOptionUI : MonoBehaviour
     public void SetTowerData(Tower data)
     {
         tower = data;
-        this.optionBase = data.Option;
+        // this.optionBase = data.Option;
         slotIndexText.text = data.SlotIndex + "번 슬롯";
-        descriptionText.text = optionBase.GetOptionStringFormatting(); //타워의 각 옵션설명
+        
+        newRandomOption = tower.RandomOption.GetRandomOption();
+
+        if(newRandomOption.id == 1)
+        {
+            bonusAmount = DataTableManager.OptionTable.GetValueDataToInt(5014);
+        }
+        else if (newRandomOption.id == 2)
+        {
+            bonusAmount = DataTableManager.OptionTable.GetValueDataToInt(5015);
+        }
+        else
+        {
+            bonusAmount = DataTableManager.OptionTable.GetValueDataToInt(5016);
+        }
+        
+        descriptionText.text = $"[{newRandomOption.option.GetOptionStringFormatting()}] + {bonusAmount}%";
         
         UpdateBackgroundImage(false);
+    }
+    
+    public RandomOptionData.Data GetNewRandomOption()
+    {
+        return newRandomOption;
+    }
+    
+    public int GetBonusAmount()
+    {
+        return bonusAmount;
     }
     
     private void UpdateBackgroundImage(bool isSelected)

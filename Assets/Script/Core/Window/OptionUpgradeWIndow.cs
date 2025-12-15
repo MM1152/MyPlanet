@@ -53,21 +53,22 @@ public class OptionUpgradeWindow : Window
             }
         }
 
-        for(int i =0; i < selectOptionUIs.Count; i++)
-        {
-            selectOptionUIs[i].SetInteractive(false);
-        }
-
         for(int i = 0; i < selectOptionUIs.Count; i++)
         {
-            if (availableTowers.Count == 0) break;
+            if (i < availableTowers.Count)
+            {
+                int randomIndex = Random.Range(0, availableTowers.Count);
+                var towerData = availableTowers[randomIndex];
+                availableTowers.RemoveAt(randomIndex);
 
-            int randomIndex = Random.Range(0, availableTowers.Count);
-            var towerData = availableTowers[randomIndex];
-            availableTowers.RemoveAt(randomIndex);
-
-            selectOptionUIs[i].SetInteractive(true);
-            selectOptionUIs[i].SetTowerData(towerData);
+                selectOptionUIs[i].gameObject.SetActive(true);
+                selectOptionUIs[i].SetInteractive(true);
+                selectOptionUIs[i].SetTowerData(towerData);
+            }
+            else
+            {
+                selectOptionUIs[i].gameObject.SetActive(false);
+            }
         }
 
         selectIndex = -1;
@@ -92,26 +93,12 @@ public class OptionUpgradeWindow : Window
     {
         if (selectIndex == -1) return;
         var towerData = selectOptionUIs[selectIndex].GetTowerData();
-
+        var bonusAmount = selectOptionUIs[selectIndex].GetBonusAmount();
+   
         towerData.Option.ResetRandomOption();
-
-        var bonusAmount = 0;
-        if(towerData.Option.GetOptionData().id == 1)
-        {
-            bonusAmount = DataTableManager.OptionTable.GetValueDataToInt(5014);
-        }
-        else if (towerData.Option.GetOptionData().id == 2)
-        {
-            bonusAmount = DataTableManager.OptionTable.GetValueDataToInt(5015);
-        }
-        else
-        {
-            bonusAmount = DataTableManager.OptionTable.GetValueDataToInt(5016);
-        }
-
         towerData.Option.AddBonusOptionValue(bonusAmount);
         towerData.Option.SetRandomOption();
-
+        Debug.Log($"선택 보너스{bonusAmount}% 적용 완료");
         manager.Close();
     }
 }

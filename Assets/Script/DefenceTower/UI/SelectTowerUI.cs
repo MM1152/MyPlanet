@@ -88,7 +88,7 @@ public class SelectTowerUI : MonoBehaviour
 
         if (nextLevelData == null) 
         {
-            towerState.text = "만렙";
+          Debug.Log("최대레벨 도달");
         }
         else
         {
@@ -111,7 +111,8 @@ public class SelectTowerUI : MonoBehaviour
             {
                 for (int i = 0; i < upgradeList.Count; i++)
                 {
-                    if (i > 0) sb.Append("\n");
+                    if (i > 0 && i % 2 == 0) sb.Append("\n");
+                    else if (i > 0) sb.Append(" / ");
                     sb.Append(upgradeList[i]);
                 }
                 towerState.text = sb.ToString();
