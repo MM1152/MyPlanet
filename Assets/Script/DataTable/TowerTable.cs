@@ -31,6 +31,8 @@ public class TowerTable : DataTable
         public override EffectTable.Data Effect => DataTableManager.EffectTable.Get(Effect_Type);
         [CsvHelper.Configuration.Attributes.Ignore]
         public override string Explanatoin => DataTableManager.StringTable.Get(Description);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override int Type => 2;
     }
 
 
@@ -40,7 +42,8 @@ public class TowerTable : DataTable
         public int id { get; set; }
         [Name("Name")]
         public int name { get; set; }
-        public int Type { get; set; }
+        [Name("Type")]
+        public int type { get; set; }
         public int ATK_Type { get; set; }
         public int Option_type { get; set; }
         public int Option_Range { get; set; }
@@ -77,11 +80,15 @@ public class TowerTable : DataTable
             _ => "정의되지 않음"
         };
         [CsvHelper.Configuration.Attributes.Ignore]
+        public Sprite towerImage;
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public virtual int Type => type;
+        [CsvHelper.Configuration.Attributes.Ignore]
         public virtual string Explanatoin => DataTableManager.StringTable.Get(explanation);
         [CsvHelper.Configuration.Attributes.Ignore]
         public string Buff_Explanation => string.Format(DataTableManager.StringTable.Get(buff_Explantion) , OptionValue);
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string TypeToString => Type switch
+        public string TypeToString => type switch
         {
             1 => "공격",
             2 => "유틸",
@@ -131,6 +138,7 @@ public class TowerTable : DataTable
         foreach (var data in datas)
         {
             towerTable.Add(data.ID, data);
+            data.towerImage = await Addressables.LoadAssetAsync<Sprite>(data.Image_path).ToUniTask();
         }
 
         return (filename, this as DataTable);
@@ -144,6 +152,7 @@ public class TowerTable : DataTable
         foreach (var data in datas)
         {
             towerTable.Add(data.Tower_ID, data);
+            data.towerImage = await Addressables.LoadAssetAsync<Sprite>(data.Image_path).ToUniTask();
         }
         return (filename, this as DataTable);
     }

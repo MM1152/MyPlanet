@@ -26,8 +26,11 @@ public class PlanetInfoViewer : MonoBehaviour
 
     private PlanetTable.Data planetData;
     private PlanetData.Data planetUserData;
+
     private void Awake()
     {
+        
+
         infomationButton.onClick.AddListener(() => UpdateTab(infomationTab.gameObject, infomationTabBackGround, infomationButton.image.color));
         levelUpbutton.onClick.AddListener(() => UpdateTab(levelUpTab.gameObject,levelUpTabBackGround, levelUpbutton.image.color));
         starUpgradeButton.onClick.AddListener(() => UpdateTab(starUpgradeTab.gameObject, starUpgradeBackGround, starUpgradeButton.image.color));
@@ -94,4 +97,5 @@ public class PlanetInfoViewer : MonoBehaviour
     {
         levelText.text = string.Format("LV.{0}", args.Snapshot.Value.ToString());
     }
+
 }

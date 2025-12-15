@@ -1,19 +1,32 @@
 ﻿using Firebase.Database;
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TowerInfomation : MonoBehaviour
 {
+    [SerializeField] private Sprite enableStar;
+    [SerializeField] private Sprite disableStar;
+
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Image outlineImage;
 
     [SerializeField] private Image typeImage;
     [SerializeField] private Image effectiveImage;
     [SerializeField] private Image towerAttackType;
+    [SerializeField] private Image towerImage;
+
+    [SerializeField] private Image[] starImage;
+
+    [SerializeField] private GameObject typeImageBackGround;
+    [SerializeField] private GameObject effectiveImageBackGround;
+    [SerializeField] private GameObject towerAttackImageBackGround;
+
     [SerializeField] private TextMeshProUGUI towerNameText;
     private TowerTable.Data data;
+    private TowerData.Data userData;
 
     public event Action<TowerTable.Data> OnTab;
     public event Action<TowerTable.Data> OnLongTab;
@@ -23,12 +36,33 @@ public class TowerInfomation : MonoBehaviour
     public void Init(int towerId)
     {
         data = DataTableManager.TowerTable.Get(towerId);
-        towerNameText.text = data.Name; 
-        typeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable , data.Type);
-        effectiveImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable , data.attribute);
+        userData = FirebaseManager.Instance.TowerData.Get(towerId);
 
+        towerNameText.text = data.Name; 
+
+        var typeSprite = DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable, data.Type);
+        if(typeSprite != null)
+            typeImage.sprite = typeSprite;
+        else
+            typeImageBackGround.SetActive(false);
+
+        var effectiveSprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, data.attribute);
+        if (effectiveSprite != null)
+            effectiveImage.sprite = effectiveSprite;
+        else 
+            effectiveImageBackGround.SetActive(false);
+
+        var attackTypeSprite = DataTableManager.SpriteTable.Get(DataTableIds.AttackTypeSpriteTable, data.ATK_Type);
+        if (attackTypeSprite != null)
+            towerAttackType.sprite = attackTypeSprite;
+        else
+            towerAttackImageBackGround.SetActive(false);
+
+        towerImage.sprite = DataTableManager.TowerTable.Get(towerId).towerImage;
         backgroundImage.color = data.AttributeToColor.backGroundColor;
         outlineImage.color = data.AttributeToColor.outlineColor;
+
+        UpdateStar(userData.grade);
     }
 
     public TowerTable.Data GetTowerData()
@@ -67,5 +101,23 @@ public class TowerInfomation : MonoBehaviour
         OnTab = null;
         OnLongTab = null;
         FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.TowerUnlockPathFormating, data.ID),OnUnlockValueChanged);
+    }
+
+    private void ResetStar()
+    {
+        for(int i = 0; i < starImage.Length; i++)
+        {
+            starImage[i].sprite = disableStar;
+        }
+    }
+
+    private void UpdateStar(int starCount)
+    {
+        ResetStar();
+
+        for (int i = 0; i < starCount; i++)
+        {
+            starImage[i].sprite = enableStar;
+        }
     }
 }

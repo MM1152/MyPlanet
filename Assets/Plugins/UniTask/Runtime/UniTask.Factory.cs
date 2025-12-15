@@ -367,7 +367,7 @@ namespace Cysharp.Threading.Tasks
                     calledGet = true;
                     GC.SuppressFinalize(this);
                 }
-                exception.Throw();
+                exception.Throw();  
                 return default;
             }
 
