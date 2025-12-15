@@ -6,37 +6,42 @@ using UnityEngine.UI;
 public class SelectOptionUI : MonoBehaviour
 {
     [Header("Images")]
-    [SerializeField] private Image image;
+    [SerializeField] private Image iconImage;
+    [SerializeField] private Image backgroundImage;
+    [Header("Sprites")]
+    [SerializeField] private Sprite backgroundSprite;
+    [SerializeField] private Sprite selectOptionBackgroundSprite;
     [Header("Texts")]
-    [SerializeField] private TextMeshProUGUI slotIndexText; 
+    [SerializeField] private TextMeshProUGUI slotIndexText;
     [SerializeField] private TextMeshProUGUI descriptionText;
 
+    [Header("Toggle")]
+    [SerializeField] private Toggle toggle;
+    [SerializeField] private ToggleGroup toggleGroup;
+
     private RandomOptionBase optionBase;
-    private Toggle toggle;
-    private Outline outLine;
-
     private Action<int> OnChangeIndex;
-
     private Tower tower;
 
     public void Initalized(int index, Action<int> callback)
     {
-        toggle = GetComponent<Toggle>();
-        outLine = GetComponent<Outline>();
+        if (toggleGroup != null)
+        {
+            toggle.group = toggleGroup;
+        }
 
-        toggle.group = transform.parent.GetComponent<ToggleGroup>();
         OnChangeIndex = callback;
 
         toggle.onValueChanged.AddListener((isOn) =>
         {
             if (isOn)
             {
-                outLine.enabled = true;
+                UpdateBackgroundImage(true);
                 OnChangeIndex?.Invoke(index);
             }
             else
             {
-                outLine.enabled = false;
+                UpdateBackgroundImage(false);
             }
         });
     }
@@ -50,17 +55,26 @@ public class SelectOptionUI : MonoBehaviour
     {
         tower = data;
         this.optionBase = data.Option;
-        slotIndexText.text = data.SlotIndex + "π¯ ΩΩ∏©";
-        descriptionText.text = optionBase.GetOptionStringFormatting();
+        slotIndexText.text = data.SlotIndex + "Î≤à Ïä¨Î°Ø";
+        descriptionText.text = optionBase.GetOptionStringFormatting(); //ÌÉÄÏõåÏùò Í∞Å ÏòµÏÖòÏÑ§Î™Ö
+        
+        UpdateBackgroundImage(false);
     }
-
-    public void ResetOutline()
+    
+    private void UpdateBackgroundImage(bool isSelected)
     {
-        outLine.enabled = false;
+        backgroundImage.sprite = isSelected ? selectOptionBackgroundSprite : backgroundSprite;
     }
 
     public void SetInteractive(bool active)
     {
         toggle.interactable = active;
     }
+
+    // public void ResetOutline()
+    // {
+    //     tower = null;
+    //     optionBase = null;
+    //     toggle.isOn = false;
+    // }
 }

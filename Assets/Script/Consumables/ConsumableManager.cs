@@ -48,6 +48,11 @@ public class ConsumableManager : MonoBehaviour
         if (useAbleConsumList == null) Init();
         return useAbleConsumList[index];
     }
+    public List<ConsumalbeTable.Data> GetAllData()
+    {
+        if (useAbleConsumList == null) Init();
+        return useAbleConsumList;
+    }
 
     public void SetConsumable(ConsumalbeTable.Data data)
     {

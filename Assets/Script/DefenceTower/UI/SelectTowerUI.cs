@@ -2,44 +2,62 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class SelectTowerUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI towerNameText;
-    [SerializeField] private TextMeshProUGUI towerTypeText;
-    [SerializeField] private TextMeshProUGUI slotIndexText;
-    [SerializeField] private TextMeshProUGUI towerDescriptionText;
+    [SerializeField] private TextMeshProUGUI towerNameText; //타워이름
+    [SerializeField] private TextMeshProUGUI slotIndexText; //슬롯위치넘버 
+    [SerializeField] private TextMeshProUGUI towerDescriptionText; //타워 간략설명
+    [SerializeField] private TextMeshProUGUI towerState; //타워 능력 상태 
 
-    private Image backGroundImage;
+    [Header("UI Elements")]
+    [SerializeField] private Image backGroundImage;
+    [SerializeField] private Image iconImage;
+
+    [Header("Tower UI")]
+    [SerializeField] private Sprite towerBackGroundImage; // 배경 이미지 
+    [SerializeField] private Sprite towerIconBackgroundImage; // 아이콘 배경 이미지
+    [SerializeField] private Sprite towerChoiceBackgroundImage; // 선택된 타워 배경 이미지
+
+    [Header("Consumable UI")]
+    [SerializeField] private Sprite consumableBackgroundImage; // 소모품 배경 이미지
+    [SerializeField] private Sprite consumableIconImage; // 소모품 아이콘 이미지
+    [SerializeField] private Sprite consumableChoiceBackgroundImage; // 선택된 소모품 배경 이미지
+
+    [Header("Toggle")]
+    [SerializeField] private Toggle toggle;
+    [SerializeField] private ToggleGroup toggleGroup;
 
     private TowerTable.Data towerData;
     private ConsumalbeTable.Data consumeData;
+    private bool isTower;
+    
 
-    private Toggle toggle;
-    private Outline outLine;
-    private Button button;
+    private List<string> upgradeList = new List<string>();
+    private System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
     private Action<int> OnChangeIndex;
 
-    public void Initalized(int index , Action<int> callback)
+    public void Initalized(int index, Action<int> callback)
     {
-        backGroundImage = GetComponent<Image>();
-        toggle = GetComponent<Toggle>();
-        outLine = GetComponent<Outline>();
-
-        toggle.group = transform.parent.GetComponent<ToggleGroup>();
+        if (toggleGroup != null)
+        {
+            toggle.group = toggleGroup;
+        }
+     
         OnChangeIndex = callback;
-
         toggle.onValueChanged.AddListener((isOn) =>
         {
-            Debug.Log($"Current Toggle IsOn : {isOn}", gameObject);
             if (isOn)
             {
-                outLine.enabled = true;
+                UpdateBackgroundImage(true);
                 OnChangeIndex?.Invoke(index);
-            }else
+            }
+            else
             {
-                outLine.enabled = false;
+                UpdateBackgroundImage(false);
             }
         });
     }
@@ -51,27 +69,113 @@ public class SelectTowerUI : MonoBehaviour
 
     public void SetTowerData(Tower data)
     {
-        backGroundImage.color = ColorDefine.TowerSelectUIColor;
-
         gameObject.SetActive(true);
+        isTower = true;
         this.towerData = data.TowerData;
-        towerNameText.text = towerData.Name + (data.Level == 0 ? "" : $"+{data.Level}단계");
-        towerTypeText.gameObject.SetActive(true);   
-        towerTypeText.text = towerData.AttackType;
-        slotIndexText.text = data.SlotIndex + "번 슬릇";
-        towerDescriptionText.text = "대충 이런 타워입니다~";
+        towerNameText.text = $"[{towerData.Name}]" + (data.Level == 0 ? "" : $"+{data.Level}단계");
+        slotIndexText.text = data.SlotIndex + "번 슬롯";
+        towerDescriptionText.text = "타워에 대한 간략한 설명";
+        towerState.gameObject.SetActive(true);
+        iconImage.sprite = towerIconBackgroundImage;
+
+        var currentLevelData = DataTableManager.LevelUpTable.Get(data.TowerData.ID, data.Level);
+        var nextLevelData = DataTableManager.LevelUpTable.Get(data.TowerData.ID, data.Level + 1);
+        
+        if (currentLevelData != null)
+            Debug.Log($"CurrentLevel {data.Level} - Var1:{currentLevelData.Var1} Val1:{currentLevelData.Val1}");
+        if (nextLevelData != null)
+            Debug.Log($"NextLevel {data.Level + 1} - Var1:{nextLevelData.Var1} Val1:{nextLevelData.Val1}");
+
+        if (nextLevelData == null) 
+        {
+            towerState.text = "만렙";
+        }
+        else
+        {
+            upgradeList.Clear();
+            sb.Clear();
+
+            int currentDamage = currentLevelData?.Damage ?? 0;
+            int damageDiff = nextLevelData.Damage - currentDamage;
+            if (damageDiff > 0)
+            {
+                upgradeList.Add($"[공격력] +{damageDiff}");
+            }
+
+            CheckVarUpgrade(currentLevelData?.Var1 ?? 0, currentLevelData?.Val1 ?? 0, nextLevelData.Var1, nextLevelData.Val1);
+            CheckVarUpgrade(currentLevelData?.Var2 ?? 0, currentLevelData?.Val2 ?? 0, nextLevelData.Var2, nextLevelData.Val2);
+            CheckVarUpgrade(currentLevelData?.Var3 ?? 0, currentLevelData?.Val3 ?? 0, nextLevelData.Var3, nextLevelData.Val3);
+            CheckVarUpgrade(currentLevelData?.Var4 ?? 0, currentLevelData?.Val4 ?? 0, nextLevelData.Var4, nextLevelData.Val4);
+
+            if (upgradeList.Count > 0)
+            {
+                for (int i = 0; i < upgradeList.Count; i++)
+                {
+                    if (i > 0) sb.Append("\n");
+                    sb.Append(upgradeList[i]);
+                }
+                towerState.text = sb.ToString();
+            }
+            else
+            {
+                towerState.text = "능력치 변화 없음";
+            }
+        }
+
+        UpdateBackgroundImage(false);
+    }
+
+    private void CheckVarUpgrade(int currentVar, float currentVal, int nextVar, float nextVal)
+    {
+        if (nextVar <= 0) return;
+
+        float compareVal = (currentVar == nextVar) ? currentVal : 0;
+        float diff = nextVal - compareVal;
+
+        if (diff == 0) return;
+
+        string effectName = LevelUpEffectDescriptions.GetLevelUpEffectDescription(nextVar);
+        if (string.IsNullOrEmpty(effectName)) return;
+  
+        // 쿨타임(Var5)만 감소 표시, 다른 능력치는 증가만 표시
+        if (nextVar == 5)
+        {
+            if (diff < 0)
+            {
+                upgradeList.Add($"[{effectName}] -{Mathf.Abs(diff)}");
+            }
+        }
+        else if (diff > 0)
+        {
+            upgradeList.Add($"[{effectName}] +{diff}");
+        }
     }
 
     public void SetConsumableData(ConsumalbeTable.Data data)
     {
-        backGroundImage.color = ColorDefine.ConsumableSelectUiColor;
-
         gameObject.SetActive(true);
+        isTower = false;
         this.consumeData = data;
         towerNameText.text = data.Name;
-        towerTypeText.gameObject.SetActive(false);
         slotIndexText.text = "소모품";
-        towerDescriptionText.text = data.Description;
+        towerDescriptionText.text = "소모품에 대한 간략한 설명";
+        towerState.text = data.Description;
+        // towerState.gameObject.SetActive(false);
+        iconImage.sprite = consumableIconImage;
+
+        UpdateBackgroundImage(false);
+    }
+
+    private void UpdateBackgroundImage(bool isSelected)
+    {
+        if (isTower)
+        {
+            backGroundImage.sprite = isSelected ? towerChoiceBackgroundImage : towerBackGroundImage;
+        }
+        else
+        {
+            backGroundImage.sprite = isSelected ? consumableChoiceBackgroundImage : consumableBackgroundImage;
+        }
     }
 
     public TowerTable.Data GetTowerData()
@@ -88,7 +192,7 @@ public class SelectTowerUI : MonoBehaviour
     {
         towerData = null;
         consumeData = null;
-        outLine.enabled = false;
+
         toggle.isOn = false;
     }
 }
