@@ -50,7 +50,8 @@ public class DarkLaser : BaseAttackPrefab
         if (timer >= tower.BonusDuration)
         {
             timer = 0;
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
 

@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using UnityEngine.InputSystem;
 
 public class TowerManager : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class TowerManager : MonoBehaviour
     private int currentLevel = 1;
     public int CurrentLevel => currentLevel;
     private int maxLevel = 999;
-    public int levelUpExp => currentLevel * 50;
+    private int levelUpExp;
 
     private bool isLevelUp = false;
 
@@ -40,6 +41,7 @@ public class TowerManager : MonoBehaviour
 
     protected virtual void Awake()
     {
+        levelUpExp = DataTableManager.BasePlanetLevelTable.GetRequiredExp(currentLevel + 1);
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
         presetGameData = FirebaseManager.Instance.PresetData.GetGameData().data;
         for(int i = 0; i < presetGameData.TowerId.Count; i++)
@@ -73,6 +75,13 @@ public class TowerManager : MonoBehaviour
         {
             tower?.Update(Time.deltaTime);
         }
+
+#if DEBUG_MODE
+        if(Keyboard.current.f1Key.wasPressedThisFrame)
+        {
+            LevelUp();
+        }
+#endif
     }
 
     public List<Enemy> FindTargets()
@@ -228,6 +237,12 @@ public class TowerManager : MonoBehaviour
 #if DEBUG_MODE
         if (!disAbleLevelUp) return;
 #endif
+        if (levelUpExp == -1)
+        {
+            expSlider?.UpdateSlider("MAX" , 1 , 1);
+            return;
+        }
+
         var sumExp = Mathf.Min(totalExp += exp, levelUpExp);
 
         if (sumExp >= levelUpExp)
@@ -242,6 +257,11 @@ public class TowerManager : MonoBehaviour
 
     private void LevelUp()
     {
+        if(levelUpExp == -1)
+        {
+            
+            return;
+        }
         if (currentLevel >= maxLevel)
         {
 #if DEBUG_MODE
@@ -250,7 +270,12 @@ public class TowerManager : MonoBehaviour
             return;
         }
         currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
+        levelUpExp = DataTableManager.BasePlanetLevelTable.GetRequiredExp(currentLevel + 1);
+     
         totalExp = 0;
+
+        if (levelUpExp == -1) expSlider?.UpdateSlider("MAX", 1, 1);
+        else expSlider?.UpdateSlider(totalExp, levelUpExp, currentLevel, levelUpExp - totalExp);
 
 
         windowManager.Open(WindowIds.PlaceTowerWindow);

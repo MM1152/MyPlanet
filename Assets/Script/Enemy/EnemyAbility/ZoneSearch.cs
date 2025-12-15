@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class ZoneSearch : MonoBehaviour
 {
@@ -9,7 +10,6 @@ public class ZoneSearch : MonoBehaviour
 
     private void Awake()
     {
-        enemy = GetComponentInParent<Enemy>();
         circleCollider = GetComponent<CircleCollider2D>();
     }
 
@@ -17,6 +17,7 @@ public class ZoneSearch : MonoBehaviour
     {
         if (circleCollider == null) return;
 
+        this.enemy = enemy;
         float scale = transform.lossyScale.x;
         circleCollider.radius = SetScaledRadius();
     }
@@ -46,6 +47,24 @@ public class ZoneSearch : MonoBehaviour
         {
             enemiesInZone.Add(enemy);
         }
+
+
+        if (collision.CompareTag(TagIds.DroneTag))
+        {
+            if(this.enemy.enemyType == EnemyType.Ranged)
+            {
+                var drone = collision.GetComponent<Drone>();
+                var percent = drone.Tower.BonusDroneTargetedPercent / 100f;
+                var rand = UnityEngine.Random.Range(0f, 1f);
+
+                if (rand < percent)
+                {
+                    this.enemy.SetTarget(collision.gameObject);
+                    this.enemy.SetState(this.enemy.stateMachine.attackState);
+                    return;
+                }
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -54,6 +73,14 @@ public class ZoneSearch : MonoBehaviour
         if (enemy != null && enemiesInZone.Contains(enemy))
         {
             enemiesInZone.Remove(enemy);
+        }
+        if (collision.CompareTag(TagIds.DroneTag))
+        {
+            if (this.enemy.GetTarget() == collision.gameObject)
+            {
+                this.enemy.SetTarget(GameObject.FindGameObjectWithTag("Player").gameObject);
+                this.enemy.SetState(this.enemy.stateMachine.attackState);
+            }
         }
     }
 

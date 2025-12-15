@@ -5,6 +5,7 @@ public class PassiveSystem
 {
     private IPassive passive;
     private ICondition condition; 
+    public ICondition Condition => condition;
 
     private ConditionFactory conditionFactory = new ConditionFactory();
     private PassiveFacotry passiveFactory = new PassiveFacotry();
@@ -20,6 +21,8 @@ public class PassiveSystem
 
     public bool isPassiveOn = false;
 
+    private EnemySpawnManager enemySpawnmanager;
+    public EnemySpawnManager EnemySpawnmanager => enemySpawnmanager;
     private Tower tower;
     private BasePlanet basePlanet;
     private Enemy enemy;
@@ -40,6 +43,7 @@ public class PassiveSystem
         coolTimeTimer = 0f;
 
         basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
+        enemySpawnmanager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag).GetComponent<EnemySpawnManager>();  
     }
 
     public void CheckUseAblePassive(Tower tower , BasePlanet basePlanet , Enemy enemy)

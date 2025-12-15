@@ -104,6 +104,17 @@ public class EnemySpawnManager : MonoBehaviour
         return null;
     }
 
+    public Enemy GetEnemyChaose(Vector3 position)
+    {
+        var list = GetEnemyDatas(position);
+        if (list != null && list.Count > 2)
+        {
+            return list[1];
+        }
+        return null;
+    }
+
+
     public void ClearAllEnemy()
     {
         var enemiesToKill = new List<Enemy>(spawnEnemys);

@@ -1,6 +1,5 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public abstract class RangeCheckDeathHandler : BaseDie

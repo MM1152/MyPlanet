@@ -1,8 +1,13 @@
 using Cysharp.Threading.Tasks;
 using Firebase.Database;
+using NUnit.Framework;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using NUnit.Framework.Interfaces;
 
 public class InfomationTab : MonoBehaviour
 {
@@ -25,6 +30,7 @@ public class InfomationTab : MonoBehaviour
 
 #if DEBUG_MODE
     [SerializeField] private Button debugAddPieceButton;
+    [SerializeField] private Button unlockButton;
 #endif
 
     private PlanetTable.Data planetTableData;
@@ -37,8 +43,10 @@ public class InfomationTab : MonoBehaviour
         {
             OnClickAddPiece().Forget();
         });
+        unlockButton.onClick.AddListener(() => OnClickUnlock().Forget());
 #endif
     }
+
 
     public void UpdateData(PlanetTable.Data planetTableData)
     {
@@ -46,25 +54,28 @@ public class InfomationTab : MonoBehaviour
         {
             FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetPeiceCountPathFormating, this.planetTableData.ID), OnValueChangedPieceCount);
             FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetStarCountPathFormating, this.planetTableData.ID), OnValueChangedStarCount);
+            FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetUnlockPathFormating, this.planetTableData.ID), OnValueChangedUnlock);
         }
 
         this.planetTableData = planetTableData; 
         FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetPeiceCountPathFormating, this.planetTableData.ID) , OnValueChangedPieceCount);
         FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetStarCountPathFormating, this.planetTableData.ID), OnValueChangedStarCount);
+        FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetUnlockPathFormating, this.planetTableData.ID), OnValueChangedUnlock);
 
         planetGradeText.text = planetTableData.grade;
         planetTypeText.text = planetTableData.PlanetType;
         planetElemetTypeText.text = planetTableData.AttributeType;
         planetDescriptionText.text = planetTableData.Explanation;
         planetElementTypeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, planetTableData.Attribute);
-
+        var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
+        UpdatePeiceCount(userPlanetData.count);
 #if DEBUG_MODE
         debugAddPieceButton.interactable = true;
-        var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
         if (!userPlanetData.UseAble)
         {
             debugAddPieceButton.interactable = false;
         }
+        unlockButton.interactable = !userPlanetData.UseAble;
 #endif
         ResetStar();
         var starCount = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID).star;
@@ -82,18 +93,25 @@ public class InfomationTab : MonoBehaviour
         }
     }
 
-    private void OnValueChangedPieceCount(object sender , ValueChangedEventArgs args)
+    private void UpdatePeiceCount(int pieceCount)
     {
-        var pieceCount = int.Parse(args.Snapshot.Value.ToString());
         var userPlnaetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
         var maxPieceCount = (int)(planetTableData.NeedPeiceCountPercent * userPlnaetData.NeedPeiceCount);
-        
-        if(maxPieceCount == 0)
+
+        if (!userPlnaetData.UseAble) maxPieceCount = 10;
+
+        if (maxPieceCount == 0)
             pieceCountText.text = "조각 개수 : MAX";
         else
             pieceCountText.text = $"조각 개수 : {pieceCount}/{maxPieceCount}";
 
         pieceCountSlider.value = (float)pieceCount / maxPieceCount;
+    }
+
+    private void OnValueChangedPieceCount(object sender , ValueChangedEventArgs args)
+    {
+        var pieceCount = int.Parse(args.Snapshot.Value.ToString());
+        UpdatePeiceCount(pieceCount);
     }
 
     private void OnValueChangedStarCount(object sender, ValueChangedEventArgs args)
@@ -105,12 +123,31 @@ public class InfomationTab : MonoBehaviour
             startsImages[i].sprite = starOnEnAbleSprite;
         }
     }
+
+    private void OnValueChangedUnlock(object sender, ValueChangedEventArgs args)
+    {
+        var unlock = bool.Parse(args.Snapshot.Value.ToString());
+        unlockButton.interactable = !unlock;
+    }
+
 #if DEBUG_MODE
     private async UniTaskVoid OnClickAddPiece()
     {
         debugAddPieceButton.interactable = false;
         await FirebaseManager.Instance.PlanetData.AddPieceCountAsync(planetTableData.ID , 100);
         debugAddPieceButton.interactable = true;
+    }
+
+    private async UniTaskVoid OnClickUnlock()
+    {
+        var userPlnaetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
+        if (userPlnaetData.count < 10) return;
+
+        var task = new List<UniTask>() {
+            FirebaseManager.Instance.PlanetData.UnlockPlanetAsync(planetTableData.ID),
+            FirebaseManager.Instance.PlanetData.AddPieceCountAsync(planetTableData.ID , -10)
+        };
+        await Managers.Instance.WaitForLoadingAsync(task);
     }
 #endif
 }

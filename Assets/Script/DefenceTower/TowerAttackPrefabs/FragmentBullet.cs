@@ -19,7 +19,8 @@ public class FragmentBullet : ProjectTile
 
         if (currentDuration <= 0f)
         {
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if(gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
 
@@ -28,6 +29,7 @@ public class FragmentBullet : ProjectTile
         var find = collision.GetComponent<IDamageAble>();
         if (find != null && find.IsDead) return;
         base.HitTarget(collision);
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        if(gameObject.activeSelf)
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
     }
 }

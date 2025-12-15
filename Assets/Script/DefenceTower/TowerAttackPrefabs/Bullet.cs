@@ -17,6 +17,7 @@ public class Bullet : ProjectTile
     protected override void HitTarget(Collider2D collision)
     {
         base.HitTarget(collision);
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);        
+        if(gameObject.activeSelf) 
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);        
     }
 }

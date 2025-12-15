@@ -28,6 +28,7 @@ public class TitleSelectPlanetWindow : Window
     private List<PlanetInfomation> planetInfomations = new List<PlanetInfomation>();
     
     private int presetIndex;
+    private WindowIds prevWindowId;
 
     public override void Close()
     {
@@ -39,15 +40,22 @@ public class TitleSelectPlanetWindow : Window
         base.Init(manager);
 
         windowId = (int)WindowIds.TitleSelectPlanetWindow;
-        closeButton.onClick.AddListener(() => manager.Open(WindowIds.TitlePresetWindow));
+        closeButton.onClick.AddListener(() => {
+            if(prevWindowId != WindowIds.None)
+                manager.Open(prevWindowId);
+            else
+                manager.Open(WindowIds.TitlePresetWindow);
+        });
         selectPlanetButton.onClick.AddListener(() => {
             if (planetData == null) return;
             var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
             if (!userData.UseAble) return;
 
             var towerPlaceWindow =  manager.Open(WindowIds.TitleTowerPlaceEditWindow);
+            
             if(towerPlaceWindow is TitleTowerPlaceEditWindow window)
             {
+                window.SetPrevWindow(prevWindowId);
                 window.SetPresetData(presetData , presetIndex);
             }
         });
@@ -107,4 +115,8 @@ public class TitleSelectPlanetWindow : Window
         GetPlanetData(planetData , planetInfomations[findIdx]);
     }
 
+    public void SetPrevWindow(WindowIds prevWindow)
+    {
+        prevWindowId = prevWindow;
+    }
 }

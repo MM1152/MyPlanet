@@ -40,19 +40,20 @@ public class PlanetInfomation : MonoBehaviour
 
     public void UpdateTexts(PlanetTable.Data data)
     {
-        if (data.ID == 1011 || data.ID == 1012)
-            isSetting = false;
-
         var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
         var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
+        var unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
         FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangedStar);
         FirebaseManager.Instance.Database.RemoveListner(levelPath, OnValueChangedLevel);
+        FirebaseManager.Instance.Database.RemoveListner(unlockPath, OnValueChangedUnLock);
         this.data = data;
 
         path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
         levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
+        unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
         FirebaseManager.Instance.Database.AddListner(path, OnValueChangedStar);
         FirebaseManager.Instance.Database.AddListner(levelPath, OnValueChangedLevel);
+        FirebaseManager.Instance.Database.AddListner(unlockPath, OnValueChangedUnLock);
 
         userData = FirebaseManager.Instance.PlanetData.GetOrigin(data.ID);
 
@@ -64,11 +65,7 @@ public class PlanetInfomation : MonoBehaviour
         planetLevelText.text = $"Lv. {userData.level:D2}";
         ResetStar();
         UpdateStar(userData.star);
-
-        if (userData.UseAble)
-            disAblePanel.SetActive(false);
-        else
-            disAblePanel.SetActive(true);
+        UpdateDisAble();
     }
 
     private void ResetStar()
@@ -85,6 +82,14 @@ public class PlanetInfomation : MonoBehaviour
         {
             starImages[i].sprite = enableStarSprite;
         }
+    }
+
+    private void UpdateDisAble()
+    {
+        if (userData.UseAble)
+            disAblePanel.SetActive(false);
+        else
+            disAblePanel.SetActive(true);
     }
 
     private void UpdateLevel(int level)
@@ -121,5 +126,10 @@ public class PlanetInfomation : MonoBehaviour
     private void OnValueChangedLevel(object sender, ValueChangedEventArgs args)
     {
         UpdateLevel(int.Parse(args.Snapshot.Value.ToString()));
+    }
+
+    private void OnValueChangedUnLock(object sender, ValueChangedEventArgs args)
+    {
+        UpdateDisAble();
     }
 }

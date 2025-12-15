@@ -44,4 +44,13 @@ public class SliderValue : MonoBehaviour
 
         slider.value = (float)value / maxValue;
     }
+
+    public void UpdateSlider(string msg , int value, int maxValue)
+    {
+        if(text != null)
+        {
+            text.text = msg;
+        }
+        slider.value = (float)value / maxValue;
+    }
 }

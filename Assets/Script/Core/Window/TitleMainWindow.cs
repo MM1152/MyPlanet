@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Firebase.Database;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ public class TitleMainWindow : Window
     [SerializeField] private Button logoutButton;
     [SerializeField] private Button debugModeSceneButton;
     [SerializeField] private Button bookOpenButton;
+    [SerializeField] private Button randomPickUpButton;
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI userNickNameText;
     [SerializeField] private TextMeshProUGUI userGold;
@@ -24,6 +26,8 @@ public class TitleMainWindow : Window
         base.Init(manager);
         windowId = (int)WindowIds.TitleMainWindow;
 
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath, OnChangeGoldValue);
+
         selectStageButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
         userNickNameText.text = FirebaseManager.Instance.UserData.nickName;
         userGold.text = FirebaseManager.Instance.UserData.gold.ToString();
@@ -31,7 +35,7 @@ public class TitleMainWindow : Window
         {
             FirebaseManager.Instance.Logout();
         });
-
+        randomPickUpButton.onClick.AddListener(() => manager.Open(WindowIds.RandomPickUpWindow));
 #if UNITY_EDITOR
         debugModeSceneButton.onClick.AddListener(() =>
         {
@@ -51,4 +55,9 @@ public class TitleMainWindow : Window
     {
         base.Open();
     }
+
+    private void OnChangeGoldValue(object sender , ValueChangedEventArgs args)
+    {
+        userGold.text = args.Snapshot.Value.ToString();
+    } 
 }

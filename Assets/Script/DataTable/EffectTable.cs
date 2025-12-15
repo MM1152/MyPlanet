@@ -11,6 +11,7 @@ public class EffectTable : DataTable
     {
         public int ID { get; set; }
         public int Effect_code { get; set; }
+        public float Val { get; set; }
         public int Effect_Cycle {  get; set; }
         public int Effect_Persent { get; set; }
         public int Stackable { get; set; }

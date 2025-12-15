@@ -19,7 +19,9 @@ public class TitlePresetWindow : Window
     {
         base.Init(manager);
         windowId = (int)WindowIds.TitlePresetWindow;
-        backButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
+        backButton.onClick.AddListener(() => {
+            manager.Open(WindowIds.TitleStageSelectedWindow);
+        });
 
         FirebaseManager.Instance.PresetData.OnChangePresetData += ChangePresetData;
         UpdatePreset();
@@ -90,6 +92,7 @@ public class TitlePresetWindow : Window
             var presetViewer = Instantiate(this.presetViewer, presetDataRoot);
             presetViewer.Init(FirebaseManager.Instance.PresetData.Get(i), i, manager , ChangeSelectPresetIndex);
             presetViewers.Add(presetViewer);
+            presetViewer.CurrentWindowId = (WindowIds)windowId;
         }
     }
 

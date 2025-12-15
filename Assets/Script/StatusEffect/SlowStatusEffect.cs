@@ -28,7 +28,7 @@ public class SlowStatusEffect : IStatusEffect
         {
             this.target = target;
             this.moveAble = moveAble;
-            this.moveAble.CurrentSpeed = moveAble.BaseSpeed * (1 - slowPercent);
+            this.moveAble.CurrentSpeed = moveAble.BaseSpeed * Mathf.Clamp01((1 - slowPercent));
         }
     }
 

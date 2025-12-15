@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using Firebase.Database;
 
 public class TitleBookWindow : Window
 {
@@ -28,10 +29,19 @@ public class TitleBookWindow : Window
     [Header("Books")]
     [SerializeField] private GameObject planetBook;
     [SerializeField] private GameObject towerBook;
+    [SerializeField] private GameObject presetBook;
+
+    [Header("References")]
+    [SerializeField] private WindowManager windowManager;
+    [SerializeField] private PresetViewer presetViewer;
+    [SerializeField] private Transform presetViewerRoot;
 
     private List<PlanetInfomation> planetInfomationList = new List<PlanetInfomation>();
     private List<TowerInfomation> towerInfomationList = new List<TowerInfomation>();
     private GameObject currentOpenBook;
+
+    private List<PresetViewer> presetViewers = new List<PresetViewer>();
+    private int currentSelectPresetIndex = -1;
 
     public override void Init(WindowManager manager)
     {
@@ -39,9 +49,12 @@ public class TitleBookWindow : Window
         windowId = (int)WindowIds.TitleBookWindow;
         InitPlanetInfoList();
         InitTowerInfoList();
+        InitPresetList();
 
         planetBook.SetActive(false);
         towerBook.SetActive(false);
+        presetBook.SetActive(false);
+        FirebaseManager.Instance.PresetData.OnChangePresetData += ChangePresetData;
 
         towerButton.onClick.AddListener(() =>
         {
@@ -62,6 +75,17 @@ public class TitleBookWindow : Window
             }
 
             currentOpenBook = planetBook;
+            currentOpenBook.SetActive(true);
+        });
+
+        presetButton.onClick.AddListener(() =>
+        {
+            if (currentOpenBook != null)
+            {
+                currentOpenBook.SetActive(false);
+            }
+
+            currentOpenBook = presetBook;
             currentOpenBook.SetActive(true);
         });
 
@@ -101,7 +125,7 @@ public class TitleBookWindow : Window
     private void InitPlanetInfoList()
     {
         var planetDatas = DataTableManager.PlanetTable.GetAllData();
-
+        
         for(int i = 0; i < planetDatas.Count; i++)
         {
             var planetInfo = Instantiate(planetInfomation , planetInfomationRoot);
@@ -120,7 +144,62 @@ public class TitleBookWindow : Window
             var towerInfo = Instantiate(towerInfomation, towerInfomationRoot);
             towerInfomationList.Add(towerInfo);
             towerInfo.Init(towerDatas[i].ID);
+
+            if (!FirebaseManager.Instance.TowerData.Get(towerDatas[i].ID).Unlock)
+            {
+                towerInfo.gameObject.SetActive(false);
+            }
+
+            towerInfo.OnTab += OnTabTowerInfomation;
+
+            var path = string.Format(DataBasePaths.TowerUnlockPathFormating , towerDatas[i].ID);
+            FirebaseManager.Instance.Database.AddListner(path, towerInfo.OnUnlockValueChanged);
         }
+    }
+
+    private void InitPresetList()
+    {
+        UpdatePreset();
+    }
+
+    private void ChangeSelectPresetIndex(int changeIdx)
+    {
+
+        if (currentSelectPresetIndex != -1)
+        {
+            presetViewers[currentSelectPresetIndex].UpdateSelectButton(false);
+        }
+        currentSelectPresetIndex = changeIdx;
+        presetViewers[currentSelectPresetIndex].UpdateSelectButton(true);
+    }
+
+    private void UpdatePreset()
+    {
+        for (int i = 0; i < presetViewers.Count; i++)
+        {
+            Destroy(presetViewers[i].gameObject);
+        }
+        presetViewers.Clear();
+
+        for (int i = 0; i < FirebaseManager.Instance.PresetData.Count(); i++)
+        {
+            var presetViewer = Instantiate(this.presetViewer, presetViewerRoot);
+            presetViewer.Init(FirebaseManager.Instance.PresetData.Get(i), i, manager, ChangeSelectPresetIndex);
+            presetViewer.CurrentWindowId = (WindowIds)windowId;
+            presetViewers.Add(presetViewer);
+        }
+    }
+
+    private void ChangePresetData(int index)
+    {
+        Debug.Log("Preset ChangeData Call");
+        var presetData = FirebaseManager.Instance.PresetData.Get(index);
+        presetViewers[index].UpdatePreset(presetData);
+    }
+
+    private void OnDestroy()
+    {
+        FirebaseManager.Instance.PresetData.OnChangePresetData -= ChangePresetData;
     }
 
     private void OpenBookInfomationWindow(PlanetTable.Data planetData , PlanetInfomation planetInfo)
@@ -133,13 +212,13 @@ public class TitleBookWindow : Window
         }
     }
 
-    private void UpdatePlanetInfoList()
+    private void OnTabTowerInfomation(TowerTable.Data towerData)
     {
-
-    }
-
-    private void UpdateTowerInfoList()
-    {
-
+        var window = windowManager.Open(WindowIds.TowerInfomationWindow);
+        
+        if(window is TowerInfomationWindow tower)
+        {
+            tower.SettingTowerData(towerData);
+        }
     }
 }

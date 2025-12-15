@@ -30,7 +30,8 @@ public class SniperBullet : ProjectTile
         
         if (currentDurationTime <= 0)
         {
-            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
 }

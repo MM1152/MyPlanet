@@ -11,12 +11,14 @@ public class FirebaseManager
     private Auth auth = new Auth();
     private PresetData presetData = new PresetData();
     private PlanetData planetData = new PlanetData();
+    private TowerData towerData = new TowerData();
     private UserData userData;
 
     public string UserId => auth.UserId;
     public UserData UserData => userData;
     public PresetData PresetData => presetData;
     public PlanetData PlanetData => planetData;
+    public TowerData TowerData => towerData;
 
     private bool initialize = false;
 
@@ -62,6 +64,7 @@ public class FirebaseManager
             version = result.version;
             planetData.LoadAllDataAsync().Forget();
             presetData.LoadAsync().Forget();
+            towerData.LoadAsync().Forget();
 
             initialize = true;
         }
@@ -86,18 +89,9 @@ public class FirebaseManager
             // 현재 유저데이터가 존재한다면
             var data =  await database.GetData<UserData>(userPath);
 
-            if(data.data.version != Version)
-            {
-                changeVersion = true;
-                data.data.version = Version;
-                bool success = await Database.OverwriteJsonData<UserData>(userPath, data.data);
-                if(success)
-                {
-                    Debug.Log("Update UserData Success");
-                }
-            }
+            await UpdateDataToNewVersion(data.data , userPath);
 
-            if(data.success)
+            if (data.success)
             {
                 userData = data.data;
                 Debug.Log($"Success Load UserData NickName : {userData.nickName}");
@@ -121,6 +115,20 @@ public class FirebaseManager
         }
     }
 
+    private async UniTask UpdateDataToNewVersion(UserData data , string userPath)
+    {
+        if (data.version != Version)
+        {
+            changeVersion = true;
+            data.version = Version;
+            bool success = await Database.OverwriteJsonData<UserData>(userPath, data);
+            if (success)
+            {
+                Debug.Log("Update UserData Success");
+            }
+        }
+    }
+
     public void Release()
     {
         database.Release();
@@ -132,6 +140,7 @@ public class FirebaseManager
         userData = null;
         presetData.Release();
         planetData.Release();
+        towerData.Release();
         InitAsync().Forget();
 
         LoadingScene.sceneId = SceneIds.TitleScene;
@@ -145,6 +154,7 @@ public class UserData : JsonSerialized
     public string nickName;
     public int gold;
     public int exp;
+    public int diamond;
     public int version;
     public UserData()
     {
@@ -154,17 +164,39 @@ public class UserData : JsonSerialized
         version = FirebaseManager.Instance.Version;
     }
 
-    public async UniTask UseGoods(int useGoldAmount , int useExpAmount)
+    public async UniTask GetGoods(int gold = 0, int exp = 0, int diamond = 0)
+    {
+        this.gold += gold;
+        this.exp += exp;
+        this.diamond += diamond;
+        await SaveGoodsAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId , this);
+    }
+
+    public async UniTask UseGoods(int useGoldAmount = 0, int useExpAmount = 0 , int useDiaAmount = 0)
     {
         this.gold -= useGoldAmount;
         this.exp -= useExpAmount;
-
+        this.diamond -= useDiaAmount;
         await SaveGoodsAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId , this);
     }
 
     public async UniTask SaveGoodsAsync(string path , UserData userData)
     {
         var success = await FirebaseManager.Instance.Database.OverwriteJsonData<UserData>(path , userData);
+    }
+
+    public async UniTask<bool> CheckGoodsAsync(string path , int goods)
+    {
+        var data = await FirebaseManager.Instance.Database.GetDataToValue(path);
+
+        if(data.success)
+        {
+            if(goods <= int.Parse(data.data.ToString()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

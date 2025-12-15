@@ -3,38 +3,37 @@ using System;
 
 public class MagmaBoomBullet : ProjectTile
 {
-    private float duration = 1f;
-    private float currentDuration = 0f;
 
-    private int spawnFragmentCount = 6;
+    private int spawnFragmentCount;
 
     public override void Init(Tower data)
     {
         base.Init(data);
         poolsId = PoolsId.MagmaBoomBullet;
-        currentDuration = duration;
         spawnFragmentCount = data.BonusFregmentCount;
     }
 
     protected override void HitTarget(Collider2D collision)
     {
-        base.HitTarget(collision);
-        SpawnFragments();
-        Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
-        var explosion = Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);
-        explosion.Init(tower);
-        explosion.transform.position = transform.position;
+            base.HitTarget(collision);
+            SpawnFragments();
+            if (gameObject.activeSelf)
+                Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
+            var explosion = Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);
+            explosion.Init(tower);
+            explosion.transform.position = transform.position;
     }
 
     protected override void Update()
     {
         Move();
 
-        currentDuration -= Time.deltaTime;
-        if(currentDuration <= 0f)
+        duration -= Time.deltaTime;
+        if(duration <= 0f)
         {
-            SpawnFragments();
-            Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
+                SpawnFragments();
+                if (gameObject.activeSelf)
+                    Managers.ObjectPoolManager.Despawn(poolsId, gameObject);
         }
     }
 

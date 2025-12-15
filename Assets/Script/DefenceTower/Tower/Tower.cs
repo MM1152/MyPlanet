@@ -1,8 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
-using System;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Video;
+﻿using UnityEngine;
 
 public abstract class Tower
 {
@@ -34,11 +30,14 @@ public abstract class Tower
     public int BonusFregmentCount { get; set; }
     public int BonusExplosionRange { get; set; }
     public int BonusTargetingCount { get; set; }
-    public int BonusSlowPercent { get; set; }
-    public int BonusSlowBulletSpeed { get; set; }
-    public int BonusStopTime { get; set; }
+    public float BonusSlowPercent { get; set; }
+    public float BonusSlowBulletSpeed { get; set; }
+    public float BonusStopTime { get; set; }
     public int BonuseNoise { get; set; }
     public int BonusBulletSpeed { get; set; }
+    public int BonusDroneCount { get; set; }
+    public int BonusDroneHp { get; set; }
+    public int BonusDroneTargetedPercent { get; set; }
 
     public float AttackRange => towerData.Attack_Range;
     public int SlotIndex => slotIndex;
@@ -49,9 +48,9 @@ public abstract class Tower
     public GameObject TowerGameObject => tower;
     public TowerTable.Data TowerData => towerData;
     public TowerManager towerManager => manager;
-    protected Transform Target
+    public Transform Target
     {
-        set
+        protected set
         {
             target = value;
 
@@ -64,6 +63,8 @@ public abstract class Tower
                 targetDamageAble = null;
             }
         }
+
+        get => target;
     }
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     public RandomOptionData RandomOptionData => randomOptionData;
@@ -125,7 +126,7 @@ public abstract class Tower
         }
         finally
         {
-            typeEffectiveness.Init((ElementType)this.towerData.Attribute);
+            typeEffectiveness.Init((ElementType)this.towerData.attribute);
         }
     }
 
@@ -148,7 +149,7 @@ public abstract class Tower
         }
         finally
         {
-            typeEffectiveness.Init((ElementType)this.towerData.Attribute);
+            typeEffectiveness.Init((ElementType)this.towerData.attribute);
             SetRandomOption();
         }
     }
@@ -315,19 +316,28 @@ public abstract class Tower
                 BonusTargetingCount += (int)value;
                 break;
             case 12:
-                BonusSlowPercent += (int)value;
+                BonusSlowPercent += value;
                 break;
             case 13:
-                BonusSlowBulletSpeed += (int)value;
+                BonusSlowBulletSpeed += value;
                 break;
             case 14:
-                BonusStopTime += (int)value;
+                BonusStopTime += value;
                 break;
             case 15:
                 BonuseNoise += (int)value;
                 break;
             case 16:
                 BonusBulletSpeed += (int)value;
+                break;
+            case 17:
+                BonusDroneCount += (int)value;
+                break;
+            case 18:
+                BonusDroneHp += (int)value;
+                break;
+            case 19:
+                BonusDroneTargetedPercent += (int)value;
                 break;
         }
     }
@@ -389,5 +399,10 @@ public abstract class Tower
         this.statusEffect = statusEffect;
     }
    
+    // 명왕성 용
+    public ElementType GetPlanetElement()
+    {
+        return (ElementType)DataTableManager.PlanetTable.Get(planetData.ID).Attribute;
+    }
     protected abstract BaseAttackPrefab CreateAttackPrefab();
 }

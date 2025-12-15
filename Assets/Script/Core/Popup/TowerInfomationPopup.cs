@@ -43,7 +43,7 @@ public class TowerInfomationPopup : Popup
         //towerGradeText.text = towerData.grade ??
         towerType.text = towerData.TypeToString;
         towerAttackType.text = towerData.AttackType;
-        towerElementText.text = ((ElementType)towerData.Attribute).ToString();
+        towerElementText.text = (towerData.AttributeToString).ToString();
         towerATKText.text = towerData.ATK.ToString();
         towerFireRateText.text = towerData.Fire_Rate.ToString();
         towerRangeText.text = towerData.Attack_Range.ToString();
@@ -53,7 +53,7 @@ public class TowerInfomationPopup : Popup
 
         towerAttackTypeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.AttackTypeSpriteTable , towerData.ATK_Type);
         towerTypeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable , towerData.Type);
-        towerElementImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, towerData.Attribute);
+        towerElementImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, towerData.attribute);
         
     }
 }
