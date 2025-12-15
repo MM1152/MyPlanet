@@ -26,8 +26,8 @@ public abstract class Tower
     public int BonusProjectileCount { get; set; }
     public int BonusAttackRange { get; set; }
     public int BonusWidthSize { get; set; }
-    public int BonusDuration { get; set; }
-    public int BonusCoolTime { get; set; }
+    public float BonusDuration { get; set; }
+    public float BonusCoolTime { get; set; }
     public int BonusFireRate { get; set; }
     public int BonusPelletCount { get; set; }
     public int BonusFregmentRange { get; set; }
@@ -277,18 +277,18 @@ public abstract class Tower
         CheckLevelUpVariable(var4, this.levelUpData.Val4);
     }
 
-    private void CheckLevelUpVariable(int variable, int value)
+    private void CheckLevelUpVariable(int variable, float value)
     {
         switch (variable)
         {
             case 1:
-                BonusProjectileCount += value;
+                BonusProjectileCount += (int)value;
                 break;
             case 2:
-                BonusAttackRange += value;
+                BonusAttackRange += (int)value;
                 break;
             case 3:
-                BonusWidthSize += value;
+                BonusWidthSize += (int)value;
                 break;
             case 4:
                 BonusDuration += value;
@@ -297,37 +297,37 @@ public abstract class Tower
                 BonusCoolTime += value;
                 break;
             case 6:
-                BonusFireRate += value;
+                BonusFireRate += (int)value;
                 break;
             case 7:
-                BonusPelletCount += value;
+                BonusPelletCount += (int)value;
                 break;
             case 8:
-                BonusFregmentRange += value;
+                BonusFregmentRange += (int)value;
                 break;
             case 9:
-                BonusFregmentCount += value;
+                BonusFregmentCount += (int)value;
                 break;
             case 10:
-                BonusExplosionRange += value;
+                BonusExplosionRange += (int)value;
                 break;
             case 11:
-                BonusTargetingCount += value;
+                BonusTargetingCount += (int)value;
                 break;
             case 12:
-                BonusSlowPercent += value;
+                BonusSlowPercent += (int)value;
                 break;
             case 13:
-                BonusSlowBulletSpeed += value;
+                BonusSlowBulletSpeed += (int)value;
                 break;
             case 14:
-                BonusStopTime += value;
+                BonusStopTime += (int)value;
                 break;
             case 15:
-                BonuseNoise += value;
+                BonuseNoise += (int)value;
                 break;
             case 16:
-                BonusBulletSpeed += value;
+                BonusBulletSpeed += (int)value;
                 break;
         }
     }

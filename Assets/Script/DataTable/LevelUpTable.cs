@@ -36,10 +36,10 @@ public class LevelUpTable : DataTable
         public int LV { get; set; }
 
         public int Var1 { get; set; }
-        public int Val1 { get; set; }
+        public float Val1 { get; set; }
 
         public int Var2 { get; set; }
-        public int Val2 { get; set; }
+        public float Val2 { get; set; }
 
         public int Var3 { get; set; }
         public int Val3 { get; set; }
