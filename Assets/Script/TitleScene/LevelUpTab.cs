@@ -18,9 +18,14 @@ public class LevelUpTab : MonoBehaviour
 
     [Header("Images")]
     [SerializeField] private Image planetImage;
+    [SerializeField] private Image[] starImages;
 
     [Header("Buttons")]
     [SerializeField] private Button levelUpButton;
+
+    [Header("Images")]
+    [SerializeField] private Sprite enableStar;
+    [SerializeField] private Sprite disableStar;
 
     private PlanetTable.Data planetData;
     private PlanetData.Data planetUserData;
@@ -33,9 +38,15 @@ public class LevelUpTab : MonoBehaviour
 
     public void UpdateData(PlanetTable.Data planetData)
     {
+        FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetStarCountPathFormating , planetData.ID), OnValueChangedStarCount);
         this.planetData = planetData;
+        FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetStarCountPathFormating , planetData.ID), OnValueChangedStarCount);
+
         levelUpButton.interactable = true;
         planetUserData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
+
+
+        UpdateStar(planetUserData.star);
         UpdateText();
     }
 
@@ -88,5 +99,29 @@ public class LevelUpTab : MonoBehaviour
 
             UpdateText();
         }
+    }
+
+    private void ResetStar()
+    {
+        for(int i = 0; i < starImages.Length; i++)
+        {
+            starImages[i].sprite = disableStar;
+        }
+    }
+
+    private void UpdateStar(int starCount)
+    {
+        ResetStar();
+
+        for(int i = 0; i < starCount; i++)
+        {
+            starImages[i].sprite = enableStar;
+        }
+    }
+
+    private void OnValueChangedStarCount(object sender , ValueChangedEventArgs args)
+    {
+        var starCount = int.Parse(args.Snapshot.Value.ToString());
+        UpdateStar(starCount);
     }
 }

@@ -8,7 +8,7 @@ public class OptionTable : DataTable
     public class Data
     {
         public int ID { get; set; }
-        public float Value { get; set; }
+        public float? Value { get; set; }
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -32,11 +32,12 @@ public class OptionTable : DataTable
 
     public int GetValueDataToInt(int id)
     {
-        return (int)optionTable[id].Value;
+        float value = optionTable[id].Value ?? 0;
+        return (int)value;
     }
 
     public float GetValueDataToFloat(int id)
     {
-        return optionTable[id].Value;
+        return optionTable[id].Value ?? 0;
     }
 }
