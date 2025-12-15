@@ -119,7 +119,7 @@ public class TowerTable : DataTable
         [CsvHelper.Configuration.Attributes.Ignore]
         public Sprite AttackTypeImage => DataTableManager.SpriteTable.Get(DataTableIds.AttackTypeSpriteTable, ATK_Type);
         [CsvHelper.Configuration.Attributes.Ignore]
-        public Sprite ElementImage => DataTableManager.SpriteTable.Get(DataTableIds.AttackTypeSpriteTable, attribute);
+        public Sprite ElementImage => DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, attribute);
 
         [CsvHelper.Configuration.Attributes.Ignore]
         public float OptionValue => FirebaseManager.Instance.TowerData.GetOptionValue(ID);

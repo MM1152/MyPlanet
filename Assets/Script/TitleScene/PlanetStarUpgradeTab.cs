@@ -42,7 +42,7 @@ public class PlanetStarUpgradeTab : MonoBehaviour
         this.planetTableData = planetTableData;
         FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetPeiceCountPathFormating , this.planetTableData.ID) ,OnValueChangeCount);
         userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
-
+        planetImage.sprite = planetTableData.PlanetImage;
         upgradeButton.interactable = true;
         UpdateData();
     }

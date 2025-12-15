@@ -15,6 +15,7 @@ public class PlanetInfomation : MonoBehaviour
     
     [Header("Image")]
     [SerializeField] private Image planetElemetImage;
+    [SerializeField] private Image planetImage;
     [SerializeField] private Image[] starImages;
 
     [Header("GameObject")]
@@ -63,6 +64,9 @@ public class PlanetInfomation : MonoBehaviour
         planetElemetImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, data.Attribute);
         planetTypeText.text = data.PlanetType;
         planetLevelText.text = $"Lv. {userData.level:D2}";
+
+        planetImage.sprite = data.PlanetImage;
+
         ResetStar();
         UpdateStar(userData.star);
         UpdateDisAble();

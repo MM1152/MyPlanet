@@ -44,7 +44,7 @@ public class LevelUpTab : MonoBehaviour
 
         levelUpButton.interactable = true;
         planetUserData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
-
+        planetImage.sprite = planetData.PlanetImage;
 
         UpdateStar(planetUserData.star);
         UpdateText();

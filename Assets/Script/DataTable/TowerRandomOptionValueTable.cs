@@ -100,7 +100,7 @@ public class TowerRandomOptionValueTable : DataTable
     {
         var data = GetOptionData(towerId);
 
-        var gradeId = 25100 + grade;
+        var gradeId = 25000 + grade + grade * 100;
         return gradeId switch
         {
             int id when id == data.tower_grade_ID_1 => data.random_max_1,

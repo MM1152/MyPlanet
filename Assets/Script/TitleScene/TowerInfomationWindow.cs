@@ -28,11 +28,16 @@ public class TowerInfomationWindow : Window
     [Header("Sprite")]
     [SerializeField] private Sprite enableStar;
     [SerializeField] private Sprite disableStar;
+    [Header("Slider")]
+    [SerializeField] private Slider pieceSlider;
     [Header("Ref")]
     [SerializeField] private GameObject infomationTab;
     [SerializeField] private GameObject starUpgradeTab;
     [SerializeField] private GameObject infomationButtonBackGround;
     [SerializeField] private GameObject starUpgradeBackGround;
+    [SerializeField] private GameObject typeLayout;
+    [SerializeField] private GameObject attacktypeLayout;
+    [SerializeField] private GameObject elementLayout;
 
     private TowerData.Data userTowerData;
     private TowerTable.Data towerTableData;
@@ -72,13 +77,17 @@ public class TowerInfomationWindow : Window
         currentTab.SetActive(true);
         currentBackGround.SetActive(true);
 
+        elementLayout.SetActive(true);
+        typeLayout.SetActive(true);
+        attacktypeLayout.SetActive(true);
+
         base.Open();
     }
 
     public void SettingTowerData(TowerTable.Data towerData)
     {
         this.towerTableData = towerData;
-        this.userTowerData = FirebaseManager.Instance.TowerData.Get(this.towerTableData.id);
+        this.userTowerData = FirebaseManager.Instance.TowerData.Get(this.towerTableData.ID);
 
         closeButton.onClick.AddListener(() => manager.Open(WindowIds.TitleBookWindow));
 
@@ -86,6 +95,24 @@ public class TowerInfomationWindow : Window
         towerPeiceCountText.text = $"부품 갯수 {userTowerData.TowerPartCount}/연결해야 됌";
 
         towerImage.sprite = towerTableData.towerImage;
+
+        if (towerTableData.ElementImage == null)
+            elementLayout.SetActive(false);
+        if(towerTableData.TypeImage == null)
+            typeLayout.SetActive(false);
+        if(towerTableData.AttackTypeImage == null)
+            attacktypeLayout.SetActive(false);
+
+
+        towerElementImage.sprite = towerTableData.ElementImage;
+        towerTypeImage.sprite = towerTableData.TypeImage;
+        towerAttackTypeImage.sprite = towerTableData.AttackTypeImage;
+
+        towerElementText.text = towerTableData.AttributeToString;
+        towerTypeText.text = towerTableData.TypeToString;
+        towerAttackTypeText.text = towerTableData.AttackType;
+        towerInfomationText.text = towerTableData.Explanatoin;
+
 
         UpdateStar(userTowerData.grade);
         UpdateOptionValue(userTowerData);
@@ -102,7 +129,7 @@ public class TowerInfomationWindow : Window
             return;
         }
 
-        towerOptionText.text = $"{currentOptionValue}% -> {nextOptionValue}";
+        towerOptionText.text = $"{currentOptionValue}% -> {nextOptionValue}%";
     }
 
     private void ResetStar()

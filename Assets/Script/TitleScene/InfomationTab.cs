@@ -73,6 +73,7 @@ public class InfomationTab : MonoBehaviour
         planetElemetTypeText.text = planetTableData.AttributeType;
         planetDescriptionText.text = planetTableData.Explanation;
         planetElementTypeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, planetTableData.Attribute);
+        planetImage.sprite =  planetTableData.PlanetImage;
         var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
         UpdatePeiceCount(userPlanetData.count);
 #if DEBUG_MODE
