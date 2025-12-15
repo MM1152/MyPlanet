@@ -14,6 +14,7 @@ public class OptionUpgradeWindow : Window
     [SerializeField] private Button selectButton;
 
     private List<SelectOptionUI> selectOptionUIs = new List<SelectOptionUI>();
+    private List<Tower> availableTowers = new List<Tower>();
     private int selectIndex = -1;
     public override void Close()
     {
@@ -27,7 +28,7 @@ public class OptionUpgradeWindow : Window
 
         for(int i = 0; i < selectOptionUIRoot.childCount; i++)
         {
-            var optionUi = selectOptionUIRoot.GetChild(i).GetComponent<SelectOptionUI>();
+            var optionUi = selectOptionUIRoot.GetChild(i).GetComponentInChildren<SelectOptionUI>();
             int index = i;
             optionUi.Initalized(index, (idx) => selectIndex = idx);
             selectOptionUIs.Add(optionUi);
@@ -41,11 +42,31 @@ public class OptionUpgradeWindow : Window
         if (Variable.IsTutorialActive) return;
         base.Open();
         Time.timeScale = 0f;
+
+        availableTowers.Clear();
+        var allTowers = towerManager.GetAllTower();
+        for (int i = 0; i < allTowers.Count; i++)
+        {
+            if (allTowers[i] != null)
+            {
+                availableTowers.Add(allTowers[i]);
+            }
+        }
+
+        for(int i =0; i < selectOptionUIs.Count; i++)
+        {
+            selectOptionUIs[i].SetInteractive(false);
+        }
+
         for(int i = 0; i < selectOptionUIs.Count; i++)
         {
-            var towerData = towerManager.GetRandomTower();
+            if (availableTowers.Count == 0) break;
+
+            int randomIndex = Random.Range(0, availableTowers.Count);
+            var towerData = availableTowers[randomIndex];
+            availableTowers.RemoveAt(randomIndex);
+
             selectOptionUIs[i].SetInteractive(true);
-            selectOptionUIs[i].ResetOutline();
             selectOptionUIs[i].SetTowerData(towerData);
         }
 
@@ -59,7 +80,6 @@ public class OptionUpgradeWindow : Window
         {
             var towerData = towerManager.GetRandomTower();
             selectOptionUIs[i].SetInteractive(true);
-            selectOptionUIs[i].ResetOutline();
             selectOptionUIs[i].SetTowerData(towerData);
         }
         selectOptionUIs[1].SetInteractive(false);
