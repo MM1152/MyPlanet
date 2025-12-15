@@ -32,7 +32,8 @@ public class OptionTable : DataTable
 
     public int GetValueDataToInt(int id)
     {
-        return (int)optionTable[id].Value;
+        float value = optionTable[id].Value ?? 0;
+        return (int)value;
     }
 
     public float GetValueDataToFloat(int id)
