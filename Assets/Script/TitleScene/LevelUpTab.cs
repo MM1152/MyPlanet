@@ -18,9 +18,14 @@ public class LevelUpTab : MonoBehaviour
 
     [Header("Images")]
     [SerializeField] private Image planetImage;
+    [SerializeField] private Image[] starImages;
 
     [Header("Buttons")]
     [SerializeField] private Button levelUpButton;
+
+    [Header("Images")]
+    [SerializeField] private Sprite enableStar;
+    [SerializeField] private Sprite disableStar;
 
     private PlanetTable.Data planetData;
     private PlanetData.Data planetUserData;

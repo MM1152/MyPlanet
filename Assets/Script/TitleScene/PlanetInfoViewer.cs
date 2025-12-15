@@ -10,25 +10,35 @@ public class PlanetInfoViewer : MonoBehaviour
     [SerializeField] private PlanetStarUpgradeTab starUpgradeTab;
 
     [SerializeField] private Image changeColorBackGround;
+    [SerializeField] private GameObject infomationTabBackGround;
+    [SerializeField] private GameObject levelUpTabBackGround;
+    [SerializeField] private GameObject starUpgradeBackGround;
     [Header("Buttons")]
     [SerializeField] private Button infomationButton;
     [SerializeField] private Button levelUpbutton;
     [SerializeField] private Button starUpgradeButton;
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI planetName;
+    [SerializeField] private TextMeshProUGUI levelText;
+
     private GameObject currentTab;
+    private GameObject currentBackGround;
 
     private PlanetTable.Data planetData;
     private PlanetData.Data planetUserData;
     private void Awake()
     {
-        infomationButton.onClick.AddListener(() => UpdateTab(infomationTab.gameObject, infomationButton.image.color));
-        levelUpbutton.onClick.AddListener(() => UpdateTab(levelUpTab.gameObject, levelUpbutton.image.color));
-        starUpgradeButton.onClick.AddListener(() => UpdateTab(starUpgradeTab.gameObject, starUpgradeButton.image.color));
+        infomationButton.onClick.AddListener(() => UpdateTab(infomationTab.gameObject, infomationTabBackGround, infomationButton.image.color));
+        levelUpbutton.onClick.AddListener(() => UpdateTab(levelUpTab.gameObject,levelUpTabBackGround, levelUpbutton.image.color));
+        starUpgradeButton.onClick.AddListener(() => UpdateTab(starUpgradeTab.gameObject, starUpgradeBackGround, starUpgradeButton.image.color));
 
         levelUpTab.gameObject.SetActive(false);
         infomationTab.gameObject.SetActive(false);
         starUpgradeTab.gameObject.SetActive(false);
+
+        infomationTabBackGround.gameObject.SetActive(false);
+        levelUpTabBackGround.gameObject.SetActive(false);
+        starUpgradeBackGround.gameObject.SetActive(false);
     }
 
     public void UpdatePlanetData(PlanetTable.Data planetData)
@@ -41,12 +51,13 @@ public class PlanetInfoViewer : MonoBehaviour
 
         planetUserData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
 
-        planetName.text = $"Lv.{planetUserData.level}."+this.planetData.Name;
+        planetName.text = this.planetData.Name;
+        levelText.text = $"Lv.{planetUserData.level}";
         levelUpTab.UpdateData(planetData);
         infomationTab.UpdateData(planetData);
         starUpgradeTab.UpdateData(planetData);
 
-        UpdateTab(infomationTab.gameObject , infomationButton.image.color);
+        UpdateTab(infomationTab.gameObject , infomationTabBackGround , infomationButton.image.color);
         CheckUseAblePlanet(planetUserData);
     }
 
@@ -65,19 +76,22 @@ public class PlanetInfoViewer : MonoBehaviour
         }
     }
 
-    public void UpdateTab(GameObject tabObject , Color color)
+    public void UpdateTab(GameObject tabObject , GameObject backGround , Color color)
     {
         if (currentTab != null)
         {
             currentTab.SetActive(false);
+            currentBackGround.SetActive(false);
         }
         currentTab = tabObject;
-        changeColorBackGround.color = color;
+        currentBackGround = backGround;
+
         currentTab.SetActive(true);
+        currentBackGround.SetActive(true);
     }
 
     private void OnValueChangedLevel(object sender , ValueChangedEventArgs args)
     {
-        planetName.text = string.Format("LV.{0} {1}", args.Snapshot.Value.ToString() , planetData.Name);
+        levelText.text = string.Format("LV.{0}", args.Snapshot.Value.ToString());
     }
 }

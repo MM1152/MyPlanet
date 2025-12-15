@@ -45,10 +45,10 @@ public class PlanetTable : DataTable
         };
         public float NeedPeiceCountPercent => grade switch
         {
-            "C" => DataTableManager.OptionTable.GetValueDataToFloat(5055),
-            "B" => DataTableManager.OptionTable.GetValueDataToFloat(5056),
-            "A" => DataTableManager.OptionTable.GetValueDataToFloat(5057),
-            "S" => DataTableManager.OptionTable.GetValueDataToFloat(5058),
+            "C" => DataTableManager.OptionTable.GetValueDataToFloat(5098),
+            "B" => DataTableManager.OptionTable.GetValueDataToFloat(5099),
+            "A" => DataTableManager.OptionTable.GetValueDataToFloat(5100),
+            "S" => DataTableManager.OptionTable.GetValueDataToFloat(5101),
             _ => 0f
         };
         public float InitOpenSlotCount => grade switch
