@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Firebase.Database;
 
 
 
@@ -128,5 +129,4 @@ public static class DataTableManager
     {
         await UniTask.WaitUntil(() => init);
     }
-
 }

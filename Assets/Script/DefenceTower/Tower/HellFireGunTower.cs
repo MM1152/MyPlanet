@@ -19,6 +19,15 @@ public class HellFireGunTower : Tower
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         Bullet projectile = Managers.ObjectPoolManager.SpawnObject<Bullet>(PoolsId.Bullet);
+
+        if(Target != null)
+        {
+            var dir = target.transform.position - TowerGameObject.transform.position;
+            
+            var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash13redlaser);
+            flash.transform.position = TowerGameObject.transform.position + dir.normalized * TowerGameObject.transform.localScale.x;
+        }
+
         //Bullet projectile = GameObject.Instantiate(attackprefab).GetComponent<Bullet>();
         return projectile;
     }

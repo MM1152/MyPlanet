@@ -79,8 +79,21 @@ public class LoadingScene : MonoBehaviour
 
         currentProgress.text = "Managers 초기화 중";
         await Managers.Instance.WaitForManagerInitalizedAsync();
+        currentProgress.text = "DataTable 초기화 중";
+
+        if(sceneId == SceneIds.GameScene)
+        {
+            currentProgress.text = "게임 데이터 초기화중";
+            await LoadGameData();
+        }
 
         currentProgress.text = "Scene 초기화 중";
         await Addressables.LoadSceneAsync(sceneId).ToUniTask();
+    }
+
+    private async UniTask LoadGameData()
+    {
+        var inGameData = FirebaseManager.Instance.PresetData.GetGameData();
+        await DataTableManager.PlanetTable.LoadPlanetPrefab(inGameData.data.PlanetId);
     }
 }

@@ -92,6 +92,7 @@ public class TowerInfomation : MonoBehaviour
         var result = bool.Parse(args.Snapshot.Value.ToString());
         if (result)
         {
+            Debug.Log($"{gameObject}", gameObject);
             gameObject.SetActive(true);
         }
     }
