@@ -59,7 +59,8 @@ public class Missile : ProjectTile
             target = enemySpawnManager.GetEnemyData(transform.position)?.transform;
             if(target == null)
             {
-                dir = (new Vector3(Mathf.Cos(currentAngle), Mathf.Sin(currentAngle), 0f)).normalized;
+                //dir = (new Vector3(Mathf.Cos(currentAngle), Mathf.Sin(currentAngle), 0f)).normalized;
+                //transform.eulerAngles = new Vector3(0f, 0f, currentAngle);
                 return;
             }
         }

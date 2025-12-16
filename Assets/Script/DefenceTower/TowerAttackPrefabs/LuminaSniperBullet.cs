@@ -3,12 +3,22 @@
 public class LuminaSniperBullet : Bullet
 {
     private int homingCount = 0;
+    private LineRenderer lineRenderer;
+    public new float duration = 0.2f;
+    private float timer = 0f;
+    private void Awake()
+    {
+        lineRenderer = GetComponent<LineRenderer>();
+    }
 
     public override void Init(Tower data)
     {
         base.Init(data);
         poolsId = PoolsId.LuminaSniperBullet;
         homingCount = tower.BonusTargetingCount;
+        lineRenderer.positionCount = 1;
+        lineRenderer.SetPosition(0, data.TowerGameObject.transform.position);
+        timer = 0f;
     }
 
     public override void SetTarget(Transform target, float noise)
@@ -18,13 +28,48 @@ public class LuminaSniperBullet : Bullet
 
     protected override void Update()
     {
-        base.Update();
-        if(target != null && !targetDamageAble.IsDead)
-            SetDir();
-        else
+        timer += Time.deltaTime;
+        if (target == null && targetDamageAble.IsDead || homingCount <= 0)
         {
-            if (gameObject.activeSelf)
+            if(timer > duration)
+            {
                 Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+            }
+            return;
+        }
+
+        var enemys = tower.towerManager.FindTargets(target.transform.position);
+
+        if (enemys == null || enemys.Count == 0) return;
+        enemys.RemoveAt(0);
+        while (homingCount > 0)
+        {
+            homingCount--;
+            lineRenderer.positionCount++;
+
+            if (target != null && !targetDamageAble.IsDead)
+            {
+                var find = target.GetComponent<IDamageAble>();
+                if (find != null)
+                {
+                    float percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
+                    find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
+                    lineRenderer.SetPosition(lineRenderer.positionCount - 1, target.transform.position);
+                }
+
+                if (enemys.Count != 0)
+                {
+                    SetTarget(enemys[0].transform, noise);
+                    enemys.RemoveAt(0);
+                }
+            }
+            else
+            {
+                lineRenderer.positionCount--;
+                homingCount = 0;
+                break;
+            }
+            
         }
     }
 
@@ -35,21 +80,13 @@ public class LuminaSniperBullet : Bullet
             return;
         }
 
-        var find = collision.GetComponent<IDamageAble>();
-        if (find != null) {
-            float percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
-            find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
-        }
 
         if(homingCount > 0)
         {
             homingCount--;
-            var enemy = tower.towerManager.FindTargets(transform.position);
             if(enemy != null)
             {
-                if (target != enemy[0]) target = enemy[0].transform;
-                else if (enemy.Count > 2 && target != enemy[1]) target = enemy[1].transform;
-                SetTarget(target.transform, noise);
+               
             }
             else
             {

@@ -112,16 +112,16 @@ public class PlanetTable : DataTable
         switch(grade) 
         {
             case "C":
-                idx = 5059 + starCount;
+                idx = 5041 + starCount;
                 break;
             case "B":
-                idx = 5065 + starCount;
+                idx = 5047 + starCount;
                 break;
             case "A":
-                idx = 5071 + starCount;
+                idx = 5053 + starCount;
                 break;
             case "S":
-                idx = 5077 + starCount;
+                idx = 5059 + starCount;
                 break;
         }
 
