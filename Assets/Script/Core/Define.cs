@@ -109,6 +109,7 @@ public enum PoolsId
     Drone = 223,
     Repulsor = 224,
     ChaosBeacon = 225,
+    HellFireBullet = 226,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -180,8 +181,9 @@ public static class AddressableNames
         { "DarkLaserHitEffect", PoolsId.DarkLaserHitEffect },   
         { "SolarLaserHitEffect", PoolsId.SolarLaserHitEffect },   
         { "Flash 13 red laser", PoolsId.Flash13redlaser },   
-        { "Hit13redlaser", PoolsId.Hit13redlaser },   
-        { "2DProjectile13redlaser", PoolsId.Projectile13redlaser },   
+        { "Hit 13 red laser", PoolsId.Hit13redlaser },   
+        { "2D Projectile 13 red laser", PoolsId.Projectile13redlaser },   
+        { "HellFireBullet", PoolsId.HellFireBullet },   
     };
 
     public static PoolsId GetPoolsId(string name)
