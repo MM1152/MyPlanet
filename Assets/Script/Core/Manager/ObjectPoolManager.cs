@@ -83,7 +83,7 @@ public class ObjectPoolManager : MonoBehaviour
        
         GameObject obj = ObjPools[id].Get();
         if (obj != null)
-        {
+        {   
             T component = obj.GetComponent<T>();
 #if DEBUG_MODE
             // Debug.Log($"{component} 생성");

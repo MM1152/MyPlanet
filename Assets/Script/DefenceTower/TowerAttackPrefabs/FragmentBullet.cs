@@ -4,7 +4,7 @@ using System;
 public class FragmentBullet : ProjectTile
 {
     private float currentDuration = 0f;
-
+    private PoolsId particleId;
     public override void Init(Tower data)
     {
         base.Init(data);
@@ -24,12 +24,25 @@ public class FragmentBullet : ProjectTile
         }
     }
 
+    public void SetParticleId(PoolsId particleId)
+    {
+        this.particleId = particleId;
+    }
+
     protected override void HitTarget(Collider2D collision)
     {
         var find = collision.GetComponent<IDamageAble>();
         if (find != null && find.IsDead) return;
         base.HitTarget(collision);
         if(gameObject.activeSelf)
+        {
             Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+
+            if(particleId != PoolsId.None)
+            {
+                var hitParticle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(particleId);
+                hitParticle.transform.position = collision.ClosestPoint(transform.position);
+            }
+        }
     }
 }

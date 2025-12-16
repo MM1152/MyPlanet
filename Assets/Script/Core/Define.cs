@@ -110,6 +110,9 @@ public enum PoolsId
     Repulsor = 224,
     ChaosBeacon = 225,
     HellFireBullet = 226,
+    FrostRepeaterBullet = 227,
+    BurstBlasterBullet = 228,
+    ShadowBursterFragment = 229,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -128,6 +131,16 @@ public enum PoolsId
     Flash13redlaser = 1002,
     Hit13redlaser = 1003,
     Projectile13redlaser = 1004,
+    Flash6bluefire = 1005,
+    Hit6bluefire = 1006,
+    Projectile6bluefire = 1007,
+    Hit8dagger = 1008,
+    Projectile8dagger = 1009,
+    Hit23cube = 1010,
+    Flash23cube = 1011,
+    Projectile7pink = 1012,
+    Flash7pink = 1013,
+    Hit7pink = 1014,
 }
 
 public enum EnemyType
@@ -184,6 +197,19 @@ public static class AddressableNames
         { "Hit 13 red laser", PoolsId.Hit13redlaser },   
         { "2D Projectile 13 red laser", PoolsId.Projectile13redlaser },   
         { "HellFireBullet", PoolsId.HellFireBullet },   
+        { "Flash 6 blue fire", PoolsId.Flash6bluefire },   
+        { "Hit 6 blue fire", PoolsId.Hit6bluefire },   
+        { "2D Projectile 6 blue fire", PoolsId.Projectile6bluefire },   
+        { "FrostRepeaterBullet", PoolsId.FrostRepeaterBullet },   
+        { "Hit 8 dagger", PoolsId.Hit8dagger },   
+        { "2D Projectile 8 dagger", PoolsId.Projectile8dagger },   
+        { "BurstBlasterBullet", PoolsId.BurstBlasterBullet },   
+        { "Hit 23 cube", PoolsId.Hit23cube },   
+        { "Flash 23 cube", PoolsId.Flash23cube },   
+        { "ShadowBursterFragment", PoolsId.ShadowBursterFragment },   
+        { "2D Projectile 7 pink", PoolsId.Projectile7pink },   
+        { "Flash 7 pink", PoolsId.Flash7pink },   
+        { "Hit 7 pink", PoolsId.Hit7pink },   
     };
 
     public static PoolsId GetPoolsId(string name)
