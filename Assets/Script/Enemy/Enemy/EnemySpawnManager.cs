@@ -51,12 +51,14 @@ public class EnemySpawnManager : MonoBehaviour
                 {
                     spawnEnemy.OnDie += (enemy) =>
                     {
+                        if (enemy.WaveManager == null) return;
+
                         if (enemy.isKilledByPlayer)
                         {
-                           enemy.WaveManager.isBossKilled = true;   
+                            enemy.WaveManager.isBossKilled = true;
                         }
-                    };
-                }
+                    };      
+                }   
                 spawnEnemy.Initallized(data);
                 if (Variable.IsDebugMode)
                 {

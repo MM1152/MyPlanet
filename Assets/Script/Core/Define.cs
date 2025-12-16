@@ -113,6 +113,7 @@ public enum PoolsId
     FrostRepeaterBullet = 227,
     BurstBlasterBullet = 228,
     ShadowBursterFragment = 229,
+    IceRangerFregment = 230,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -141,6 +142,8 @@ public enum PoolsId
     Projectile7pink = 1012,
     Flash7pink = 1013,
     Hit7pink = 1014,
+    Flash26bluecrystal = 1015,
+    Hit26bluecrystal = 1016,
 }
 
 public enum EnemyType
@@ -210,6 +213,9 @@ public static class AddressableNames
         { "2D Projectile 7 pink", PoolsId.Projectile7pink },   
         { "Flash 7 pink", PoolsId.Flash7pink },   
         { "Hit 7 pink", PoolsId.Hit7pink },   
+        { "Flash 26 blue crystal", PoolsId.Flash26bluecrystal },   
+        { "Hit 26 blue crystal", PoolsId.Hit26bluecrystal },   
+        { "IceRangerFregment", PoolsId.IceRangerFregment },   
     };
 
     public static PoolsId GetPoolsId(string name)
