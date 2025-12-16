@@ -72,6 +72,11 @@ public static class AddressableLabelIds
     public readonly static string AttackTypeIds = "AttackType";
 }
 
+public static class AddressableFormatPaths
+{
+    public readonly static string PlanetPrefabFormating = "Assets/DAX/Low Poly Solar System/Prefabs/{0}.prefab";
+}
+
 public enum PoolsId
 {
     None = -1,
@@ -116,6 +121,12 @@ public enum PoolsId
     DamageText = 600,
 
     TestRange = 900,
+
+    SolarLaserHitEffect = 1000,
+    DarkLaserHitEffect = 1001,
+    Flash13redlaser = 1002,
+    Hit13redlaser = 1003,
+    Projectile13redlaser = 1004,
 }
 
 public enum EnemyType
@@ -166,6 +177,11 @@ public static class AddressableNames
         { "Drone", PoolsId.Drone },   
         { "Repulsor", PoolsId.Repulsor },   
         { "ChaosBeacon", PoolsId.ChaosBeacon },   
+        { "DarkLaserHitEffect", PoolsId.DarkLaserHitEffect },   
+        { "SolarLaserHitEffect", PoolsId.SolarLaserHitEffect },   
+        { "Flash 13 red laser", PoolsId.Flash13redlaser },   
+        { "Hit13redlaser", PoolsId.Hit13redlaser },   
+        { "2DProjectile13redlaser", PoolsId.Projectile13redlaser },   
     };
 
     public static PoolsId GetPoolsId(string name)

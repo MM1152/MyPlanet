@@ -7,11 +7,14 @@ public class SolarLaser : BaseAttackPrefab
     private BasePlanet basePlanet;
     private Vector2 baseScale;
     private float timer;
+    private LineRenderer lineRenderer;
 
     private void Awake()
     {
         basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
         baseScale = transform.localScale;
+        lineRenderer = GetComponent<LineRenderer>();
+
     }
 
     public override void Init(Tower data)
@@ -34,8 +37,10 @@ public class SolarLaser : BaseAttackPrefab
         {
             gameObject.SetActive(true);
         }
+        var percentX = tower.BonusWidthSize * baseScale.x / baseScale.x;
 
         gameObject.transform.localScale = new Vector2(tower.BonusWidthSize * baseScale.x, tower.BonusAttackRange * baseScale.y);
+        lineRenderer.startWidth = 1 * percentX;
     }
 
     public void UpdateLaser(float angle)
@@ -53,7 +58,7 @@ public class SolarLaser : BaseAttackPrefab
         return;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (!tower.UseAble) return;
         //transform.eulerAngles += Vector3.forward * rotationSpeed * Time.deltaTime;
@@ -63,22 +68,36 @@ public class SolarLaser : BaseAttackPrefab
             Mathf.Cos(angle * Mathf.Deg2Rad) * towerSize.x * transform.localScale.y,
             Mathf.Sin(angle * Mathf.Deg2Rad) * towerSize.y * transform.localScale.y,
             0f);
+
+
+        // 0.3 두께가 linerederer 의 1 사이즈
+        // 0.3 : 1 비율
+        lineRenderer.SetPosition(0, tower.TowerGameObject.transform.position);
+        lineRenderer.SetPosition(1, tower.TowerGameObject.transform.position + new Vector3(
+            Mathf.Cos(angle * Mathf.Deg2Rad) * towerSize.x * transform.localScale.y * 2f,
+            Mathf.Sin(angle * Mathf.Deg2Rad) * towerSize.y * transform.localScale.y * 2f,
+            0f));
+
+        if (timer >= 60f / tower.FullAttackSpeed) timer = 0;
         timer += Time.deltaTime;
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (timer < 60f / tower.FullAttackSpeed) return;
+
         if (collision.CompareTag(TagIds.EnemyTag))
         {
-            if (timer < 60f / tower.FullAttackSpeed) return;
-
-            timer = 0;
             var find = collision.GetComponent<IDamageAble>();
 
             var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
             find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
             basePlanet.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
+
+            var hitParticle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.SolarLaserHitEffect);
+            hitParticle.transform.position = collision.ClosestPoint(transform.position);
         }
        
     }
+
 }

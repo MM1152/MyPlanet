@@ -8,6 +8,8 @@ using UnityEngine.AddressableAssets;
 public class PlanetTable : DataTable
 {
     private Dictionary<int, Data> planetTable = new Dictionary<int, Data>();
+    public GameObject Model { get; set; }
+    public GameObject SubModel { get; set; }
     public class Data
     {
         public int ID { get; set; }
@@ -70,6 +72,7 @@ public class PlanetTable : DataTable
         };
         [Ignore]
         public Sprite PlanetImage { get; set; }
+
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -123,5 +126,16 @@ public class PlanetTable : DataTable
         }
 
         return DataTableManager.OptionTable.GetValueDataToInt(idx);
+    }
+
+    public async UniTask LoadPlanetPrefab(int planetId)
+    {
+        var path = string.Format(AddressableFormatPaths.PlanetPrefabFormating , Get(planetId).Rescoce_ID);
+        if(planetId == 1011)
+        {
+            var subPath = string.Format(AddressableFormatPaths.PlanetPrefabFormating, "Planet_12");
+            SubModel = await Addressables.LoadAssetAsync<GameObject>(subPath).ToUniTask();
+        }
+        Model = await Addressables.LoadAssetAsync<GameObject>(path).ToUniTask();
     }
 }
