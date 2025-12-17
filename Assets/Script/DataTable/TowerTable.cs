@@ -67,7 +67,7 @@ public class TowerTable : DataTable
         [CsvHelper.Configuration.Attributes.Ignore]
         public virtual string Name => DataTableManager.StringTable.Get(name);
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string AttackType => ATK_Type switch
+        public string AttackTypeToString => ATK_Type switch
         {
             1 => "레이저",
             2 => "기관총",
@@ -151,6 +151,7 @@ public class TowerTable : DataTable
         var datas = await LoadCSV<UtilTower>(textAsset.text);
         foreach (var data in datas)
         {
+            //FIX : 임시로 막아놓음
             if (data.ID == 23008)
                 continue;
 

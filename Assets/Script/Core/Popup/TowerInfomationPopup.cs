@@ -43,7 +43,7 @@ public class TowerInfomationPopup : Popup
         towerImage.sprite = towerData.towerImage;
         //towerGradeText.text = towerData.grade ??
         towerType.text = towerData.TypeToString;
-        towerAttackType.text = towerData.AttackType;
+        towerAttackType.text = towerData.AttackTypeToString;
         towerElementText.text = (towerData.AttributeToString).ToString();
         towerATKText.text = towerData.ATK.ToString();
         towerFireRateText.text = towerData.Fire_Rate.ToString();

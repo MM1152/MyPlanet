@@ -42,14 +42,14 @@ public class RandomPickUpLayout : MonoBehaviour
     public void OnClickPickOneButton()
     {
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
-        popup.SetTexts("뽑기를 진행하시겠습니까?" , "뽑기를 진행합니다.\n100다이아가 소모됩니다." , "취소" , "뽑기");
+        popup.SetTexts("뽑기를 진행하시겠습니까?" , $"{titleText.text}뽑기를 진행합니다.\n100다이아가 소모됩니다." , "취소" , "뽑기");
         popup.SetButtonAction(() => OnClickBlueButton(1).Forget(), OnClickRedButton);
     }
 
     public void OnClickPickTenButton()
     {
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
-        popup.SetTexts("뽑기를 진행하시겠습니까?", "뽑기를 진행합니다.\n1000다이아가 소모됩니다.", "취소", "뽑기");
+        popup.SetTexts("뽑기를 진행하시겠습니까?", $"{titleText.text}뽑기를 진행합니다.\n1000다이아가 소모됩니다.", "취소", "뽑기");
         popup.SetButtonAction(() => OnClickBlueButton(10).Forget(), OnClickRedButton);
     }
 
@@ -108,7 +108,7 @@ public class RandomPickUpLayout : MonoBehaviour
             if(userPlanetData.unlocked)
             {
                 // 해금 되어있는 상태
-                return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, 10) , false, (true , 0f));
+                return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, 10) , false, (true , 10f));
             }
             else
             {
@@ -119,7 +119,7 @@ public class RandomPickUpLayout : MonoBehaviour
         else
         {
             //조각
-            return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, data.amount ?? 0) , false, (false , 0f));
+            return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, data.amount ?? 0) , false, (true , data.amount ?? 0));
         }
     }
 
@@ -135,11 +135,13 @@ public class RandomPickUpLayout : MonoBehaviour
 
         if (userTowerData.Unlock)
         {
+            // 더 높은값 뽑아서 교체
             if(userTowerData.OptionValue < randomOptionValue.percent)
             {
                 var prevOptionValue = userTowerData.OptionValue;
                 return (FirebaseManager.Instance.TowerData.UpdateOptionValueAsync(userTowerData,randomOptionValue.percent), false, (true, prevOptionValue));
             }
+            // 더 낮은값 뽑아서 조각으로 교체
             else
             {
                 var duplicationPiece = DataTableManager.TowerDuplicationRewardTable.GetDuplicationPartCount(userTowerData.TowerId, randomOptionData.GetGradeToId(userTowerData.grade), randomOptionValue.LMH);
@@ -148,6 +150,7 @@ public class RandomPickUpLayout : MonoBehaviour
         }
         else
         {
+            // 처음 얻은 타워
             return (FirebaseManager.Instance.TowerData.UnlockAsync(userTowerData, randomOptionValue.percent), true, (false, 0f));
         }
     }
