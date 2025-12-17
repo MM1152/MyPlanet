@@ -122,7 +122,7 @@ public class TowerInfomationWindow : Window
 
         towerElementText.text = towerTableData.AttributeToString;
         towerTypeText.text = towerTableData.TypeToString;
-        towerAttackTypeText.text = towerTableData.AttackType;
+        towerAttackTypeText.text = towerTableData.AttackTypeToString;
         towerInfomationText.text = towerTableData.Explanatoin;
 
         var randomOptionData = randomOptionTable.GetData(towerData.Option);

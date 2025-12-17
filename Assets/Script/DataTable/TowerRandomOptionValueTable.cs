@@ -40,7 +40,7 @@ public class TowerRandomOptionValueTable : DataTable
                 5 => tower_grade_ID_5,
                 _ => 0
             };
-    }
+        }
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -66,14 +66,14 @@ public class TowerRandomOptionValueTable : DataTable
     {
         var data = GetOptionData(towerId);
 
-        var gradeId = 25100 + grade;
+        var gradeId = 25000 + grade + 100 * grade;
         var randomValueMax = gradeId switch
         {
-            int id when id == data.tower_grade_ID_1 => Random.Range(data.random_min, data.random_max_1 + 1),
-            int id when id == data.tower_grade_ID_2 => Random.Range(data.random_min, data.random_max_2 + 1),
-            int id when id == data.tower_grade_ID_3 => Random.Range(data.random_min, data.random_max_3 + 1),
-            int id when id == data.tower_grade_ID_4 => Random.Range(data.random_min, data.random_max_4 + 1),
-            int id when id == data.tower_grade_ID_5 => Random.Range(data.random_min, data.random_max_5 + 1),
+            int id when id == data.tower_grade_ID_1 => data.random_max_1 ,
+            int id when id == data.tower_grade_ID_2 => data.random_max_2 ,
+            int id when id == data.tower_grade_ID_3 => data.random_max_3,
+            int id when id == data.tower_grade_ID_4 => data.random_max_4,
+            int id when id == data.tower_grade_ID_5 => data.random_max_5,
             _ => 0
         };
 
@@ -84,7 +84,8 @@ public class TowerRandomOptionValueTable : DataTable
     {
         var data = GetOptionData(towerId);
 
-        var gradeId = 25100 + grade;
+        var gradeId = 25000 + grade + 100 * grade;
+        Debug.Log($"Tower Max Value : {GetMaxPercent(towerId, grade)} , Current Valuue : {currentValue}");
         return gradeId switch
         {
             int id when id == data.tower_grade_ID_1 => data.random_max_1 == currentValue,
