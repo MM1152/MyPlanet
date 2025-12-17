@@ -13,6 +13,8 @@ public static class AbilityManager
          { 3024, () => new  RangeBoostAbility() },
          { 3025, () => new  PlayerKillSplitAbility() },
          {3042, () => new FortifiedBarrierAbility() },
+         {3057, ()=> new CounterLaserAbility() },
+         {3062, ()=> new DivergentBarrier() }
     };
 
     public static BaseAbility GetAbility(int key)

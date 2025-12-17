@@ -20,8 +20,7 @@ public class BarrierAbility : BaseAbility
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        // barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);
-        barrierAmount = maxBarrierAmount;
+        barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);
     }
     public override int OnDamage(int damage)
     {
@@ -36,7 +35,6 @@ public class BarrierAbility : BaseAbility
             rangePrefab.transform.position = enemy.transform.position;
             var spr = rangePrefab.GetComponent<SpriteRenderer>();
             spr.color = enemy.spriteRenderer.color;
-            // spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
             float radius = enemy.transform.localScale.x;
             float visualScale = radius * 10f;
             rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
@@ -46,7 +44,7 @@ public class BarrierAbility : BaseAbility
         barrierAmount -= damage;
         Debug.Log("베리어 데미지 흡수 " + damage + ", 남은 베리어: " + barrierAmount);
 
-        if (barrierAmount < 0)
+        if (barrierAmount <= 0)
         {
             int overflowDamage = -barrierAmount;
             barrierAmount = 0;
@@ -56,7 +54,7 @@ public class BarrierAbility : BaseAbility
 #endif
             return overflowDamage;
         }
-        return 0;
+        return 0; 
     }
 
     public void RefillBarrier(int amount)
