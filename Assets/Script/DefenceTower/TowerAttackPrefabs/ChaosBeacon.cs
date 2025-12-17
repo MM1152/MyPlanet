@@ -8,7 +8,7 @@ public class ChaosBeacon : BaseAttackPrefab
     public override void Init(Tower data)
     {
         base.Init(data);
-        poolsId = PoolsId.Repulsor;
+        poolsId = PoolsId.ChaosBeacon;
         this.data = data.TowerData as TowerTable.UtilTower;
         duration = this.data.Duration;
         transform.localScale = new Vector3(this.data.range, this.data.range, this.data.range);
@@ -30,7 +30,7 @@ public class ChaosBeacon : BaseAttackPrefab
                 Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
     }
-
+    
     public override void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag(TagIds.EnemyTag))

@@ -44,11 +44,14 @@ public class LaserShot : IShotStrategy
         Vector2 dir = (target.transform.position - enemy.transform.position).normalized;
         float dis = Vector2.Distance(enemy.transform.position, target.transform.position);
 
-        hit = Physics2D.Raycast(enemy.transform.position, dir, dis, obstacleMask);
+        hit = Physics2D.Raycast(enemy.transform.position, dir, dis);
         if (hit.collider != null)
         {
-            Vector2 offsetPoint = hit.point + dir * offset;
-            lineRenderer.SetPosition(1, offsetPoint);
+            if(hit.collider.CompareTag(target.tag) || hit.collider.CompareTag(TagIds.PlayerTag) 
+                || hit.collider.CompareTag(TagIds.DefenseTowerTag))
+            {
+                lineRenderer.SetPosition(1, hit.collider.transform.position);
+            }
         }
     }
 

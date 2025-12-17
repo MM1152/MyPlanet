@@ -7,6 +7,7 @@ public class DelayFieldTower : UtilTower
         var gravityWrap = Managers.ObjectPoolManager.SpawnObject<GravityWrap>(PoolsId.GravityWrap);
         gravityWrap.Init(this);
         gravityWrap.Setting(planet, TagIds.EnemyProjectileTag, BonusSlowBulletSpeed);
+        gravityWrap.SetAssets(1);
         return gravityWrap;
     }
 

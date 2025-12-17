@@ -24,7 +24,7 @@ public class AttackState : IState
             return;
         }
 
-        if (enemy.attackRange <= 0 || Vector2.Distance(enemy.transform.position, target.transform.position) <= enemy.attackRange)
+        if (enemy.attackRange <= 0 || Vector2.Distance(enemy.transform.position, enemy.GetTarget().transform.position) <= enemy.attackRange)
         {            
             enemy.attack.Attack(enemy);            
             return;

@@ -7,6 +7,7 @@ public class AbyssCoreTower : UtilTower
         var gravityWrap = Managers.ObjectPoolManager.SpawnObject<GravityWrap>(PoolsId.GravityWrap);
         gravityWrap.Init(this);
         gravityWrap.Setting(tower.transform, TagIds.EnemyProjectileTag, 0, isDeleteProjectile : true);
+        gravityWrap.SetAssets(1);
         return gravityWrap;
     }
 

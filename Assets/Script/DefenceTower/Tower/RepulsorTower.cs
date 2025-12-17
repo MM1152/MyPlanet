@@ -18,7 +18,7 @@ public class RepulsorTower : UtilTower
         var repulsor = Managers.ObjectPoolManager.SpawnObject<Repulsor>(PoolsId.Repulsor);
         repulsor.Init(this);
         var dir = (tower.gameObject.transform.position - planet.transform.position).normalized;
-        repulsor.transform.position = tower.transform.position + (dir * BonusAttackRange / 2f);
+        repulsor.transform.position = tower.transform.position/* + (dir * BonusAttackRange / 2f)*/;
         repulsor.SetDir(dir);
         return repulsor;
     }

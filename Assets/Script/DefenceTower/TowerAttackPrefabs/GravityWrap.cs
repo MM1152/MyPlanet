@@ -12,6 +12,8 @@ public class GravityWrap : BaseAttackPrefab
     protected List<IMoveAble> moveAbles = new List<IMoveAble>();
     private UtilTower utiltower;
 
+    [SerializeField] private GameObject[] filedParticle;
+
     public override void Init(Tower data)
     {
         base.Init(data);
@@ -31,6 +33,18 @@ public class GravityWrap : BaseAttackPrefab
         this.isDeleteProjectile = isDeleteProjectile;
     }
 
+    /// <summary>
+    /// 1 : ÇÏ¾á ÀåÆÇ , 2 : ÁöÀ¶ÁöÀ¶ÁöÀ¶ ÇÏ´Â ÆÄÆ¼Å¬
+    /// </summary>
+    public void SetAssets(int particle)
+    {
+        for(int i = 0; i < filedParticle.Length; i++)
+        {
+            filedParticle[i].SetActive(false);
+        }
+        filedParticle[particle].SetActive(true);
+    }
+    
     protected override void HitTarget(Collider2D collision)
     {
         return;
