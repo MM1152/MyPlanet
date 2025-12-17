@@ -11,7 +11,7 @@ public static class AttackManager
         {EnemyType.EliteMonster, () => new EliteMonsterAttack() },
         {EnemyType.Boss, () => new BossAttack() },
     };
-    public static  IAttack GetAttack(EnemyType key)
+    public static  IAttack GetAttack(EnemyType key = EnemyType.None)
     {
         if (attackTable.ContainsKey(key))
         {
