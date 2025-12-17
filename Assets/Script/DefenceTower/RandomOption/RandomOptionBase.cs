@@ -54,6 +54,11 @@ public abstract class RandomOptionBase
         bonusValue += amount;
     }
 
+    public int GetOptionValue()
+    {
+        return bonusValue;
+    }
+
     public RandomOptionData.Data GetOptionData()
     {
         return optionData;

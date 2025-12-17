@@ -89,6 +89,7 @@ public abstract class Tower
 
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
     private RandomOptionData randomOptionData = new RandomOptionData();
+    public RandomOptionData RandomOption => randomOptionData;
     private LevelUpTable.Data levelUpData;
 
     protected RandomOptionData.Data optionData;

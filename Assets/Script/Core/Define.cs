@@ -179,7 +179,7 @@ public static class AddressableNames
         { "Drone", PoolsId.Drone },   
         { "Repulsor", PoolsId.Repulsor },   
         { "ChaosBeacon", PoolsId.ChaosBeacon },   
-        { "Barrier", PoolsId.Barrier }
+        { "Barrier", PoolsId.Barrier },
         { "DarkLaserHitEffect", PoolsId.DarkLaserHitEffect },   
         { "SolarLaserHitEffect", PoolsId.SolarLaserHitEffect },   
         { "Flash 13 red laser", PoolsId.Flash13redlaser },   
