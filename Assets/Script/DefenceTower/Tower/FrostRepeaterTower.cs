@@ -25,7 +25,15 @@ public class FrostRepeaterTower : Tower
 
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
-        Bullet projectile = Managers.ObjectPoolManager.SpawnObject<Bullet>(PoolsId.Bullet);
+        Bullet projectile = Managers.ObjectPoolManager.SpawnObject<FrostRepeaterBullet>(PoolsId.FrostRepeaterBullet);
+        projectile.SetHitParticle(PoolsId.Hit6bluefire);
+        var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash6bluefire);
+        if(target != null)
+        {
+            var dir = (target.transform.position - TowerGameObject.transform.position).normalized;
+            flash.transform.position = TowerGameObject.transform.position + dir * TowerGameObject.transform.localScale.x;
+
+        }
         return projectile;
     }
 }

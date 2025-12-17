@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 
 public class TowerDuplicationRewardTable : DataTable
 {

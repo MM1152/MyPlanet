@@ -43,7 +43,12 @@ public class IRonMineTower : Tower
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         var mine = Managers.ObjectPoolManager.SpawnObject<IronMine>(PoolsId.IronMine);
-        mine.SetDir((tower.transform.position - manager.basePlanet.transform.position).normalized);
+
+        var dir = (tower.transform.position - manager.basePlanet.transform.position).normalized;
+        mine.SetDir(dir);
+
+        var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash17novaviolet);
+        flash.transform.position = TowerGameObject.transform.position + dir * TowerGameObject.transform.localScale.x;
         return mine;
     }
 }

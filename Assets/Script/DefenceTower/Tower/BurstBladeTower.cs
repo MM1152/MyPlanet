@@ -25,7 +25,8 @@ public class BurstBlasterTower : Tower
 
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
-        var bullet = Managers.ObjectPoolManager.SpawnObject<Bullet>(PoolsId.Bullet).GetComponent<Bullet>();
+        Bullet bullet = Managers.ObjectPoolManager.SpawnObject<BurstBlasterBullet>(PoolsId.BurstBlasterBullet).GetComponent<Bullet>();
+        bullet.SetHitParticle(PoolsId.Hit8dagger);
         return bullet;
     }
 }

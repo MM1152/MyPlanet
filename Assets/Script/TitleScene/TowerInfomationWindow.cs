@@ -19,6 +19,16 @@ public class TowerInfomationWindow : Window
     [SerializeField] private TextMeshProUGUI towerOptionText;
     [SerializeField] private TextMeshProUGUI towerPeiceCountText;
     [SerializeField] private TextMeshProUGUI towerUpgradeStat;
+
+    [SerializeField] private TextMeshProUGUI firstStatusTitle;
+    [SerializeField] private TextMeshProUGUI firstStatusValue;
+    [SerializeField] private TextMeshProUGUI secondStatusTitle;
+    [SerializeField] private TextMeshProUGUI secondStatusValue;
+    [SerializeField] private TextMeshProUGUI thirdStatusTitle;
+    [SerializeField] private TextMeshProUGUI thirdStatusValue;
+
+    [SerializeField] private TextMeshProUGUI randomOptionText;
+
     [Header("Images")]
     [SerializeField] private Image towerImage;
     [SerializeField] private Image towerTypeImage;
@@ -38,6 +48,8 @@ public class TowerInfomationWindow : Window
     [SerializeField] private GameObject typeLayout;
     [SerializeField] private GameObject attacktypeLayout;
     [SerializeField] private GameObject elementLayout;
+
+    private RandomOptionData randomOptionTable = new RandomOptionData();
 
     private TowerData.Data userTowerData;
     private TowerTable.Data towerTableData;
@@ -113,7 +125,17 @@ public class TowerInfomationWindow : Window
         towerAttackTypeText.text = towerTableData.AttackType;
         towerInfomationText.text = towerTableData.Explanatoin;
 
+        var randomOptionData = randomOptionTable.GetData(towerData.Option);
+        var randomOption = randomOptionData.option.DeepCopy();
+        randomOption.Init(towerData, randomOptionData);
 
+        randomOptionText.text = string.Format(randomOption.FormatingString);
+        randomOptionText.text += " " + randomOption.GetOptionStringFormatting();
+        randomOptionText.text += $" <color=yellow>{userTowerData.OptionValue} %</color>";
+        if (towerData.Type == 1)
+            UpdateTextToAttackTypeTower(towerData);
+        else
+            UpdateTextToUtilTypeTower(towerData as TowerTable.UtilTower);
         UpdateStar(userTowerData.grade);
         UpdateOptionValue(userTowerData);
     }
@@ -160,5 +182,29 @@ public class TowerInfomationWindow : Window
 
         currentTab.SetActive(true);
         currentBackGround.SetActive(true);
+    }
+
+    private void UpdateTextToAttackTypeTower(TowerTable.Data tower)
+    {
+        firstStatusTitle.text = "공격력[ATK]";
+        firstStatusValue.text = "+" + tower.ATK.ToString("F2");
+
+        secondStatusTitle.text = "연사 속도[FIRE_RATE]";
+        secondStatusValue.text = "+" + tower.Fire_Rate.ToString("F2");
+
+        thirdStatusTitle.text = "사거리[RANGE]";
+        thirdStatusValue.text = "+" + tower.Attack_Range.ToString("F2");
+    }
+
+    private void UpdateTextToUtilTypeTower(TowerTable.UtilTower tower)
+    {
+        firstStatusTitle.text = "지속시간[DURATION]";
+        firstStatusValue.text = "+" + tower.Duration.ToString("F2");
+
+        secondStatusTitle.text = "쿨타임[COOLTIME]";
+        secondStatusValue.text = "+" + tower.Cooltime.ToString("F2");
+
+        thirdStatusTitle.text = "범위[RANGE]";
+        thirdStatusValue.text = "+" + tower.range.ToString("F2");
     }
 }

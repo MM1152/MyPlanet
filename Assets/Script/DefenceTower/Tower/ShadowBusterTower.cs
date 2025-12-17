@@ -17,6 +17,14 @@ public class ShadowBusterTower : Tower
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         var bullet = Managers.ObjectPoolManager.SpawnObject<ShadowBursterBullet>(PoolsId.ShadowBursterBullet);
+        bullet.SetParticle(PoolsId.Hit23cube);
+        if(target != null)
+        {
+            var dir = (target.position - TowerGameObject.transform.position).normalized;
+
+            var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash23cube);
+            flash.transform.position = TowerGameObject.transform.position + dir * TowerGameObject.transform.localScale.x;
+        }
         return bullet;
     }
 }
