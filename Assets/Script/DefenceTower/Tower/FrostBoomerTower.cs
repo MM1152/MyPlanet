@@ -25,7 +25,9 @@ public class FrostBoomberTower : Tower
 
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
-        var projectile = Managers.ObjectPoolManager.SpawnObject<MagmaBoomFregment>(PoolsId.MagmaBoomFregment);
+        var projectile = Managers.ObjectPoolManager.SpawnObject<ForstBoomerBullet>(PoolsId.FrostBoomerBullet);
+        var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash2electro);
+        flash.transform.position = TowerGameObject.transform.position;
         return projectile;
     }
 }

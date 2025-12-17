@@ -3,14 +3,11 @@ using System;
 
 public class SniperBullet : ProjectTile
 {
-    [SerializeField] private float durationTime = 0.5f;
-
-    private TrailRenderer trailRenderer;
-    private float currentDurationTime;
-
+    private PoolsId particleId;
+    private Vector3 initScale;
     private void Awake()
     {
-        trailRenderer = GetComponent<TrailRenderer>();
+        initScale = transform.localScale;
     }
 
     public override void Init(Tower data)
@@ -19,19 +16,33 @@ public class SniperBullet : ProjectTile
         poolsId = PoolsId.SniperBullet;
         speed = 15f;
 
-        currentDurationTime = durationTime;
-        trailRenderer.SetPosition(0 ,transform.position);
+        transform.localScale = new Vector3(initScale.x * data.BonusWidthSize , initScale.y);
     }
 
-    protected override void Update()
+    public void SetParticleId(PoolsId particleId)
+    {
+        this.particleId = particleId;
+    }
+
+    protected override void Update() { }
+
+    protected void FixedUpdate()
     {
         transform.position += dir * speed * Time.deltaTime;
-        currentDurationTime -= Time.deltaTime;
+        duration -= Time.deltaTime;
         
-        if (currentDurationTime <= 0)
+        if (duration <= 0)
         {
             if (gameObject.activeSelf)
                 Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
         }
+    }
+
+    protected override void HitTarget(Collider2D collision)
+    {
+        base.HitTarget(collision);
+
+        var hitParticle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(particleId);
+        hitParticle.transform.position = collision.ClosestPoint(transform.position);
     }
 }

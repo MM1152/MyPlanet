@@ -57,6 +57,7 @@ public class ProjectTile : BaseAttackPrefab
     public void SetDirNoNoise(Vector3 dir)
     {
         this.dir = dir;
+        transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
         duration = tower.FullAttackRange / FullBulletSpeed;
     }
     

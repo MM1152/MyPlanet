@@ -88,7 +88,7 @@ public class TowerTable : DataTable
         [CsvHelper.Configuration.Attributes.Ignore]
         public string Buff_Explanation => string.Format(DataTableManager.StringTable.Get(buff_Explantion) , OptionValue);
         [CsvHelper.Configuration.Attributes.Ignore]
-        public string TypeToString => type switch
+        public string TypeToString => Type switch
         {
             1 => "공격",
             2 => "유틸",

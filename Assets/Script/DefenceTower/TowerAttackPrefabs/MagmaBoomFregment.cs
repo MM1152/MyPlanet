@@ -44,7 +44,9 @@ public class MagmaBoomFregment : FragmentBullet
                 explosion.transform.position = this.transform.position;
                 explosion.Init(tower);
                 if (gameObject.activeSelf)
+                {
                     Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+                }
             }
         }
         else

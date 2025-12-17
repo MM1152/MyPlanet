@@ -114,6 +114,7 @@ public enum PoolsId
     BurstBlasterBullet = 228,
     ShadowBursterFragment = 229,
     IceRangerFregment = 230,
+    FrostBoomerBullet = 231,
 
     SimpleBullet = 300,
     HomingBullet = 301,
@@ -144,6 +145,16 @@ public enum PoolsId
     Hit7pink = 1014,
     Flash26bluecrystal = 1015,
     Hit26bluecrystal = 1016,
+    Hit10bluelaser = 1017,
+    Flash10bluelaser = 1018,
+    Flash18novaorange = 1019,
+    Hit18novaorange = 1020,
+    Flash23cube1 = 1021,
+    Hit23cube1 = 1022,
+    Flash2electro = 1023,
+    Flash17novaviolet = 1024,
+    Hit17novaviolet = 1025,
+    Hit20pinkarrow = 1026,
 }
 
 public enum EnemyType
@@ -216,6 +227,17 @@ public static class AddressableNames
         { "Flash 26 blue crystal", PoolsId.Flash26bluecrystal },   
         { "Hit 26 blue crystal", PoolsId.Hit26bluecrystal },   
         { "IceRangerFregment", PoolsId.IceRangerFregment },   
+        { "Flash 10 blue laser", PoolsId.Flash10bluelaser },    
+        { "Hit 10 blue laser", PoolsId.Hit10bluelaser },
+        { "Flash 18 nova orange", PoolsId.Flash18novaorange },
+        { "Hit 18 nova orange", PoolsId.Hit18novaorange },
+        { "Hit 23 cube 1", PoolsId.Hit23cube1 },
+        { "Flash 23 cube 1", PoolsId.Flash23cube1 },
+        { "FrostBoomerBullet", PoolsId.FrostBoomerBullet },
+        { "Flash 2 electro", PoolsId.Flash2electro },
+        { "Flash 17 nova violet", PoolsId.Flash17novaviolet },
+        { "Hit 17 nova violet", PoolsId.Hit17novaviolet },
+        { "Hit 20 pink arrow", PoolsId.Hit20pinkarrow },
     };
 
     public static PoolsId GetPoolsId(string name)

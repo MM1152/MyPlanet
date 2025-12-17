@@ -22,6 +22,8 @@ public class PlutoBullet : Bullet
         if(find != null)
         {
             find.OnDamage((int)(tower.CalcurateAttackDamage * (passiveDamagePercent / 100f)));
+            var hit = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Hit20pinkarrow);
+            hit.transform.position = transform.position;
             if (gameObject.activeSelf)
                 Managers.ObjectPoolManager.Despawn(poolsId , gameObject);
         }

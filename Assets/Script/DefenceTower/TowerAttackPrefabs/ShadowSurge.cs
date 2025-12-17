@@ -6,7 +6,7 @@ public class ShadowSurge : BaseAttackPrefab
     [SerializeField] private GameObject pillar;
     [SerializeField] private GameObject attackRange;
     private Rect screenRect;
-    private float duration = 0.1f;
+    private float duration = 1f;
     private Renderer render;
 
     private void Awake()
@@ -38,7 +38,7 @@ public class ShadowSurge : BaseAttackPrefab
 
         pillar.transform.position = Vector3.Lerp(bottomPos, topPos, 0.5f);
 
-        duration = 0.2f;
+        duration = 0.7f;
     }
 
     private void Update()

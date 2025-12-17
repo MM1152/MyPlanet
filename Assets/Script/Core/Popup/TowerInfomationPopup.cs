@@ -40,6 +40,7 @@ public class TowerInfomationPopup : Popup
     public void UpdateTexts(TowerTable.Data towerData)
     {
         towerNameText.text = towerData.Name;
+        towerImage.sprite = towerData.towerImage;
         //towerGradeText.text = towerData.grade ??
         towerType.text = towerData.TypeToString;
         towerAttackType.text = towerData.AttackType;

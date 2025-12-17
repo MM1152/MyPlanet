@@ -4,8 +4,11 @@ public class Surge : BaseAttackPrefab
 {
     private float duration = 0f;
     private float timer = 0f;
+
+    [SerializeField] private Transform[] particles;
     public override void Init(Tower data)
     {
+        //3 : 1 ∫Ò¿≤
         base.Init(data);
         poolsId = PoolsId.Surge;
 
@@ -13,6 +16,11 @@ public class Surge : BaseAttackPrefab
         timer = 0f;
 
         transform.localScale = new Vector3(tower.FullAttackRange , tower.FullAttackRange , 1f);
+
+        for(int i = 0; i < particles.Length; i++)
+        {
+            particles[i].localScale = new Vector3(1f * (tower.FullAttackRange / 3f), 1f * (tower.FullAttackRange / 3f), 1f * (tower.FullAttackRange / 3f));
+        }
     }
 
     public override void SetTarget(Transform target, float noise)
