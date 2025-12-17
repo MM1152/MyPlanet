@@ -30,13 +30,13 @@ public class BossPartner : MonoBehaviour, IDamageAble
     private bool inLaserAttack = false;
     private bool isAttackTurn = false;  // 보스와 주고받는 공격 턴인지 여부
     private bool initialized = false; // 초기화 여부
-    private LayerMask targetLayer = LayerMask.GetMask("Player"); // 타겟 레이어   
+    private LayerMask targetLayer; // 타겟 레이어   
     private TurnSimpleAttack turnSimpleAttack;
 
     private void Start()
     {
         radius = enemy.GetComponent<CircleCollider2D>().radius; // 부모 반지름 가져오고 궤도를 구해야함 
-
+        targetLayer = LayerMask.GetMask("Player");
         // X, Y만 스케일 적용, Z는 원본 유지
         this.transform.localScale = enemy.transform.localScale * controlScale;
         typeEffectiveness.Init(elementType); // 타입 효과 초기화

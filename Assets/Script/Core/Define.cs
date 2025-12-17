@@ -325,6 +325,7 @@ public static class DataBasePaths
     public static string PresetPath => "preset/";
     public static string PlanetPath => "planet/";
     public static string TowerPath => "tower/";
+    public static string AsyncPlayerPath => "asyncPlayers/";
 
     public static string GoldPath => UserPath + FirebaseManager.Instance.UserId + "/gold";
     public static string ExpPath => UserPath + FirebaseManager.Instance.UserId + "/exp";
@@ -338,6 +339,9 @@ public static class DataBasePaths
 
     public static string TowerDataPathFormating => TowerPath + FirebaseManager.Instance.UserId + "/{0}";
     public static string TowerUnlockPathFormating => TowerDataPathFormating + "/Unlock";
+
+    public static string AsyncStagePathFormating => AsyncPlayerPath + "stage{0}/";
+    public static string AsyncPlayerSavePathFormating => AsyncStagePathFormating + FirebaseManager.Instance.UserId;
 }
 
 public static class EnemyTypes

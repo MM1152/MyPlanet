@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -49,6 +50,19 @@ public static class Utils
     public static Rect GetScreenBounds()
     {
         return screenRect;
+    }
+
+    public static void Suffle<T>(IList<T> target)
+    {
+        int n = target.Count;
+        System.Random rnd = new System.Random();
+        while (n > 1)
+        {
+            int k = rnd.Next(n--);
+            T temp = target[n];
+            target[n] = target[k];
+            target[k] = temp;
+        }
     }
 }
 

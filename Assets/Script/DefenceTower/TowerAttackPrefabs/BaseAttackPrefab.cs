@@ -64,7 +64,10 @@ public abstract class BaseAttackPrefab : MonoBehaviour
                 {
                     Debug.Log($"타워 공격력 {tower.TowerData.ATK}, 풀데미지 {tower.FullDamage}");
                     enemy.LastAttackerType = (ElementType)tower.TowerData.attribute;
-                    basePlaent.PassiveSystem.CheckUseAblePassive(tower, null, enemy);
+                    if(!tower.IsHelper)
+                    {
+                        basePlaent.PassiveSystem.CheckUseAblePassive(tower, null, enemy);
+                    }
                 }
                 HitTarget(collision);
             }
