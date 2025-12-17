@@ -112,6 +112,7 @@ public enum PoolsId
     RainBullet = 304,
     ArcMissileBullet = 305,
 
+    Barrier = 500,
     Exp = 400,
     DamageText = 600,
 
@@ -120,6 +121,7 @@ public enum PoolsId
 
 public enum EnemyType
 {
+    None = -1,
     Melee = 0,
     Ranged = 1,
     EliteMonster = 2,
@@ -166,6 +168,7 @@ public static class AddressableNames
         { "Drone", PoolsId.Drone },   
         { "Repulsor", PoolsId.Repulsor },   
         { "ChaosBeacon", PoolsId.ChaosBeacon },   
+        { "Barrier", PoolsId.Barrier }
     };
 
     public static PoolsId GetPoolsId(string name)
