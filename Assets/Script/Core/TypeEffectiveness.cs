@@ -9,13 +9,13 @@ public class TypeEffectiveness
     // ������ �Ӽ� ���̺����� ��������� �ҵ�
     public float[,] typeToDamageTable = new float[,]
     {
-        //        Normal, Fire ,Steel, Water,Light , Dark
-        /*Nrmal */ { 1f ,  1f ,  1f ,   1f ,   1f  ,  1f  },
-        /* Fire */ { 1f ,  1f , 1.5f,  0.5f ,  1f  ,  1f  },
-        /* Steel*/ { 1f , 0.5f,  1f ,  1.5f ,  1f  ,  1f  },
-        /* Water*/ { 1f , 1.5f, 0.5f,   1f  ,  1f  ,  1f  },
-        /* Light*/ { 1f ,  1f ,  1f ,   1f  ,  1f  ,  1.5f},
-        /* Dark */ { 1f ,  1f ,  1f ,   1f  , 0.5f ,  1f  },
+        //              Normal, Fire ,Ice, Steel,Light , Dark 
+            /*Normal*/ { 1f ,  1f ,  1f ,   1f ,   1f  ,  1f  },
+            /* Fire */ { 1f ,  1f , 0.5f,  1.5f ,  1f  ,  1f  },
+            /* Ice  */ { 1f , 1.5f,  1f ,  0.5f ,  1f  ,  1f  },
+            /* Steel*/ { 1f , 0.5f, 1.5f,   1f  ,  1f  ,  1f  },
+            /* Light*/ { 1f ,  1f ,  1f ,   1f  ,  1f  ,  1.5f},
+            /* Dark */ { 1f ,  1f ,  1f ,   1f  , 1.5f ,  1f  },
     };
 
     public void Init(ElementType type)
@@ -26,5 +26,11 @@ public class TypeEffectiveness
     public float GetDamagePercent(ElementType targetType)
     {
         return typeToDamageTable[TypeToInt, (int)targetType];
+    }
+
+    public static float StaticGetDamagePercent(ElementType attackerType, ElementType targetType)
+    {
+        var temp = new TypeEffectiveness();
+        return temp.typeToDamageTable[(int)attackerType, (int)targetType];
     }
 }

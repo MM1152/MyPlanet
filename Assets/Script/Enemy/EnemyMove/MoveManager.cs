@@ -9,7 +9,7 @@ public static class MoveManager
         { EnemyType.Melee, () => new SimpleMove() },                
         { EnemyType.Ranged, () => new SimpleMove() },
         { EnemyType.EliteMonster, () => new BaseElementalMove() },
-        { EnemyType.Boss, () => new BossSimpleMove() },   
+        { EnemyType.Boss, () => new BaseBossMonsterMove() },   
     };
 
     public static IMove GetMove(EnemyType Id)

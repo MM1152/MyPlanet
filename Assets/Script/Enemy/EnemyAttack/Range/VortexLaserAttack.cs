@@ -6,6 +6,7 @@ public class VortexLaserAttack : IShotStrategy
 {
     private Enemy enemy;
     private bool initialized = false;
+    private bool isAttacking = false;
     private Rect screenRect;
     private List<float> damageIntervals = new List<float>();
     private float alpha = 1f;
@@ -22,8 +23,9 @@ public class VortexLaserAttack : IShotStrategy
     public void Shot(Enemy enemy, GameObject target)
     {
         if (!initialized) Initialize(enemy);
+        if (isAttacking) return;
 
-        LaserRotation().Forget();
+        LaserRotation(enemy.GetCancellationTokenOnDestroy()).Forget();
     }
 
     private void Initialize(Enemy enemy)
@@ -79,23 +81,47 @@ public class VortexLaserAttack : IShotStrategy
         enemy.OnDie += ClearLineRenderers;
     }
 
-    private async UniTask LaserRotation()
+    private async UniTask LaserRotation(System.Threading.CancellationToken cancellationToken)
     {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < rotateTime)
+        isAttacking = true;
+        
+        try
         {
-            UpdateLaser(true);
-            elapsedTime += Time.deltaTime;
-            await UniTask.Yield();
+            float elapsedTime = 0f;
+
+            while (elapsedTime < rotateTime)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+                
+                UpdateLaser(true);
+                elapsedTime += Time.deltaTime;
+                await UniTask.Yield(cancellationToken);
+            }
+
+            float delayTime = 0f;
+            while (delayTime < rotateDelay)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+                
+                UpdateLaser(false);
+                delayTime += Time.deltaTime;
+                await UniTask.Yield(cancellationToken);
+            }
+        
         }
-
-        float delayTime = 0f;
-        while (delayTime < rotateDelay)
+        catch (System.OperationCanceledException)
         {
-            UpdateLaser(false);
-            delayTime += Time.deltaTime;
-            await UniTask.Yield();
+            // Enemy가 파괴됨
+        }
+        finally
+        {
+            isAttacking = false;
         }
     }
     private void UpdateLaser(bool rotate)

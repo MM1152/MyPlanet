@@ -9,7 +9,7 @@ public class FortifiedBarrierAbility : BaseAbility
     public int barrierAmount;
     private float refillTimer = 5f; //임시 
     public override bool isActive => barrierAmount > 0;
-    private float reductionDamage = 0.4f; //테이블연동필요 
+    private float reductionDamage = 0.4f; //테이블연동필요 //피해감소율 
 #if DEBUG_MODE
     TestRange rangePrefab;
     bool setSprite = false;
@@ -18,8 +18,8 @@ public class FortifiedBarrierAbility : BaseAbility
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        // barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);
-        barrierAmount = maxBarrierAmount;
+        barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);
+        maxBarrierAmount = barrierAmount;
     }
     public override int OnDamage(int damage)
     {

@@ -92,11 +92,15 @@ public class ProjectTile : BaseAttackPrefab
     protected override void HitTarget(Collider2D collision)
     {
         var find = collision.GetComponent<IDamageAble>();
+        if(find == null && collision.attachedRigidbody != null)
+        {
+            find = collision.attachedRigidbody.GetComponentInParent<IDamageAble>();
+        }
         if (find != null)
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
             find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
-            find.StatusEffect.Apply(effect, find);
+            find.StatusEffect?.Apply(effect, find);
         }
     }
 }

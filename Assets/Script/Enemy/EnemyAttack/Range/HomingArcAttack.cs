@@ -1,15 +1,40 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 public class HomingArcAttack : IShotStrategy
 {
-    private Enemy body;
-    private float baseAngle =135f;
+    private Enemy enemy;
+    private float baseAngle = 135f;
     public int spawnCount = 4;
+    private Action<GameObject> shotPattern;
+    private bool initialized = false;
     private List<Vector3> spreadAngles = new List<Vector3>();
 
     public void Shot(Enemy enemy, GameObject target)
     {
-        body = enemy;
+        if (!initialized)
+        {
+            this.enemy = enemy;
+            InitializePattern(enemy.enemyData.ID);
+        }
+
+        shotPattern?.Invoke(target);
+    }
+
+    private void InitializePattern(int enemyId)
+    {
+        shotPattern = enemyId switch
+        {
+            3042 => ShotSpread,
+            3062 => ShotAlternate,
+            _ => ShotSpread
+        };
+        initialized = true;
+    }
+
+    // 3042: 흩뿌리기
+    private void ShotSpread(GameObject target)
+    {
         Vector3 dir = (target.transform.position - enemy.transform.position).normalized;
         SetSpreadAngle(dir);
         for (int i = 0; i < spawnCount; i++)
@@ -19,16 +44,33 @@ public class HomingArcAttack : IShotStrategy
             Bullet.Init(enemy, enemy.typeEffectiveness);
             Bullet.SetTarget(target.transform);
             Bullet.SetDirection(spreadAngles[i]);
-            
+
             if (i == 0 || i == spawnCount - 1)
             {
-                Bullet.SetTurnSpeed(1f); 
+                Bullet.SetTurnSpeed(1f);
             }
             else
             {
                 Bullet.SetTurnSpeed(0.3f);
             }
         }
+    }
+
+    private void ShotAlternate(GameObject target)
+    {
+        Vector3 dir = (target.transform.position - enemy.transform.position).normalized;
+        SetSpreadAngle(dir);
+
+        Vector3 chosenDirection;
+        var randomNum = UnityEngine.Random.Range(0f, 1f);
+        chosenDirection = randomNum < 0.5f ? spreadAngles[0] : spreadAngles[spawnCount - 1];    
+
+        var Bullet = CreateProjectile(PoolsId.ArcMissileBullet);
+        Bullet.transform.position = enemy.transform.position;
+        Bullet.Init(enemy, enemy.typeEffectiveness);
+        Bullet.SetTarget(target.transform);
+        Bullet.SetDirection(chosenDirection);
+        Bullet.SetTurnSpeed(1f);
     }
 
     private ArcMissileBullet CreateProjectile(PoolsId poolsId)
@@ -41,8 +83,8 @@ public class HomingArcAttack : IShotStrategy
     private void SetSpreadAngle(Vector3 angle)
     {
         spreadAngles.Clear();
-     
-        float totalSpreadAngle = baseAngle; 
+
+        float totalSpreadAngle = baseAngle;
         float angleStep = totalSpreadAngle / (spawnCount - 1);
         float startAngle = -totalSpreadAngle / 2f;
 
@@ -54,6 +96,4 @@ public class HomingArcAttack : IShotStrategy
             spreadAngles.Add(rotatedDirection.normalized);
         }
     }
-
-
 }

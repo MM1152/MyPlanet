@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     public TypeEffectiveness typeEffectiveness;
+    public ElementType LastAttackerType { get; set; }
     public GameObject target;
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
@@ -28,7 +29,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         get
         {
-
             if (EnemyTypes.IsEliteMonster(enemyData.ID))
             {
                 return EnemyType.EliteMonster;
@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private float baseRange;
     private bool bonusApplied = false;
     public float bulletSpeed => enemyData.Bullet_Speed;
-    public float fireInterval => enemyData.Fire_Rate > 0f ? 60f / enemyData.Fire_Rate : 0f ;
+    public float fireInterval => enemyData.Fire_Rate > 0f ? 60f / enemyData.Fire_Rate : 0f;
     public float attackInterval;
     private float abilityInterval = 1f;
     private float nextInterval = 0f;
@@ -76,10 +76,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public Action ReturnMoveAction;
 
+    public Action<int> OnBarrierRefill;
+
     public LineRenderer enemyLineRenderer;
 
     public CircleCollider2D enemyCollider;
-     
+
     private WaveWindow bossUi;
     public EnemyPredictionPoisition enemyPredictionPoisition = new EnemyPredictionPoisition();
 
@@ -89,6 +91,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private float chaosDuration;
     private BasePlanet basePlanet;
     private CancellationTokenSource disAbleCtr;
+    private GameObject bossPartnerObj;
+    [SerializeField] private BossPartner bossPartner;
     private void Awake()
     {
         stateMachine = new StateMachine(this);
@@ -98,10 +102,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag)?.GetComponent<TextSpawnManager>();
 #endif
         enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag)?.GetComponent<EnemySpawnManager>();
-        zone = GetComponentInChildren<ZoneSearch>();
+        // zone = GetComponentInChildren<ZoneSearch>();
         typeEffectiveness = new TypeEffectiveness();
-        enemyLineRenderer = GetComponent<LineRenderer>();
-        enemyCollider = GetComponent<CircleCollider2D>();
+        // enemyLineRenderer = GetComponent<LineRenderer>();
+        // enemyCollider = GetComponent<CircleCollider2D>();
         enemyPredictionPoisition.Init(this);
         basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
         stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
@@ -146,25 +150,30 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         zone?.Init(this);
         ResetActions();
         ability?.SetEnemy(this);
-        if(enemyLineRenderer != null)
+        if (enemyLineRenderer != null)
         {
             enemyLineRenderer.enabled = false;
             enemyLineRenderer.positionCount = 0;
-        }  
+        }
 #if DEBUG_MODE
 
         if (EnemyTypes.IsBossMonster(data.ID))
         {
-            this.transform.localScale = new Vector2(2f, 2f);
+            this.transform.localScale = new Vector3(2f, 2f, 2f);
             bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag)?.GetComponent<WaveWindow>();
             bossUi?.ShowBossUI(enemyData.HP);
+
+            if (data.ID == 3057)
+            {
+                bossPartner.gameObject.SetActive(true);
+            }
         }
 
         if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector2(1.3f, 1.3f);
 #endif
         ReturnMoveAction = () =>
         {
-            if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID) || EnemyTypes.IsBossMonster(data.ID)))
+            if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID) || (EnemyTypes.IsBossMonster(data.ID)&&data.ID==3067)))
             {
 
                 stateMachine.ChangeState(stateMachine.walkState);
@@ -214,7 +223,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
     }
 #endif
-        
+
     public void SetState(IState newState)
     {
         stateMachine.ChangeState(newState);
@@ -242,13 +251,13 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         {
             chaosDuration -= Time.deltaTime;
             SetTarget(enemySpawnManager.GetEnemyChaose(transform.position)?.gameObject);
-            
-            if(target == null)
+
+            if (target == null)
             {
                 SetTarget(basePlanet.gameObject);
             }
 
-            if(chaosDuration <= 0)
+            if (chaosDuration <= 0)
             {
                 isChaos = false;
                 SetTarget(GameObject.FindWithTag(TagIds.PlayerTag));
@@ -256,7 +265,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
         stateMachine.currentState.Execute();
 
-         if(IsDead) return; 
+        if (IsDead) return;
 
         if (ability != null && ability.abilityType == AbilityType.OnUpdate && abilityAction != null && Time.time >= nextInterval)
         {
@@ -267,11 +276,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (move is BaseElementalMove elementalMove && elementalMove.currentStrategy is LeftRinghMove)
         {
             attackInterval += Time.deltaTime;
-            if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval -(fireInterval * 0.4f)))
+            if (attack is EliteMonsterAttack eliteMonsterAttack && eliteMonsterAttack.GetShotStrategy(ElementType) is TrailShotAttack trailShotAttack && attackInterval >= (fireInterval - (fireInterval * 0.4f)))
             {
                 trailShotAttack.ShotLineDraw(this, target);
             }
-            
+
             if (attack is EliteMonsterAttack rotatingLaserAttack && rotatingLaserAttack.GetShotStrategy(ElementType) is RotatingLaserAttack laserAttack)
             {
                 if (attackInterval >= laserAttack.rotationInterval)
@@ -307,16 +316,20 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public void OnDamage(int damage)
     {
+        Debug.Log($"{this.name} is taking damage: {damage}");
         if (ability != null && ability.abilityType == AbilityType.OnDamage && ability.isActive)
         {
             damage = ability.OnDamage(damage);
         }
 
-        // if (damage <= 0) damage = 1;
+        if (damage < 0) return;
 
         currentHP -= damage;
-        if(bossUi != null)
+        if (bossUi != null)
             bossUi.UpdateBossHP(currentHP, enemyData.HP);
+
+        int percent = Mathf.FloorToInt((float)currentHP / enemyData.HP * 100f);
+        OnBarrierRefill?.Invoke(percent);
 
 #if DEBUG_MODE
         if (damage > 0)
@@ -347,7 +360,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public void OnDead()
     {
-        if(enemyLineRenderer != null)
+        if (enemyLineRenderer != null)
         {
             enemyLineRenderer.enabled = false;
             enemyLineRenderer.positionCount = 0;
@@ -359,13 +372,14 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
         OnBuffRemoved?.Invoke();
-        
+
         if (waveManager != null)
         {
             OnTerraformingValueChanged?.Invoke();
             OnTerraformingValueChanged = null;
         }
 
+        OnBarrierRefill = null;
         OnDie?.Invoke(this);
         OnDie = null;
     }
@@ -390,20 +404,20 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         chaosDuration = duration;
     }
 
-    public void PushEnemy(Vector3 dir, float force , float duration)
+    public void PushEnemy(Vector3 dir, float force, float duration)
     {
         isPushed = true;
 
-        if(disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
+        if (disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
         {
             disAbleCtr.Cancel();
             disAbleCtr.Dispose();
         }
         disAbleCtr = new CancellationTokenSource();
-        PushEnemyAsync(dir , force , duration , disAbleCtr).Forget();
+        PushEnemyAsync(dir, force, duration, disAbleCtr).Forget();
     }
-    
-    private async UniTaskVoid PushEnemyAsync(Vector3 dir , float force , float duration , CancellationTokenSource ctr)
+
+    private async UniTaskVoid PushEnemyAsync(Vector3 dir, float force, float duration, CancellationTokenSource ctr)
     {
         var speed = (dir * force).magnitude / duration;
         try
@@ -432,7 +446,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     private void OnDisable()
     {
-        if(disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
+        if (disAbleCtr != null && !disAbleCtr.Token.IsCancellationRequested)
         {
             disAbleCtr.Cancel();
             disAbleCtr.Dispose();
