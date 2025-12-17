@@ -16,9 +16,20 @@ public class BossSimpleMove : IMove
 
     public Vector2 Direction => direction;
 
+    private Enemy enemy;
+ private float centerYAlpha
+{
+    get =>  enemy.enemyData.ID switch
+    {
+        3072 => 0.5f,
+        _ => 0f
+    };
+}
+
     public void Init(Enemy enemy)
     {
         target = enemy.GetTarget();
+        this.enemy = enemy;
         if(enemy.WaveManager != null)
         {
             screenBounds = enemy.WaveManager.ScreenBounds;
@@ -37,7 +48,7 @@ public class BossSimpleMove : IMove
             screenBounds = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
         }
         var centerY = (target.transform.position.y + screenBounds.yMax) / 2;
-        centerPoint = new Vector2(target.transform.position.x, centerY);
+        centerPoint = new Vector2(target.transform.position.x, centerY+centerYAlpha);
         currentPattern = BossMoveState.MoveToCenter;
     }
 
