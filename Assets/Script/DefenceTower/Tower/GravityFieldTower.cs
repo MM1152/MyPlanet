@@ -7,6 +7,7 @@ public class GravityFieldTower : UtilTower
         var gravityWrap = Managers.ObjectPoolManager.SpawnObject<GravityWrap>(PoolsId.GravityWrap);
         gravityWrap.Init(this);
         gravityWrap.Setting(planet, TagIds.EnemyTag , BonusSlowPercent);
+        gravityWrap.SetAssets(0);
         return gravityWrap;
     }
 

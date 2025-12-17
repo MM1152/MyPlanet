@@ -7,6 +7,7 @@ public class GravitySinkTower : UtilTower
         var gravityWrap = Managers.ObjectPoolManager.SpawnObject<GravityWrap>(PoolsId.GravityWrap);
         gravityWrap.Init(this);
         gravityWrap.Setting(tower.transform, TagIds.EnemyTag, BonusSlowPercent , true);
+        gravityWrap.SetAssets(0);
         return gravityWrap;
     }
 

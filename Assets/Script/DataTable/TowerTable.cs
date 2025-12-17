@@ -151,6 +151,9 @@ public class TowerTable : DataTable
         var datas = await LoadCSV<UtilTower>(textAsset.text);
         foreach (var data in datas)
         {
+            if (data.ID == 23008)
+                continue;
+
             towerTable.Add(data.Tower_ID, data);
             data.towerImage = await Addressables.LoadAssetAsync<Sprite>(data.Image_path).ToUniTask();
         }

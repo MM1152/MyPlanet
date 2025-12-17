@@ -30,7 +30,7 @@ public class TowerFactory : BaseFactory<Tower>
         { 23005,  new DroneTowerCreator() },
         { 23006,  new RepulsorTowerCreator() },
         { 23007,  new ShockWaveTowerCreator() },
-        { 23008,  new ChaosTowerCreator() },
+        //{ 23008,  new ChaosTowerCreator() },
         //{ 7,  new GravityControlTowerCreator() },
         //{ 8,  new ShockWaveTowerCreator() },
     };

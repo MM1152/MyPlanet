@@ -56,7 +56,8 @@ public class Repulsor : BaseAttackPrefab
 
             if(isInAngle )
             {
-                float force = effect.Val;
+                //float force = effect.Val;
+                float force = 5f;
                 enemy.PushEnemy(dir , force , 1f);
             }
         }
