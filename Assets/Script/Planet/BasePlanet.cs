@@ -52,6 +52,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public GameObject basicPlanet;
     public GameObject plutoPlanet;
     public GameObject assistantPlanet;
+    public GameObject plutoMainPlanet;
 
     protected virtual void Awake()
     {
@@ -81,10 +82,17 @@ public class BasePlanet : MonoBehaviour, IDamageAble
         if(planetData.ID == 1011)
         {
             plutoPlanet.SetActive(true);
+            var model = DataTableManager.PlanetTable.Model;
+            var subModel = DataTableManager.PlanetTable.SubModel;
+
+            Instantiate(model, plutoMainPlanet.transform);
+            Instantiate(subModel, assistantPlanet.transform);
         }
         else
         {
             basicPlanet.SetActive(true);
+            var planetModel = DataTableManager.PlanetTable.Model;
+            Instantiate(planetModel , basicPlanet.transform);
         }
     }
 

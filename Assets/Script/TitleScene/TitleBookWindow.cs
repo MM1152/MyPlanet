@@ -17,6 +17,7 @@ public class TitleBookWindow : Window
     [SerializeField] private Button presetButton;
     [SerializeField] private Button homeButton;
     [SerializeField] private Button battleButton;
+    [SerializeField] private Button gatchaButton;
 
     [Header("Planet")]
     [SerializeField] private PlanetInfomation planetInfomation;
@@ -35,10 +36,15 @@ public class TitleBookWindow : Window
     [SerializeField] private WindowManager windowManager;
     [SerializeField] private PresetViewer presetViewer;
     [SerializeField] private Transform presetViewerRoot;
+    [SerializeField] private GameObject planetButtonBackGround;
+    [SerializeField] private GameObject towerButtonBackGround;
+    [SerializeField] private GameObject presetButtonBackGround;
 
     private List<PlanetInfomation> planetInfomationList = new List<PlanetInfomation>();
     private List<TowerInfomation> towerInfomationList = new List<TowerInfomation>();
+
     private GameObject currentOpenBook;
+    private GameObject currentBackGround;
 
     private List<PresetViewer> presetViewers = new List<PresetViewer>();
     private int currentSelectPresetIndex = -1;
@@ -46,6 +52,7 @@ public class TitleBookWindow : Window
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
+
         windowId = (int)WindowIds.TitleBookWindow;
         InitPlanetInfoList();
         InitTowerInfoList();
@@ -54,40 +61,16 @@ public class TitleBookWindow : Window
         planetBook.SetActive(false);
         towerBook.SetActive(false);
         presetBook.SetActive(false);
+
+        planetButtonBackGround.SetActive(false);
+        towerButtonBackGround.SetActive(false);
+        presetButtonBackGround.SetActive(false);
+
         FirebaseManager.Instance.PresetData.OnChangePresetData += ChangePresetData;
 
-        towerButton.onClick.AddListener(() =>
-        {
-            if(currentOpenBook != null)
-            {
-                currentOpenBook.SetActive(false);
-            }
-
-            currentOpenBook = towerBook;
-            currentOpenBook.SetActive(true);
-        });
-
-        planetButton.onClick.AddListener(() =>
-        {
-            if (currentOpenBook != null)
-            {
-                currentOpenBook.SetActive(false);
-            }
-
-            currentOpenBook = planetBook;
-            currentOpenBook.SetActive(true);
-        });
-
-        presetButton.onClick.AddListener(() =>
-        {
-            if (currentOpenBook != null)
-            {
-                currentOpenBook.SetActive(false);
-            }
-
-            currentOpenBook = presetBook;
-            currentOpenBook.SetActive(true);
-        });
+        towerButton.onClick.AddListener(() => OnClickBookButton(towerBook, towerButtonBackGround));
+        planetButton.onClick.AddListener(() => OnClickBookButton(planetBook, planetButtonBackGround));
+        presetButton.onClick.AddListener(() => OnClickBookButton(presetBook , presetButtonBackGround));
 
         homeButton.onClick.AddListener(() =>
         {
@@ -98,13 +81,35 @@ public class TitleBookWindow : Window
         {
             manager.Open(WindowIds.TitleStageSelectedWindow);
         });
+
+        gatchaButton.onClick.AddListener(() =>
+        {
+            manager.Open(WindowIds.RandomPickUpWindow);
+        });
+
+        currentOpenBook = planetBook;
+        currentBackGround = planetButtonBackGround;
     }
+
+    private void OnClickBookButton(GameObject targetBook , GameObject targetBackGround)
+    {
+        if(currentOpenBook != null)
+        {
+            currentOpenBook.SetActive(false);
+            currentBackGround.SetActive(false);
+        }
+        currentOpenBook = targetBook;
+        currentBackGround = targetBackGround;
+
+        currentOpenBook.SetActive(true);
+        currentBackGround.SetActive(true);
+    }
+    
 
     public override void Open()
     {
-        currentOpenBook = planetBook;
         currentOpenBook.SetActive(true);
-
+        currentBackGround.SetActive(true);
         userNickName.text = FirebaseManager.Instance.UserData.nickName;
         goldText.text = FirebaseManager.Instance.UserData.gold.ToString();
         expText.text = FirebaseManager.Instance.UserData.exp.ToString();
@@ -117,7 +122,7 @@ public class TitleBookWindow : Window
         if(currentOpenBook != null)
         {
             currentOpenBook.SetActive(false);
-            currentOpenBook = null;
+            currentBackGround.SetActive(false);
         }
         base.Close();
     }

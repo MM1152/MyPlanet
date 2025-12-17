@@ -8,6 +8,8 @@ using UnityEngine.AddressableAssets;
 public class PlanetTable : DataTable
 {
     private Dictionary<int, Data> planetTable = new Dictionary<int, Data>();
+    public GameObject Model { get; set; }
+    public GameObject SubModel { get; set; }
     public class Data
     {
         public int ID { get; set; }
@@ -24,6 +26,7 @@ public class PlanetTable : DataTable
         public int ATK { get; set; }
         public int DEF { get; set; }
         public int Skill_ID { get; set; }
+        public string Image_Path { get; set; }
 
         public string Name => DataTableManager.StringTable.Get(name);
         public string Explanation => DataTableManager.StringTable.Get(explanation);
@@ -67,6 +70,9 @@ public class PlanetTable : DataTable
             "C" => new Color32(0xaf, 0xd4, 0x85, 0xff), // #afd485
             _ => Color.white
         };
+        [Ignore]
+        public Sprite PlanetImage { get; set; }
+
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -78,6 +84,7 @@ public class PlanetTable : DataTable
         for(int i = 0; i < datas.Count; i++)
         {
             planetTable.Add(datas[i].ID, datas[i]);
+            datas[i].PlanetImage = await Addressables.LoadAssetAsync<Sprite>(datas[i].Image_Path).ToUniTask();
         }
 
         return (filename, this as DataTable);
@@ -119,5 +126,16 @@ public class PlanetTable : DataTable
         }
 
         return DataTableManager.OptionTable.GetValueDataToInt(idx);
+    }
+
+    public async UniTask LoadPlanetPrefab(int planetId)
+    {
+        var path = string.Format(AddressableFormatPaths.PlanetPrefabFormating , Get(planetId).Rescoce_ID);
+        if(planetId == 1011)
+        {
+            var subPath = string.Format(AddressableFormatPaths.PlanetPrefabFormating, "Planet_12");
+            SubModel = await Addressables.LoadAssetAsync<GameObject>(subPath).ToUniTask();
+        }
+        Model = await Addressables.LoadAssetAsync<GameObject>(path).ToUniTask();
     }
 }

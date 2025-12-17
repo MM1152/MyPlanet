@@ -25,7 +25,7 @@ public class PlanetData
             level = 1;
             count = 0;
             star = 0;
-            unlocked = false;
+            unlocked = true;
             openSlot = new List<int>();
 
             var cnt = DataTableManager.PlanetTable.Get(id).InitOpenSlotCount;

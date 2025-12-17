@@ -7,11 +7,13 @@ public class DarkLaser : BaseAttackPrefab
     private float timer;
     private Rect screenRect;
     private Vector2 baseScale;
+    private LineRenderer lineRenderer;
     private void Awake()
     {
         basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
         screenRect = Screen.safeArea;
         baseScale = transform.localScale;
+        lineRenderer = GetComponent<LineRenderer>();
     }
 
     public override void Init(Tower data)
@@ -24,9 +26,15 @@ public class DarkLaser : BaseAttackPrefab
         var endPoint = Camera.main.ScreenToWorldPoint(
             new Vector3(screenRect.xMax, Random.Range(screenRect.yMin, screenRect.yMax),
             -Camera.main.transform.position.z));
+        
+        var plusDir = endPoint - startPoint;
+        var reverseDir = startPoint - endPoint;
+
+        lineRenderer.SetPosition(0, startPoint + reverseDir);
+        lineRenderer.SetPosition(1, endPoint + plusDir);
         //var startPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenRect.x, Random.Range(screenRect.y,screenRect.height) , -Camera.main.transform.position.z));
         //var endPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenRect.width, Random.Range(screenRect.y, screenRect.height), -Camera.main.transform.position.z));
-
+         
         transform.position = (startPoint + endPoint) / 2; 
         //transform.position = new Vector3(0f, endPoint.y - startPoint.y, 0f);
         transform.eulerAngles = Vector3.forward * 90f;
@@ -34,6 +42,9 @@ public class DarkLaser : BaseAttackPrefab
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation *= Quaternion.Euler(0f, 0f, angle);
 
+        var percentX = tower.BonusWidthSize * baseScale.x / baseScale.x;
+
+        lineRenderer.startWidth = 1 * percentX;
         transform.localScale = new Vector3(tower.BonusWidthSize * baseScale.x, baseScale.y, 1f);
         poolsId = PoolsId.DarkLaser;
     }
@@ -43,9 +54,15 @@ public class DarkLaser : BaseAttackPrefab
         base.SetTarget(target, noise);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        if (attackIntervalTimer >= 60f / tower.FullAttackSpeed)
+        {
+            attackIntervalTimer = 0;
+        }
+
         attackIntervalTimer += Time.deltaTime;
+
         timer += Time.deltaTime;
         if (timer >= tower.BonusDuration)
         {
@@ -59,15 +76,17 @@ public class DarkLaser : BaseAttackPrefab
     {
         if(collision.CompareTag(TagIds.EnemyTag))
         {
-            if (attackIntervalTimer < 60f / tower.FullAttackSpeed) return;
+            if (attackIntervalTimer > 60f / tower.FullAttackSpeed) return;
 
-            attackIntervalTimer = 0f;
             var find = collision.GetComponent<IDamageAble>();
             if (find != null)
             {
                 var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
                 find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
                 basePlanet.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
+
+                var particle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.DarkLaserHitEffect);
+                particle.transform.position = collision.ClosestPoint(transform.position);
             }
         }
     }
