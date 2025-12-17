@@ -56,6 +56,7 @@ public class RandomPickUpTable : DataTable
 
         foreach (var data in results)
         {
+            if (data.connection_id == 23008) continue;
             if(randomPickUpTable.ContainsKey(data.reward_id))
             {
                 randomPickUpTable[data.reward_id].Add(data);

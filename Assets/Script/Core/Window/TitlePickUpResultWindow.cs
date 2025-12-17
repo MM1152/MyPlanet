@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 public class TitlePickUpResultWindow : Window
 {
     [SerializeField] private GameObject panel;
@@ -8,8 +9,15 @@ public class TitlePickUpResultWindow : Window
     [SerializeField] private RandomPickUp10Result planetPickUPResult10;
     [SerializeField] private TowerPickUpViewer towerPickUpResult;
     [SerializeField] private TowerPickUpResult towerPickUpResultViewer;
-    [Header("Texts")]
+    [Header("Sprite")]
+    [SerializeField] private Sprite planetPickUpBackGround;
+    [SerializeField] private Sprite towerPickUpBackGround;
+    [Header("Panel Ref")]
     [SerializeField] private TextMeshProUGUI panelText;
+    [SerializeField] private Image panelImage;
+    [SerializeField] private Image rotationCircle;
+
+    public float rotationSpeed = 50f;
 
     private TowerTable.Data towerData;
     private PlanetTable.Data planetData;
@@ -38,6 +46,11 @@ public class TitlePickUpResultWindow : Window
 
     private void Update()
     {
+        if (panel.activeSelf)
+        {
+            rotationCircle.transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
+        }
+
         if(panel.activeSelf && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
             panel.SetActive(false);
@@ -46,9 +59,6 @@ public class TitlePickUpResultWindow : Window
 
     public void SetData(RandomPickUpTable.Data randomData , bool isNew, (bool , float) isDuplication)
     {
-        if (randomData.IsPlanetReward) panelText.text = "새로운 행성을 탐색중입니다.\n\nTouch!";
-        if (randomData.IsTowerReward) panelText.text = "새로운 타워를 예 뭐.\n\nTouch!";
-
         if(randomData.IsPlanetReward)
         {
             planetPickUpResult.gameObject.SetActive(true);
@@ -58,8 +68,16 @@ public class TitlePickUpResultWindow : Window
 
     public void SetData(List<RandomPickUpTable.Data> randomData ,List<bool> isNew, List<(bool ,float)> isDuplication)
     {
-        if (randomData[0].IsPlanetReward) panelText.text = "새로운 행성을 탐색중입니다.\n\nTouch!";
-        if (randomData[0].IsTowerReward) panelText.text = "새로운 타워를 예 뭐.\n\nTouch!";
+        if (randomData[0].IsPlanetReward)
+        {
+            panelText.text = "새로운 행성을 탐색중입니다.";
+            panelImage.sprite = planetPickUpBackGround;
+        }
+        if (randomData[0].IsTowerReward) 
+        {
+            panelText.text = "새로운 타워를 건설하는 중입니다.";
+            panelImage.sprite = towerPickUpBackGround;
+        };
 
         if (randomData[0].IsPlanetReward)
         {
