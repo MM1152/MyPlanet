@@ -90,10 +90,18 @@ public class RectRandomShotAttack : IShotStrategy
         }
     }
 
-    private EnemyProjectileBase CreateProjectile(PoolsId poolsId)
+    private SimpleBullet CreateProjectile(PoolsId poolsId)
     {
-        var projectileObj = Managers.ObjectPoolManager.SpawnObject<EnemyProjectileBase>(poolsId);
-        EnemyProjectileBase projectile = projectileObj.GetComponent<EnemyProjectileBase>();
+        var projectileObj = Managers.ObjectPoolManager.SpawnObject<SimpleBullet>(poolsId);
+        SimpleBullet projectile = projectileObj.GetComponent<SimpleBullet>();
+        if (enemy.target != null)
+        {
+            projectile.SetHitParticle(PoolsId.Hit13redlaser);
+            var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash13redlaser);
+            flash.transform.position = startPoint;
+            projectile.transform.position = flash.transform.position;
+        }
+
         return projectile;
     }
 
@@ -101,7 +109,7 @@ public class RectRandomShotAttack : IShotStrategy
     {
         isLaserActive = true;
         laserTimer = 0f;
-        // Ensure line renderer is visible and widths are reset each time we start drawing
+
         if (lineRenderer != null)
         {
             float initialWidth = enemy.transform.localScale.x * 0.3f;
@@ -126,10 +134,21 @@ public class RectRandomShotAttack : IShotStrategy
         }
         catch (System.OperationCanceledException)
         {
-            // Enemy가 파괴됨
+            return;
         }
         finally
         {
+
+            if (lineRenderer != null)
+            {
+                try
+                {
+                    lineRenderer.enabled = false;
+                    lineRenderer.positionCount = 0;
+                }
+                catch { }
+            }
+
             isLaserActive = false;
             targetInRange = false;
         }
@@ -164,37 +183,51 @@ public class RectRandomShotAttack : IShotStrategy
         }
         catch (System.OperationCanceledException)
         {
-            // Enemy가 파괴됨
+            return;
         }
     }
 
     private void LaserDraw()
     {
-        if (lineRenderer == null || target == null || target.transform == null)
-        {
+
+        if (lineRenderer == null || target == null || target.transform == null) return;
+
+        if (!lineRenderer.enabled)
             return;
+
+        if (lineRenderer.positionCount < 2)
+        {
+            try { lineRenderer.positionCount = 2; }
+            catch { return; }
         }
 
-        lineRenderer.SetPosition(0, startPoint);
-
-        Vector2 targetPos = target.transform.position;
-        Vector2 dir = (targetPos - (Vector2)startPoint).normalized;
-        float dis = Vector2.Distance(startPoint, targetPos);
-
-        RaycastHit2D hit = Physics2D.Raycast(startPoint, dir, dis, targetLayer);
-        if (hit.collider != null)
+        try
         {
-            Vector2 offsetPoint = hit.point + dir * 0.1f;
-            lineRenderer.SetPosition(1, offsetPoint);
-            if (!targetInRange)
+            lineRenderer.SetPosition(0, startPoint);
+
+            Vector2 targetPos = target.transform.position;
+            Vector2 dir = (targetPos - (Vector2)startPoint).normalized;
+            float dis = Vector2.Distance(startPoint, targetPos);
+
+            RaycastHit2D hit = Physics2D.Raycast(startPoint, dir, dis, targetLayer);
+            if (hit.collider != null)
             {
-                targetInRange = true;
-                LaserShrink(enemy.GetCancellationTokenOnDestroy()).Forget();
+                Vector2 offsetPoint = hit.point + dir * 0.1f;
+                lineRenderer.SetPosition(1, offsetPoint);
+                if (!targetInRange)
+                {
+                    targetInRange = true;
+                    LaserShrink(enemy.GetCancellationTokenOnDestroy()).Forget();
+                }
+            }
+            else
+            {
+                lineRenderer.SetPosition(1, targetPos);
             }
         }
-        else
+        catch
         {
-            lineRenderer.SetPosition(1, targetPos);
+            return;
         }
     }
 }

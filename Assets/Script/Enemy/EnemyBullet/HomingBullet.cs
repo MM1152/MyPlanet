@@ -4,6 +4,8 @@ using Cysharp.Threading.Tasks;
 public class HomingBullet : EnemyProjectileSimple
 {
     private bool isWaiting = true;
+    private Vector2 offsetDir;
+    public Vector2 OffsetDir => offsetDir;
 
     public override void Init(Enemy data, TypeEffectiveness typeEffectiveness)
     {
@@ -18,7 +20,17 @@ public class HomingBullet : EnemyProjectileSimple
     protected override void HitTarget(Collider2D collision)
     {
         base.HitTarget(collision);
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        if(gameObject.activeSelf)
+        {
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+
+            if( poolsId != PoolsId.None)
+            { 
+                var particle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(particleId);
+                particle.transform.position = collision.ClosestPoint(transform.position);
+                poolsId = PoolsId.None;
+            }   
+        }
     }
 
     protected override void Move()
@@ -36,7 +48,7 @@ public class HomingBullet : EnemyProjectileSimple
 
     private async UniTask AwaitMove()
     {
-        Vector2 offsetDir = (Random.value > 0.5f) ? (Vector2)Enemy.transform.up : -(Vector2)Enemy.transform.up;
+        offsetDir = (Random.value > 0.5f) ? (Vector2)Enemy.transform.up : -(Vector2)Enemy.transform.up;
         offsetDir.Normalize();
         Vector2 offsetTarget = (Vector2)Enemy.transform.position + offsetDir * Random.Range(0.5f, 1f);
 

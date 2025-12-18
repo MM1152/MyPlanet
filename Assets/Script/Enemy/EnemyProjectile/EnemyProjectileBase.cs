@@ -4,7 +4,6 @@ public abstract class EnemyProjectileBase : MonoBehaviour , IMoveAble
 {
     [SerializeField]
     private Sprite sprite;
-    private SpriteRenderer spriteRenderer;
     protected PoolsId poolsId;
     public PoolsId PoolsId => poolsId;
     protected Enemy enemyData;
@@ -21,12 +20,6 @@ public abstract class EnemyProjectileBase : MonoBehaviour , IMoveAble
     protected float currentSpeed = 0f;
     public virtual void Init(Enemy data, TypeEffectiveness typeEffectiveness)
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null && sprite != null)
-        {
-            spriteRenderer.sprite = sprite;
-
-        }
         this.enemyData = data;
         this.typeEffectiveness = typeEffectiveness;
         currentSpeed = BaseSpeed;

@@ -19,7 +19,17 @@ public class SwitchDirectionBullet : EnemyProjectileSimple
     protected override void HitTarget(Collider2D collision)
     {
         base.HitTarget(collision);
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        if(gameObject.activeSelf)
+        {
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+
+            if( poolsId != PoolsId.None)
+            { 
+                var particle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(particleId);
+                particle.transform.position = collision.ClosestPoint(transform.position);
+                poolsId = PoolsId.None;
+            }   
+        }
     }
 
     protected override void Move()

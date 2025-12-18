@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class RapidFireAttack : IShotStrategy
 {    
+    private Enemy enemy;
     private float baseAngle = 90f;
     public int spawnCount = 10;
 
     public void Shot(Enemy enemy, GameObject target)
     {        
+        this.enemy = enemy;
         Vector3 toTarget = (target.transform.position - enemy.transform.position).normalized;
 
         for (int i = 0; i < spawnCount; i++)
@@ -14,18 +16,24 @@ public class RapidFireAttack : IShotStrategy
             float rnadomAngle = Random.Range(-baseAngle, baseAngle);
             Vector2 dir = RotateVector(toTarget, rnadomAngle);
 
-            var Bullet = CreateProjectile(PoolsId.SwitchDirectionBullet);
-            Bullet.transform.position = enemy.transform.position;
+            var Bullet = CreateProjectile(PoolsId.SwitchDirectionBullet, dir);
             Bullet.Init(enemy, enemy.typeEffectiveness);
             Bullet.SetTarget(target.transform);
             Bullet.SetDirection(dir);
         }
     }
 
-    private SwitchDirectionBullet CreateProjectile(PoolsId poolsId)
+    private SwitchDirectionBullet CreateProjectile(PoolsId poolsId, Vector2 dir)
     {
         var projectileObj = Managers.ObjectPoolManager.SpawnObject<SwitchDirectionBullet>(poolsId);
         SwitchDirectionBullet projectile = projectileObj.GetComponent<SwitchDirectionBullet>();
+         if(enemy.target != null)
+        {
+            projectile.SetHitParticle(PoolsId.Hit13redlaser);
+            var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash13redlaser);
+            flash.transform.position = enemy.transform.position + (Vector3)dir.normalized * (enemy.transform.localScale.x * 0.5f);
+            projectile.transform.position = flash.transform.position;
+        }
         return projectile;
     }
 

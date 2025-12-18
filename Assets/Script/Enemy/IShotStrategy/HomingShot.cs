@@ -12,16 +12,23 @@ public class HomingShot : IShotStrategy
         for (int i = 0; i < homingCount; i++)
         {
             var Bullet = CreateProjectile(PoolsId.HomingBullet);
-            Bullet.transform.position = enemy.transform.position;
             Bullet.Init(enemy, enemy.typeEffectiveness);
             Bullet.SetTarget(target.transform);
+            SetParticlePosition(Bullet,Bullet.OffsetDir);
         }
     }
  
-    private EnemyProjectileBase CreateProjectile(PoolsId poolsId)
+    private HomingBullet CreateProjectile(PoolsId poolsId)
     {
-        var projectileObj = Managers.ObjectPoolManager.SpawnObject<EnemyProjectileBase>(poolsId);
-        EnemyProjectileBase projectile = projectileObj.GetComponent<EnemyProjectileBase>();
+        var projectileObj = Managers.ObjectPoolManager.SpawnObject<HomingBullet>(poolsId);
+        HomingBullet projectile = projectileObj.GetComponent<HomingBullet>();
         return projectile;
+    }
+    private void SetParticlePosition(HomingBullet bullet,Vector2 dir)
+    {
+        bullet.SetHitParticle(PoolsId.Hit13redlaser);
+        var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash13redlaser);
+        flash.transform.position = enemy.transform.position + (Vector3)dir.normalized * (enemy.transform.localScale.x * 0.5f);     
+        bullet.transform.position = flash.transform.position;   
     }
 }

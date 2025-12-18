@@ -41,7 +41,7 @@ public class CornerWrapMove : IMove
 
     public void Init(Enemy enemy)
     {
-        screenBounds = enemy.WaveManager.ScreenBounds;
+        screenBounds = Utils.GetScreenBounds();
         enemyCollider = enemy.GetComponent<Collider2D>();
         enemyBounds = enemyCollider.bounds;
         currentPattern = CornerMovePattern.ToAttackPoint;
