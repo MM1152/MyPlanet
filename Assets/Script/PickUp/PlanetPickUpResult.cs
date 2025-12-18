@@ -33,13 +33,23 @@ public class PlanetPickUpResult : MonoBehaviour
     public void SetData(RandomPickUpTable.Data randomPlanetData, bool isNew , (bool, float) isDuplication)
     {
         var planetData = DataTableManager.PlanetTable.Get(randomPlanetData.connection_id);
+
+        if (randomPlanetData.reward_type == 1)
+        {
+            planetImage.sprite = planetData.PlanetImage;
+        }
+        else if (randomPlanetData.reward_type == 2)
+        {
+            planetImage.sprite = randomPlanetData.RewardData.ItemData.ItemImage;
+        }
+
         gradeText.text = planetData.grade;
         typeText.text = planetData.PlanetType;
         planetNameText.text = randomPlanetData.RewardName;
         elemetImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, planetData.Attribute);
 
-        var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
 
+        var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
         var needPeiceCount = userPlanetData.NeedPeiceCount * planetData.NeedPeiceCountPercent;
         if(!userPlanetData.UseAble)
         {

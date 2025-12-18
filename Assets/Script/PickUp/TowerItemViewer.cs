@@ -28,8 +28,8 @@ public class TowerItemViewer : MonoBehaviour
     {
         maxOrNewText.gameObject.SetActive(false);
 
-        towerPieceImage.sprite = DataTableManager.TowerDuplicationRewardTable.GetData(data.connection_id, 1).ItemData.ItemImage;
-        towerPieceImage2.sprite = DataTableManager.TowerDuplicationRewardTable.GetData(data.connection_id, 1).ItemData.ItemImage; 
+        //towerPieceImage.sprite = DataTableManager.TowerDuplicationRewardTable.GetData(data.connection_id, 1).ItemData.ItemImage;
+        //towerPieceImage2.sprite = DataTableManager.TowerDuplicationRewardTable.GetData(data.connection_id, 1).ItemData.ItemImage;
         towerImage.sprite = DataTableManager.TowerTable.Get(data.connection_id).towerImage;
         bonusTopGameObject.SetActive(false);
         sliderLayout[0].SetActive(false);

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using CsvHelper.Configuration.Attributes;
 
 public class RewardListTable : DataTable
 {
@@ -15,6 +16,9 @@ public class RewardListTable : DataTable
         public int value { get; set; }
         public int Stackable { get; set; }
         public int Stackable_Max { get; set; }
+
+        [Ignore]
+        public ItemTable.Data ItemData => DataTableManager.ItemTable.Get(item_ID ?? 0);
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -29,13 +33,12 @@ public class RewardListTable : DataTable
         return (filename, this);
     }
 
-    public Data GetData(int rewardListId)
-    {
-        return rewardListTable[rewardListId];
-    }
-
     public Data Get(int reward_Id)
     {
-        return rewardListTable[reward_Id];
+        if(rewardListTable.ContainsKey(reward_Id))
+        {
+            return rewardListTable[reward_Id];
+        }
+        return null;
     }
 }

@@ -7,7 +7,7 @@ public class ShockWave : BaseAttackPrefab
     private TowerTable.UtilTower utilTower;
     private Transform followTarget;
 
-    public float sizeIncreaseValue;
+    public float sizeIncreaseValue; 
     public float durationTimer;
     public Vector3 targetSize;
 

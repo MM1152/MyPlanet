@@ -58,11 +58,15 @@ public class SideBarPopup : Popup
     private void OnClickBookButton()
     {
         //FIX
+        windowManager.Open(WindowIds.TitleBookWindow);
+        OnClickCloseButton();
     }
 
     private void OnClickRandomPickUpButton()
     {
         //FIX
+        windowManager.Open(WindowIds.RandomPickUpWindow);
+        OnClickCloseButton();
     }
 
     private void OnClickShopButton()

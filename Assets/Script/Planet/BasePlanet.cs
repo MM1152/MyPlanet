@@ -13,7 +13,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
     public int Defense => FullDEF;
     public int BonusDEF => bonusDEF;
-    public int FullDEF => planetLevelData != null ? planetLevelData.DEF + bonusDEF : 1;
+    public int FullDEF => planetLevelData != null ? (int)((planetLevelData.DEF + bonusDEF) * 0.1f) : 1;
     public int FullHp => hp + shield;
     public int ATK => planetLevelData.ATK;
 

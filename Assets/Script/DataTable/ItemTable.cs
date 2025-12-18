@@ -44,6 +44,10 @@ public class ItemTable : DataTable
 
     public Data Get(int id)
     {
-        return itemTable[id];
+        if(itemTable.ContainsKey(id))
+        {
+            return itemTable[id];
+        }
+        return null;
     }
 }

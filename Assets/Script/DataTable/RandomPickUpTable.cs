@@ -50,6 +50,8 @@ public class RandomPickUpTable : DataTable
             4 => "C",
             _ => "정의되지 않음"
         };
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public RewardListTable.Data RewardData => DataTableManager.RewardListTable.Get(G_item_id);
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)

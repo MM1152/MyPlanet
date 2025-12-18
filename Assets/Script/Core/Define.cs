@@ -329,6 +329,7 @@ public static class DataBasePaths
 
     public static string GoldPath => UserPath + FirebaseManager.Instance.UserId + "/gold";
     public static string ExpPath => UserPath + FirebaseManager.Instance.UserId + "/exp";
+    public static string DiamondPath => UserPath + FirebaseManager.Instance.UserId + "/diamond";
 
     public static string PlanetDataPathFormating => PlanetPath + FirebaseManager.Instance.UserId + "/{0}";
     public static string PlanetLevelPathFormating => PlanetDataPathFormating + "/level";

@@ -1,3 +1,5 @@
+using Firebase.Database;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +11,8 @@ public class RandomPickUpWindow : Window
     [SerializeField] private Button backButton;
     [SerializeField] private Button planetPickUpButton;
     [SerializeField] private Button towerPickUpButton;
+    [Header("Texts")]
+    [SerializeField] private TextMeshProUGUI diamondText;
     [Header("Ref")]
     [SerializeField] private GameObject planetPickUpPanel;
     [SerializeField] private GameObject towerPickUpPanel;
@@ -37,6 +41,11 @@ public class RandomPickUpWindow : Window
 
         planetPickUpButton.onClick.AddListener(OnClickPlanetPickUpButton);
         towerPickUpButton.onClick.AddListener(OnClickTowerPickUpButton);
+
+        var path = DataBasePaths.DiamondPath;
+        FirebaseManager.Instance.Database.AddListner(path, OnValueChangedDiamond);
+
+        diamondText.text = FirebaseManager.Instance.UserData.diamond.ToString();
     }
 
     public override void Open()
@@ -60,5 +69,10 @@ public class RandomPickUpWindow : Window
         previousOpenPanel?.SetActive(false);
         previousOpenPanel = towerPickUpPanel;
         previousOpenPanel.SetActive(true);
+    }
+
+    private void OnValueChangedDiamond(object sender , ValueChangedEventArgs args)
+    {
+        diamondText.text = args.Snapshot.Value.ToString();
     }
 }
