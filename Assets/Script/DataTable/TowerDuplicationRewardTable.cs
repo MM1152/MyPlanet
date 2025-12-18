@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using CsvHelper.Configuration.Attributes;
+using UnityEngine.UIElements;
 
 public class TowerDuplicationRewardTable : DataTable
 {
@@ -15,6 +17,9 @@ public class TowerDuplicationRewardTable : DataTable
         public int L_piece_count { get; set; }
         public int M_piece_count { get; set; }
         public int H_piece_count { get; set; }
+
+        [Ignore]
+        public ItemTable.Data ItemData => DataTableManager.ItemTable.Get(item_ID);
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -42,5 +47,11 @@ public class TowerDuplicationRewardTable : DataTable
             2 => duplicationData.H_piece_count,
             _ => 0,
         };
+    }
+
+    public Data GetData (int towerId , int grade)
+    {
+        var gradeId = 25000 + grade + grade * 100;
+        return towerDuplicationRewardTable[(towerId , gradeId)];
     }
 }

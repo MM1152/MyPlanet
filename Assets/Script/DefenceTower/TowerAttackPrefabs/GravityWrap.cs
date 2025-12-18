@@ -11,7 +11,7 @@ public class GravityWrap : BaseAttackPrefab
     
     protected List<IMoveAble> moveAbles = new List<IMoveAble>();
     private UtilTower utiltower;
-
+    private float FullRange => utiltower.UtilTowerData.range + tower.BonusAttackRange;
     [SerializeField] private GameObject[] filedParticle;
 
     public override void Init(Tower data)
@@ -20,7 +20,7 @@ public class GravityWrap : BaseAttackPrefab
 
         utiltower = data as UtilTower;
         poolsId = PoolsId.GravityWrap;
-        transform.localScale = new Vector3(utiltower.UtilTowerData.range, utiltower.UtilTowerData.range, utiltower.UtilTowerData.range);
+        transform.localScale = new Vector3(FullRange, FullRange, FullRange);
         duration = tower.BonusDuration;
     }
 

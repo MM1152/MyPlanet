@@ -28,7 +28,7 @@ public class Helper : MonoBehaviour
             tower.Init(towerFullDamage, this.gameObject ,manager.TowerManager, DataTableManager.TowerTable.Get(towerId));
             tower.LevelUp(DataTableManager.LevelUpTable.Get(towerId, 1));
             tower.BonusAttackRange += 10;
-            tower.PlaceTower(true);
+           
 
             towers.Add(tower);
         }
@@ -45,6 +45,11 @@ public class Helper : MonoBehaviour
 
     public void MoveHelper(Vector3 startPos , Vector3 endPos)
     {
+        for(int i = 0; i < towers.Count; i++)
+        {
+            towers[i].PlaceTower(true);
+        }
+
         this.endPos = endPos;
         this.startPos = startPos;   
         gameObject.SetActive(true);

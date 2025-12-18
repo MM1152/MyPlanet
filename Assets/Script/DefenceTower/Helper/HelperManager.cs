@@ -42,7 +42,7 @@ public class HelperManager : MonoBehaviour
 
     private async UniTask SaveUserData()
     {
-        await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex / 60f >= 0.4f);
+        await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex / (float)waveManager.MaxWave >= 0.4f);
 
         var stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
         var asyncUserData = new AsyncPlayerData.Data()
@@ -76,7 +76,7 @@ public class HelperManager : MonoBehaviour
 
     private async UniTaskVoid SpawnHelpers()
     {
-        await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex == 3 , cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex == waveManager.MaxWave , cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
         
         while(true)
         {

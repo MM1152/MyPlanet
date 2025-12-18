@@ -11,9 +11,6 @@ public class SpriteManager
     {
         init = true;
     }
-    
-
-
 }
 
 public enum SpriteType

@@ -1,7 +1,5 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Unity.Android.Gradle;
-
 
 public class BossPartner : MonoBehaviour, IDamageAble
 {

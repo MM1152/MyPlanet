@@ -14,6 +14,7 @@ public class TowerItemViewer : MonoBehaviour
     [Header("Image")]
     [SerializeField] private Image towerImage;
     [SerializeField] private Image towerPieceImage;
+    [SerializeField] private Image towerPieceImage2;
 
     [Header("Slider")]
     [SerializeField] private Slider partCountSlider;
@@ -27,6 +28,9 @@ public class TowerItemViewer : MonoBehaviour
     {
         maxOrNewText.gameObject.SetActive(false);
 
+        towerPieceImage.sprite = DataTableManager.TowerDuplicationRewardTable.GetData(data.connection_id, 1).ItemData.ItemImage;
+        towerPieceImage2.sprite = DataTableManager.TowerDuplicationRewardTable.GetData(data.connection_id, 1).ItemData.ItemImage; 
+        towerImage.sprite = DataTableManager.TowerTable.Get(data.connection_id).towerImage;
         bonusTopGameObject.SetActive(false);
         sliderLayout[0].SetActive(false);
         sliderLayout[1].SetActive(false);

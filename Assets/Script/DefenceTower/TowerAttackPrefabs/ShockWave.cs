@@ -10,6 +10,8 @@ public class ShockWave : BaseAttackPrefab
     public float sizeIncreaseValue;
     public float durationTimer;
     public Vector3 targetSize;
+
+    public float FullRange => utilTower.range + tower.BonusAttackRange;
     public override void Init(Tower data)
     {
         base.Init(data);
@@ -18,7 +20,7 @@ public class ShockWave : BaseAttackPrefab
         duration = data.BonusDuration;
         transform.localScale = Vector3.zero;
         durationTimer = duration; 
-        targetSize = new Vector3(utilTower.range, utilTower.range, 1f);
+        targetSize = new Vector3(FullRange, FullRange, 1f);
         sizeIncreaseValue = utilTower.range / duration;
         poolsId = PoolsId.ShockWave;
     }

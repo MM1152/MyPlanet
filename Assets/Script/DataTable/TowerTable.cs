@@ -77,6 +77,12 @@ public class TowerTable : DataTable
             6 => "폭탄",
             7 => "기뢰",
             8 => "방전",
+            9 => "이동저하",
+            10 => "탄막 방어",
+            11 => "드론",
+            12 => "혼란",
+            13 => "기절",
+            14 => "넉백",
             _ => "정의되지 않음"
         };
         [CsvHelper.Configuration.Attributes.Ignore]
@@ -97,6 +103,7 @@ public class TowerTable : DataTable
         [CsvHelper.Configuration.Attributes.Ignore]
         public string AttributeToString => attribute switch
         {
+            0 => "노말",
             1 => "불",
             2 => "얼음",
             3 => "금속",

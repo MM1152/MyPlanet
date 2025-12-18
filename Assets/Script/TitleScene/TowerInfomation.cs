@@ -48,11 +48,11 @@ public class TowerInfomation : MonoBehaviour
 
         var effectiveSprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, data.attribute);
         if (effectiveSprite != null)
-            effectiveImage.sprite = effectiveSprite;
+            effectiveImage.sprite = effectiveSprite; 
         else 
             effectiveImageBackGround.SetActive(false);
 
-        var attackTypeSprite = DataTableManager.SpriteTable.Get(DataTableIds.AttackTypeSpriteTable, data.ATK_Type);
+        var attackTypeSprite = data.AttackTypeImage;
         if (attackTypeSprite != null)
             towerAttackType.sprite = attackTypeSprite;
         else
@@ -92,7 +92,6 @@ public class TowerInfomation : MonoBehaviour
         var result = bool.Parse(args.Snapshot.Value.ToString());
         if (result)
         {
-            Debug.Log($"{gameObject}", gameObject);
             gameObject.SetActive(true);
         }
     }
