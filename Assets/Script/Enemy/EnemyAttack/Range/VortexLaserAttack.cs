@@ -18,7 +18,10 @@ public class VortexLaserAttack : IShotStrategy
     private LineRenderer baseLineRenderer;
     private List<LineRenderer> lineRenderers;
     private List<float> currentAngles = new List<float>();
-    private LayerMask obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
+    private LayerMask obstacleMask;
+    private Vector2 startPoint = Vector2.zero;
+    private List<ParticleSystem> hitParticle;
+    private List<ParticleSystem> flashParticle;
 
     public void Shot(Enemy enemy, GameObject target)
     {
@@ -31,6 +34,7 @@ public class VortexLaserAttack : IShotStrategy
     private void Initialize(Enemy enemy)
     {
         this.enemy = enemy;
+        obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
         initialized = true;
         if (enemy.WaveManager == null)
         {
@@ -58,6 +62,13 @@ public class VortexLaserAttack : IShotStrategy
         lineRenderers.Add(baseLineRenderer);
         currentAngles.Add(0f);
         damageIntervals.Add(0f);
+        flashParticle = new List<ParticleSystem>();
+        hitParticle = new List<ParticleSystem>();
+        for(int i =0 ; i<= lineCount; i++)
+        {
+            flashParticle.Add(null);
+            hitParticle.Add(null);
+        }
 
         for (int i = 0; i < lineCount; i++)
         {
@@ -74,6 +85,8 @@ public class VortexLaserAttack : IShotStrategy
             {
                 lr.material = baseLineRenderer.material;
             }
+            lr.startColor = Color.red;
+            lr.endColor = Color.red;
             lineRenderers.Add(lr);
             currentAngles.Add((i + 1) * (angle / (lineCount + 1)));
             damageIntervals.Add(0f);
@@ -84,7 +97,7 @@ public class VortexLaserAttack : IShotStrategy
     private async UniTask LaserRotation(System.Threading.CancellationToken cancellationToken)
     {
         isAttacking = true;
-        
+
         try
         {
             float elapsedTime = 0f;
@@ -95,7 +108,7 @@ public class VortexLaserAttack : IShotStrategy
                 {
                     break;
                 }
-                
+
                 UpdateLaser(true);
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield(cancellationToken);
@@ -108,12 +121,12 @@ public class VortexLaserAttack : IShotStrategy
                 {
                     break;
                 }
-                
+
                 UpdateLaser(false);
                 delayTime += Time.deltaTime;
                 await UniTask.Yield(cancellationToken);
             }
-        
+
         }
         catch (System.OperationCanceledException)
         {
@@ -141,12 +154,14 @@ public class VortexLaserAttack : IShotStrategy
             Vector2 dir = new Vector2(Mathf.Cos(lineAngle * Mathf.Deg2Rad), Mathf.Sin(lineAngle * Mathf.Deg2Rad)).normalized;
             RaycastHit2D hit = Physics2D.Raycast(enemy.transform.position, dir, Mathf.Max(screenRect.width + alpha, screenRect.height + alpha), obstacleMask);
             Vector2 endPoint = hit.collider != null ? hit.point : ((Vector2)enemy.transform.position + dir * Mathf.Max(screenRect.width + alpha, screenRect.height + alpha));
-
-            lineRenderers[i].SetPosition(0, enemy.transform.position);
-            lineRenderers[i].SetPosition(1, endPoint);
+            startPoint = enemy.transform.position + (Vector3)dir * (enemy.transform.localScale.x * 0.5f);
+            lineRenderers[i].SetPosition(0, startPoint);
+            FlashParticle(startPoint, dir, Vector2.Distance(startPoint, endPoint), i);
 
             if (hit.collider != null && damageIntervals[i] <= 0f)
             {
+                lineRenderers[i].SetPosition(1, endPoint);
+                HitParticle(endPoint, i);
                 var find = hit.collider.GetComponent<IDamageAble>();
                 if (find != null)
                 {
@@ -154,6 +169,11 @@ public class VortexLaserAttack : IShotStrategy
                     find.OnDamage(Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue));
                     damageIntervals[i] = 0.5f;
                 }
+            }
+            else
+            {
+                lineRenderers[i].SetPosition(1, endPoint);
+                HitParticle(endPoint, i);
             }
         }
     }
@@ -171,5 +191,56 @@ public class VortexLaserAttack : IShotStrategy
         }
         lineRenderers = null;
         initialized = false;
+        for (int i = 0; i < hitParticle.Count; i++)
+        {
+            if (hitParticle[i] != null)
+            {
+                Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle[i].gameObject);
+                hitParticle = null;
+            }
+        }
+        for (int i = 0; i < flashParticle.Count; i++)
+        {
+            if (flashParticle[i] != null)
+            {
+                Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle[i].gameObject);
+                flashParticle = null;
+            }
+        }
+        hitParticle.Clear();
+        flashParticle.Clear();
+    }
+
+    private void FlashParticle(Vector2 position, Vector2 direction, float dis, int index)
+    {
+        if (flashParticle[index] == null)
+        {
+            flashParticle[index] =Managers.ObjectPoolManager.SpawnObject<ParticleSystem>(PoolsId.LaserBeam4RedFlash);
+
+            if (flashParticle[index] == null) return;
+            flashParticle[index].Play();
+        }
+
+        if (flashParticle[index].transform.position == (Vector3)position) return;
+        flashParticle[index].transform.position = position;
+        flashParticle[index].transform.rotation = Quaternion.LookRotation(direction);
+
+        var flashmain = flashParticle[index].main;
+        flashmain.startRotation = dis / flashmain.startSpeed.constant;
+    }
+
+    private void HitParticle(Vector2 position, int index)
+    {
+        if (hitParticle[index] != null)
+        {
+            if (hitParticle[index].transform.position == (Vector3)position)
+                return;
+            hitParticle[index].transform.position = position;
+            return;
+        }
+        hitParticle[index] =Managers.ObjectPoolManager.SpawnObject<ParticleSystem>(PoolsId.LaserBeam4RedHit);
+        if (hitParticle[index] == null) return;
+        hitParticle[index].transform.position = position;
+        hitParticle[index].Play();
     }
 }

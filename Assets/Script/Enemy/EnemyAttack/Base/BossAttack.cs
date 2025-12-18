@@ -10,7 +10,7 @@ public class BossAttack : BaseShotAttack
         {
             { (ElementType.Normal, 0), new NormalStrategy() },
             { (ElementType.Fire, 0), new NormalStrategy() },
-            { (ElementType.Fire, 3037), new RandomLaserAttack() },
+            { (ElementType.Fire, 3037), new RandomLaserAttack() }, 
             { (ElementType.Ice, 0), new NormalStrategy() },
             { (ElementType.Steel, 3027), new RapidFireAttack() },
             { (ElementType.Steel, 3032), new MissileRainAttack() },

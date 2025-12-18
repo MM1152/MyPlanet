@@ -16,8 +16,8 @@ public class RainBullet : EnemyProjectileSimple
     {
         base.Init(data, typeEffectiveness);
         poolsId = PoolsId.RainBullet;
-        bulletBounds = GetComponent<Collider2D>().bounds;   
-        speed = enemyData.bulletSpeed * speedAlpha;       
+        bulletBounds = GetComponent<Collider2D>().bounds;
+        speed = enemyData.bulletSpeed * speedAlpha;
     }
 
     public void SetRectLind(Enemy enemy)
@@ -33,7 +33,17 @@ public class RainBullet : EnemyProjectileSimple
     protected override void HitTarget(Collider2D collision)
     {
         base.HitTarget(collision);
-        Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        if (gameObject.activeSelf)
+        {
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+
+            if (poolsId != PoolsId.None)
+            {
+                var particle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(particleId);
+                particle.transform.position = collision.ClosestPoint(transform.position);
+                poolsId = PoolsId.None;
+            }
+        }
     }
 
     protected override void Move()
@@ -52,6 +62,6 @@ public class RainBullet : EnemyProjectileSimple
         if (target == null) return;
         Vector3 dirToTarget = (target.transform.position - transform.position).normalized;
         movedir = dirToTarget;
-        speed = enemyData.bulletSpeed;  
+        speed = enemyData.bulletSpeed;
     }
 }

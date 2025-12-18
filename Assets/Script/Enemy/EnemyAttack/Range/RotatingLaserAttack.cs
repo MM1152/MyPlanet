@@ -12,7 +12,7 @@ public class RotatingLaserAttack : IShotStrategy
     private RaycastHit2D hit;
 
     Vector3 targetPos = Vector3.zero;
-    private LayerMask obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
+    private LayerMask obstacleMask;
 
     private bool isInitialized = false;
 
@@ -35,6 +35,10 @@ public class RotatingLaserAttack : IShotStrategy
     private float delayTimer = 0f;
 
     private float damageTimer = 0.1f;
+    private Vector2 startPoint = Vector2.zero;
+
+    private ParticleSystem hitParticle;
+    private ParticleSystem flashParticle;
 
     public void Shot(Enemy enemy, GameObject target)
     {
@@ -68,7 +72,7 @@ public class RotatingLaserAttack : IShotStrategy
 
         if (!isInitialized)
         {
-            screenBounds = enemy.WaveManager.ScreenBounds;
+            screenBounds = Utils.GetScreenBounds();
             laserRenderer = enemy.enemyLineRenderer;
             laserRenderer.enabled = true;
             laserRenderer.startWidth = enemy.transform.localScale.y * 0.3f;
@@ -81,6 +85,7 @@ public class RotatingLaserAttack : IShotStrategy
             startAngle = 0f;
             delayTimer = 0f;
             damageTimer = enemy.fireInterval;
+            obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
         }
 
         if (delayTimer < delayTime)
@@ -88,16 +93,19 @@ public class RotatingLaserAttack : IShotStrategy
             delayTimer += Time.deltaTime;
 
             Vector2 dirFixed = new Vector2(Mathf.Cos(currentAngle * Mathf.Deg2Rad), Mathf.Sin(currentAngle * Mathf.Deg2Rad));
-            laserRenderer.SetPosition(0, enemy.transform.position);
-
+            startPoint = enemy.transform.position + (Vector3)dirFixed * (enemy.transform.localScale.x * 0.5f);
+            laserRenderer.SetPosition(0, startPoint);
+            FlashParticle(startPoint, dirFixed, maxdistance);
             RaycastHit2D hitTemp = Physics2D.Raycast(enemy.transform.position, dirFixed, maxdistance, obstacleMask);
             if (hitTemp.collider != null)
             {
-                laserRenderer.SetPosition(1, hitTemp.point + dirFixed * 0.1f);
+                laserRenderer.SetPosition(1, hitTemp.point);
+                HitParticle(hitTemp.point);
             }
             else
             {
                 laserRenderer.SetPosition(1, (Vector2)enemy.transform.position + dirFixed * maxdistance);
+                HitParticle((Vector2)enemy.transform.position + dirFixed * maxdistance);
             }
             return;
         }
@@ -112,25 +120,69 @@ public class RotatingLaserAttack : IShotStrategy
         Vector2 dir = new Vector2(Mathf.Cos(currentAngle * Mathf.Deg2Rad), Mathf.Sin(currentAngle * Mathf.Deg2Rad));
 
         laserRenderer.SetPosition(0, enemy.transform.position);
+        startPoint = enemy.transform.position + (Vector3)dir * (enemy.transform.localScale.x * 0.5f);
+        laserRenderer.SetPosition(0, startPoint);
+        FlashParticle(startPoint, dir, maxdistance);
 
         hit = Physics2D.Raycast(enemy.transform.position, dir, maxdistance, obstacleMask);
 
         if (hit.collider != null)
         {
-            Vector2 offsetPoint = hit.point + dir * 0.1f;
-            laserRenderer.SetPosition(1, offsetPoint);
+            laserRenderer.SetPosition(1, hit.point);
+            HitParticle(hit.point);
         }
         else
         {
             endPoint = (Vector2)enemy.transform.position + dir * maxdistance;
             laserRenderer.SetPosition(1, endPoint);
+            HitParticle(endPoint);
         }
 
         if (endAngle - startAngle <= 0f)
         {
             LaserReset(enemy);
+            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
+            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
+            hitParticle = null;
+            flashParticle = null;
         }
     }
+
+    private void FlashParticle(Vector2 position, Vector2 direction, float dis)
+    {
+        if (flashParticle == null)
+        {
+            flashParticle = Managers.ObjectPoolManager.SpawnObject<ParticleSystem>(PoolsId.LaserBeam4RedFlash);
+
+            if (flashParticle == null) return;
+            flashParticle.Play();
+        }
+
+        if (flashParticle.transform.position == (Vector3)position) return;
+
+        flashParticle.transform.position = position;
+        flashParticle.transform.rotation = Quaternion.LookRotation(direction);
+
+        var flashmain = flashParticle.main;
+        flashmain.startRotation = dis / flashmain.startSpeed.constant;
+    }
+
+    private void HitParticle(Vector2 position)
+    {
+        if (hitParticle != null)
+        {
+            if (hitParticle.transform.position == (Vector3)position)
+                return;
+            hitParticle.transform.position = position;
+            return;
+        }
+
+        hitParticle = Managers.ObjectPoolManager.SpawnObject<ParticleSystem>(PoolsId.LaserBeam4RedHit);
+        if (hitParticle == null) return;
+        hitParticle.transform.position = position;
+        hitParticle.Play();
+    }
+
 
 
     public void LaserReset(Enemy enemy)

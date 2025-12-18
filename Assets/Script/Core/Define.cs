@@ -122,6 +122,9 @@ public enum PoolsId
     SwitchDirectionBullet = 303,
     RainBullet = 304,
     ArcMissileBullet = 305,
+    LaserBeam4RedFlash = 306,
+    LaserBeam4RedHit = 307,
+
 
     Barrier = 500,
     Exp = 400,
@@ -156,6 +159,9 @@ public enum PoolsId
     Flash17novaviolet = 1024,
     Hit17novaviolet = 1025,
     Hit20pinkarrow = 1026,
+    Flash19circlebomb = 1027,
+    Hit19circlebomb = 1028,
+
 }
 
 public enum EnemyType
@@ -241,6 +247,11 @@ public static class AddressableNames
         { "Flash 17 nova violet", PoolsId.Flash17novaviolet },
         { "Hit 17 nova violet", PoolsId.Hit17novaviolet },
         { "Hit 20 pink arrow", PoolsId.Hit20pinkarrow },
+        { "Flash 19 circle bomb", PoolsId.Flash19circlebomb },
+        { "Hit 19 circle bomb", PoolsId.Hit19circlebomb },
+        { "Laser beam 4 red Flash", PoolsId.LaserBeam4RedFlash },
+        { "Laser beam 4 red Hit", PoolsId.LaserBeam4RedHit },
+
     };
 
     public static PoolsId GetPoolsId(string name)

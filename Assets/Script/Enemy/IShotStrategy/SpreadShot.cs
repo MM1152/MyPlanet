@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SpreadShot : IShotStrategy
 {
-    private Enemy body;
-    private int baseProjectiles => SetProjectileCount(body);
+    private Enemy enemy;
+    private int baseProjectiles => SetProjectileCount(enemy);
 
     public int numberOfProjectiles => baseProjectiles + bonus;  
     private int bonus = 0;
@@ -25,31 +25,38 @@ public class SpreadShot : IShotStrategy
 
     public void Shot(Enemy enemy, GameObject target)
     {
-        body = enemy;
+        this.enemy = enemy;
       
         Vector3 dir = (target.transform.position - enemy.transform.position).normalized;
         SetSpreadAngle(dir);
         for (int i = 0; i < numberOfProjectiles; i++)
         {
-            var Bullet = CreateProjectile(PoolsId.SpreadBullet);
-            Bullet.transform.position = enemy.transform.position;
+            var Bullet = CreateProjectile(PoolsId.SpreadBullet, spreadAngles[i]);
             Bullet.Init(enemy, enemy.typeEffectiveness);
             Bullet.SetTarget(target.transform);
             Bullet.SetDirection(spreadAngles[i]);
         }
     }
 
-    private SpreadBullet CreateProjectile(PoolsId poolsId)
+    private SpreadBullet CreateProjectile(PoolsId poolsId,Vector3 dir)
     {
         var projectileObj = Managers.ObjectPoolManager.SpawnObject<SpreadBullet>(poolsId);
         SpreadBullet projectile = projectileObj.GetComponent<SpreadBullet>();
+         if(enemy.target != null)
+        {
+            projectile.SetHitParticle(PoolsId.Hit13redlaser);
+            var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash13redlaser);
+            flash.transform.position = enemy.transform.position + dir.normalized * (enemy.transform.localScale.x * 0.5f);
+            projectile.transform.position = flash.transform.position;
+        }
+
         return projectile;
     }
 
     private void SetSpreadAngle(Vector3 angle)
     {
         spreadAngles.Clear();
-        float scaleFactor = (body.transform.localScale.x + body.transform.localScale.y) / 2f;
+        float scaleFactor = (enemy.transform.localScale.x + enemy.transform.localScale.y) / 2f;
         float totalSpreadAngle = baseAngle * scaleFactor;
         float angleStep = totalSpreadAngle / (numberOfProjectiles - 1);
         float startAngle = -totalSpreadAngle / 2f;
