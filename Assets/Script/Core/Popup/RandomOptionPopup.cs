@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class RandomOptionPopup : Popup
 {
-    [SerializeField] private TextMeshProUGUI probabilityText;
+    [SerializeField] private PriorityTextLayout probabilityText;
     [SerializeField] private Transform probabilityTextRoot;
     [SerializeField] private Button closeButton;
-    private List<TextMeshProUGUI> probabilityTexts = new List<TextMeshProUGUI>();
+    private List<PriorityTextLayout> probabilityTexts = new List<PriorityTextLayout>();
 
     public override bool Close()
     {
@@ -41,7 +41,7 @@ public class RandomOptionPopup : Popup
         for(int i = 0; i < randomPickUpList.Count; i++)
         {
             probabilityTexts[i].gameObject.SetActive(true);
-            probabilityTexts[i].text = $"{randomPickUpList[i].RewardName} {randomPickUpList[i].probability}%";
+            probabilityTexts[i].UpdateTexts(randomPickUpList[i].RewardName, randomPickUpList[i].probability.ToString());
         }
 
         for(int i = randomPickUpList.Count; i < probabilityTexts.Count; i++)

@@ -14,21 +14,27 @@ public class TowerItemViewer : MonoBehaviour
     [Header("Image")]
     [SerializeField] private Image towerImage;
     [SerializeField] private Image towerPieceImage;
+    [SerializeField] private Image towerPieceImage2;
 
     [Header("Slider")]
     [SerializeField] private Slider partCountSlider;
 
     [Header("Ref")]
-    [SerializeField] private GameObject optionValueBackGround;
-    [SerializeField] private GameObject rewardPartBackGround;
-    [SerializeField] private GameObject sliderBackGround;
+    [SerializeField] private GameObject bonusTopGameObject;
+    [SerializeField] private GameObject[] sliderLayout;
+    [SerializeField] private GameObject optionValueLayout;
 
     public void SetData(RandomPickUpTable.Data data , bool isNew , (bool, float) isDuplication)
     {
         maxOrNewText.gameObject.SetActive(false);
-        sliderBackGround.gameObject.SetActive(false);
-        rewardPartBackGround.SetActive(false);
-        optionValueBackGround.gameObject.SetActive(false);
+
+        towerPieceImage.sprite = DataTableManager.TowerDuplicationRewardTable.GetData(data.connection_id, 1).ItemData.ItemImage;
+        towerPieceImage2.sprite = DataTableManager.TowerDuplicationRewardTable.GetData(data.connection_id, 1).ItemData.ItemImage; 
+        towerImage.sprite = DataTableManager.TowerTable.Get(data.connection_id).towerImage;
+        bonusTopGameObject.SetActive(false);
+        sliderLayout[0].SetActive(false);
+        sliderLayout[1].SetActive(false);
+        optionValueLayout.SetActive(false);
 
         var userData = FirebaseManager.Instance.TowerData.Get(data.connection_id);
 
@@ -54,15 +60,17 @@ public class TowerItemViewer : MonoBehaviour
         maxOrNewText.gameObject.SetActive(true);
         maxOrNewText.color = Color.yellow;
 
-        sliderBackGround.gameObject.SetActive(true);
-        optionValueBackGround.SetActive(true);
+        sliderLayout[0].SetActive(true);
+        sliderLayout[1].SetActive(true);
+        optionValueLayout.SetActive(true);
+
         optionValueText.text = userData.OptionValue + "%";
     }
     // 옵션이 높을때
     private void GetOptionUpgradeTower(TowerData.Data userData , (bool, float) isDuplication) 
     {
+        optionValueLayout.SetActive(true);
         optionValueText.text = $"{isDuplication.Item2}% >> {userData.OptionValue}%";
-        optionValueBackGround.SetActive(true);
 
         var isMax = DataTableManager.TowerRandomOptionValueTable.IsMaxGrade(userData.TowerId, userData.grade, userData.OptionValue);
         if (isMax)
@@ -75,9 +83,9 @@ public class TowerItemViewer : MonoBehaviour
     // 옵션이 낮을떄
     private void GetOptionDownTower(TowerData.Data userData , (bool , float) isDuplication)
     {
-        rewardPartBackGround.SetActive(true);
-        sliderBackGround.SetActive(true);
-
-        towerRewardPeiceCountText.text = $"x{((int)isDuplication.Item2).ToString()}";
+        bonusTopGameObject.SetActive(true);
+        sliderLayout[0].SetActive(true);
+        sliderLayout[1].SetActive(true);
+        towerRewardPeiceCountText.text = $"x{((int)isDuplication.Item2)}";
     }
 }

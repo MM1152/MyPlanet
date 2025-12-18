@@ -7,6 +7,7 @@ public class Repulsor : BaseAttackPrefab
     private new EffectTable.Data effect;
 
     private float duration = 1f;
+    private float FullRange => data.range + tower.BonusAttackRange;
     public override void Init(Tower data)
     {
         base.Init(data);
@@ -14,7 +15,7 @@ public class Repulsor : BaseAttackPrefab
         this.data = data.TowerData as TowerTable.UtilTower;
         effect = this.data.Effect;
         duration = 1f;
-        transform.localScale = new Vector3(data.BonusAttackRange , data.BonusAttackRange , data.BonusAttackRange);
+        transform.localScale = new Vector3(FullRange, FullRange, FullRange);
     }
 
     public void SetDir(Vector3 dir)
@@ -56,7 +57,8 @@ public class Repulsor : BaseAttackPrefab
 
             if(isInAngle )
             {
-                float force = effect.Val;
+                //float force = effect.Val;
+                float force = 5f;
                 enemy.PushEnemy(dir , force , 1f);
             }
         }

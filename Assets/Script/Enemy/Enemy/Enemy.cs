@@ -95,7 +95,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     [SerializeField] private BossPartner bossPartner;
     private void Awake()
     {
-        stateMachine = new StateMachine(this);
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag)?.GetComponent<WaveManager>();
 #if DEBUG_MODE
@@ -119,7 +119,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public void Initallized(EnemyData.Data data)
     {
         this.enemyData = data;
-
+        stateMachine = new StateMachine(this);
         var stageData = DataTableManager.StageInfomationTable.Get(stageId);
         var percent = 1f;
         if (stageData != null)
@@ -260,7 +260,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             if (chaosDuration <= 0)
             {
                 isChaos = false;
-                SetTarget(GameObject.FindWithTag(TagIds.PlayerTag));
+                SetTarget(basePlanet.gameObject);
             }
         }
         stateMachine.currentState.Execute();

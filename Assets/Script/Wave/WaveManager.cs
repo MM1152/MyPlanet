@@ -52,6 +52,7 @@ public class WaveManager : MonoBehaviour
     private float waveElapsedTime = 0f;
     public float WaveElapsedTime => waveElapsedTime;
     public bool isFinalWaveEnded => currentWaveIndex >= waves.Count;
+    public int MaxWave => waves.Count;
 
     public int waveClearCount = 0;
     public int totalEnemyCount = 0;
@@ -438,6 +439,8 @@ public class WaveManager : MonoBehaviour
         }
     }
 #endif
-
+    public void GetMaxStage()
+    {
+    }
 
 }

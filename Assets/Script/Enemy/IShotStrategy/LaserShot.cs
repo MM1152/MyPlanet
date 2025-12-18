@@ -48,12 +48,19 @@ public class LaserShot : IShotStrategy
 
         Vector2 dir = (target.transform.position - enemy.transform.position).normalized;
         float dis = Vector2.Distance(enemy.transform.position, target.transform.position);
+
+        hit = Physics2D.Raycast(enemy.transform.position, dir, dis);
         startPoint = enemy.transform.position + (Vector3)dir * (enemy.transform.localScale.x * 0.5f);
         lineRenderer.SetPosition(0, startPoint);
         FlashParticle(startPoint, dir, dis);
         hit = Physics2D.Raycast(startPoint, dir, dis, obstacleMask);
         if (hit.collider != null)
         {
+            if(hit.collider.CompareTag(target.tag) || hit.collider.CompareTag(TagIds.PlayerTag) 
+                || hit.collider.CompareTag(TagIds.DefenseTowerTag))
+            {
+                lineRenderer.SetPosition(1, hit.collider.transform.position);
+            }
             lineRenderer.SetPosition(1, hit.point);
             HitParticle(hit.point);
         }

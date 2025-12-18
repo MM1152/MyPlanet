@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ public class HelperManager : MonoBehaviour
     [SerializeField] private Helper helper;
     public TowerManager TowerManager => towerManager;
 
-    private List<UserData> userDatas = new List<UserData>();
+    private List<AsyncPlayerData.Data> userDatas = new List<AsyncPlayerData.Data>();
     private CancellationTokenSource ctr;
     private List<Helper> helpers = new List<Helper>();
     [Header("Settings")]
@@ -22,20 +22,39 @@ public class HelperManager : MonoBehaviour
     private float curInterval;
     private async UniTaskVoid Start()
     {
-        //if (Variable.IsTutorialActive) return;
-        //await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex == 1 , cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
-        //await GetRandomUserData();
-        //if(userDatas != null && userDatas.Count > 2)
-        //{
-        //    for(int i = 0; i < spawnHelperCount; i++) 
-        //    {
-        //        var rand = UnityEngine.Random.Range(0, userDatas.Count);
-        //        var helper = Instantiate(this.helper);
-        //        helper.Init(userDatas[rand], this);
-        //        helpers.Add(helper);
-        //    }
-        //    SpawnHelpers().Forget();
-        //}
+        if (Variable.IsTutorialActive) return;
+
+        SaveUserData().Forget();
+        await GetRandomUserData();
+
+        if (userDatas != null && userDatas.Count >= 2)
+        {
+            for (int i = 0; i < spawnHelperCount; i++)
+            {
+                var rand = UnityEngine.Random.Range(0, userDatas.Count);
+                var helper = Instantiate(this.helper);
+                helper.Init(userDatas[i], this);
+                helpers.Add(helper);
+            }
+            SpawnHelpers().Forget();
+        }
+    }
+
+    private async UniTask SaveUserData()
+    {
+        await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex / (float)waveManager.MaxWave >= 0.4f);
+
+        var stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
+        var asyncUserData = new AsyncPlayerData.Data()
+        {
+            playerNickName = FirebaseManager.Instance.UserData.nickName,
+            playerPlanetId = FirebaseManager.Instance.PresetData.GetGameData().data.PlanetId,
+            playerTowerIds = towerManager.GetAllTower().Select(tower => tower != null ? tower.TowerData.ID : -1).ToList(),
+            //playerTowerLevels = towerManager.GetAllTower().Select(tower => tower.Level).ToList(),
+            playerTowerFullDamages = towerManager.GetAllTower().Select(tower => tower != null ? tower.FullDamage : -1).ToList(),
+        };
+
+        await FirebaseManager.Instance.AsyncPlayerData.SaveAsyncData(stageId, asyncUserData);
     }
 
     private async UniTask GetRandomUserData()
@@ -43,16 +62,21 @@ public class HelperManager : MonoBehaviour
         ctr = new CancellationTokenSource();
         ctr.CancelAfterSlim(TimeSpan.FromSeconds(10));
 
-        var userDatas = await FirebaseManager.Instance.Database.GetDatas<UserData>(DataBasePaths.UserPath, ctr);
-        if (userDatas.success)
+        var stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
+
+        // ¼ÅÇÃÇØ¼­ µ¹·ÁÁÜ
+        var asyncUserData = await FirebaseManager.Instance.AsyncPlayerData.LoadAsyncData(stageId);
+
+        if (asyncUserData.isSuccess && asyncUserData.datas.Count >= 2)
         {
-            this.userDatas = userDatas.data;
+            this.userDatas.Add(asyncUserData.datas[0]);
+            this.userDatas.Add(asyncUserData.datas[1]);
         }
     }
 
     private async UniTaskVoid SpawnHelpers()
     {
-        await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex == 3 , cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
+        await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex == waveManager.MaxWave , cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
         
         while(true)
         {

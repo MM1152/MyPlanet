@@ -1,14 +1,12 @@
 using UnityEngine;
-using Cysharp.Threading.Tasks;
-using System.Threading;
-using System;
 using TMPro;
+using System.Collections.Generic;
 public class Helper : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI userNameText;
 
-    private UserData userData;
-    private Tower tower;
+    private AsyncPlayerData.Data userData;
+    private List<Tower> towers = new List<Tower>();
     private HelperManager manager;
 
     public float duration = 5f;
@@ -16,22 +14,42 @@ public class Helper : MonoBehaviour
     private Vector3 dir;
     public Vector3 endPos;
     public Vector3 startPos;
-    public void Init(UserData userData, HelperManager manager)
+    public void Init(AsyncPlayerData.Data userData, HelperManager manager)
     {
         this.manager = manager;
-        var data = manager.TowerManager.TowerFactory.CreateInstance(2003);
-        this.userData = userData;
-        tower = data;
-        tower.Init(this.gameObject, manager.TowerManager, DataTableManager.TowerTable.Get(2003));
-        tower.PlaceTower(true);
-        tower.BonusAttackRange += 10;
-        userNameText.text = userData.nickName;
 
+        for(int i = 0; i< userData.playerTowerIds.Count; i++)
+        {
+            var towerId = userData.playerTowerIds[i];
+            var towerFullDamage = userData.playerTowerFullDamages[i];
+
+            if (towerId == -1) continue;
+            var tower = manager.TowerManager.TowerFactory.CreateInstance(towerId);
+            tower.Init(towerFullDamage, this.gameObject ,manager.TowerManager, DataTableManager.TowerTable.Get(towerId));
+            tower.LevelUp(DataTableManager.LevelUpTable.Get(towerId, 1));
+            tower.BonusAttackRange += 10;
+           
+
+            towers.Add(tower);
+        }
+
+        userNameText.text = userData.playerNickName;
         gameObject.SetActive(false);
+
+        Instantiate(DataTableManager.PlanetTable.Model, transform);
+
+        this.userData = userData;
+        
+        //tower.BonusAttackRange += 10;
     }
 
     public void MoveHelper(Vector3 startPos , Vector3 endPos)
     {
+        for(int i = 0; i < towers.Count; i++)
+        {
+            towers[i].PlaceTower(true);
+        }
+
         this.endPos = endPos;
         this.startPos = startPos;   
         gameObject.SetActive(true);
@@ -56,6 +74,10 @@ public class Helper : MonoBehaviour
             transform.position += dir * speed * Time.deltaTime;
         }
 
-        tower.Update(Time.deltaTime);
+
+        foreach(var tower in towers)
+        {
+            tower.Update(Time.deltaTime);
+        }
     }
 }

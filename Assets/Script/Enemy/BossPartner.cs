@@ -41,7 +41,7 @@ public class BossPartner : MonoBehaviour, IDamageAble
     private void Start()
     {
         radius = enemy.GetComponent<CircleCollider2D>().radius; // 부모 반지름 가져오고 궤도를 구해야함 
-
+        targetLayer = LayerMask.GetMask("Player");
         // X, Y만 스케일 적용, Z는 원본 유지
         this.transform.localScale = enemy.transform.localScale * controlScale;
         typeEffectiveness.Init(elementType); // 타입 효과 초기화

@@ -6,8 +6,12 @@ using UnityEngine.AddressableAssets;
 public class RandomPickUpTable : DataTable
 {
     private Dictionary<int , List<Data>> randomPickUpTable = new Dictionary<int, List<Data>>();
+
     private List<Data> sortedPlanetRandomDatas;
     private List<Data> sortedTowerRandomDatas;
+
+    private float towerWeight = 0f;
+    private float planetWeight = 0f;
     public class Data
     {
         public int reward_id { get; set; }
@@ -56,14 +60,26 @@ public class RandomPickUpTable : DataTable
 
         foreach (var data in results)
         {
+            //FIX : 임시로 막아놓음
+            if (data.connection_id == 23008) continue;
             if(randomPickUpTable.ContainsKey(data.reward_id))
             {
                 randomPickUpTable[data.reward_id].Add(data);
+
+                if (data.IsPlanetReward)
+                    planetWeight += data.probability;
+                else
+                    towerWeight += data.probability;
             }
             else
             {
                 randomPickUpTable.Add(data.reward_id, new List<Data>());
                 randomPickUpTable[data.reward_id].Add(data);
+
+                if (data.IsPlanetReward)
+                    planetWeight += data.probability;
+                else   
+                    towerWeight += data.probability;
             }
         }
 
@@ -77,7 +93,7 @@ public class RandomPickUpTable : DataTable
 
     public Data GetRandomDataForPlanet()
     {
-        float rand = Random.Range(0f, 100f);
+        float rand = Random.Range(0f, planetWeight);
         float probabilityAmount = 0f;
         foreach (var data in sortedPlanetRandomDatas)
         {
@@ -93,10 +109,11 @@ public class RandomPickUpTable : DataTable
 
     public Data GetRandomDataForTower()
     {
-        float rand = Random.Range(0f, 100f);
+        float rand = Random.Range(0f, towerWeight);
         float probabilityAmount = 0f;
         foreach (var data in sortedTowerRandomDatas)
         {
+            //FIX : 임시로 막아놓음
             probabilityAmount += data.probability;
             if (rand <= probabilityAmount)
             {

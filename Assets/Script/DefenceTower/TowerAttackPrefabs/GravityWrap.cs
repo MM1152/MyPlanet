@@ -11,6 +11,8 @@ public class GravityWrap : BaseAttackPrefab
     
     protected List<IMoveAble> moveAbles = new List<IMoveAble>();
     private UtilTower utiltower;
+    private float FullRange => utiltower.UtilTowerData.range + tower.BonusAttackRange;
+    [SerializeField] private GameObject[] filedParticle;
 
     public override void Init(Tower data)
     {
@@ -18,7 +20,7 @@ public class GravityWrap : BaseAttackPrefab
 
         utiltower = data as UtilTower;
         poolsId = PoolsId.GravityWrap;
-        transform.localScale = new Vector3(utiltower.UtilTowerData.range, utiltower.UtilTowerData.range, utiltower.UtilTowerData.range);
+        transform.localScale = new Vector3(FullRange, FullRange, FullRange);
         duration = tower.BonusDuration;
     }
 
@@ -31,6 +33,18 @@ public class GravityWrap : BaseAttackPrefab
         this.isDeleteProjectile = isDeleteProjectile;
     }
 
+    /// <summary>
+    /// 1 : ÇÏ¾á ÀåÆÇ , 2 : ÁöÀ¶ÁöÀ¶ÁöÀ¶ ÇÏ´Â ÆÄÆ¼Å¬
+    /// </summary>
+    public void SetAssets(int particle)
+    {
+        for(int i = 0; i < filedParticle.Length; i++)
+        {
+            filedParticle[i].SetActive(false);
+        }
+        filedParticle[particle].SetActive(true);
+    }
+    
     protected override void HitTarget(Collider2D collision)
     {
         return;

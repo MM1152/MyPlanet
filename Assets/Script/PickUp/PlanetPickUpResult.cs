@@ -6,15 +6,15 @@ public class PlanetPickUpResult : MonoBehaviour
 {
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI gradeText;
-    [SerializeField] private TextMeshProUGUI gradeTextToSlider;
     [SerializeField] private TextMeshProUGUI typeText;
+    [SerializeField] private TextMeshProUGUI elementText;
     [SerializeField] private TextMeshProUGUI planetNameText;
     [SerializeField] private TextMeshProUGUI newText;
     [SerializeField] private TextMeshProUGUI sliderText;
 
     [Header("Images")]
     [SerializeField] private Image planetImage;
-    [SerializeField] private Image lockImage;
+    [SerializeField] private Image planetTypeImage;
     [SerializeField] private Image elemetImage;
 
     [Header("Buttons")]
@@ -34,7 +34,6 @@ public class PlanetPickUpResult : MonoBehaviour
     {
         var planetData = DataTableManager.PlanetTable.Get(randomPlanetData.connection_id);
         gradeText.text = planetData.grade;
-        gradeTextToSlider.text = planetData.grade;
         typeText.text = planetData.PlanetType;
         planetNameText.text = randomPlanetData.RewardName;
         elemetImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, planetData.Attribute);
@@ -46,10 +45,9 @@ public class PlanetPickUpResult : MonoBehaviour
         {
             needPeiceCount = 10;
         }
-        sliderText.text = $"{userPlanetData.count} / {needPeiceCount}";
+        sliderText.text = $"조각 개수 {userPlanetData.count} / {needPeiceCount}";
         planetPieceSlider.value = (float)userPlanetData.count / needPeiceCount;
 
         newText.gameObject.SetActive(isNew);
-        lockImage.gameObject.SetActive(!userPlanetData.UseAble);
     }
 }

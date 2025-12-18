@@ -17,6 +17,12 @@ public class TowerPickUpViewer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI sliderText;
     [SerializeField] private TextMeshProUGUI okButtonText;
 
+    [SerializeField] private TextMeshProUGUI towerTypeText;
+    [SerializeField] private TextMeshProUGUI towerElementText;
+    [SerializeField] private TextMeshProUGUI towerAttackTypeText;
+
+    [SerializeField] private TextMeshProUGUI buffText;
+
     [Header("Buttons")]
     [SerializeField] private Button closeButton;
     [SerializeField] private Button skipButton;
@@ -47,7 +53,7 @@ public class TowerPickUpViewer : MonoBehaviour
         this.isDuplication = isDuplication;
         this.currentIdx = 0;
 
-        UpdateUI(randomPickUpData[currentIdx], isNew[currentIdx]);
+        UpdateUI(randomPickUpData[currentIdx], isNew[currentIdx], isDuplication[currentIdx]);
 
         if (randomPickUpData.Count == 1)
         {
@@ -61,12 +67,37 @@ public class TowerPickUpViewer : MonoBehaviour
         }
     }
 
-    private void UpdateUI(RandomPickUpTable.Data data , bool isNew)
+    private void UpdateUI(RandomPickUpTable.Data data , bool isNew, (bool ,float) isDuplication)
     {
         var tower = DataTableManager.TowerTable.Get(data.connection_id);
+
+        towerImage.sprite = tower.towerImage;
+
         typeImage.sprite = tower.TypeImage;
         attackTypeImage.sprite = tower.AttackTypeImage;
+        if(attackTypeImage.sprite == null)
+            attackTypeImage.gameObject.SetActive(false);
+        else 
+            attackTypeImage.gameObject.SetActive(true);
+
         elemeteImage.sprite = tower.ElementImage;
+        if(elemeteImage.sprite == null)
+            elemeteImage.gameObject.SetActive(false);
+        else 
+            elemeteImage.gameObject.SetActive(true);
+
+        if(isDuplication.Item1)
+        {
+            buffText.text = $"{isDuplication.Item2}% >> {tower.OptionValue}%";
+        }
+        else
+        {
+            buffText.text = $"{tower.OptionValue}%";
+        }
+
+        towerTypeText.text = tower.TypeToString;
+        towerElementText.text = tower.AttributeToString;
+        towerAttackTypeText.text = tower.AttackTypeToString;
 
         towerNameText.text = tower.Name;
         newText.gameObject.SetActive(isNew);
@@ -94,7 +125,7 @@ public class TowerPickUpViewer : MonoBehaviour
             closeButton.onClick.AddListener(OnClickCloseButtonToShowPickUpResult);
         }
 
-        UpdateUI(randomPickUpData[currentIdx], isNew[currentIdx]);
+        UpdateUI(randomPickUpData[currentIdx], isNew[currentIdx] , isDuplication[currentIdx]);
         okButtonText.text = $"»Æ¿Œ({currentIdx + 1}/10)";
     }
 

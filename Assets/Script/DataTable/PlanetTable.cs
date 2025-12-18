@@ -29,7 +29,7 @@ public class PlanetTable : DataTable
         public string Image_Path { get; set; }
 
         public string Name => DataTableManager.StringTable.Get(name);
-        public string Explanation => DataTableManager.StringTable.Get(explanation);
+        public string Explanation => DataTableManager.StringTable.Get(explanation + 1);
         public string PlanetType => planet_type switch
         {
             1 => "암석형",

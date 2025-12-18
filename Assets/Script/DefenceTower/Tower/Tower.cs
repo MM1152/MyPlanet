@@ -13,7 +13,7 @@ public abstract class Tower
 
     public float FullNoise => noise + BonuseNoise;
 
-    public int CalcurateAttackDamage => (int)((FullDamage + planetData.ATK * 0.1f) * (1 + BonusDamagePercent));
+    public int CalcurateAttackDamage => planetData != null ? (int)((FullDamage + planetData.ATK * 0.1f) * (1 + BonusDamagePercent)) : FullDamage;
     
     public float BonusAttackSpeedPercent { get; set; }
     public float BonusDamagePercent { get; set; }
@@ -100,6 +100,8 @@ public abstract class Tower
     protected IStatusEffect statusEffect;
     protected int slotIndex = -1;
 
+    public bool IsHelper { get; set; } = false;
+
     //Debug 용임 지우면 X
     public void SetPlanetData(PlanetTable.Data planetData)
     {
@@ -109,7 +111,7 @@ public abstract class Tower
     }
 
     //Helper 용 타워 설치
-    public void Init(GameObject tower , TowerManager towerManager , TowerTable.Data data)
+    public void Init(int fulldamage , GameObject tower , TowerManager towerManager , TowerTable.Data data)
     {
         this.manager = towerManager;
         this.towerData = data;
@@ -117,18 +119,14 @@ public abstract class Tower
 
         try
         {
-            var gameData = FirebaseManager.Instance.PresetData.GetGameData().data;
-            if (gameData != null)
-            {
-                var planetId = gameData.PlanetId;
-                var userData = FirebaseManager.Instance.PlanetData.GetOrigin(planetId);
-                this.planetData = userData.PlanetLevelData;
-            }
+            BonusDamage = fulldamage;
         }
         finally
         {
             typeEffectiveness.Init((ElementType)this.towerData.attribute);
         }
+
+        IsHelper = true;
     }
 
     public virtual void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
@@ -380,7 +378,7 @@ public abstract class Tower
     public virtual void PlaceTower(bool isHelper = false)
     {
         useAble = true;
-        if(!isHelper)
+        if(!IsHelper)
            baseRandomOption.SetRandomOption();
     }
 

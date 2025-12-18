@@ -7,7 +7,6 @@ public class TenPickUpItemLayout : MonoBehaviour
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI itemName;
     [SerializeField] private TextMeshProUGUI itemGrade;
-    [SerializeField] private TextMeshProUGUI newText;
     [SerializeField] private TextMeshProUGUI sliderText;
     [SerializeField] private TextMeshProUGUI rewardText;
     [Header("Images")]
@@ -16,20 +15,22 @@ public class TenPickUpItemLayout : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform rewardRoot;
+    [SerializeField] private GameObject newTextRoot;
 
     [Header("Sliders")]
     [SerializeField] private Slider slider;
     public void UpdateData(RandomPickUpTable.Data data , bool isNew, (bool ,float) isDuplication)
     {
-        itemName.text = data.RewardName;
-        itemGrade.text = data.rarityToString;
-        newText.gameObject.SetActive(isNew);
-        
         var planetData = DataTableManager.PlanetTable.Get(data.connection_id);
         var userData = FirebaseManager.Instance.PlanetData.GetOrigin(data.connection_id);
 
+        itemName.text = data.RewardName;
+        itemGrade.text = data.rarityToString;
+        itemGrade.color = planetData.GradeToColor;
+        newTextRoot.gameObject.SetActive(isNew);
+
         rewardRoot.gameObject.SetActive(isDuplication.Item1);
-        rewardText.text = "x10";
+        rewardText.text = $"x{(int)isDuplication.Item2}";
 
         slider.gameObject.SetActive(!isNew);
         var fullPeiceCount = planetData.NeedPeiceCountPercent * userData.NeedPeiceCount;

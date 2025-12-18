@@ -12,6 +12,7 @@ public class FirebaseManager
     private PresetData presetData = new PresetData();
     private PlanetData planetData = new PlanetData();
     private TowerData towerData = new TowerData();
+    private AsyncPlayerData asyncPlayerData = new AsyncPlayerData();
     private UserData userData;
 
     public string UserId => auth.UserId;
@@ -19,6 +20,7 @@ public class FirebaseManager
     public PresetData PresetData => presetData;
     public PlanetData PlanetData => planetData;
     public TowerData TowerData => towerData;
+    public AsyncPlayerData AsyncPlayerData => asyncPlayerData;
 
     private bool initialize = false;
 
