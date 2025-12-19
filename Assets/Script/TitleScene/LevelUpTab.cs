@@ -57,17 +57,17 @@ public class LevelUpTab : MonoBehaviour
         var prevData  = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID , planetUserData.level);
         if(upgradeData != null)
         {
-            hpText.text = prevData.HP + " >> " + upgradeData.HP;
-            atkText.text = prevData.ATK + " >> " + upgradeData.ATK;
-            defText.text = prevData.DEF + " >> " + upgradeData.DEF;
-            goldText.text = upgradeData.Gold.ToString();
-            expText.text = upgradeData.Exp.ToString();
+            hpText.text = prevData.HP.ToString("N0") + " >> " + upgradeData.HP.ToString("N0");
+            atkText.text = prevData.ATK.ToString("N0") + " >> " + upgradeData.ATK.ToString("N0");
+            defText.text = prevData.DEF.ToString("N0") + " >> " + upgradeData.DEF.ToString("N0");
+            goldText.text = upgradeData.Gold.ToString("N0");
+            expText.text = upgradeData.Exp.ToString("N0");
         }
         else
         {
-            hpText.text = prevData.HP.ToString();
-            atkText.text = prevData.ATK.ToString();
-            defText.text = prevData.DEF.ToString();
+            hpText.text = prevData.HP.ToString("N0");
+            atkText.text = prevData.ATK.ToString("N0");
+            defText.text = prevData.DEF.ToString("N0");
             goldText.text = "MAX";
             expText.text = "MAX";
             levelUpButton.interactable = false;

@@ -14,6 +14,7 @@ public class TitleBookInfomationWindow : Window
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private TextMeshProUGUI expText;
+    [SerializeField] private TextMeshProUGUI diamondText;
 
     public override void Close()
     {
@@ -30,6 +31,7 @@ public class TitleBookInfomationWindow : Window
 
         FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath, OnValueChangeToGold);
         FirebaseManager.Instance.Database.AddListner(DataBasePaths.ExpPath, OnValueChangeToExp);
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.DiamondPath, OnValueChangeToDiamond);
     }
 
     public override void Open()
@@ -44,11 +46,16 @@ public class TitleBookInfomationWindow : Window
 
     private void OnValueChangeToGold(object sender, ValueChangedEventArgs args)
     {
-        goldText.text = args.Snapshot.Value.ToString();
+        goldText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
     }
 
     private void OnValueChangeToExp(object sender, ValueChangedEventArgs args)
     {
-        expText.text = args.Snapshot.Value.ToString();
+        expText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
+    }
+
+    private void OnValueChangeToDiamond(object sender, ValueChangedEventArgs args)
+    {
+        diamondText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
     }
 }

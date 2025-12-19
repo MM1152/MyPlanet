@@ -72,7 +72,7 @@ public class PassiveSystem
     {
         coolTimeTimer += deltaTime;
 
-        if(isPassiveOn)
+        if(isPassiveOn && Time.timeScale != 0)
         {
             durationTimeTimer += deltaTime;
             effectCycleTime -= deltaTime;

@@ -16,6 +16,7 @@ public class TitleMainWindow : Window
     [SerializeField] private TextMeshProUGUI userNickNameText;
     [SerializeField] private TextMeshProUGUI userGold;
     [SerializeField] private TextMeshProUGUI userDiamond;
+    [SerializeField] private TextMeshProUGUI userExpText;
 
     public override void Close()
     {
@@ -29,6 +30,7 @@ public class TitleMainWindow : Window
 
         FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath, OnChangeGoldValue);
         FirebaseManager.Instance.Database.AddListner(DataBasePaths.DiamondPath, OnChangeDiamondValue);
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.ExpPath, OnChangeExpValue);
 
         selectStageButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
         userNickNameText.text = FirebaseManager.Instance.UserData.nickName;
@@ -61,11 +63,16 @@ public class TitleMainWindow : Window
 
     private void OnChangeGoldValue(object sender , ValueChangedEventArgs args)
     {
-        userGold.text = args.Snapshot.Value.ToString();
+        userGold.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
     }
 
     private void OnChangeDiamondValue(object sender, ValueChangedEventArgs args)
     {
-        userDiamond.text = args.Snapshot.Value.ToString();
+        userDiamond.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
+    }
+
+    private void OnChangeExpValue(object sender, ValueChangedEventArgs args)
+    {
+        userExpText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
     }
 }

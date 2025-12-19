@@ -103,6 +103,7 @@ public class TowerData
 
             foreach(var data in userTowerDatas.data)
             {
+                Math.Round(data.OptionValue, 2);
                 towerDatas.Add(data.TowerId, data);
             }
         }

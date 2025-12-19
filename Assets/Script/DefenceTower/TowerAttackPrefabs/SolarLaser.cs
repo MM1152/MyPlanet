@@ -14,7 +14,6 @@ public class SolarLaser : BaseAttackPrefab
         basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
         baseScale = transform.localScale;
         lineRenderer = GetComponent<LineRenderer>();
-
     }
 
     public override void Init(Tower data)

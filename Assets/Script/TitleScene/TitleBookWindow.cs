@@ -1,8 +1,9 @@
-using UnityEngine;
-using UnityEngine.UI;
+using Firebase.Database;
 using System.Collections.Generic;
 using TMPro;
-using Firebase.Database;
+using UnityEngine;
+using UnityEngine.UI;
+using static UnityEngine.Rendering.GPUSort;
 
 public class TitleBookWindow : Window
 {
@@ -10,6 +11,7 @@ public class TitleBookWindow : Window
     [SerializeField] private TextMeshProUGUI userNickName;
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private TextMeshProUGUI expText;
+    [SerializeField] private TextMeshProUGUI diamondText;
 
     [Header("Buttons")]
     [SerializeField] private Button planetButton;
@@ -111,8 +113,9 @@ public class TitleBookWindow : Window
         currentOpenBook.SetActive(true);
         currentBackGround.SetActive(true);
         userNickName.text = FirebaseManager.Instance.UserData.nickName;
-        goldText.text = FirebaseManager.Instance.UserData.gold.ToString();
-        expText.text = FirebaseManager.Instance.UserData.exp.ToString();
+        goldText.text = FirebaseManager.Instance.UserData.gold.ToString("N0");
+        expText.text = FirebaseManager.Instance.UserData.exp.ToString("N0");
+        diamondText.text = FirebaseManager.Instance.UserData.diamond.ToString("N0");
 
         base.Open();
     }

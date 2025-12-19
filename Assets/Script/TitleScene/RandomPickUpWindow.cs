@@ -8,11 +8,16 @@ public class RandomPickUpWindow : Window
     [SerializeField] private RandomPickUpLayout randomPickUpLayoutForPlanet;
     [SerializeField] private RandomPickUpLayout randomPickUpLayoutForTower;
     [Header("Buttons")]
-    [SerializeField] private Button backButton;
     [SerializeField] private Button planetPickUpButton;
     [SerializeField] private Button towerPickUpButton;
+
+    [SerializeField] private Button homeButton;
+    [SerializeField] private Button battleButton;
+    [SerializeField] private Button bookButton;
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI diamondText;
+    [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI expText;
     [Header("Ref")]
     [SerializeField] private GameObject planetPickUpPanel;
     [SerializeField] private GameObject towerPickUpPanel;
@@ -34,7 +39,6 @@ public class RandomPickUpWindow : Window
 
         randomPickUpLayoutForPlanet.Init(DataTableManager.RandomPickUpTable.GetAllDataForPlanet());
         randomPickUpLayoutForTower.Init(DataTableManager.RandomPickUpTable.GetRandomPickUpDatasForTower());
-        backButton.onClick.AddListener(() => manager.Open(WindowIds.TitleMainWindow));
 
         previousOpenPanel = planetPickUpPanel;
         planetPickUpPanel.SetActive(true);
@@ -42,10 +46,17 @@ public class RandomPickUpWindow : Window
         planetPickUpButton.onClick.AddListener(OnClickPlanetPickUpButton);
         towerPickUpButton.onClick.AddListener(OnClickTowerPickUpButton);
 
-        var path = DataBasePaths.DiamondPath;
-        FirebaseManager.Instance.Database.AddListner(path, OnValueChangedDiamond);
+        homeButton.onClick.AddListener(OnClickHomeButton);
+        battleButton.onClick.AddListener(OnClickBattleButton);
+        bookButton.onClick.AddListener(OnClickBookButton);
+
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.DiamondPath, OnValueChangedDiamond);
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath, OnValueChangedGold);
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.ExpPath, OnValueChangedExp);
 
         diamondText.text = FirebaseManager.Instance.UserData.diamond.ToString();
+        goldText.text = FirebaseManager.Instance.UserData.gold.ToString();
+        expText.text = FirebaseManager.Instance.UserData.exp.ToString();
     }
 
     public override void Open()
@@ -74,5 +85,30 @@ public class RandomPickUpWindow : Window
     private void OnValueChangedDiamond(object sender , ValueChangedEventArgs args)
     {
         diamondText.text = args.Snapshot.Value.ToString();
+    }
+
+    private void OnValueChangedGold(object sender, ValueChangedEventArgs args)
+    {
+        goldText.text = args.Snapshot.Value.ToString();
+    }
+
+    private void OnValueChangedExp(object sender, ValueChangedEventArgs args)
+    {
+        expText.text = args.Snapshot.Value.ToString();
+    }
+
+    private void OnClickHomeButton()
+    {
+        manager.Open(WindowIds.TitleMainWindow);
+    }
+
+    private void OnClickBattleButton()
+    {
+        manager.Open(WindowIds.TitleStageSelectedWindow);
+    }
+
+    private void OnClickBookButton()
+    {
+        manager.Open(WindowIds.TitleBookWindow);
     }
 }

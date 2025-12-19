@@ -1,3 +1,4 @@
+using Firebase.Database;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -28,6 +29,11 @@ public class TowerInfomationWindow : Window
     [SerializeField] private TextMeshProUGUI thirdStatusValue;
 
     [SerializeField] private TextMeshProUGUI randomOptionText;
+
+    [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI diamondText;
+    [SerializeField] private TextMeshProUGUI expText;
+    [SerializeField] private TextMeshProUGUI userNameText;
 
     [Header("Images")]
     [SerializeField] private Image towerImage;
@@ -75,10 +81,19 @@ public class TowerInfomationWindow : Window
         infomationButtonBackGround.SetActive(false);
         starUpgradeBackGround.SetActive(false);
 
-
         closeButton.onClick.AddListener(() => { manager.Open(WindowIds.TitleBookWindow); });
         infomationButton.onClick.AddListener(() => OpenTab(infomationTab , infomationButtonBackGround));
         starUpgradeButton.onClick.AddListener(() => OpenTab(starUpgradeTab , starUpgradeBackGround));
+
+        userNameText.text = FirebaseManager.Instance.UserData.nickName;
+
+        goldText.text = FirebaseManager.Instance.UserData.gold.ToString();
+        diamondText.text = FirebaseManager.Instance.UserData.diamond.ToString();
+        expText.text = FirebaseManager.Instance.UserData.exp.ToString();
+
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath, OnChangeGoldValue);
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.ExpPath, OnChangeExpValue);
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.DiamondPath, OnChangeDiamondValue);
     }
 
     public override void Open()
@@ -206,5 +221,20 @@ public class TowerInfomationWindow : Window
 
         thirdStatusTitle.text = "¹üÀ§[RANGE]";
         thirdStatusValue.text = "+" + tower.range.ToString("F2");
+    }
+
+    private void OnChangeGoldValue(object sender, ValueChangedEventArgs args)
+    {
+        goldText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
+    }
+
+    private void OnChangeDiamondValue(object sender, ValueChangedEventArgs args)
+    {
+        diamondText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
+    }
+
+    private void OnChangeExpValue(object sender, ValueChangedEventArgs args)
+    {
+        expText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
     }
 }
