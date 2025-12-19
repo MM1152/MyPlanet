@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+
 public class HomingArcAttack : IShotStrategy
 {
     private Enemy enemy;
@@ -39,8 +40,7 @@ public class HomingArcAttack : IShotStrategy
         SetSpreadAngle(dir);
         for (int i = 0; i < spawnCount; i++)
         {
-            var Bullet = CreateProjectile(PoolsId.ArcMissileBullet);
-            Bullet.transform.position = enemy.transform.position;
+            var Bullet = CreateProjectile(PoolsId.ArcMissileBullet, spreadAngles[i]);
             Bullet.Init(enemy, enemy.typeEffectiveness);
             Bullet.SetTarget(target.transform);
             Bullet.SetDirection(spreadAngles[i]);
@@ -63,20 +63,26 @@ public class HomingArcAttack : IShotStrategy
 
         Vector3 chosenDirection;
         var randomNum = UnityEngine.Random.Range(0f, 1f);
-        chosenDirection = randomNum < 0.5f ? spreadAngles[0] : spreadAngles[spawnCount - 1];    
+        chosenDirection = randomNum < 0.5f ? spreadAngles[0] : spreadAngles[spawnCount - 1];
 
-        var Bullet = CreateProjectile(PoolsId.ArcMissileBullet);
-        Bullet.transform.position = enemy.transform.position;
+        var Bullet = CreateProjectile(PoolsId.ArcMissileBullet, chosenDirection);
         Bullet.Init(enemy, enemy.typeEffectiveness);
         Bullet.SetTarget(target.transform);
         Bullet.SetDirection(chosenDirection);
         Bullet.SetTurnSpeed(1f);
     }
 
-    private ArcMissileBullet CreateProjectile(PoolsId poolsId)
+    private ArcMissileBullet CreateProjectile(PoolsId poolsId,Vector3 dir)
     {
         var projectileObj = Managers.ObjectPoolManager.SpawnObject<ArcMissileBullet>(poolsId);
         ArcMissileBullet projectile = projectileObj.GetComponent<ArcMissileBullet>();
+        if (enemy.target != null)
+        {
+            projectile.SetHitParticle(PoolsId.Hit13redlaser);
+            var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash13redlaser);
+            flash.transform.position = enemy.transform.position + dir.normalized * (enemy.transform.localScale.x * 0.5f);
+            projectile.transform.position = flash.transform.position;
+        }
         return projectile;
     }
 
