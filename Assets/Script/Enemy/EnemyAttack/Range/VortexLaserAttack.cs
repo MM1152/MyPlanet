@@ -36,23 +36,7 @@ public class VortexLaserAttack : IShotStrategy
         this.enemy = enemy;
         obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
         initialized = true;
-        if (enemy.WaveManager == null)
-        {
-            var camera = Camera.main;
-
-            if (camera == null) return;
-
-            var zDistance = Mathf.Abs(camera.transform.position.z);
-
-            var bottomLeft = camera.ScreenToWorldPoint(new Vector3(0, 0, zDistance));
-            var topRight = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, zDistance));
-
-            screenRect = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
-        }
-        else
-        {
-            screenRect = enemy.WaveManager.ScreenBounds;
-        }
+        screenRect = Utils.GetScreenBounds();   
         baseLineRenderer = enemy.enemyLineRenderer;
         lineRenderers = new List<LineRenderer>();
         baseLineRenderer.startWidth = enemy.transform.localScale.y * 0.2f;
@@ -139,6 +123,8 @@ public class VortexLaserAttack : IShotStrategy
     }
     private void UpdateLaser(bool rotate)
     {
+        if (enemy == null || lineRenderers == null) return;
+        
         for (int i = 0; i < lineRenderers.Count; i++)
         {
             if (enemy == null) return;
@@ -196,7 +182,6 @@ public class VortexLaserAttack : IShotStrategy
             if (hitParticle[i] != null)
             {
                 Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle[i].gameObject);
-                hitParticle = null;
             }
         }
         for (int i = 0; i < flashParticle.Count; i++)
@@ -204,7 +189,6 @@ public class VortexLaserAttack : IShotStrategy
             if (flashParticle[i] != null)
             {
                 Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle[i].gameObject);
-                flashParticle = null;
             }
         }
         hitParticle.Clear();

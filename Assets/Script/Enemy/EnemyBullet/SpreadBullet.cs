@@ -2,20 +2,23 @@ using UnityEngine;
 
 public class SpreadBullet : EnemyProjectileSimple
 {
-    private float range;
     private Vector3 movedir;
+    private Vector3 originPosition;
+    private float dis;
 
     public override void Init(Enemy data, TypeEffectiveness typeEffectiveness)
     {
         base.Init(data, typeEffectiveness);
         poolsId = PoolsId.SpreadBullet;
-        range = data.attackRange;
     }
 
-    public void SetDirection(Vector3 direction)
+    public void SetDirection(Vector3 direction, float distance)
     {
         movedir = direction.normalized;
+        dis = distance;
+        originPosition = transform.position;
     }
+
 
     protected override void HitTarget(Collider2D collision)
     {
@@ -35,14 +38,13 @@ public class SpreadBullet : EnemyProjectileSimple
 
     protected override void Move()
     {
-        if (Vector2.Distance(transform.position, Enemy.transform.position) < range)
+        if (Vector2.Distance(transform.position, originPosition) < dis)
         {
             transform.position += movedir * currentSpeed * Time.deltaTime;
         }
         else
         {
             Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
-            //  isDespawned = true;
         }
     }
 }

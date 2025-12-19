@@ -11,7 +11,8 @@ public class SpreadShot : IShotStrategy
     private int bonus = 0;
     private float baseAngle = 90f;
     private bool bonusApplied = false;
-    List<Vector3> spreadAngles = new List<Vector3>();
+    private float dis;
+    private List<Vector3> spreadAngles = new List<Vector3>();
 
     private int SetProjectileCount(Enemy body)
     {
@@ -34,7 +35,7 @@ public class SpreadShot : IShotStrategy
             var Bullet = CreateProjectile(PoolsId.SpreadBullet, spreadAngles[i]);
             Bullet.Init(enemy, enemy.typeEffectiveness);
             Bullet.SetTarget(target.transform);
-            Bullet.SetDirection(spreadAngles[i]);
+            Bullet.SetDirection(spreadAngles[i],dis);
         }
     }
 
@@ -48,6 +49,7 @@ public class SpreadShot : IShotStrategy
             var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash13redlaser);
             flash.transform.position = enemy.transform.position + dir.normalized * (enemy.transform.localScale.x * 0.5f);
             projectile.transform.position = flash.transform.position;
+            dis = Vector2.Distance(enemy.transform.position, enemy.target.transform.position);
         }
 
         return projectile;

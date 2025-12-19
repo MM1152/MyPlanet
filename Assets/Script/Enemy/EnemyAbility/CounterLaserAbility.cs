@@ -26,6 +26,7 @@ public class CounterLaserAbility : BaseAbility
         lineRenderer = enemy.enemyLineRenderer;
         lineRenderer.enabled = false;
         isActive = true;
+        enemy.OnDie += LaserReset;
     }
 
     public override int OnDamage(int damage)
@@ -51,7 +52,7 @@ public class CounterLaserAbility : BaseAbility
             if (laserDuration >= laserMaxDuration)
             {
                 Debug.Log($"{laserDuration}");
-                LaserReset();
+                LaserReset(enemy);
                 laserDuration = 0f;
                 inLaserAttack = false;
                 isActive = true;
@@ -71,6 +72,8 @@ public class CounterLaserAbility : BaseAbility
 
     private void LaserDraw()
     {
+        if(enemy == null || lineRenderer == null) return;
+
         if (!initialized)
         {
             lineRenderer.enabled = true;
@@ -131,18 +134,19 @@ public class CounterLaserAbility : BaseAbility
         hitParticle.transform.position = position;
         hitParticle.Play();
     }
-    private void LaserReset()
+    private void LaserReset(Enemy enemy)
     {
         if (lineRenderer != null)
         {
             lineRenderer.enabled = false;
             lineRenderer.positionCount = 0;
-            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
-            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
+            if (hitParticle != null)
+                Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
+            if (flashParticle != null)
+                Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
             hitParticle = null;
             flashParticle = null;
         }
         initialized = false;
     }
-
 }

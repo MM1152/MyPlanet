@@ -50,11 +50,11 @@ public class HomingBullet : EnemyProjectileSimple
     {
         offsetDir = (Random.value > 0.5f) ? (Vector2)Enemy.transform.up : -(Vector2)Enemy.transform.up;
         offsetDir.Normalize();
-        Vector2 offsetTarget = (Vector2)Enemy.transform.position + offsetDir * Random.Range(0.5f, 1f);
+        Vector2 offsetTarget = (Vector2)Enemy.transform.position + offsetDir * Random.Range(0f, 3f);
 
         while (Vector3.Distance(transform.position, offsetTarget) > 0.01f)
         {
-            transform.position = Vector3.MoveTowards(transform.position, offsetTarget, currentSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, offsetTarget, 1f * Time.deltaTime);
             await UniTask.Yield(this.gameObject.GetCancellationTokenOnDestroy());
         }
         await UniTask.Delay(500, cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());

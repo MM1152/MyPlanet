@@ -86,6 +86,7 @@ public class RotatingLaserAttack : IShotStrategy
             delayTimer = 0f;
             damageTimer = enemy.fireInterval;
             obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
+            enemy.OnDie += LaserReset;
         }
 
         if (delayTimer < delayTime)
@@ -141,10 +142,6 @@ public class RotatingLaserAttack : IShotStrategy
         if (endAngle - startAngle <= 0f)
         {
             LaserReset(enemy);
-            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
-            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
-            hitParticle = null;
-            flashParticle = null;
         }
     }
 
@@ -192,6 +189,10 @@ public class RotatingLaserAttack : IShotStrategy
             laserRenderer.enabled = false;
             laserRenderer.positionCount = 0; ;
             enemy.attackInterval = 0f;
+            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
+            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
+            hitParticle = null;
+            flashParticle = null;
         }
         isInitialized = false;
     }
