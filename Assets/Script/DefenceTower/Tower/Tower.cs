@@ -67,7 +67,6 @@ public abstract class Tower
         get => target;
     }
     public TypeEffectiveness TypeEffectiveness => typeEffectiveness;
-    public RandomOptionData RandomOptionData => randomOptionData;
     public IStatusEffect StatusEffect => statusEffect;
     public RandomOptionBase Option => baseRandomOption;
 
@@ -88,8 +87,6 @@ public abstract class Tower
     private bool useAble = false;
 
     protected TypeEffectiveness typeEffectiveness = new TypeEffectiveness();
-    private RandomOptionData randomOptionData = new RandomOptionData();
-    public RandomOptionData RandomOption => randomOptionData;
     private LevelUpTable.Data levelUpData;
 
     protected RandomOptionData.Data optionData;
@@ -155,8 +152,8 @@ public abstract class Tower
 
     private void SetRandomOption()
     {
-        optionData = randomOptionData.GetData(towerData.Option);
-        baseRandomOption = randomOptionData.GetRandomOptionBase(towerData.Option);
+        optionData = RandomOptionData.GetData(towerData.Option);
+        baseRandomOption = RandomOptionData.GetRandomOptionBase(towerData.Option);
         baseRandomOption.Init(manager, towerData, optionData);
     }
 

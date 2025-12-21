@@ -2,6 +2,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Firebase.Database;
+using Cysharp.Threading.Tasks;
 public class WaveManager : MonoBehaviour
 {
     public class SpawnPoint
@@ -78,6 +80,7 @@ public class WaveManager : MonoBehaviour
     private WaveWindow waveWindow;
 
     private int stageId = 1;
+    public int StageId => stageId;
     private bool isFinalStage => stageId >= DataTableManager.WaveTable.GetStageCount();
     private bool isGameEnded = false;
     public bool isBossKilled = false;  
@@ -93,6 +96,10 @@ public class WaveManager : MonoBehaviour
 #if DEBUG_MODE
         skipWaveButton?.onClick.AddListener(() => SkipToWave());
 #endif
+        if(stageId == 1)
+        {
+            tutorialManager.InitTutorial(TutorialStep.Stage1);
+        }
     }
 
     private void Start()
@@ -346,10 +353,7 @@ public class WaveManager : MonoBehaviour
     public void NextWave()
     {
         int nextWaveIndex = currentWaveIndex + 1;
-        if (Variable.IsTutorialActive && tutorialManager != null && NextTutorialWaveIndex == currentWaveIndex)
-        {
-            tutorialManager.SetSectorTutorial(NextTutorialWaveIndex);
-        }
+
         if (!waves.ContainsKey(nextWaveIndex))
         {
             return;
@@ -394,6 +398,7 @@ public class WaveManager : MonoBehaviour
 
             if (window is VictoryWindow victoryWindow)
             {
+
                 victoryWindow.SetVictoryUI(playTimeTimer, isClear, isFinalStage);
             }
         }

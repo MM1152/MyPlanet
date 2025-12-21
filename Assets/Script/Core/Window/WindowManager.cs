@@ -38,47 +38,11 @@ public class WindowManager : MonoBehaviour
 
         if(openStatusViewButton != null)
             openStatusViewButton.onClick.AddListener(() => Open(WindowIds.StatusWindow));
-    }
 
-    //TutorialOpen
-    public void TutorialOpen1(int id)
-    {
-        Variable.IsJoyStickActive = false;
-        cureentWindow?.Close();
-        cureentWindow = windowTable[id];
-        cureentWindow.TutorialTowerOpen1();
-    }
-
-    public void TutorialOpen2(int id)
-    {
-        Variable.IsJoyStickActive = false;
-        cureentWindow?.Close();
-        cureentWindow = windowTable[id];
-        cureentWindow.TutorialTowerOpen2();
-    }
-
-    public void TutorialOpen3(int id)
-    {
-        Variable.IsJoyStickActive = false;
-        cureentWindow?.Close();
-        cureentWindow = windowTable[id];
-        cureentWindow.TutorialTowerOpen3();
-    }
-
-    public void TutorialOpen4(int id)
-    {
-        Variable.IsJoyStickActive = false;
-        cureentWindow?.Close();
-        cureentWindow = windowTable[id];
-        cureentWindow.TutorialTowerOpen4();
-    }
-
-    public void TutorialOpen5(int id)
-    {
-        Variable.IsJoyStickActive = false;
-        cureentWindow?.Close();
-        cureentWindow = windowTable[id];
-        cureentWindow.TutorialTowerOpen5();
+        if(Variable.IsTutorialActive)
+        {
+            Time.timeScale = 0f;
+        }
     }
 
     public Window Open(WindowIds id)
@@ -90,11 +54,17 @@ public class WindowManager : MonoBehaviour
 
         return cureentWindow;
     }
+
     public void Close()
     {
         Variable.IsJoyStickActive = true;
         cureentWindow?.Close();
         cureentWindow = null;
         Time.timeScale = (int)GameSpeed.CurrentSpeed;
+    }
+
+    public Window GetWindow(WindowIds windowId)
+    {
+        return windowTable[(int)windowId];
     }
 }

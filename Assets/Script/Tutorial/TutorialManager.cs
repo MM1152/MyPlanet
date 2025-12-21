@@ -1,212 +1,227 @@
 using UnityEngine;
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using System.Text;
-using TMPro;
-using NUnit.Framework;
-using System.Runtime.CompilerServices;
 using UnityEngine.UI;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using TMPro;
+using System.Threading;
 using System;
 
-[HideInInspector]
-[Serializable]
-public class TutorialList
+public enum TutorialStep
 {
-    public List<Tutorial> data;
+    None,
+    Preset,
+    Stage1,
+    PickUp,
+    PickUp2,
+    Book,
+    Book1,
 }
 
 public class TutorialManager : MonoBehaviour
 {
-    [SerializeField] private List<TutorialList> tutorials;   
+    [SerializeField] private TutorialStep currentTutorialStep;
 
-    [Header("Tutorial Settings")]
-    [SerializeField] private GameObject tutorialBackGround;
-    [SerializeField] private TextMeshProUGUI tutorialText;
-    [SerializeField] private RectTransform tutorialHighLightImage;
-    [SerializeField] private int startTutorialIndex = -1;
-    [SerializeField] private List<int> nextTutorialStartIndex;
-    [Header("TextAnimationSetting")]
-    [SerializeField] private float wordDelay;
-    [Header("References")]
-    [SerializeField] private WindowManager windowManager;
-    [SerializeField] private WaveManager waveManager;
+    [Header("Tutorial Text")]
+    [SerializeField] private List<Transform> tutorialTextPositions;
+    [SerializeField] private GameObject tutorialTextPanel;
+    [SerializeField] private Image tutorialBackGround;
+    [SerializeField] private Image tutoriamTextEndImage;
+    [SerializeField] private Image tutorialTouchPanel;
 
-    public bool isPlayWordAnimation = false;
-    private StringBuilder sb = new StringBuilder();
-    private Tutorial currentTutorial;
-    private Image tutorialBackGroundImage;
+    private List<Tutorial> curTutorialList;
 
-    private int currentSectorIdx = 0;
-    private int currentTutorialIdx = -1;
+    public float rotateSpeed = 50f;
+    public TextMeshProUGUI tutorialText;
 
-#if DEBUG_MODE
-    public int foreceStartTutorialSector = -1;
-#endif
-    private void Awake()
+    private Dictionary<TutorialStep, List<Tutorial>> tutorials = new Dictionary<TutorialStep, List<Tutorial>>()
     {
-        tutorialHighLightImage.gameObject.SetActive(false);
-        tutorialBackGround.SetActive(false);
+        { TutorialStep.Preset, new List<Tutorial> { new PresetWindowTutorial(), new PresetWindowTutorial2(), new PresetWindowTutorial3() } },
+        { TutorialStep.Stage1, new List<Tutorial> { new Stage1Tutorial1()  , new Stage1Tutorial2(), new Stage1Tutorial3(), new Stage1Tutorial4() , new Stage1Tutorial5()} },
+        { TutorialStep.PickUp, new List<Tutorial> { new RandomPickUpTutorial1() , new RandomPickUpTutorial2() , new RandomPickUpTutorial3() } },
+        { TutorialStep.PickUp2, new List<Tutorial> { new TowerRandomPickUp1() , new TowerRandomPickUp2() } },
+        { TutorialStep.Book, new List<Tutorial> { new BookTutorial1() , new BookTutorial2(), new BookTutorial3() } },
+        { TutorialStep.Book1, new List<Tutorial> { new BookTutorial1() , new BookTutorial2(), new BookTutorial3() } },
+    };
 
-        Variable.IsTutorialActive = false;
-        Variable.IsSpawnActive = true;
+    [SerializeField] private List<TutorialDisAbleButtons> tutorialDisableButtons;
 
-        tutorialBackGroundImage = tutorialBackGround.GetComponent<Image>();
+    private Tutorial curTutorial;
+    private TutorialDisAbleButtons curTutorialDisableButtons;
+    private int curIdx;
+    public bool CanPlayNextTutorial { get; set; }
 
-       
-        foreach (var tutorial in tutorials)
+    public CancellationTokenSource TutorialCtr => tutorialCtr;
+    private CancellationTokenSource tutorialCtr;
+
+    private bool init = false;
+
+
+    private void Init()
+    {
+        foreach(var key in tutorials.Keys)
         {
-            foreach(var tuto in tutorial.data)
+            foreach(var tutorial in tutorials[key])
             {
-                tuto.Init(this);
+                tutorial.Init(this);
             }
         }
 
-        if (waveManager != null && nextTutorialStartIndex != null)
+        init = true;
+    }
+
+
+    public void InitTutorial(TutorialStep tutorialId)
+    {
+        if (!init) Init();
+
+        curTutorialDisableButtons = null;
+        gameObject.SetActive(true); 
+        curTutorialList = tutorials[tutorialId];
+        currentTutorialStep = tutorialId;
+        curIdx = 0;
+        for(int i = 0; i < tutorialDisableButtons.Count; i++)
         {
-#if DEBUG_MODE
-            if(foreceStartTutorialSector != -1)
+            if(tutorialId == tutorialDisableButtons[i].tutorialStep)
             {
-                waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[foreceStartTutorialSector];
-                currentSectorIdx = foreceStartTutorialSector;
-            }
-            else
-#endif
-                waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[0];
-        }
-
-        if (FirebaseManager.Instance.PresetData.GetGameData().stageId == 1)
-        {
-            Variable.IsTutorialActive = true;
-            Variable.IsSpawnActive = false;
-        }
-    }
-
-    private async UniTaskVoid Start()
-    {
-        await UniTask.Delay(100 , cancellationToken : gameObject.GetCancellationTokenOnDestroy());
-        if (FirebaseManager.Instance.PresetData.GetGameData().stageId == 1)
-        {
-#if DEBUG_MODE
-            if(foreceStartTutorialSector != -1)
-            {
-                currentTutorial = tutorials[currentSectorIdx].data[startTutorialIndex];
-                currentTutorialIdx = startTutorialIndex;
-                currentTutorial.Excute();
-                return;
-            }
-#endif
-            currentTutorial = tutorials[0].data[startTutorialIndex];
-            currentTutorialIdx = startTutorialIndex;
-            currentTutorial.Excute();
-        }
-    }
-
-    private void Update()
-    {
-        if(currentTutorial != null)
-        {
-            currentTutorial.Update();
-        }
-
-        bool isTab = Managers.TouchManager.TouchType == TouchTypes.Tab || Managers.TouchManager.TouchType == TouchTypes.LongTab;
-        if (currentTutorial != null && !currentTutorial.IsWaitDelay && !currentTutorial.IsSelectTarget && isTab && !isPlayWordAnimation)
-        {
-            ForceUpdateTutorial();
-        }   
-    }
-    public void ForceUpdateTutorial()
-    {
-        currentTutorialIdx++;
-        Time.timeScale = GameSpeed.ResetGameSpeed();
-        tutorialHighLightImage.gameObject.SetActive(false);
-        tutorialBackGround.SetActive(false);
-
-        if (currentSectorIdx >= tutorials.Count || currentTutorialIdx >= tutorials[currentSectorIdx].data.Count)
-        {
-            currentTutorial?.Exit();
-            currentTutorial = null;
-            tutorialText.text = string.Empty;
-            tutorialBackGround.SetActive(false);
-            return;
-        }
-        isPlayWordAnimation = true;
-        currentTutorial?.Exit();
-        currentTutorial = tutorials[currentSectorIdx].data[currentTutorialIdx];
-        currentTutorial?.Excute();
-    }
-    public async UniTask WordAnimationAsync(string msg)
-    {
-        tutorialBackGround.SetActive(true);
-        sb.Clear();
-
-        int currentStringIdx = 0;
-        sb.Append(msg[0]);
-        
-        while(sb.Length != msg.Length)
-        {
-            tutorialText.text = sb.ToString();
-            currentStringIdx++;
-            sb.Append(msg[currentStringIdx]);
-            await UniTask.Delay((int)(wordDelay * 1000f), ignoreTimeScale : true , cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
-        }
-
-        tutorialText.text = sb.ToString();
-        isPlayWordAnimation = false;
-    }
-
-    public void SetTutorialBackGroundActive(bool isActive)
-    {
-        tutorialBackGroundImage.raycastTarget = isActive;
-    }
-
-    public void SetTutorialHighLightImagePositionAndSize(RectTransform target)
-    {
-        Canvas.ForceUpdateCanvases();
-        tutorialHighLightImage.gameObject.SetActive(true);
-        tutorialHighLightImage.anchorMin = Vector2.one * 0.5f;
-        tutorialHighLightImage.anchorMax = Vector2.one * 0.5f;
-        tutorialHighLightImage.pivot = Vector2.one * 0.5f;
-
-        Vector2 targetSize = new Vector2(target.rect.width + 50f , target.rect.height + 50f);
-        Debug.Log(target.position);
-        tutorialHighLightImage.sizeDelta = targetSize;
-        tutorialHighLightImage.position = target.position;
-    }
-
-    public void SetTutorialHighLightImagePositionAndSize(GameObject target , Vector2 sizedelta)
-    {
-        tutorialHighLightImage.gameObject.SetActive(true);
-        tutorialHighLightImage.anchorMin = Vector2.one * 0.5f;
-        tutorialHighLightImage.anchorMax = Vector2.one * 0.5f;
-        tutorialHighLightImage.pivot = Vector2.one * 0.5f;
-
-
-        var targetPos = new Vector3(target.transform.position.x , target.transform.position.y , -Camera.main.transform.position.z);
-        targetPos = Camera.main.WorldToScreenPoint(target.transform.position);
-
-        tutorialHighLightImage.sizeDelta = sizedelta;
-        tutorialHighLightImage.position = targetPos;
-    }
-
-    public void SetSectorTutorial(int wave)
-    {
-        currentTutorialIdx = -1;
-        currentSectorIdx++;
-        ForceUpdateTutorial();
-        var index = 0;
-        for(int i = 0; i < nextTutorialStartIndex.Count; i++)
-        {
-            if(wave == nextTutorialStartIndex[i])
-            {
-                index = i + 1;
+                curTutorialDisableButtons = tutorialDisableButtons[i];
+                for(int j = 0; j < curTutorialDisableButtons.disAbleButtons.Count; j++)
+                {
+                    curTutorialDisableButtons.disAbleButtons[j].interactable = false;
+                }
                 break;
             }
-        }   
-        if (index < nextTutorialStartIndex.Count && waveManager != null && nextTutorialStartIndex != null)
+        }        
+
+        Variable.IsTutorialActive = true;
+
+        SetNextTutorial();
+    }
+
+    public void SetNextTutorial()
+    {
+        if (curIdx >= curTutorialList.Count)
         {
-            waveManager.NextTutorialWaveIndex = nextTutorialStartIndex[index];
+            EndTutorials();
+            return;
+        }
+
+        if(tutorialCtr != null)
+        {
+            tutorialCtr?.Cancel();
+            tutorialCtr?.Dispose();
+        }
+        tutorialCtr = new CancellationTokenSource();
+
+        SetActiveTouchPanelPosition(false);
+        SetActiveTutorialTextArea(false);
+        SetActiveTutorialTextEndImage(false);
+        tutorialTouchPanel.transform.parent = transform;
+
+        curTutorial?.TutorialExit();
+        curTutorial = curTutorialList[curIdx++];
+        curTutorial?.TutorialEnter();
+    }
+
+    public void Update()
+    {
+        if(CanPlayNextTutorial && Managers.TouchManager.TouchType == TouchTypes.Tab)
+        {
+            SetNextTutorial();
+        }
+
+        curTutorial?.TutorialUpdate();
+
+        if(tutorialTouchPanel.gameObject.activeSelf)
+        {
+            tutorialTouchPanel.rectTransform.rotation *= Quaternion.Euler(0, 0, rotateSpeed * Time.unscaledDeltaTime);
         }
     }
-  
+
+    public void SetPrevTutorial()
+    {
+        if(curIdx - 2 >= 0)
+        {
+            curIdx -= 2;
+        }
+        else
+        {
+            EndTutorials();
+            return;
+        }
+        SetNextTutorial();
+    }
+
+
+    public void EndTutorials()
+    {
+        curTutorial?.TutorialExit();
+        tutorialTouchPanel.transform.parent = transform;
+        gameObject.SetActive(false);
+
+        Variable.IsTutorialActive = false;
+
+        if(curTutorialDisableButtons != null)
+        {
+            for (int i = 0; i < curTutorialDisableButtons.disAbleButtons.Count; i++)
+            {
+                curTutorialDisableButtons.disAbleButtons[i].interactable = true;
+            }
+        }
+    }
+
+    public void SetTextAreaPosition(int idx)
+    {
+        tutorialTextPanel.transform.parent = tutorialTextPositions[idx];
+        tutorialTextPanel.transform.localPosition = Vector3.zero;
+    }
+
+    public void SetTouchPanelPosition(Vector3 pos)
+    {
+        tutorialTouchPanel.transform.position = pos;
+    }
+
+    public void SetTouchPlanelParent(Transform target)
+    {
+        tutorialTouchPanel.transform.parent = target;
+        tutorialTouchPanel.transform.localPosition = Vector3.zero;
+    }
+
+    public void SetActiveTouchPanelPosition(bool active)
+    {
+        tutorialTouchPanel.gameObject.SetActive(active);
+    }
+
+    public void SetActiveTutorialTextEndImage(bool isActive)
+    {
+        tutorialTouchPanel.gameObject.SetActive(true);
+        tutoriamTextEndImage.gameObject.SetActive(isActive);
+    }
+
+    public void SetTutorialBackGround(bool raycastAble)
+    {
+        tutorialBackGround.raycastTarget = raycastAble;
+    }
+
+    public bool GetActiveTutorialTextEndImage()
+    {
+        return tutoriamTextEndImage.gameObject.activeSelf;
+    }
+    
+    public void SetActiveTutorialTextArea(bool active)
+    {
+        tutorialTextPanel.SetActive(active);
+    }
+
+    private void OnDestroy()
+    {
+        tutorialCtr?.Cancel();
+        tutorialCtr?.Dispose();
+    }
 }
+
+[Serializable]   
+public class TutorialDisAbleButtons
+{
+    public TutorialStep tutorialStep;
+    public List<Selectable> disAbleButtons;
+}
+

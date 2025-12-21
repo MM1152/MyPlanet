@@ -51,6 +51,8 @@ public class TitleBookWindow : Window
     private List<PresetViewer> presetViewers = new List<PresetViewer>();
     private int currentSelectPresetIndex = -1;
 
+    public List<PlanetInfomation> PlanetInfomationList => planetInfomationList;
+
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
@@ -229,4 +231,5 @@ public class TitleBookWindow : Window
             tower.SettingTowerData(towerData);
         }
     }
+
 }

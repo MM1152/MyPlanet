@@ -1,4 +1,6 @@
 using Cysharp.Threading.Tasks;
+using System;
+using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,6 +11,7 @@ public class WarringWindow : Window
     [SerializeField] private TextMeshProUGUI warringText;
     [SerializeField] private CanvasGroup canvasGroup;
 
+    public event Action closeEvent;
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
@@ -43,7 +46,8 @@ public class WarringWindow : Window
             canvasGroup.alpha -= Time.unscaledDeltaTime;
             await UniTask.Yield();
         }
-      manager.Close();  
+        manager.Close();
+        closeEvent?.Invoke();
     }
 
 

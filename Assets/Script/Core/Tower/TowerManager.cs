@@ -281,38 +281,6 @@ public class TowerManager : MonoBehaviour
         windowManager.Open(WindowIds.PlaceTowerWindow);
     }
 
-    public void TutorialLevelUp()
-    {
-        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
-        totalExp = 0;
-
-        windowManager.TutorialOpen2((int)WindowIds.PlaceTowerWindow);
-    }
-
-    public void TutorialLevelUp1()
-    {
-        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
-        totalExp = 0;
-
-        windowManager.TutorialOpen3((int)WindowIds.PlaceTowerWindow);
-    }
-    
-    public void TutorialLevelUp2()
-    {
-        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
-        totalExp = 0;
-
-        windowManager.TutorialOpen4((int)WindowIds.PlaceTowerWindow);
-    }
-
-    public void TutorialLevelUp3()
-    {
-        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
-        totalExp = 0;
-
-        windowManager.TutorialOpen5((int)WindowIds.PlaceTowerWindow);
-    }
-
     public Tower GetTower(int id)
     {
         return towers[id];
@@ -361,4 +329,10 @@ public class TowerManager : MonoBehaviour
         }
     }
 
+
+    //Tutorial
+    public void SetLevel(int level)
+    {
+        this.currentLevel = level;
+    } 
 }

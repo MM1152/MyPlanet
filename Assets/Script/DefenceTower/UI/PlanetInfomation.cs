@@ -116,7 +116,7 @@ public class PlanetInfomation : MonoBehaviour
 
     private void Update()
     {
-        if(isSetting && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(gameObject))
+        if(!Variable.IsTutorialActive && isSetting && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(gameObject))
         {
             OnClickPlanet?.Invoke(data, this);
         }

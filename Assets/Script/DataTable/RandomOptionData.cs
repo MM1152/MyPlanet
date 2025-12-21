@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-public class RandomOptionData
+public static class RandomOptionData
 {
     public class Data
     {
@@ -9,9 +9,9 @@ public class RandomOptionData
         [CsvHelper.Configuration.Attributes.Ignore]
         public RandomOptionBase option;
     }
-    public Dictionary<int, Data> optionTable = new Dictionary<int, Data>();
+    public static Dictionary<int, Data> optionTable = new Dictionary<int, Data>();
 
-    public RandomOptionData()
+    static RandomOptionData()
     {
         optionTable.Add(1 , new Data() {id = 1, option = new TowerDamageUpgradeOption()});
         optionTable.Add(2 , new Data() {id = 2, option = new TowerAttackSpeedOption()});
@@ -22,19 +22,19 @@ public class RandomOptionData
         optionTable.Add(7 , new Data() {id = 7, option = new DarkElemetDamageUpgradeOption()});
     }
 
-    public Data GetData(int id)
+    public static Data GetData(int id)
     {
         return optionTable[id];
     }
 
-    public Data GetRandomOption()
+    public static Data GetRandomOption()
     {
         int rand = Random.Range(1 , optionTable.Count + 1);
         Debug.Log($"RandomOption : {rand}");
         return optionTable[rand];
     }
 
-    public RandomOptionBase GetRandomOptionBase(int id)
+    public static RandomOptionBase GetRandomOptionBase(int id)
     {
         return optionTable[id].option.DeepCopy();
     }

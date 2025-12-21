@@ -1,6 +1,9 @@
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -34,7 +37,7 @@ public class VictoryWindow : Window
     private int goldReward;
     private int expReward;
     private int diamondReward;
-
+    private bool isClear;
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
@@ -76,8 +79,19 @@ public class VictoryWindow : Window
     private async UniTaskVoid OnClickExitButton()
     {
         // Time.timeScale = 1f;
-        var task = FirebaseManager.Instance.UserData.GetGoods(goldReward , expReward , diamondReward);
-        await Managers.Instance.WaitForLoadingAsync(task);
+        List<UniTask> tasks =  new List<UniTask>();
+        tasks.Add(FirebaseManager.Instance.UserData.GetGoods(goldReward , expReward , diamondReward));
+        if (waveManager.StageId == 1)
+        {
+            if (isClear && !FirebaseManager.Instance.UserData.isClearStage1Tutorial)
+            {
+                FirebaseManager.Instance.UserData.isClearStage1Tutorial = true;
+                var path = DataBasePaths.UserPath + FirebaseManager.Instance.UserId;
+                tasks.Add(FirebaseManager.Instance.UserData.SaveAsync(path, FirebaseManager.Instance.UserData));
+            }
+        }
+
+        await Managers.Instance.WaitForLoadingAsync(tasks);
 
         manager.Close();
         LoadingScene.sceneId = SceneIds.TitleScene;
@@ -87,7 +101,7 @@ public class VictoryWindow : Window
     public void SetVictoryUI(float timer, bool isClear,bool lastStage)
     {
         bool isTutorial = Variable.IsTutorialActive;
-
+        this.isClear = isClear;
         if (isClear)
         {
             victoryTitle.SetActive(true);

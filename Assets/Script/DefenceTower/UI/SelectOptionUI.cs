@@ -59,7 +59,7 @@ public class SelectOptionUI : MonoBehaviour
         // this.optionBase = data.Option;
         slotIndexText.text = data.SlotIndex + "번 슬롯";
         
-        newRandomOption = tower.RandomOption.GetRandomOption();
+        newRandomOption = RandomOptionData.GetRandomOption();
 
         if(newRandomOption.id == 1)
         {

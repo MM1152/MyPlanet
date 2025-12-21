@@ -86,7 +86,10 @@ public class PopupManager : MonoBehaviour
             popupBackGroundPanel.SetActive(false);
             interactable = true;
         }
+    }
 
-        
+    public Popup GetPopup(PopupIds popupId)
+    {
+        return popupTable[(int)popupId];
     }
 }

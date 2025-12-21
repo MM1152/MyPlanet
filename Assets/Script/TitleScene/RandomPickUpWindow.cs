@@ -24,6 +24,9 @@ public class RandomPickUpWindow : Window
 
     private GameObject previousOpenPanel;
 
+    public RandomPickUpLayout RandomPickUpLayoutForTower => randomPickUpLayoutForTower;
+    public Button TowerPickUpButton => towerPickUpButton;
+    public Button BookButton => bookButton;
     public override void Close()
     {
         base.Close();

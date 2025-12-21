@@ -179,12 +179,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
                 stateMachine.ChangeState(stateMachine.walkState);
             }
         };
-
-        if (Variable.IsTutorialActive && EnemyTypes.IsEliteMonster(data.ID))
-        {
-            TutorialManager tutorialManager = GameObject.FindWithTag(TagIds.TutorialManagerTag).GetComponent<TutorialManager>();
-            OnDie += (enemy) => tutorialManager.ForceUpdateTutorial();
-        }
     }
 
 

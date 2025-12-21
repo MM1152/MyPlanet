@@ -17,6 +17,9 @@ public class TitlePickUpResultWindow : Window
     [SerializeField] private Image panelImage;
     [SerializeField] private Image rotationCircle;
 
+    public TowerPickUpViewer TowerPickUpResult => towerPickUpResult;
+    public PlanetPickUpResult PlanetPickUpResult => planetPickUpResult;
+
     public float rotationSpeed = 50f;
 
     private TowerTable.Data towerData;

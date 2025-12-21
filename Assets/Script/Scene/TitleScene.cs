@@ -6,6 +6,7 @@ public class TitleScene : MonoBehaviour
 {
     [SerializeField] private PopupManager popupManager;
     [SerializeField] private List<Button> sideBarButtons;
+    [SerializeField] private TutorialManager tutorialManager;
 
     private void Start()
     {

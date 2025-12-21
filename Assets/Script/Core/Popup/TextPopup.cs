@@ -14,6 +14,9 @@ public class TextPopup : Popup
     [SerializeField] private Button redButton;
     [SerializeField] private Button blueButton;
 
+    public Button BlueButton => blueButton;
+    public Button RedButton => redButton;
+
     public override bool Close()
     {
         redButton.onClick.RemoveAllListeners();
@@ -46,4 +49,5 @@ public class TextPopup : Popup
         redButton.onClick.AddListener(redButtonAction);
         blueButton.onClick.AddListener(blueButtonAction);
     }
+
 }
