@@ -7,6 +7,7 @@ public class EnemySpawnManager : MonoBehaviour
 {
     private WindowManager windowManager;
     private ObjectPoolManager poolManager;
+    private EnemyAssetManager assetManager;
     private List<Enemy> spawnEnemys = new List<Enemy>();
     private bool init = false;
 #if DEBUG_MODE
@@ -17,6 +18,7 @@ public class EnemySpawnManager : MonoBehaviour
     protected virtual void Awake()
     {
         windowManager = GameObject.FindWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
+        assetManager = GameObject.FindWithTag(TagIds.EnemyAssetManagerTag)?.GetComponent<EnemyAssetManager>();
         poolManager = Managers.ObjectPoolManager;
     }
 
@@ -60,6 +62,7 @@ public class EnemySpawnManager : MonoBehaviour
                     };      
                 }   
                 spawnEnemy.Initallized(data);
+                assetManager.SpawnAsset(spawnEnemy);
                 if (Variable.IsDebugMode)
                 {
                     spawnEnemy.DebugToolsInit();

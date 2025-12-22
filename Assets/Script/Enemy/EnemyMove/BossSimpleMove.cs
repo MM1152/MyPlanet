@@ -17,20 +17,20 @@ public class BossSimpleMove : IMove
     public Vector2 Direction => direction;
 
     private Enemy enemy;
- private float centerYAlpha
-{
-    get =>  enemy.enemyData.ID switch
+    private float centerYAlpha
     {
-        3072 => 0.5f,
-        _ => 0f
-    };
-}
+        get => enemy.enemyData.ID switch
+        {
+            3072 => 0.5f,
+            _ => 0f
+        };
+    }
 
     public void Init(Enemy enemy)
     {
         target = enemy.GetTarget();
         this.enemy = enemy;
-        if(enemy.WaveManager != null)
+        if (enemy.WaveManager != null)
         {
             screenBounds = enemy.WaveManager.ScreenBounds;
         }
@@ -48,7 +48,7 @@ public class BossSimpleMove : IMove
             screenBounds = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
         }
         var centerY = (target.transform.position.y + screenBounds.yMax) / 2;
-        centerPoint = new Vector2(target.transform.position.x, centerY+centerYAlpha);
+        centerPoint = new Vector2(target.transform.position.x, centerY + centerYAlpha);
         currentPattern = BossMoveState.MoveToCenter;
     }
 
@@ -60,7 +60,7 @@ public class BossSimpleMove : IMove
             direction = Vector2.zero;
             return;
         }
-  
+
         float step = enemy.CurrentSpeed * Time.deltaTime;
 
         switch (currentPattern)
@@ -73,8 +73,9 @@ public class BossSimpleMove : IMove
                 Attack(enemy);
                 break;
         }
+        RotateTowardsTarget(enemy);
     }
-    
+
     private void RotateTowardsTarget(Enemy enemy)
     {
         if (target == null) return;
@@ -98,7 +99,6 @@ public class BossSimpleMove : IMove
 
     private void Attack(Enemy enemy)
     {
-        RotateTowardsTarget(enemy);
         enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
     }
 }

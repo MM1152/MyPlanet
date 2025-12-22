@@ -32,7 +32,7 @@ public class CornerWrapMove : IMove
 
     private bool isLeftMoving = false;
     private bool isMovingUp = false;
-    private CornerMovePattern currentPattern;    
+    private CornerMovePattern currentPattern;
     private Vector2 attackTargetPos;
     private Dictionary<Vector2, Vector2> cornerExitPoints;
     private Vector2 direction;
@@ -59,7 +59,7 @@ public class CornerWrapMove : IMove
         leftDownExitPoint = new Vector2(screenBounds.xMin - enemyBounds.extents.x - Vector2.right.x, downY);
         rightUpExitPoint = new Vector2(screenBounds.xMax + enemyBounds.extents.x + Vector2.right.x, upY);
         rightDownExitPoint = new Vector2(screenBounds.xMax + enemyBounds.extents.x + Vector2.right.x, downY);
-       
+
         isLeftMoving = enemy.transform.position.x > screenBounds.center.x ? true : false;
         isMovingUp = enemy.transform.position.y > screenBounds.center.y ? true : false;
 
@@ -99,6 +99,7 @@ public class CornerWrapMove : IMove
                 WaitAtPoint();
                 break;
         }
+        RotateTowardsTarget(enemy);
     }
 
     private void RotateTowardsTarget(Enemy enemy)
@@ -112,7 +113,6 @@ public class CornerWrapMove : IMove
 
     private void SwitchAttack(Enemy enemy)
     {
-        RotateTowardsTarget(enemy);
         enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
         currentPattern = CornerMovePattern.MoveingNextCorner;
     }
@@ -135,7 +135,7 @@ public class CornerWrapMove : IMove
         enemy.transform.position += (Vector3)(moveToPos * step);
         if (enemy.transform.position.x < leftUpExitPoint.x ||
          enemy.transform.position.x > rightUpExitPoint.x)
-        {            
+        {
             currentPattern = CornerMovePattern.Waiting;
             enemy.transform.position = GetExitPoint(attackTargetPos);
             delayTime = 3f;
@@ -150,8 +150,8 @@ public class CornerWrapMove : IMove
         delayTime -= Time.deltaTime;
         if (delayTime <= 0f)
         {
-            isMovingUp = !isMovingUp; 
-            attackTargetPos = (isLeftMoving,isMovingUp) switch
+            isMovingUp = !isMovingUp;
+            attackTargetPos = (isLeftMoving, isMovingUp) switch
             {
                 (true, true) => rightUpPoint,
                 (true, false) => rightDownPoint,

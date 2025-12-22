@@ -58,6 +58,7 @@ public class LeftRinghMove : IMove
                 EnemyMoving(enemy, step);
                 break;
         }
+        RotateTowardsTarget(enemy);
     }
     private void MoveToCenter(Enemy enemy, float step)
     {
@@ -79,7 +80,6 @@ public class LeftRinghMove : IMove
         if (Vector2.Distance(enemy.transform.position, targetPos) < 0.1f)
         {
             Debug.Log("방향꺽기");
-            RotateTowardsTarget(enemy);
             isMovingRight = !isMovingRight;
             return;
         }

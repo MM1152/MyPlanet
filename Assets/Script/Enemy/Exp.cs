@@ -11,7 +11,11 @@ public class Exp : MonoBehaviour
     private bool isWaiting = false;
     [SerializeField]
     private float speed = 1f;
-    public int exp;
+    private int exp;
+    [SerializeField] Sprite oneExpSprite;
+    [SerializeField] Sprite twoExpSprite;
+    [SerializeField] Sprite threeExpSprite;
+    [SerializeField] SpriteRenderer spriteRenderer;  
 
     private void Awake()
     {
@@ -28,6 +32,30 @@ public class Exp : MonoBehaviour
     {
         isWaiting = true;
         AwaitMove().Forget();
+    }
+
+    public void Init(int exp)
+    {
+        this.exp = exp;
+        SetSprite(exp);
+    }
+
+    private void SetSprite(int exp)
+    {
+        switch (exp)
+        {
+            case 1:
+                spriteRenderer.sprite = oneExpSprite;
+                break;
+            case 2:
+                spriteRenderer.sprite = twoExpSprite;
+                break;
+            case 3:
+                spriteRenderer.sprite = threeExpSprite;
+                break;
+            default:
+                break;
+        }
     }
 
     private async UniTask AwaitMove()

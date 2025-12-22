@@ -51,6 +51,7 @@ public class VictoryWindow : Window
 
         replayButton.onClick.AddListener(() => OnClickReplayButton().Forget());
         exitButton.onClick.AddListener(() => OnClickExitButton().Forget());
+        nextStageButton.onClick.AddListener(() => OnClickNextStageButton().Forget());
     }
 
     public override void Open()
@@ -75,12 +76,23 @@ public class VictoryWindow : Window
 
     private async UniTaskVoid OnClickExitButton()
     {
-        // Time.timeScale = 1f;
         var task = FirebaseManager.Instance.UserData.GetGoods(goldReward , expReward , diamondReward);
         await Managers.Instance.WaitForLoadingAsync(task);
 
         manager.Close();
         LoadingScene.sceneId = SceneIds.TitleScene;
+        SceneManager.LoadScene(SceneIds.LoadingScene);
+    }
+
+    private async UniTaskVoid OnClickNextStageButton()
+    {
+        var task = FirebaseManager.Instance.UserData.GetGoods(goldReward, expReward, diamondReward);
+        await Managers.Instance.WaitForLoadingAsync(task);
+
+        manager.Close();
+        
+        FirebaseManager.Instance.PresetData.SetGameDataStageId(FirebaseManager.Instance.PresetData.GetGameData().stageId + 1);
+        LoadingScene.sceneId = SceneIds.GameScene;
         SceneManager.LoadScene(SceneIds.LoadingScene);
     }
 
@@ -104,7 +116,7 @@ public class VictoryWindow : Window
         }
 
         SetRewards(isClear);
-        replayButton.interactable = !isTutorial;    
+        replayButton.interactable = !isTutorial;     
         nextStageButton.interactable = (isClear && !lastStage && !isTutorial);
         playTimeText.text = $"플레이 타임 | {(int)(timer / 60):00}분 {(int)(timer % 60):00}초";
     }
