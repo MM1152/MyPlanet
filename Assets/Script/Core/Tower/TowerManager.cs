@@ -38,9 +38,17 @@ public class TowerManager : MonoBehaviour
     public bool stopAttack;
     public bool disAbleLevelUp;
 #endif
+    private bool init = false;
 
     protected virtual void Awake()
     {
+        Init();
+    }
+
+    protected virtual void Init()
+    {
+        if (init) return;
+
         levelUpExp = DataTableManager.BasePlanetLevelTable.GetRequiredExp(currentLevel + 1);
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
         presetGameData = FirebaseManager.Instance.PresetData.GetGameData().data;
@@ -56,6 +64,8 @@ public class TowerManager : MonoBehaviour
             var data = DataTableManager.TowerTable.Get(towerId);
             AddTower(data, i + 1);
         }
+
+        init = true;
     }
 
     private void Start()
@@ -281,38 +291,6 @@ public class TowerManager : MonoBehaviour
         windowManager.Open(WindowIds.PlaceTowerWindow);
     }
 
-    public void TutorialLevelUp()
-    {
-        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
-        totalExp = 0;
-
-        windowManager.TutorialOpen2((int)WindowIds.PlaceTowerWindow);
-    }
-
-    public void TutorialLevelUp1()
-    {
-        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
-        totalExp = 0;
-
-        windowManager.TutorialOpen3((int)WindowIds.PlaceTowerWindow);
-    }
-    
-    public void TutorialLevelUp2()
-    {
-        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
-        totalExp = 0;
-
-        windowManager.TutorialOpen4((int)WindowIds.PlaceTowerWindow);
-    }
-
-    public void TutorialLevelUp3()
-    {
-        currentLevel = Mathf.Min(currentLevel + 1, maxLevel);
-        totalExp = 0;
-
-        windowManager.TutorialOpen5((int)WindowIds.PlaceTowerWindow);
-    }
-
     public Tower GetTower(int id)
     {
         return towers[id];
@@ -339,6 +317,7 @@ public class TowerManager : MonoBehaviour
 
     public List<Tower> GetAllTower()
     {
+        Init();
         return towers;
     }
 
@@ -361,4 +340,10 @@ public class TowerManager : MonoBehaviour
         }
     }
 
+
+    //Tutorial
+    public void SetLevel(int level)
+    {
+        this.currentLevel = level;
+    } 
 }

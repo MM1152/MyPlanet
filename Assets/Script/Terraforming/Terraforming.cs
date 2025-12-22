@@ -39,6 +39,8 @@ public class Terraforming : MonoBehaviour
 
     public void SetPoint(int point)
     {
+        if (Variable.IsTutorialActive) return;
+        
         var data = DataTableManager.TerraformingTable.GetDataByPoint(point);
 
         if (data.Count != 2)
@@ -65,35 +67,6 @@ public class Terraforming : MonoBehaviour
         terraformingWindow.rightButton.interactable = true;
         terraformingWindow.rightButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)right.T_Effect_type, right.T_effect_value); SetTerraformingState(point, right); windowManager.Close(); });
         windowManager.Open(WindowIds.TerraformingWindow);
-    }
-
-    public void TutorialOpen(int point)
-    {
-        var data = DataTableManager.TerraformingTable.GetDataByPoint(point);
-
-        if (data.Count != 2)
-        {
-            Debug.LogError($"Terraforming data count is not 2 for point: {point}");
-            return;
-        }
-        var left = data[0];
-        var right = data[1];
-
-        terraformingWindow.SetUI(
-            TerraformingData.GetTerraformingNameDataKey(left.Terra_name),
-            TerraformingData.GetTerraformingDescriptionDataKey(left.T_description),
-            TerraformingData.GetTerraformingNameDataKey(right.Terra_name),
-            TerraformingData.GetTerraformingDescriptionDataKey(right.T_description),
-            point);
-
-
-        terraformingWindow.leftButton.onClick.RemoveAllListeners();
-        terraformingWindow.leftButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)left.T_Effect_type, left.T_effect_value); SetTerraformingState(point, left); windowManager.Close(); });
-
-        terraformingWindow.rightButton.onClick.RemoveAllListeners();
-        terraformingWindow.rightButton.interactable = false;
-        terraformingWindow.rightButton.onClick.AddListener(() => { ExecuteTerraforming((TerraformingData.T_Effect_type)right.T_Effect_type, right.T_effect_value); SetTerraformingState(point, right); windowManager.Close(); });
-        windowManager.TutorialOpen1((int)WindowIds.TerraformingWindow);
     }
 
    private void SetTerraformingState(int point ,TerraformingTable.Data data)

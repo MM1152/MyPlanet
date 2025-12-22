@@ -1,6 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -17,16 +21,26 @@ public class TitleTowerPlaceEditWindow : Window
     [SerializeField] private Button closeButton;
     [SerializeField] private PopupManager popupManager;
     [SerializeField] private GameObject linear;
+    [SerializeField] private UpgradeLayout upgradeLayout;
 
     [Header("Images")]
     [SerializeField] private Image firstImage;
     [SerializeField] private Image secondImage;
-    [SerializeField] private Sprite[] numbers; 
+    [SerializeField] private Sprite[] numbers;
 
-    private Vector2 circleSize;
+    [Header("Texts")]
+    [SerializeField] private TextMeshProUGUI status1Title;
+    [SerializeField] private TextMeshProUGUI status2Title;
+    [SerializeField] private TextMeshProUGUI status3Title;
+    [SerializeField] private TextMeshProUGUI status1Value;
+    [SerializeField] private TextMeshProUGUI status2Value;
+    [SerializeField] private TextMeshProUGUI status3Value;
+
+    public Vector2 circleSize;
     private int placeCount;
 
     private List<TowerPlaceHold> placeHolds = new List<TowerPlaceHold>();
+    private List<UpgradeLayout> upgradeLayouts = new List<UpgradeLayout>();
     private Dictionary<int,ShowIndexPanel> showIndexPanels = new Dictionary<int, ShowIndexPanel>();
     private List<TowerInfomation> towerInfos = new List<TowerInfomation>();
 
@@ -173,10 +187,29 @@ public class TitleTowerPlaceEditWindow : Window
     private void UnPlace(int idx)
     {
         if (isRotate) return;
+        if (!placeHolds[idx].Placed()) return;
         if (!popupManager.Interactable) return;
+        
+        var towerData = placeHolds[idx].TowerData;
+        int targetIndex = towerData.Option_Range;
+
+        if (towerData.Option_type == 0) prevApplyOptionSlots = GetBothSideSlots(idx, targetIndex);
+        else if (towerData.Option_type == 1) prevApplyOptionSlots = (GetLeftSlots(idx, targetIndex), -1);
+        else if (towerData.Option_type == 2) prevApplyOptionSlots = (-1, GetRightSlots(idx, targetIndex));
+
+        if (prevApplyOptionSlots.left != -1)
+            placeHolds[prevApplyOptionSlots.left].RemoveBonusOptionDataTowerIndex(idx);
+
+        if (prevApplyOptionSlots.right != -1)
+            placeHolds[prevApplyOptionSlots.right].RemoveBonusOptionDataTowerIndex(idx);
+
+
         showIndexPanels[placeHolds[idx].TowerData.ID].UpdatePlace(-1);
         placeHolds[idx].PlaceTower(null);
         FindOptionApplyTower(null);
+        ResetUpgradeLayout();
+        UpdateUpgradeLayout();
+        UpdateStatTexts();
     }
 
     private void Place(TowerTable.Data data)
@@ -195,8 +228,10 @@ public class TitleTowerPlaceEditWindow : Window
             showIndexPanels[data.ID].UpdatePlace(selectIndex + 1);
             FindOptionApplyTower(data);
         }
+        UpdateStatTexts();
     }
-
+    //6.6 , 283.3
+    //-11.79999 , 283.3
     private int ContainPresetList(int towerId)
     {
         for(int i = 0; i < presetData.TowerId.Count; i++)
@@ -211,6 +246,8 @@ public class TitleTowerPlaceEditWindow : Window
 
     private void UpdateTowerHold()
     {
+        Canvas.ForceUpdateCanvases();
+
         angle = 360f / placeCount;
         float startAngle = 90f;
         for (int i = 0; i < placeCount; i++)
@@ -221,7 +258,7 @@ public class TitleTowerPlaceEditWindow : Window
             (
                 Mathf.Cos(Mathf.Deg2Rad * startAngle),
                 Mathf.Sin(Mathf.Deg2Rad * startAngle)
-            ) * circleSize * 0.44f;
+            ) * circleSize * 0.5f;
             linearRect.eulerAngles = new Vector3(0, 0, angle * i + 1 + 90f);
 
             var placeHold = Instantiate(towerPlaceObject, circle.transform);
@@ -231,15 +268,29 @@ public class TitleTowerPlaceEditWindow : Window
             placeHold.UpdateSlot(planetData.openSlot[i]);
 
             RectTransform rect = placeHold.GetComponent<RectTransform>();
-            rect.anchoredPosition = new Vector3
+            //rect.anchoredPosition = circle.rectTransform.position;
+            rect.anchoredPosition = new Vector2
             (
                 Mathf.Cos(Mathf.Deg2Rad * startAngle),
                 Mathf.Sin(Mathf.Deg2Rad * startAngle)
-            ) * circleSize * 0.6f;
+            ) * circleSize * 0.7f;
 
-            startAngle += angle;
             rect.eulerAngles = new Vector3(0, 0, angle * i + 1);
             placeHolds.Add(placeHold);
+
+            var upgradeLayout = Instantiate(this.upgradeLayout, circle.transform);
+            upgradeLayout.ResetImages();
+            upgradeLayouts.Add(upgradeLayout);
+            RectTransform upgradeLayoutRect = upgradeLayout.GetComponent<RectTransform>();
+            upgradeLayoutRect.anchoredPosition = new Vector2
+            (
+                Mathf.Cos(Mathf.Deg2Rad * startAngle),
+                Mathf.Sin(Mathf.Deg2Rad * startAngle)
+            ) * circleSize * 0.4f;
+
+            upgradeLayoutRect.eulerAngles = new Vector3(0, 0, angle * i + 1);
+
+            startAngle += angle;
 
             var towerData = DataTableManager.TowerTable.Get(presetData.TowerId[i]);
             if (planetData.openSlot[i] == -1)
@@ -260,7 +311,6 @@ public class TitleTowerPlaceEditWindow : Window
                 }
 
                 RotateCircle(idx);
-                FindOptionApplyTower(placeHolds[idx].TowerData);
                 firstImage.sprite = numbers[(idx + 1) % 10];
                 secondImage.sprite = numbers[(idx + 1) /10];
             });
@@ -300,6 +350,10 @@ public class TitleTowerPlaceEditWindow : Window
 
         placeHolds[selectIndex].transform.localScale = Vector3.one * 1.5f;
         placeHolds[selectIndex].Select();
+        ResetUpgradeLayout();
+        UpdateStatTexts();
+        FindOptionApplyTower(placeHolds[idx].TowerData);
+        UpdateUpgradeLayout();
     }
 
     private async UniTaskVoid RotateAsync(float from , float to , float duration)
@@ -320,10 +374,12 @@ public class TitleTowerPlaceEditWindow : Window
     {
         if (prevApplyOptionSlots.left != -1)
         {
+            upgradeLayouts[prevApplyOptionSlots.left].ResetGiveUpgrade();
             placeHolds[prevApplyOptionSlots.left].CancelSelect();
         }
         if (prevApplyOptionSlots.right != -1)
         {
+            upgradeLayouts[prevApplyOptionSlots.right].ResetGiveUpgrade();
             placeHolds[prevApplyOptionSlots.right].CancelSelect();
         }
 
@@ -338,10 +394,14 @@ public class TitleTowerPlaceEditWindow : Window
         if (prevApplyOptionSlots.left != -1)
         {
             placeHolds[prevApplyOptionSlots.left].Select();
+            placeHolds[prevApplyOptionSlots.left].GetBonusOptionDataTowerIndex(selectIndex , placeHolds[selectIndex].TowerData);
+            upgradeLayouts[prevApplyOptionSlots.left].GiveUpgrade();
         }
         if (prevApplyOptionSlots.right != -1)
         {
             placeHolds[prevApplyOptionSlots.right].Select();
+            placeHolds[prevApplyOptionSlots.right].GetBonusOptionDataTowerIndex(selectIndex , placeHolds[selectIndex].TowerData);
+            upgradeLayouts[prevApplyOptionSlots.right].GiveUpgrade();
         }
 
         placeHolds[selectIndex].Select();
@@ -391,5 +451,50 @@ public class TitleTowerPlaceEditWindow : Window
     public void SetPrevWindow(WindowIds windowId)
     {
         prevWindow = windowId;
+    }
+
+    private void UpdateStatTexts()
+    {
+        TowerTable.Data currentData = placeHolds[selectIndex].TowerData;
+
+        if(currentData == null)
+        {
+            status1Title.text = "-";
+            status1Value.text = "-";
+            status2Title.text = "-";
+            status2Value.text = "-";
+            status3Title.text = "-";
+            status3Value.text = "-";
+            return;
+        }
+
+         
+        status1Title.text = currentData.GetFormaingStat1.Split(' ')[0];
+        status1Value.text = currentData.GetFormaingStat1.Split(' ')[1];
+        status2Title.text = currentData.GetFormaingStat2.Split(' ')[0];
+        status2Value.text = currentData.GetFormaingStat2.Split(' ')[1];
+        status3Title.text = currentData.GetFormaingStat3.Split(' ')[0];
+        status3Value.text = currentData.GetFormaingStat3.Split(' ')[1];
+
+        if (currentData.Type == 2) return;
+
+        status1Value.text += $"<color=#ffbf00> +{placeHolds[selectIndex].AttackBonusAmount.ToString("F2")}% </color>";
+        status2Value.text += $"<color=#ffbf00> +{placeHolds[selectIndex].AttackSpeedBonusAmount.ToString("F2")}% </color>";
+    }
+
+    private void UpdateUpgradeLayout()
+    {
+        foreach(var otherTowerIndex in placeHolds[selectIndex].applyBonusOptionValueTowerTable.Keys)
+        {
+            upgradeLayouts[otherTowerIndex].ResiveUpgrade();
+        }
+    }
+
+    private void ResetUpgradeLayout()
+    {
+        foreach (var upgradeLayout in upgradeLayouts)
+        {
+            upgradeLayout.ResetImages();
+        }
     }
 }

@@ -25,6 +25,8 @@ public class PlanetPickUpResult : MonoBehaviour
 
     [Header("Sliders")]
     [SerializeField] private Slider planetPieceSlider;
+
+    public Button OkButton => okButton;
     private void Awake()
     {
         okButton.onClick.AddListener(() => windowManager.Open(WindowIds.RandomPickUpWindow));

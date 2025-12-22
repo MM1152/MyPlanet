@@ -33,6 +33,13 @@ public class TowerTable : DataTable
         public override string Explanatoin => DataTableManager.StringTable.Get(Description);
         [CsvHelper.Configuration.Attributes.Ignore]
         public override int Type => 2;
+
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override string GetFormaingStat1 => $"지속시간 {Duration.ToString("F2")}";
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override string GetFormaingStat2 => $"쿨타임 {Cooltime.ToString("F2")}";
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public override string GetFormaingStat3 => $"범위 {range.ToString("F2")}";
     }
 
 
@@ -134,6 +141,13 @@ public class TowerTable : DataTable
         public bool Unlock => FirebaseManager.Instance.TowerData.IsUnlocked(ID);
         [CsvHelper.Configuration.Attributes.Ignore]
         public virtual EffectTable.Data Effect => null;
+
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public virtual string GetFormaingStat1 => $"공격력 {ATK.ToString("F2")}";
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public virtual string GetFormaingStat2 => $"연사력 {Fire_Rate.ToString("F2")}";
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public virtual string GetFormaingStat3 => $"사거리 {Attack_Range.ToString("F2")}";
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)

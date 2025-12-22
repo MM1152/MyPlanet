@@ -16,6 +16,8 @@ public class TitleBookInfomationWindow : Window
     [SerializeField] private TextMeshProUGUI expText;
     [SerializeField] private TextMeshProUGUI diamondText;
 
+
+    public Button ExitButton => exitButton;
     public override void Close()
     {
         base.Close();

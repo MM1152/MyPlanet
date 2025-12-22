@@ -72,7 +72,7 @@ public class TowerInfomation : MonoBehaviour
 
     private void Update()
     {
-        if(!DisableTouch && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(this.gameObject))
+        if(!Variable.IsTutorialActive && !DisableTouch && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(this.gameObject))
         {
             OnTab?.Invoke(data);
         }

@@ -309,6 +309,8 @@ public static class AddressableNames
 
 public static class TagIds
 {
+    public readonly static string None = "Untagged";
+    public readonly static string TerraFormingHighlightImage = "TerraFormingImage";
     public readonly static string DefenseTowerTag = "DefenseTower";
     public readonly static string TowerManagerTag = "TowerManager";
     public readonly static string WindowManagerTag = "WindowManager";
@@ -323,6 +325,10 @@ public static class TagIds
     public readonly static string WaveWindowTag = "WaveWindow";
     public readonly static string DroneTag = "Drone";
     public readonly static string EnemyAssetManagerTag = "EnemyAssetManager";
+    public readonly static string TutorialTaget = "TutorialTarget";
+    public readonly static string BackButton = "BackButton";
+    public readonly static string MainGameSceneCanvas = "GameSceneCanvas";
+    public readonly static string PopupManager = "PopupManager";
 }
 
 public static class DataTableIds

@@ -157,12 +157,23 @@ public class UserData : JsonSerialized
     public int gold;
     public int exp;
     public int diamond;
+    public bool isClearPresetTutorial;
+    public bool isClearRandomPickUpTutorial;
+    public bool isClearBookTutorial;
+    public bool isClearStage1Tutorial;
+    public bool isClearFirstTutorial;
+    public bool isClearStage2Tutorial;
     public int version;
+
     public UserData()
     {
         nickName = "NoName-" + UnityEngine.Random.Range(10000, 50000);
         gold = 30000;
         exp = 30000;
+
+        isClearPresetTutorial = false;
+        isClearStage2Tutorial = false;
+
         version = FirebaseManager.Instance.Version;
     }
 
@@ -171,7 +182,7 @@ public class UserData : JsonSerialized
         this.gold += gold;
         this.exp += exp;
         this.diamond += diamond;
-        await SaveGoodsAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId , this);
+        await SaveAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId , this);
     }
 
     public async UniTask UseGoods(int useGoldAmount = 0, int useExpAmount = 0 , int useDiaAmount = 0)
@@ -179,10 +190,16 @@ public class UserData : JsonSerialized
         this.gold -= useGoldAmount;
         this.exp -= useExpAmount;
         this.diamond -= useDiaAmount;
-        await SaveGoodsAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId , this);
+        await SaveAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId , this);
     }
 
-    public async UniTask SaveGoodsAsync(string path , UserData userData)
+    public async UniTask ClearPresetTutorial()
+    {
+        isClearPresetTutorial = true;
+        await SaveAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId, this);
+    }
+
+    public async UniTask SaveAsync(string path , UserData userData)
     {
         var success = await FirebaseManager.Instance.Database.OverwriteJsonData<UserData>(path , userData);
     }

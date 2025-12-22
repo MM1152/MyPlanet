@@ -17,6 +17,8 @@ public class RandomPickUpLayout : MonoBehaviour
     [SerializeField] private PopupManager popupManager;
     [SerializeField] private WindowManager windowManager;
 
+    public Button PickOneButton => pickOneButton;
+
     private List<RandomPickUpTable.Data> randomPickList;
     private List<RandomPickUpTable.Data> sortedPickList;
     private bool isPlanetPickUp = false;

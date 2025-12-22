@@ -35,6 +35,13 @@ public class TowerData
             Unlock = false;
             TowerPartCount = 0;
             grade = 1;
+
+            if (towerId == 2003 || towerId == 2015 || towerId == 23001)
+            {
+                OptionValue = DataTableManager.TowerRandomOptionValueTable.GetOptionData(towerId).random_min;
+                Unlock = true;
+            }
+
         }
     }
 

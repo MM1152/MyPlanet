@@ -74,21 +74,6 @@ public class OptionUpgradeWindow : Window
         selectIndex = -1;
     }
 
-    public override void TutorialTowerOpen1()
-    {
-        Time.timeScale = 0f;
-        for (int i = 0; i < selectOptionUIs.Count; i++)
-        {
-            var towerData = towerManager.GetRandomTower();
-            selectOptionUIs[i].SetInteractive(true);
-            selectOptionUIs[i].SetTowerData(towerData);
-        }
-        selectOptionUIs[1].SetInteractive(false);
-        selectOptionUIs[2].SetInteractive(false);
-        selectIndex = -1;
-        base.TutorialTowerOpen1();
-    }
-
     private void OnClickSelectButton()
     {
         if (selectIndex == -1) return;

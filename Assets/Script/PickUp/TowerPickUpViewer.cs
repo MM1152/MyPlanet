@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class TowerPickUpViewer : MonoBehaviour
 {
@@ -39,6 +40,10 @@ public class TowerPickUpViewer : MonoBehaviour
     private List<bool> isNew;
     private List<(bool, float)> isDuplication;
 
+    public Button OkButton => closeButton;
+
+    public event Action TutorialTabAction;
+
     private void Awake()
     {
         skipButton.onClick.AddListener(OnClickSkipButton);
@@ -46,7 +51,7 @@ public class TowerPickUpViewer : MonoBehaviour
 
     public void SetData(List<RandomPickUpTable.Data> randomPickUpData , List<bool> isNew  , List<(bool, float)> isDuplication)
     {
-        closeButton.onClick.RemoveAllListeners();
+        //closeButton.onClick.RemoveAllListeners();
 
         this.randomPickUpData = randomPickUpData;
         this.isNew = isNew;
@@ -57,11 +62,13 @@ public class TowerPickUpViewer : MonoBehaviour
 
         if (randomPickUpData.Count == 1)
         {
+            skipButton.gameObject.SetActive(false);
             okButtonText.text = "확인";
             closeButton.onClick.AddListener(OnClickCloseToClose);
         }
         else
         {
+            skipButton.gameObject.SetActive(true);
             okButtonText.text = $"확인 {currentIdx + 1}/10";
             closeButton.onClick.AddListener(OnClickCloseButtonToNextTowerInfoamtion);
         }

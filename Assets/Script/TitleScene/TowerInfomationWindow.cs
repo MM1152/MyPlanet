@@ -55,7 +55,6 @@ public class TowerInfomationWindow : Window
     [SerializeField] private GameObject attacktypeLayout;
     [SerializeField] private GameObject elementLayout;
 
-    private RandomOptionData randomOptionTable = new RandomOptionData();
 
     private TowerData.Data userTowerData;
     private TowerTable.Data towerTableData;
@@ -140,7 +139,7 @@ public class TowerInfomationWindow : Window
         towerAttackTypeText.text = towerTableData.AttackTypeToString;
         towerInfomationText.text = towerTableData.Explanatoin;
 
-        var randomOptionData = randomOptionTable.GetData(towerData.Option);
+        var randomOptionData = RandomOptionData.GetData(towerData.Option);
         var randomOption = randomOptionData.option.DeepCopy();
         randomOption.Init(towerData, randomOptionData);
 

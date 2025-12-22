@@ -20,7 +20,7 @@ public class TowerInfomationPopup : Popup
     [SerializeField] private Image towerAttackTypeImage;
     [SerializeField] private Image towerElementImage;
 
-    [SerializeField] private RandomOptionData randomOptionData = new RandomOptionData(); 
+    //[SerializeField] private RandomOptionData randomOptionData = new RandomOptionData(); 
     public override bool Close()
     {
         return base.Close();

@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class SelectTowerUI : MonoBehaviour
 {
@@ -195,5 +194,10 @@ public class SelectTowerUI : MonoBehaviour
         consumeData = null;
 
         toggle.isOn = false;
+    }
+
+    public Toggle GetToggle()
+    {
+        return toggle;
     }
 }

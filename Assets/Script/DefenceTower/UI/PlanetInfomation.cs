@@ -1,6 +1,7 @@
 ﻿using Firebase.Database;
 using JetBrains.Annotations;
 using System;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,6 +38,17 @@ public class PlanetInfomation : MonoBehaviour
         outline = GetComponent<Outline>();
         outline.enabled = false;
         
+    }
+
+    private void OnDestroy()
+    {
+        var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
+        var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
+        var unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
+
+        FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangedStar);
+        FirebaseManager.Instance.Database.RemoveListner(levelPath, OnValueChangedLevel);
+        FirebaseManager.Instance.Database.RemoveListner(unlockPath, OnValueChangedUnLock);
     }
 
     public void UpdateTexts(PlanetTable.Data data)
@@ -116,7 +128,7 @@ public class PlanetInfomation : MonoBehaviour
 
     private void Update()
     {
-        if(isSetting && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(gameObject))
+        if(!Variable.IsTutorialActive && isSetting && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(gameObject))
         {
             OnClickPlanet?.Invoke(data, this);
         }

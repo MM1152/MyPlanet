@@ -17,6 +17,11 @@ public class TitleMainWindow : Window
     [SerializeField] private TextMeshProUGUI userGold;
     [SerializeField] private TextMeshProUGUI userDiamond;
     [SerializeField] private TextMeshProUGUI userExpText;
+    [Header("References")]
+    [SerializeField] private TutorialManager tutorialManager;
+
+    public Button SelectStageButton => selectStageButton;
+    public Button GachaButton => randomPickUpButton;
 
     public override void Close()
     {
@@ -49,7 +54,6 @@ public class TitleMainWindow : Window
         });
         debugModeSceneButton.gameObject.SetActive(true);
 #endif
-        bookOpenButton.interactable = true;
         bookOpenButton.onClick.AddListener(() =>
         {
             manager.Open(WindowIds.TitleBookWindow);
@@ -59,6 +63,19 @@ public class TitleMainWindow : Window
     public override void Open()
     {
         base.Open();
+        if (FirebaseManager.Instance.UserData.isClearStage1Tutorial)
+        {
+            if (!FirebaseManager.Instance.UserData.isClearRandomPickUpTutorial)
+            {
+                tutorialManager.InitTutorial(TutorialStep.PickUp);
+            }
+        }
+
+        if (!FirebaseManager.Instance.UserData.isClearFirstTutorial)
+        {
+            tutorialManager.InitTutorial(TutorialStep.Stage1Enter);
+        }
+
     }
 
     private void OnChangeGoldValue(object sender , ValueChangedEventArgs args)

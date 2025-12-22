@@ -6,9 +6,11 @@ public class TitleScene : MonoBehaviour
 {
     [SerializeField] private PopupManager popupManager;
     [SerializeField] private List<Button> sideBarButtons;
+    [SerializeField] private TutorialManager tutorialManager;
 
     private void Start()
     {
+
         foreach(var bnt in sideBarButtons)
         {
             bnt.onClick.AddListener(OnClickSideBarButton);

@@ -8,6 +8,8 @@ public class TowerPickUpResult : MonoBehaviour
     [SerializeField] private Transform towerPickUpViewerRoot;
     [SerializeField] private Button okButton;
     [SerializeField] private WindowManager windowManager;
+
+    public Button OkButton => okButton;
     private List<TowerItemViewer> towerItemViewers = new List<TowerItemViewer>();
 
     public void Awake()
