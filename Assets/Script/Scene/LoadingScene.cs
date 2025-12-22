@@ -1,4 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -8,11 +10,14 @@ using UnityEngine.UI;
 public class LoadingScene : MonoBehaviour
 {
     public TextMeshProUGUI currentProgress;
+    public TextMeshProUGUI loadingText; 
     public static string sceneId = "TitleScene";
-
+    public float textAnimationDelay = 0.2f;
     [Header("Firebase AuthLogin")]
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private Button annymousLoginButton;
+
+    private CancellationTokenSource ctr;
 
     public async UniTaskVoid Start()
     {
@@ -40,11 +45,12 @@ public class LoadingScene : MonoBehaviour
 
     public async UniTask LoadSceneAsync(string id)
     {
+        ctr = new CancellationTokenSource();
         if (string.IsNullOrEmpty(id))
         {
             return;
         }
-
+        TextAniamtionAsync(ctr).Forget();
         Time.timeScale = GameSpeed.ResetGameSpeed();
         Variable.IsSpawnActive = true;
         Variable.IsTutorialActive = false;
@@ -53,21 +59,18 @@ public class LoadingScene : MonoBehaviour
 
         Managers.Instance.Release();
 
-        currentProgress.text = "테이블 불러오는 중";
+        currentProgress.text = "4팀 레츠고 좀만 더 고생하자.";
         await DataTableManager.WaitForInitalizeAsync();
 
-        currentProgress.text = "Firebase 초기화 중";
         await FirebaseManager.Instance.WaitForInitalizedAsync();
 
         //Firebase Auth 로그인 정보가 존재할때 다음 작업 진행가능하도록 기다림
         if(FirebaseManager.Instance.UserId == string.Empty)
         {
             loginPanel.SetActive(true);
-            currentProgress.text = "로그인 대기 중";
         }
         await UniTask.WaitUntil(() => FirebaseManager.Instance.UserId != string.Empty);
 
-        currentProgress.text = "유저 데이터 불러오는 중";
         if (FirebaseManager.Instance.UserData == null)
         {
             await FirebaseManager.Instance.FindUserDataInDatabase();    
@@ -77,17 +80,19 @@ public class LoadingScene : MonoBehaviour
         await FirebaseManager.Instance.PlanetData.WaitForInitalizeAsync();
         await FirebaseManager.Instance.TowerData.WaitForInitializeAsync();
 
-        currentProgress.text = "Managers 초기화 중";
         await Managers.Instance.WaitForManagerInitalizedAsync();
-        currentProgress.text = "DataTable 초기화 중";
 
         if(sceneId == SceneIds.GameScene)
         {
-            currentProgress.text = "게임 데이터 초기화중";
             await LoadGameData();
         }
 
-        currentProgress.text = "Scene 초기화 중";
+        ctr?.Cancel();
+        ctr?.Dispose();
+
+        loadingText.text = "Game Start";
+
+        await UniTask.WaitUntil(() => Managers.TouchManager.TouchType == TouchTypes.Tab);
         await Addressables.LoadSceneAsync(sceneId).ToUniTask();
     }
 
@@ -95,5 +100,30 @@ public class LoadingScene : MonoBehaviour
     {
         var inGameData = FirebaseManager.Instance.PresetData.GetGameData();
         await DataTableManager.PlanetTable.LoadPlanetPrefab(inGameData.data.PlanetId);
+    }
+
+    private async UniTaskVoid TextAniamtionAsync(CancellationTokenSource ctr)
+    {
+        string text = "Now Loading...";
+        int textPointer = 0;
+        StringBuilder sb = new StringBuilder();
+
+        while (true)
+        {
+            if(ctr.IsCancellationRequested)
+            {
+                break;
+            }
+
+            if(textPointer >= text.Length)
+            {
+                sb.Clear();
+                textPointer = 0;
+            }
+
+            sb.Append(text[textPointer++]);
+            loadingText.text = sb.ToString();
+            await UniTask.Delay((int)(textAnimationDelay * 1000));
+        }
     }
 }
