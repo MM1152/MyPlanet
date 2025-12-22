@@ -189,10 +189,17 @@ public class RotatingLaserAttack : IShotStrategy
             laserRenderer.enabled = false;
             laserRenderer.positionCount = 0; ;
             enemy.attackInterval = 0f;
-            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
-            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
-            hitParticle = null;
-            flashParticle = null;
+            if(hitParticle != null)
+            {
+                Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
+                hitParticle = null;
+            }
+            
+            if(flashParticle != null)
+            {
+                Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
+                flashParticle = null;
+            }
         }
         isInitialized = false;
     }

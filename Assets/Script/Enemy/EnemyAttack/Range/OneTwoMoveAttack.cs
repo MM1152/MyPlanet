@@ -63,6 +63,7 @@ public class OneTwoMoveAttack : IMove
                 WaitAtPoint();
                 break;
         }
+        RotateTowardsTarget(enemy);
     }
 
     private void MoveToCenter(Enemy enemy, float step)
@@ -97,7 +98,6 @@ public class OneTwoMoveAttack : IMove
 
     private void SwitchAttack(Enemy enemy)
     {
-        RotateTowardsTarget(enemy);
         enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
         currentState = OneTwoMoveState.WaitingMove;
     }

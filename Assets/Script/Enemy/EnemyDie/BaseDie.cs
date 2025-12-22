@@ -1,9 +1,12 @@
+using System.Diagnostics;
 using UnityEngine;
 
 public class BaseDie
 {
     protected Enemy enemy;
     protected TypeEffectiveness typeEffectiveness;
+
+    private PoolsId poolsId;
 
     public virtual bool active { get; set; } = true;
 
@@ -19,7 +22,7 @@ public class BaseDie
         {
             var exp = Managers.ObjectPoolManager.SpawnObject<Exp>(PoolsId.Exp);
             exp.transform.position = enemy.transform.position;
-            exp.exp = enemy.enemyData.EXP;
+            exp.Init(enemy.enemyData.EXP);    
         }       
         if(enemy.WaveManager != null)
         {
@@ -29,7 +32,6 @@ public class BaseDie
     
         Managers.ObjectPoolManager.Despawn(PoolsId.Enemy, enemy.gameObject);
     }
-
     public virtual void SetBonusCount(int count) {}   
     public virtual void ResetCount() {} 
 }

@@ -18,8 +18,8 @@ public enum WindowIds
     OptionUpgradeWindow = 11,
     TerraformingWindow = 12,
     WaveWindow = 13,
-    WarringWindow = 14, 
-    PauseWindow = 15,   
+    WarringWindow = 14,
+    PauseWindow = 15,
     TitleShopWindow = 16,
     TowerInfomationWindow = 17,
     RandomPickUpWindow = 18,
@@ -162,6 +162,29 @@ public enum PoolsId
     Flash19circlebomb = 1027,
     Hit19circlebomb = 1028,
 
+
+    Melee_Tier03 = 1200,
+    Melee_Tier02 = 1201,
+    Melee_Tier01 = 1202,
+    Ranged_Tier02 = 1300,
+    Ranged_Tier01 = 1301,
+    EliteMonster_Fire = 1400,
+    EliteMonster_Ice = 1401,
+    EliteMonster_Steel = 1402,
+    EliteMonster_Light = 1403,
+    EliteMonster_Dark = 1404,
+    StageBoss_01 = 1500,
+    StageBoss_02 = 1501,
+    StageBoss_03 = 1502,
+    StageBoss_04 = 1503,
+    StageBoss_05 = 1504,
+    StageBoss_06 = 1505,
+    StageBoss_07 = 1506,
+    StageBoss_08 = 1507,
+    StageBoss_09 = 1508,
+    StageBoss_10 = 1509,
+
+    BossPartner = 1600,
 }
 
 public enum EnemyType
@@ -208,35 +231,35 @@ public static class AddressableNames
         { "GravityWrap" , PoolsId.GravityWrap },
         { "SwitchDirectionBullet", PoolsId.SwitchDirectionBullet },
         { "ArcMissileBullet", PoolsId.ArcMissileBullet },
-        { "RainBullet", PoolsId.RainBullet },   
-        { "PlutoBullet", PoolsId.PlutoBullet },   
-        { "Drone", PoolsId.Drone },   
-        { "Repulsor", PoolsId.Repulsor },   
-        { "ChaosBeacon", PoolsId.ChaosBeacon },   
+        { "RainBullet", PoolsId.RainBullet },
+        { "PlutoBullet", PoolsId.PlutoBullet },
+        { "Drone", PoolsId.Drone },
+        { "Repulsor", PoolsId.Repulsor },
+        { "ChaosBeacon", PoolsId.ChaosBeacon },
         { "Barrier", PoolsId.Barrier },
-        { "DarkLaserHitEffect", PoolsId.DarkLaserHitEffect },   
-        { "SolarLaserHitEffect", PoolsId.SolarLaserHitEffect },   
-        { "Flash 13 red laser", PoolsId.Flash13redlaser },   
-        { "Hit 13 red laser", PoolsId.Hit13redlaser },   
-        { "2D Projectile 13 red laser", PoolsId.Projectile13redlaser },   
-        { "HellFireBullet", PoolsId.HellFireBullet },   
-        { "Flash 6 blue fire", PoolsId.Flash6bluefire },   
-        { "Hit 6 blue fire", PoolsId.Hit6bluefire },   
-        { "2D Projectile 6 blue fire", PoolsId.Projectile6bluefire },   
-        { "FrostRepeaterBullet", PoolsId.FrostRepeaterBullet },   
-        { "Hit 8 dagger", PoolsId.Hit8dagger },   
-        { "2D Projectile 8 dagger", PoolsId.Projectile8dagger },   
-        { "BurstBlasterBullet", PoolsId.BurstBlasterBullet },   
-        { "Hit 23 cube", PoolsId.Hit23cube },   
-        { "Flash 23 cube", PoolsId.Flash23cube },   
-        { "ShadowBursterFragment", PoolsId.ShadowBursterFragment },   
-        { "2D Projectile 7 pink", PoolsId.Projectile7pink },   
-        { "Flash 7 pink", PoolsId.Flash7pink },   
-        { "Hit 7 pink", PoolsId.Hit7pink },   
-        { "Flash 26 blue crystal", PoolsId.Flash26bluecrystal },   
-        { "Hit 26 blue crystal", PoolsId.Hit26bluecrystal },   
-        { "IceRangerFregment", PoolsId.IceRangerFregment },   
-        { "Flash 10 blue laser", PoolsId.Flash10bluelaser },    
+        { "DarkLaserHitEffect", PoolsId.DarkLaserHitEffect },
+        { "SolarLaserHitEffect", PoolsId.SolarLaserHitEffect },
+        { "Flash 13 red laser", PoolsId.Flash13redlaser },
+        { "Hit 13 red laser", PoolsId.Hit13redlaser },
+        { "2D Projectile 13 red laser", PoolsId.Projectile13redlaser },
+        { "HellFireBullet", PoolsId.HellFireBullet },
+        { "Flash 6 blue fire", PoolsId.Flash6bluefire },
+        { "Hit 6 blue fire", PoolsId.Hit6bluefire },
+        { "2D Projectile 6 blue fire", PoolsId.Projectile6bluefire },
+        { "FrostRepeaterBullet", PoolsId.FrostRepeaterBullet },
+        { "Hit 8 dagger", PoolsId.Hit8dagger },
+        { "2D Projectile 8 dagger", PoolsId.Projectile8dagger },
+        { "BurstBlasterBullet", PoolsId.BurstBlasterBullet },
+        { "Hit 23 cube", PoolsId.Hit23cube },
+        { "Flash 23 cube", PoolsId.Flash23cube },
+        { "ShadowBursterFragment", PoolsId.ShadowBursterFragment },
+        { "2D Projectile 7 pink", PoolsId.Projectile7pink },
+        { "Flash 7 pink", PoolsId.Flash7pink },
+        { "Hit 7 pink", PoolsId.Hit7pink },
+        { "Flash 26 blue crystal", PoolsId.Flash26bluecrystal },
+        { "Hit 26 blue crystal", PoolsId.Hit26bluecrystal },
+        { "IceRangerFregment", PoolsId.IceRangerFregment },
+        { "Flash 10 blue laser", PoolsId.Flash10bluelaser },
         { "Hit 10 blue laser", PoolsId.Hit10bluelaser },
         { "Flash 18 nova orange", PoolsId.Flash18novaorange },
         { "Hit 18 nova orange", PoolsId.Hit18novaorange },
@@ -251,7 +274,27 @@ public static class AddressableNames
         { "Hit 19 circle bomb", PoolsId.Hit19circlebomb },
         { "Laser beam 4 red Flash", PoolsId.LaserBeam4RedFlash },
         { "Laser beam 4 red Hit", PoolsId.LaserBeam4RedHit },
-
+        { "Melee_Tier03", PoolsId.Melee_Tier03 },
+        { "Melee_Tier02", PoolsId.Melee_Tier02 },
+        { "Melee_Tier01", PoolsId.Melee_Tier01 },   
+        { "Ranged_Tier02", PoolsId.Ranged_Tier02 },
+        { "Ranged_Tier01", PoolsId.Ranged_Tier01 },
+        { "EliteMonster_Fire", PoolsId.EliteMonster_Fire },
+        { "EliteMonster_Ice", PoolsId.EliteMonster_Ice },
+        { "EliteMonster_Steel", PoolsId.EliteMonster_Steel },
+        { "EliteMonster_Light", PoolsId.EliteMonster_Light },
+        { "EliteMonster_Dark", PoolsId.EliteMonster_Dark },
+        { "StageBoss_01", PoolsId.StageBoss_01 },
+        { "StageBoss_02", PoolsId.StageBoss_02 },
+        { "StageBoss_03", PoolsId.StageBoss_03 },
+        { "StageBoss_04", PoolsId.StageBoss_04 },
+        { "StageBoss_05", PoolsId.StageBoss_05 },
+        { "StageBoss_06", PoolsId.StageBoss_06 },
+        { "StageBoss_07", PoolsId.StageBoss_07 },
+        { "StageBoss_08", PoolsId.StageBoss_08 },
+        { "StageBoss_09", PoolsId.StageBoss_09 },
+        { "StageBoss_10", PoolsId.StageBoss_10 },
+        { "BossPartner", PoolsId.BossPartner },
     };
 
     public static PoolsId GetPoolsId(string name)
@@ -279,6 +322,7 @@ public static class TagIds
     public readonly static string TutorialManagerTag = "TutorialManager";
     public readonly static string WaveWindowTag = "WaveWindow";
     public readonly static string DroneTag = "Drone";
+    public readonly static string EnemyAssetManagerTag = "EnemyAssetManager";
 }
 
 public static class DataTableIds
@@ -365,6 +409,91 @@ public static class EnemyTypes
           3060, 3061, 3063, 3064, 3065, 3066, 3068, 3069, 3070, 3071,};
     public static bool IsEliteMonster(int id) => EliteMonseterIds.Contains(id);
     public static bool IsBossMonster(int id) => BossMonsterIds.Contains(id);
+}
+
+public static class EnemyTier
+{
+    private static readonly Dictionary<int, int> monsterTierMap = new()
+    {
+        { 3001, 3 }, { 3002, 3 }, { 3003, 3 }, { 3004, 3 }, { 3005, 3 },
+        { 3006, 2 }, { 3007, 2 }, { 3008, 2 }, { 3009, 2 }, { 3010, 2 },
+        { 3011, 2 }, { 3012, 2 }, { 3013, 2 }, { 3014, 2 }, { 3015, 2 },
+        { 3016, 1 }, { 3017, 1 }, { 3018, 1 }, { 3019, 1 }, { 3020, 1 },
+        { 3021, 1 }, { 3022, 1 }, { 3023, 1 }, { 3024, 1 }, { 3025, 1 },
+    };
+
+    public static int GetTier(int id)
+    {
+        return monsterTierMap.TryGetValue(id, out var tier) ? tier : 0;
+    }
+}
+
+public static class MonsterTierAssetMap
+{
+    public static readonly Dictionary<(EnemyType, int), PoolsId> monsterTierAssetMap = new()
+    {
+        { (EnemyType.Melee, 1), PoolsId.Melee_Tier01 },
+        { (EnemyType.Melee, 2), PoolsId.Melee_Tier02 },
+        { (EnemyType.Melee, 3), PoolsId.Melee_Tier03 },
+        { (EnemyType.Ranged, 1), PoolsId.Ranged_Tier01 },
+        { (EnemyType.Ranged, 2), PoolsId.Ranged_Tier02 },
+    };
+
+    public static PoolsId GetMonsterTierAsset(EnemyType enemyType, int tier)
+    {
+        if (monsterTierAssetMap.TryGetValue((enemyType, tier), out PoolsId poolId))
+        {
+            return poolId;
+        }
+        return PoolsId.None;
+    }
+}
+
+public static class EliteMonsterAssetMap
+{
+    public static readonly Dictionary<ElementType, PoolsId> eliteMonsterAssetMap = new()
+    {
+        { ElementType.Fire, PoolsId.EliteMonster_Fire },
+        { ElementType.Ice, PoolsId.EliteMonster_Ice },
+        { ElementType.Steel, PoolsId.EliteMonster_Steel },
+        { ElementType.Light, PoolsId.EliteMonster_Light },
+        { ElementType.Dark, PoolsId.EliteMonster_Dark },
+    };
+
+    public static PoolsId GetEliteMonsterAsset(ElementType elementType)
+    {
+        if (eliteMonsterAssetMap.TryGetValue(elementType, out PoolsId poolId))
+        {
+            return poolId;
+        }
+        return PoolsId.None;
+    }
+}
+
+public static class BossAssetMap
+{
+    public static readonly Dictionary<int, PoolsId> bossAssetMap = new()
+    {
+        { 3027, PoolsId.StageBoss_01 },
+        { 3032, PoolsId.StageBoss_02 },
+        { 3037, PoolsId.StageBoss_03 },
+        { 3042, PoolsId.StageBoss_04 },
+        { 3047, PoolsId.StageBoss_05 },
+        { 3052, PoolsId.StageBoss_06 },
+        { 3057, PoolsId.StageBoss_07 },
+        { 3062, PoolsId.StageBoss_08 },
+        { 3067, PoolsId.StageBoss_09 },
+        { 3072, PoolsId.StageBoss_10 },
+    };
+
+    public static PoolsId GetBossAsset(int id)
+    {
+        if (bossAssetMap.TryGetValue(id, out PoolsId poolId))
+        {
+            return poolId;
+        }
+        return PoolsId.None;
+    }
 }
 
 public static class ColorDefine

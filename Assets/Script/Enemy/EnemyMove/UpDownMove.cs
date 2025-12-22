@@ -46,8 +46,8 @@ public class UpDownMove : IMove
         var downCenterY = (target.transform.position.y + screenBounds.yMin) / 2;
         upAttackPos = new Vector2(enemy.transform.position.x, upCenterY);
         downAttackPos = new Vector2(enemy.transform.position.x, downCenterY);
-        upPoint = new Vector2(enemy.transform.position.x, screenBounds.yMax + enemyBounds.extents.y+Vector2.up.y);
-        downPoint = new Vector2(enemy.transform.position.x, screenBounds.yMin - enemyBounds.extents.y-Vector2.up.y);
+        upPoint = new Vector2(enemy.transform.position.x, screenBounds.yMax + enemyBounds.extents.y + Vector2.up.y);
+        downPoint = new Vector2(enemy.transform.position.x, screenBounds.yMin - enemyBounds.extents.y - Vector2.up.y);
         isMovingUp = enemy.transform.position.y > upAttackPos.y ? true : false;
     }
 
@@ -60,7 +60,7 @@ public class UpDownMove : IMove
     public void Move(Enemy enemy)
     {
         float step = enemy.speed * Time.deltaTime;
-     
+
         switch (currentPattern)
         {
             case UpDownPattern.ToAttackPoint:
@@ -76,6 +76,7 @@ public class UpDownMove : IMove
                 WaitAtPoint();
                 break;
         }
+        RotateTowardsTarget(enemy);
     }
 
     private void RotateTowardsTarget(Enemy enemy)
@@ -89,7 +90,6 @@ public class UpDownMove : IMove
 
     private void SwitchAttack(Enemy enemy)
     {
-        RotateTowardsTarget(enemy);
         enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
         currentPattern = UpDownPattern.ReturnPoint;
     }

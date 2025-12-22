@@ -93,6 +93,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private CancellationTokenSource disAbleCtr;
     private GameObject bossPartnerObj;
     [SerializeField] private BossPartner bossPartner;
+
+    public EnemyAsset enemyAsset { get; set; }
+    public PoolsId enemyAssetPoolId { get; set; }
+    public Transform rotObj;
     private void Awake()
     {
 
@@ -102,10 +106,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag)?.GetComponent<TextSpawnManager>();
 #endif
         enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag)?.GetComponent<EnemySpawnManager>();
-        // zone = GetComponentInChildren<ZoneSearch>();
         typeEffectiveness = new TypeEffectiveness();
-        // enemyLineRenderer = GetComponent<LineRenderer>();
-        // enemyCollider = GetComponent<CircleCollider2D>();
         enemyPredictionPoisition.Init(this);
         basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
         stageId = FirebaseManager.Instance.PresetData.GetGameData().stageId;
@@ -159,7 +160,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
         if (EnemyTypes.IsBossMonster(data.ID))
         {
-            this.transform.localScale = new Vector3(2f, 2f, 2f);
+            this.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag)?.GetComponent<WaveWindow>();
             bossUi?.ShowBossUI(enemyData.HP);
 
@@ -169,11 +170,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             }
         }
 
-        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector2(1.3f, 1.3f);
+        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 #endif
         ReturnMoveAction = () =>
         {
-            if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID) || (EnemyTypes.IsBossMonster(data.ID)&&data.ID==3067)))
+            if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID) || (EnemyTypes.IsBossMonster(data.ID) && data.ID == 3067)))
             {
 
                 stateMachine.ChangeState(stateMachine.walkState);
@@ -367,7 +368,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
         isChaos = false;
         IsDead = true;
-        this.transform.localScale = new Vector3(0.35f, 0.35f, 1f);
+        this.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
         ReturnMoveAction = null;
         stateMachine.ChangeState(stateMachine.dieState);
         statusEffect.Clear();
