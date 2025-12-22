@@ -2,8 +2,6 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using Firebase.Database;
-using Cysharp.Threading.Tasks;
 public class WaveManager : MonoBehaviour
 {
     public class SpawnPoint
@@ -100,6 +98,8 @@ public class WaveManager : MonoBehaviour
         {
             tutorialManager.InitTutorial(TutorialStep.Stage1);
         }
+
+
     }
 
     private void Start()

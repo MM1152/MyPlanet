@@ -1,8 +1,9 @@
-using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using TMPro;
 using System.Linq;
+using TMPro;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class PlaceTowerWindow : Window
 {
@@ -19,13 +20,12 @@ public class PlaceTowerWindow : Window
 
     [Header("Ÿ���� �Ҹ�ǰ ���������� ���� Ȯ��")]
     [SerializeField] private float towerSpawnPercent; //타워 나올 확률 
-
+    [SerializeField] private TutorialManager tutorialManager;
     private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>(); //선택할 타워 UI들 
     private int selectTowerIndex = -1; //처음 선택된 타워 인덱스
-
+    private bool isStartTutorial = false;
     private List<Tower> availableTowers = new List<Tower>(); //사용 가능한 타워들
     private List<ConsumalbeTable.Data> availableConsumables = new List<ConsumalbeTable.Data>(); //사용 가능한 소모품들
-
 
 #if DEBUG_MODE
     [Header("�̰� ���� Ÿ�� ID �� �ֱ�")]
@@ -37,7 +37,7 @@ public class PlaceTowerWindow : Window
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
-
+        isStartTutorial = false;
         for (int i = 0; i < selectTowerUIRoot.childCount; i++)
         {
             SelectTowerUI obj = selectTowerUIRoot.GetChild(i).GetComponentInChildren<SelectTowerUI>();
@@ -57,18 +57,27 @@ public class PlaceTowerWindow : Window
         if (towerData != null)
         {
             towerManager.PlaceTower(towerData);
+
+            if (!isStartTutorial && FirebaseManager.Instance.PresetData.GetGameData().stageId == 2 && !FirebaseManager.Instance.UserData.isClearStage2Tutorial)
+            {
+                isStartTutorial = true;
+                tutorialManager.InitTutorial(TutorialStep.Stage2);
+            }
         }
         else
         {
             var consumData = selectTowerUIs[selectTowerIndex].GetCosumaableData();
             consumableManager.SetConsumable(consumData);
         }
+
         manager.Close();
     }
 
     public override void Open()
     {
-        if (Variable.IsTutorialActive) return;
+        if (Variable.IsTutorialActive) 
+            return;
+
         selectTowerIndex = -1;
         levelText.text = $"Lv. {towerManager.CurrentLevel}";
 
@@ -164,6 +173,8 @@ public class PlaceTowerWindow : Window
         {
             selectTowerUIs[i].ResetOutline();
         }
+
+
         base.Close();
     }
 

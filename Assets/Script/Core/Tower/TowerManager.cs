@@ -38,9 +38,17 @@ public class TowerManager : MonoBehaviour
     public bool stopAttack;
     public bool disAbleLevelUp;
 #endif
+    private bool init = false;
 
     protected virtual void Awake()
     {
+        Init();
+    }
+
+    protected virtual void Init()
+    {
+        if (init) return;
+
         levelUpExp = DataTableManager.BasePlanetLevelTable.GetRequiredExp(currentLevel + 1);
         windowManager = GameObject.FindGameObjectWithTag(TagIds.WindowManagerTag)?.GetComponent<WindowManager>();
         presetGameData = FirebaseManager.Instance.PresetData.GetGameData().data;
@@ -56,6 +64,8 @@ public class TowerManager : MonoBehaviour
             var data = DataTableManager.TowerTable.Get(towerId);
             AddTower(data, i + 1);
         }
+
+        init = true;
     }
 
     private void Start()
@@ -307,6 +317,7 @@ public class TowerManager : MonoBehaviour
 
     public List<Tower> GetAllTower()
     {
+        Init();
         return towers;
     }
 

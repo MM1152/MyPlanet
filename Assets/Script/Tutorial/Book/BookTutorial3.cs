@@ -37,5 +37,6 @@ public class BookTutorial3 : Tutorial
     {
         exitButton.onClick.RemoveListener(OnClickExitButton);
         manager.SetNextTutorial();
+        manager.InitTutorial(TutorialStep.Book1);
     }
 }

@@ -36,6 +36,7 @@ public abstract class Tutorial
         manager.SetTutorialBackGround(backGroundRayCastAble);
         manager.CanPlayNextTutorial = canPlayNextTutorial;
         callback?.Invoke();
+        callback = null;
         sb.Clear();
     }
 }

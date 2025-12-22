@@ -14,6 +14,7 @@ public enum TutorialStep
     PickUp2,
     Book,
     Book1,
+    Stage2,
 }
 
 public class TutorialManager : MonoBehaviour
@@ -39,7 +40,8 @@ public class TutorialManager : MonoBehaviour
         { TutorialStep.PickUp, new List<Tutorial> { new RandomPickUpTutorial1() , new RandomPickUpTutorial2() , new RandomPickUpTutorial3() } },
         { TutorialStep.PickUp2, new List<Tutorial> { new TowerRandomPickUp1() , new TowerRandomPickUp2() } },
         { TutorialStep.Book, new List<Tutorial> { new BookTutorial1() , new BookTutorial2(), new BookTutorial3() } },
-        { TutorialStep.Book1, new List<Tutorial> { new BookTutorial1() , new BookTutorial2(), new BookTutorial3() } },
+        { TutorialStep.Book1, new List<Tutorial> { new BookTutorial4() , new BookTutorial5()}},
+        { TutorialStep.Stage2, new List<Tutorial> { new Stage2Tutorial() }},
     };
 
     [SerializeField] private List<TutorialDisAbleButtons> tutorialDisableButtons;
@@ -54,6 +56,10 @@ public class TutorialManager : MonoBehaviour
 
     private bool init = false;
 
+    private void Awake()
+    {
+        Init();
+    }
 
     private void Init()
     {
@@ -66,6 +72,7 @@ public class TutorialManager : MonoBehaviour
         }
 
         init = true;
+        gameObject.SetActive(false);
     }
 
 
@@ -111,7 +118,7 @@ public class TutorialManager : MonoBehaviour
         }
         tutorialCtr = new CancellationTokenSource();
 
-        SetActiveTouchPanelPosition(false);
+        SetActiveTouchPanel(false);
         SetActiveTutorialTextArea(false);
         SetActiveTutorialTextEndImage(false);
         tutorialTouchPanel.transform.parent = transform;
@@ -185,7 +192,7 @@ public class TutorialManager : MonoBehaviour
         tutorialTouchPanel.transform.localPosition = Vector3.zero;
     }
 
-    public void SetActiveTouchPanelPosition(bool active)
+    public void SetActiveTouchPanel(bool active)
     {
         tutorialTouchPanel.gameObject.SetActive(active);
     }

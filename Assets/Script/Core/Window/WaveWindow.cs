@@ -13,6 +13,13 @@ public class WaveWindow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bosscurrentHpText;
     [SerializeField] private TextMeshProUGUI bossNameText;
     [SerializeField] private TextMeshProUGUI bossTotalHpText;
+    [SerializeField] private Image terraformingHightlightImage;
+
+    public Image TerraformingHighlightImage => terraformingHightlightImage;
+    private void Awake()
+    {
+        terraformingHightlightImage.gameObject.SetActive(false);
+    }
 
     public void SetWaveText(int waveNumber)
     {
