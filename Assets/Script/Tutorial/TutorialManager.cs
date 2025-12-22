@@ -22,6 +22,7 @@ public class TutorialManager : MonoBehaviour
 {
     [SerializeField] private TutorialStep currentTutorialStep;
 
+
     [Header("Tutorial Text")]
     [SerializeField] private List<Transform> tutorialTextPositions;
     [SerializeField] private GameObject tutorialTextPanel;
@@ -30,7 +31,9 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private Image tutorialTouchPanel;
 
     private List<Tutorial> curTutorialList;
+    private AudioSource audioSource;
 
+    public bool Skip { get; set; }
     public float rotateSpeed = 50f;
     public TextMeshProUGUI tutorialText;
 
@@ -57,11 +60,12 @@ public class TutorialManager : MonoBehaviour
     private CancellationTokenSource tutorialCtr;
 
     private bool init = false;
-
+    private float textSkipDelay = 0.05f;
     private void Awake()
     {
         if(!init)
             Init();
+
     }
 
     private void Init()
@@ -76,6 +80,7 @@ public class TutorialManager : MonoBehaviour
 
         init = true;
         gameObject.SetActive(false);
+        audioSource = GetComponent<AudioSource>();
     }
 
 
@@ -108,8 +113,10 @@ public class TutorialManager : MonoBehaviour
 
     public void SetNextTutorial()
     {
-        tutorialTouchPanel.transform.localScale = Vector3.one;
+        textSkipDelay = 0.05f;
 
+        tutorialTouchPanel.transform.localScale = Vector3.one;
+        StopSound();
         if (curIdx >= curTutorialList.Count)
         {
             EndTutorials();
@@ -138,6 +145,17 @@ public class TutorialManager : MonoBehaviour
         if(CanPlayNextTutorial && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
             SetNextTutorial();
+        }
+
+        if(curTutorial != null && curTutorial.isPlayTexts)
+        {
+            textSkipDelay -= Time.unscaledDeltaTime;
+        }
+
+        if (textSkipDelay < 0 && !Skip && tutorialTextPanel.activeSelf && !GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
+        {
+            Skip = true;
+            textSkipDelay = 0.05f;
         }
 
         curTutorial?.TutorialUpdate();
@@ -228,6 +246,17 @@ public class TutorialManager : MonoBehaviour
     {
         tutorialCtr?.Cancel();
         tutorialCtr?.Dispose();
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+
+    public void StopSound()
+    {
+        audioSource.Stop();
     }
 }
 

@@ -15,7 +15,6 @@ public class Stage1Tutorial5 : Tutorial
         warningWindow = windowManager.GetWindow(WindowIds.WarringWindow) as WarringWindow;
 
         warningWindow.closeEvent += OnCloseEvent;
-
         isFirstUpdate = false;
     }
 
@@ -35,7 +34,12 @@ public class Stage1Tutorial5 : Tutorial
 
     private void OnCloseEvent()
     {
-        SetTextWithAnimation(msg).Forget();
+        var clip1 = DataTableManager.SoundsTable.Get(1, 7);
+        var clip2 = DataTableManager.SoundsTable.Get(1, 8);
+        var clip3 = DataTableManager.SoundsTable.Get(1, 9);
+
+        var combineClip = Utils.CombineMultipleAudioClips(new AudioClip[] { clip1, clip2, clip3 });
+        SetTextWithAnimation(msg , combineClip).Forget();
         warningWindow.closeEvent -= OnCloseEvent;
         Time.timeScale = 0f;
     }

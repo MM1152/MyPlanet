@@ -37,7 +37,7 @@ public class TowerRandomPickUp2 : Tutorial
         if (!isFirstUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
             isFirstUpdate = true;
-            SetTextWithAnimation(msgs[1], false).Forget();
+            SetTextWithAnimation(msgs[1], backGroundRayCastAble : false).Forget();
         }
         else if (isFirstUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {

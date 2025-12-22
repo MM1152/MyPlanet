@@ -20,8 +20,14 @@ public class Stage1Tutorial1 : Tutorial
         mainGameSceneCanvas = GameObject.FindWithTag(TagIds.MainGameSceneCanvas).GetComponent<Canvas>();
         windowManager = GameObject.FindWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
 
+        AudioClip clip1 = DataTableManager.SoundsTable.Get(1, 0);
+        AudioClip clip2 = DataTableManager.SoundsTable.Get(1, 1);
+
+        AudioClip combineClip = Utils.CombineAudioClips(clip1, clip2);
+
+
         string msg = "스테이지 입장 시\n공격형 타워 하나를 선택할 수 있습니다.\n활성화 시킬 타워를 선택하세요";
-        SetTextWithAnimation(msg, false).Forget();
+        SetTextWithAnimation(msg, combineClip,  backGroundRayCastAble : false).Forget();
         Time.timeScale = 0f;
     }
 
@@ -56,6 +62,7 @@ public class Stage1Tutorial1 : Tutorial
 
                 manager.SetTouchPlanelParent(selectTowerUIs[1].transform);
             }
+            manager.SetActiveTutorialTextArea(false);
             isFirstUpdate = true;
         }
     }

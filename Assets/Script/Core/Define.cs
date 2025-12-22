@@ -334,6 +334,7 @@ public static class TagIds
 public static class DataTableIds
 {
     public static readonly string EnemyTable = "EnemyTable";
+    public static readonly string SoundTable = "SoundsTable";
     public static readonly string CrewRankTable = "CrewRankTable";
     public static readonly string TowerTable = "TowerTable";
     public static readonly string UtilTowerTable = "UtilTowerTable";

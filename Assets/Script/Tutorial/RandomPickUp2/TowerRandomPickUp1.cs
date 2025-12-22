@@ -52,7 +52,7 @@ public class TowerRandomPickUp1 : Tutorial
     {
         manager.SetTutorialBackGround(true);
         manager.SetTouchPlanelParent(pickoneButton.transform);
-        SetTextWithAnimation(msg, false).Forget();
+        SetTextWithAnimation(msg,  backGroundRayCastAble :false).Forget();
     }
 
     private void OnClickPickUpButton()
