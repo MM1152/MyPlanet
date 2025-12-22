@@ -46,7 +46,7 @@ public class PresetViewer : MonoBehaviour
 
         selectPresetButton.onClick.AddListener(() =>
         {
-            OnChangeIndex?.Invoke(index);
+            OnClickSelectButton();
         });
     }
 
@@ -84,6 +84,11 @@ public class PresetViewer : MonoBehaviour
         {
             selectPresetButton.image.sprite = disableSprite;
         }
+    }
+
+    public void OnClickSelectButton()
+    {
+        OnChangeIndex?.Invoke(index);
     }
 }
     

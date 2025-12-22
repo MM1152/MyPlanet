@@ -20,7 +20,7 @@ public class StageLayout : MonoBehaviour
     public int StageIdx => stageIdx;
     private event Action<int> onClickArrow;
 
-    public void Init(int stageIdx , Action<int> callback)
+    public void Init(int stageIdx, Action<int> callback)
     {
         stageNameText.text = $"{stageIdx} 스테이지";
         stageDescription.text = "데이터 연결 필요";
@@ -28,9 +28,16 @@ public class StageLayout : MonoBehaviour
         onClickArrow = callback;
         this.stageIdx = stageIdx;
 
-        leftArrowButton.onClick.AddListener(() => onClickArrow?.Invoke(stageIdx - 1));
-        rightArrowButton.onClick.AddListener(() => onClickArrow?.Invoke(stageIdx + 1));
+        leftArrowButton.onClick.AddListener(() => {
+            if (!FirebaseManager.Instance.UserData.isClearFirstTutorial) return;
+            onClickArrow?.Invoke(stageIdx - 1);
+        });
+        rightArrowButton.onClick.AddListener(() => {
+            if (!FirebaseManager.Instance.UserData.isClearFirstTutorial) return;
+            onClickArrow?.Invoke(stageIdx + 1);
+        });
     }
+
 
     public void UpdateStageLayout(bool activeLeftArrow , bool activeRightArrow , bool active)
     {

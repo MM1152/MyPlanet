@@ -161,6 +161,7 @@ public class UserData : JsonSerialized
     public bool isClearRandomPickUpTutorial;
     public bool isClearBookTutorial;
     public bool isClearStage1Tutorial;
+    public bool isClearFirstTutorial;
     public bool isClearStage2Tutorial;
     public int version;
 

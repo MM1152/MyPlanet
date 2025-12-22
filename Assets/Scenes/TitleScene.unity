@@ -18701,7 +18701,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7759458014845286971, guid: 752c97d0cb1aa4948ba10b8979a6efe8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000030517578
+      value: 0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 7759458014930852559, guid: 752c97d0cb1aa4948ba10b8979a6efe8, type: 3}
       propertyPath: m_SizeDelta.x
@@ -79518,6 +79518,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -756
       objectReference: {fileID: 0}
+    - target: {fileID: 5905534837259996872, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5905534837259996872, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 6156753110297763210, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -79600,23 +79608,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
       propertyPath: tutorialDisableButtons.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
-      propertyPath: tutorialDisableButtons.Array.data[0].tutorialStep
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
-      propertyPath: tutorialDisableButtons.Array.data[1].tutorialStep
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
-      propertyPath: tutorialDisableButtons.Array.data[2].tutorialStep
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
-      propertyPath: tutorialDisableButtons.Array.data[3].tutorialStep
+      propertyPath: tutorialDisableButtons.Array.data[0].tutorialStep
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: tutorialDisableButtons.Array.data[1].tutorialStep
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: tutorialDisableButtons.Array.data[2].tutorialStep
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: tutorialDisableButtons.Array.data[3].tutorialStep
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: tutorialDisableButtons.Array.data[4].tutorialStep
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
       propertyPath: tutorialDisableButtons.Array.data[0].disAbleButtons.Array.size
@@ -79633,6 +79645,10 @@ PrefabInstance:
     - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
       propertyPath: tutorialDisableButtons.Array.data[3].disAbleButtons.Array.size
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: tutorialDisableButtons.Array.data[4].disAbleButtons.Array.size
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
       propertyPath: 'tutorialDisableButtons.Array.data[0].disAbleButtons.Array.data[0]'
@@ -79778,6 +79794,30 @@ PrefabInstance:
       propertyPath: 'tutorialDisableButtons.Array.data[3].disAbleButtons.Array.data[9]'
       value: 
       objectReference: {fileID: 949149429}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: 'tutorialDisableButtons.Array.data[4].disAbleButtons.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7246281626171843685}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: 'tutorialDisableButtons.Array.data[4].disAbleButtons.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1000515226}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: 'tutorialDisableButtons.Array.data[4].disAbleButtons.Array.data[2]'
+      value: 
+      objectReference: {fileID: 61021455}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: 'tutorialDisableButtons.Array.data[4].disAbleButtons.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1229473620}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: 'tutorialDisableButtons.Array.data[4].disAbleButtons.Array.data[4]'
+      value: 
+      objectReference: {fileID: 363626064}
+    - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
+      propertyPath: 'tutorialDisableButtons.Array.data[4].disAbleButtons.Array.data[5]'
+      value: 
+      objectReference: {fileID: 1515077677}
     - target: {fileID: 9154187340399816592, guid: 98491a21d0243c8458e43af4b1cafe71, type: 3}
       propertyPath: 'tutorialDisableButtons.Array.data[2].disAbleButtons.Array.data[10]'
       value: 

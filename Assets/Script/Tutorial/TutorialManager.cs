@@ -10,6 +10,7 @@ public enum TutorialStep
     None,
     Preset,
     Stage1,
+    Stage1Enter,
     PickUp,
     PickUp2,
     Book,
@@ -36,6 +37,7 @@ public class TutorialManager : MonoBehaviour
     private Dictionary<TutorialStep, List<Tutorial>> tutorials = new Dictionary<TutorialStep, List<Tutorial>>()
     {
         { TutorialStep.Preset, new List<Tutorial> { new PresetWindowTutorial(), new PresetWindowTutorial2(), new PresetWindowTutorial3() } },
+        { TutorialStep.Stage1Enter, new List<Tutorial> { new Stage1Enter1(), new Stage1Enter2(), new Stage1Enter3()} },
         { TutorialStep.Stage1, new List<Tutorial> { new Stage1Tutorial1()  , new Stage1Tutorial2(), new Stage1Tutorial3(), new Stage1Tutorial4() , new Stage1Tutorial5()} },
         { TutorialStep.PickUp, new List<Tutorial> { new RandomPickUpTutorial1() , new RandomPickUpTutorial2() , new RandomPickUpTutorial3() } },
         { TutorialStep.PickUp2, new List<Tutorial> { new TowerRandomPickUp1() , new TowerRandomPickUp2() } },
@@ -58,7 +60,8 @@ public class TutorialManager : MonoBehaviour
 
     private void Awake()
     {
-        Init();
+        if(!init)
+            Init();
     }
 
     private void Init()
@@ -105,6 +108,8 @@ public class TutorialManager : MonoBehaviour
 
     public void SetNextTutorial()
     {
+        tutorialTouchPanel.transform.localScale = Vector3.one;
+
         if (curIdx >= curTutorialList.Count)
         {
             EndTutorials();
@@ -121,7 +126,7 @@ public class TutorialManager : MonoBehaviour
         SetActiveTouchPanel(false);
         SetActiveTutorialTextArea(false);
         SetActiveTutorialTextEndImage(false);
-        tutorialTouchPanel.transform.parent = transform;
+        tutorialTouchPanel.transform.SetParent(transform);
 
         curTutorial?.TutorialExit();
         curTutorial = curTutorialList[curIdx++];
@@ -188,8 +193,9 @@ public class TutorialManager : MonoBehaviour
 
     public void SetTouchPlanelParent(Transform target)
     {
-        tutorialTouchPanel.transform.parent = target;
+        tutorialTouchPanel.transform.SetParent(target , true);
         tutorialTouchPanel.transform.localPosition = Vector3.zero;
+        tutorialTouchPanel.transform.localScale = Vector3.one;
     }
 
     public void SetActiveTouchPanel(bool active)

@@ -15,7 +15,7 @@ public class WindowManager : MonoBehaviour
     private Dictionary<int, Window> windowTable = new Dictionary<int, Window>();
     
 
-    private void OnEnable()
+    private void Awake()
     {
         foreach (var window in windows)
         {

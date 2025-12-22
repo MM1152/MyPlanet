@@ -11,6 +11,8 @@ public class TitleStageSelectWindow : Window
     [SerializeField] private Transform stageLayoutRoot;
     [SerializeField] private TutorialManager tutorialManager;
 
+    public Button SelectButton => selectButton;
+
     private List<StageLayout> stageLayouts = new List<StageLayout>();
     private StageLayout currentStageLayout;
     private int currentSelectStage = 0;
@@ -30,17 +32,17 @@ public class TitleStageSelectWindow : Window
             {
                 FirebaseManager.Instance.PresetData.SetGameDataStageId(currentStageLayout.StageIdx);
 
-                if(currentStageLayout.StageIdx == 1)
-                {
-                    FirebaseManager.Instance.PresetData.SetGameData(null);
-                    LoadingScene.sceneId = SceneIds.GameScene;
-                    SceneManager.LoadScene(SceneIds.LoadingScene);
-                    return;
-                }
+                //if(currentStageLayout.StageIdx == 1)
+                //{
+                //    FirebaseManager.Instance.PresetData.SetGameData(null);
+                //    LoadingScene.sceneId = SceneIds.GameScene;
+                //    SceneManager.LoadScene(SceneIds.LoadingScene);
+                //    return;
+                //}
 
                 manager.Open(WindowIds.TitlePresetWindow);
 
-                if(!FirebaseManager.Instance.UserData.isClearPresetTutorial)
+                if(FirebaseManager.Instance.UserData.isClearFirstTutorial && !FirebaseManager.Instance.UserData.isClearPresetTutorial)
                     tutorialManager.InitTutorial(TutorialStep.Preset);
             }
         });

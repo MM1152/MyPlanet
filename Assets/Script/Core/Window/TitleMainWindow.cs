@@ -20,6 +20,9 @@ public class TitleMainWindow : Window
     [Header("References")]
     [SerializeField] private TutorialManager tutorialManager;
 
+    public Button SelectStageButton => selectStageButton;
+    public Button GachaButton => randomPickUpButton;
+
     public override void Close()
     {
         base.Close();
@@ -67,6 +70,12 @@ public class TitleMainWindow : Window
                 tutorialManager.InitTutorial(TutorialStep.PickUp);
             }
         }
+
+        if (!FirebaseManager.Instance.UserData.isClearFirstTutorial)
+        {
+            tutorialManager.InitTutorial(TutorialStep.Stage1Enter);
+        }
+
     }
 
     private void OnChangeGoldValue(object sender , ValueChangedEventArgs args)

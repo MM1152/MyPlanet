@@ -37,19 +37,7 @@ public class PresetData
 
     public void SetGameData(Data InGameData)
     {
-        if (inGameData.stageId == 1)
-        {
-            Data tutorialData = new Data();
-            tutorialData.PlanetId = 1001;
-            tutorialData.TowerId[0] = 2003;
-            tutorialData.TowerId[1] = 2015;
-            tutorialData.TowerId[2] = 2017;
-            inGameData.data = tutorialData;
-        }
-        else
-        {
-            inGameData.data = InGameData;
-        }
+        inGameData.data = InGameData;
     } 
 
     public InGameData GetGameData()

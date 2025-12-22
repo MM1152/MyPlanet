@@ -10,6 +10,7 @@ public class TitleScene : MonoBehaviour
 
     private void Start()
     {
+
         foreach(var bnt in sideBarButtons)
         {
             bnt.onClick.AddListener(OnClickSideBarButton);

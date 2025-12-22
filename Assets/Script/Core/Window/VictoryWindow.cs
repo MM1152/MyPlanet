@@ -86,6 +86,7 @@ public class VictoryWindow : Window
             if (isClear && !FirebaseManager.Instance.UserData.isClearStage1Tutorial)
             {
                 FirebaseManager.Instance.UserData.isClearStage1Tutorial = true;
+                FirebaseManager.Instance.UserData.isClearFirstTutorial = true;
                 var path = DataBasePaths.UserPath + FirebaseManager.Instance.UserId;
                 tasks.Add(FirebaseManager.Instance.UserData.SaveAsync(path, FirebaseManager.Instance.UserData));
             }

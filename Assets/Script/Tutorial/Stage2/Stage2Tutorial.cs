@@ -49,6 +49,9 @@ public class Stage2Tutorial : Tutorial
         if(isSecondUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
             manager.SetNextTutorial();
+            FirebaseManager.Instance.UserData.isClearStage2Tutorial = true;
+            var path = DataBasePaths.UserPath + FirebaseManager.Instance.UserId;
+            FirebaseManager.Instance.UserData.SaveAsync(path , FirebaseManager.Instance.UserData).Forget();
         }
     }
 

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using JetBrains.Annotations;
 
 public class TitlePresetWindow : Window
 {
@@ -11,6 +12,8 @@ public class TitlePresetWindow : Window
     [SerializeField] private Transform presetDataRoot;
     [SerializeField] private Button gameStartButton;
     [SerializeField] private PopupManager popupManger;
+
+    public Button GameStartButton => gameStartButton;
 
     private List<PresetViewer> presetViewers = new List<PresetViewer>();
     private int currentSelectPresetIndex = -1;
@@ -55,7 +58,6 @@ public class TitlePresetWindow : Window
 
     private void ChangeSelectPresetIndex(int changeIdx)
     {
-
         if (currentSelectPresetIndex != -1)
         {
             presetViewers[currentSelectPresetIndex].UpdateSelectButton(false);
@@ -66,11 +68,30 @@ public class TitlePresetWindow : Window
 
     public override void Open()
     {
+        if(FirebaseManager.Instance.PresetData.GetGameData().stageId == 1)
+        {
+            PresetData.Data tempData = new PresetData.Data();
+            tempData.TowerId = new List<int>() { 2003 , 2015 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 , -1 , -1};
+            tempData.PlanetId = 1001;
+
+            presetViewers[0].UpdatePreset(tempData);
+            presetViewers[0].UpdateSelectButton(true);
+            presetViewers[0].OnClickSelectButton();
+
+            for(int i = 1; i < presetViewers.Count; i++)
+            {
+                Destroy(presetViewers[i].gameObject);
+            }
+        }
         base.Open();
     }
 
     public override void Close()
     {
+        if(FirebaseManager.Instance.PresetData.GetGameData().stageId == 1)
+        {
+            UpdatePreset();
+        }
         base.Close();
     }
 
@@ -81,6 +102,7 @@ public class TitlePresetWindow : Window
 
     private void UpdatePreset()
     {
+
         for(int i = 0; i < presetViewers.Count; i++)
         {
             Destroy(presetViewers[i].gameObject);
