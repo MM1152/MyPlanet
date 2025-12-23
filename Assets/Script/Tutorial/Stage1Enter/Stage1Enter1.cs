@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,8 @@ public class Stage1Enter1 : Tutorial
             interactionButton = mainWindow.SelectStageButton;
             interactionButton.onClick.AddListener(OnClickInteractionButton);
         }
-        SetTextWithAnimation(msg, backGroundRayCastAble: false, callback : () => manager.SetTouchPlanelParent(interactionButton.transform)).Forget();
+        var clip = GetCombineClip(new (int type, int id)[] { (5, 0), (5, 1), (5, 2) });
+        SetTextWithAnimation(msg, clip, backGroundRayCastAble: false, callback : () => manager.SetTouchPlanelParent(interactionButton.transform)).Forget();
     }
     public override void TutorialExit()
     {
