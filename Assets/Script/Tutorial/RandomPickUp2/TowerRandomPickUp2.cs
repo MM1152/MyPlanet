@@ -37,7 +37,8 @@ public class TowerRandomPickUp2 : Tutorial
         if (!isFirstUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
             isFirstUpdate = true;
-            SetTextWithAnimation(msgs[1], false).Forget();
+            var clip = GetCombineClip(2, 9, 2, 10);
+            SetTextWithAnimation(msgs[1], backGroundRayCastAble : false).Forget();
         }
         else if (isFirstUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
@@ -48,7 +49,8 @@ public class TowerRandomPickUp2 : Tutorial
 
     private void OnClickOkButton()
     {
+        var clip = GetClip(2, 8);
         manager.SetTutorialBackGround(true);
-        SetTextWithAnimation(msgs[0]).Forget();
+        SetTextWithAnimation(msgs[0] , clip).Forget();
     }
 }

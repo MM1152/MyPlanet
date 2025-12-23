@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,8 +25,10 @@ public class Stage1Tutorial4 : Tutorial
 
         Variable.IsSpawnActive = false;
 
+        var clip = DataTableManager.SoundsTable.Get(1,6);
+
         towerManager.SetLevel(2);
-        SetTextWithAnimation(msg , backGroundRayCastAble : false).Forget();
+        SetTextWithAnimation(msg , clip, backGroundRayCastAble : false).Forget();
         WaitForBossStageAsync().Forget();
     }
 

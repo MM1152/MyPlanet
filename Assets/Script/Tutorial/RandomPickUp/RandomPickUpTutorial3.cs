@@ -35,7 +35,8 @@ public class RandomPickUpTutorial3 : Tutorial
 
     private void OnClickOkButton()
     {
-        SetTextWithAnimation(msg).Forget();
+        
+        SetTextWithAnimation(msg , GetClip(2, 5)).Forget();
         manager.SetTutorialBackGround(true);
     }
 }

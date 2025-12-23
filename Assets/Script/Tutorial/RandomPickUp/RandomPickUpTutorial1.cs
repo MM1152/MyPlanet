@@ -20,9 +20,13 @@ public class  RandomPickUpTutorial1 : Tutorial
             gachaTabButton.onClick.AddListener(OnClickGachaTabButton);
         }
 
+        var clip = DataTableManager.SoundsTable.Get(2, 0);
+        var clip1 = DataTableManager.SoundsTable.Get(2, 1);
+
+        var combineClip = Utils.CombineAudioClips(clip, clip1);
         manager.SetTouchPlanelParent(gachaTabButton.transform);
 
-        SetTextWithAnimation(msg, backGroundRayCastAble: false).Forget();
+        SetTextWithAnimation(msg, combineClip,  backGroundRayCastAble: false).Forget();
     }
 
     public override void TutorialExit()

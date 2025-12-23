@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -10,6 +11,13 @@ public class PresetWindowTutorial3 : Tutorial
     private string msg = null;
 
     private List<int> stringTableIds = new List<int>() { 6244, 6245, 6246, 6247 };
+    private List<Func<AudioClip>> audiooClips = new List<Func<AudioClip>>() 
+    { 
+        () => Utils.CombineMultipleAudioClips(new AudioClip[] { DataTableManager.SoundsTable.Get(4, 5), DataTableManager.SoundsTable.Get(4, 4), DataTableManager.SoundsTable.Get(4, 6) }),
+        () => Utils.CombineAudioClips(DataTableManager.SoundsTable.Get(4, 7), DataTableManager.SoundsTable.Get(4, 8)),
+        () => DataTableManager.SoundsTable.Get(4, 11),
+        () => Utils.CombineAudioClips(DataTableManager.SoundsTable.Get(4, 9), DataTableManager.SoundsTable.Get(4, 10)),
+    };
     private int stringTableIndex = 0;
     public override void TutorialEnter()
     {
@@ -22,10 +30,8 @@ public class PresetWindowTutorial3 : Tutorial
 
         manager.SetTextAreaPosition(3);
 
-        msg = DataTableManager.StringTable.Get(stringTableIds[stringTableIndex++]);
-        SetTextWithAnimation(msg, backGroundRayCastAble: false).Forget();
-
-        msg = DataTableManager.StringTable.Get(stringTableIds[stringTableIndex++]);
+        msg = DataTableManager.StringTable.Get(stringTableIds[stringTableIndex]);
+        SetTextWithAnimation(msg, audiooClips[stringTableIndex++]?.Invoke() , backGroundRayCastAble: false).Forget();
 
         Debug.Log("Start Tutorial Preset 3");
     }
@@ -35,19 +41,18 @@ public class PresetWindowTutorial3 : Tutorial
         {
             stringTableIndex++;
 
-            if (stringTableIndex > stringTableIds.Count)
+            if (stringTableIndex >= stringTableIds.Count)
             {
                 msg = null;
                 manager.SetNextTutorial();
                 return;
             }
-            SetTextWithAnimation(msg, backGroundRayCastAble: true).Forget();
-            
-
-            if(stringTableIndex < stringTableIds.Count)
+            if (stringTableIndex < stringTableIds.Count)
             {
                 msg = DataTableManager.StringTable.Get(stringTableIds[stringTableIndex]);
             }
+
+            SetTextWithAnimation(msg, audiooClips[stringTableIndex]?.Invoke() , backGroundRayCastAble: true).Forget();
         }
     }  
     public override void TutorialExit()

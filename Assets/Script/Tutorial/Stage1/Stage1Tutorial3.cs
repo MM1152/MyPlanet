@@ -18,7 +18,13 @@ public class Stage1Tutorial3 : Tutorial
     {
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag).GetComponent<WaveManager>();
         isFirstUpdate = false;
-        SetTextWithAnimation(msgs[0], backGroundRayCastAble : false).Forget();
+        var clip1 = DataTableManager.SoundsTable.Get(1, 4);
+        var clip2 = DataTableManager.SoundsTable.Get(1, 5);
+        var combineClip = Utils.CombineAudioClips(clip1, clip2);
+
+        manager.PlaySound(combineClip);
+
+        SetTextWithAnimation(msgs[0],  backGroundRayCastAble : false).Forget();
         WaitForClearAllEnemy().Forget();
     }
 
@@ -42,7 +48,7 @@ public class Stage1Tutorial3 : Tutorial
 
     private async UniTask WaitForClearAllEnemy()
     {
-        await UniTask.WaitUntil(() => waveManager.waveClearCount == 0 , timing : PlayerLoopTiming.PreUpdate);
+        await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex == 5 , timing : PlayerLoopTiming.PreUpdate);
         manager.SetNextTutorial();
     }
 }

@@ -25,7 +25,8 @@ public class BookTutorial2 : Tutorial
         }
 
         manager.SetTextAreaPosition(3);
-        SetTextWithAnimation(msgs[0], backGroundRayCastAble : false).Forget();   
+        var clip = GetClip(2,12);
+        SetTextWithAnimation(msgs[0], clip, backGroundRayCastAble : false).Forget();   
     }
 
     public override void TutorialExit()
@@ -45,7 +46,8 @@ public class BookTutorial2 : Tutorial
         if(!isFirstUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
             isFirstUpdate = true;
-            SetTextWithAnimation(msgs[1], backGroundRayCastAble : true, callback: EndTextAniamtionCallBack).Forget();
+            var clip = GetClip(2, 14);
+            SetTextWithAnimation(msgs[1],  clip, backGroundRayCastAble : true, callback: EndTextAniamtionCallBack).Forget();
         }
     }
 

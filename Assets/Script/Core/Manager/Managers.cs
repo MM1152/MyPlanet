@@ -1,7 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 public class Managers
 {
     private static Managers instance;
@@ -26,6 +29,8 @@ public class Managers
     private ObjectPoolManager objectPoolManager;
     private GameObject loadingProgress;
     private bool init;
+
+    private CancellationTokenSource ctr;
 
     private async UniTaskVoid Init()
     {
@@ -62,33 +67,85 @@ public class Managers
 
     public async UniTask<(T1 , T2)> WaitForLoadingAsync<T1 , T2>(UniTask<(T1 , T2)> task)
     {
+        ctr = new CancellationTokenSource();
         loadingProgress.SetActive(true);
-        var data = await UniTask.WhenAll(task);
-        loadingProgress.SetActive(false);
+        try
+        {
+            var data = await UniTask.WhenAll(task).AttachExternalCancellation(ctr.Token);
+            loadingProgress.SetActive(false);
+            ctr.Dispose();
 
-        return data[0];
+            return data[0];
+        }
+        catch (OperationCanceledException)
+        {
+            loadingProgress.SetActive(false);
+            ctr.Dispose();
+            SceneManager.LoadScene(SceneIds.LoadingScene);
+            return default((T1, T2));
+        }
     }
 
     public async UniTask WaitForLoadingAsync(List<UniTask> task)
     {
+        ctr = new CancellationTokenSource();
+        ctr.CancelAfterSlim(10000);
         loadingProgress.SetActive(true);
-        await UniTask.WhenAll(task);
-        loadingProgress.SetActive(false);
+        try
+        {
+            await UniTask.WhenAll(task).AttachExternalCancellation(ctr.Token);
+            loadingProgress.SetActive(false);
+            ctr.Dispose();
+        }
+        catch (OperationCanceledException)
+        {
+            loadingProgress.SetActive(false);
+            ctr.Dispose();
+            SceneManager.LoadScene(SceneIds.LoadingScene);
+            return;
+        }
     }
 
     public async UniTask WaitForLoadingAsync(UniTask task)
     {
+        ctr = new CancellationTokenSource();
+        ctr.CancelAfterSlim(10000);
         loadingProgress.SetActive(true);
-        await UniTask.WhenAll(task);
-        loadingProgress.SetActive(false);
+        try
+        {
+            await UniTask.WhenAll(task).AttachExternalCancellation(ctr.Token);
+            loadingProgress.SetActive(false);
+            ctr.Dispose();
+        }
+        catch (OperationCanceledException)
+        {
+            loadingProgress.SetActive(false);
+            ctr.Dispose();
+            SceneManager.LoadScene(SceneIds.LoadingScene);
+            return;
+        }
     }
 
     public async UniTask<T> WaitForLoadingAsync<T>(UniTask<T> task)
     {
+        ctr = new CancellationTokenSource();
+        ctr.CancelAfterSlim(10000);
         loadingProgress.SetActive(true);
-        var data = await UniTask.WhenAll(task);
-        loadingProgress.SetActive(false);
+        try
+        {
+            var data = await UniTask.WhenAll(task).AttachExternalCancellation(ctr.Token);
+            loadingProgress.SetActive(false);
+            ctr.Dispose();
 
-        return data[0];
+            return data[0];
+        }
+        catch (OperationCanceledException)
+        {
+            loadingProgress.SetActive(false);
+            ctr.Dispose();
+            SceneManager.LoadScene(SceneIds.LoadingScene);
+            return default(T);
+        }
+
     }
 }   

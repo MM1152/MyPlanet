@@ -30,7 +30,9 @@ public class Stage2Tutorial : Tutorial
         {
             warringWindow.closeEvent += CloseEvent;
         }
-        SetTextWithAnimation(msg[0] , backGroundRayCastAble : false).Forget();
+
+        var clip = GetCombineClip(3, 0, 3, 1);
+        SetTextWithAnimation(msg[0] , clip, backGroundRayCastAble : false).Forget();
     }
 
     public override void TutorialExit()
@@ -57,7 +59,8 @@ public class Stage2Tutorial : Tutorial
 
     private void CloseEvent()
     {
-        SetTextWithAnimation(msg[1], backGroundRayCastAble: false).Forget();
+        var clip = GetCombineClip(3, 2, 3, 3);
+        SetTextWithAnimation(msg[1], clip, backGroundRayCastAble: false).Forget();
 
         var window = windowManager.GetWindow(WindowIds.WarringWindow);
 

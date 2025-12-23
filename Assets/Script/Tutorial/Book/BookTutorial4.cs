@@ -35,7 +35,8 @@ public class BookTutorial4 : Tutorial
         towerButton.onClick.AddListener(OnClickTowerButton);
         presetTabButton.onClick.AddListener(OnClickPresetTabButton);
 
-        SetTextWithAnimation(msgs[0] , backGroundRayCastAble : false).Forget();
+        var clip = GetCombineClip(2, 16 , 2 , 17);
+        SetTextWithAnimation(msgs[0] , clip , backGroundRayCastAble : false).Forget();
         TouchPositionUpdate2();
 
         blockTutorial = false;
@@ -52,13 +53,15 @@ public class BookTutorial4 : Tutorial
     {
         if(isFirstUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
-            SetTextWithAnimation(msgs[2], callback: () => isSecondUpdate = true).Forget();
+            var clip = GetClip(2, 19);
+            SetTextWithAnimation(msgs[2], clip , callback: () => isSecondUpdate = true).Forget();
             isFirstUpdate = false;
         }
         else if (isSecondUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
             presetTabButton.interactable = true;
-            SetTextWithAnimation(msgs[3] , backGroundRayCastAble : false , callback : TouchPositionUpdate).Forget();
+            var clip = GetClip(2, 20);
+            SetTextWithAnimation(msgs[3] , clip, backGroundRayCastAble : false , callback : TouchPositionUpdate).Forget();
             isSecondUpdate = false;
         }
     }
@@ -83,6 +86,7 @@ public class BookTutorial4 : Tutorial
     private void OnClickTowerButton()
     {
         towerButton.onClick.RemoveListener(OnClickTowerButton);
-        SetTextWithAnimation(msgs[1] , callback : () => isFirstUpdate = true).Forget();
+        var clip = GetClip(2, 18);
+        SetTextWithAnimation(msgs[1] , clip , callback : () => isFirstUpdate = true).Forget();
     }
 }

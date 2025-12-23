@@ -15,7 +15,7 @@ public class Stage1Enter1 : Tutorial
             interactionButton = mainWindow.SelectStageButton;
             interactionButton.onClick.AddListener(OnClickInteractionButton);
         }
-        SetTextWithAnimation(msg, false, callback : () => manager.SetTouchPlanelParent(interactionButton.transform)).Forget();
+        SetTextWithAnimation(msg, backGroundRayCastAble: false, callback : () => manager.SetTouchPlanelParent(interactionButton.transform)).Forget();
     }
     public override void TutorialExit()
     {

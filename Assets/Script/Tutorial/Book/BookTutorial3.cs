@@ -22,6 +22,7 @@ public class BookTutorial3 : Tutorial
         }
             
         manager.SetTutorialBackGround(true);
+        var clip = GetClip(2,15);
         SetTextWithAnimation(msg , backGroundRayCastAble : false).Forget();
     }
 

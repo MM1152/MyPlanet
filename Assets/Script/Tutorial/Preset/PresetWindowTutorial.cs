@@ -29,7 +29,9 @@ public class PresetWindowTutorial : Tutorial
 
         manager.SetTouchPlanelParent(interactionButton[0].transform);
         manager.SetTextAreaPosition(3);
-        SetTextWithAnimation(DataTableManager.StringTable.Get(6238) , backGroundRayCastAble : false).Forget();
+
+        var clip = GetCombineClip(4, 0 , 4 , 1);
+        SetTextWithAnimation(DataTableManager.StringTable.Get(6238), clip , backGroundRayCastAble : false).Forget();
 
         Debug.Log("Start Tutorial Preset 1");
     }

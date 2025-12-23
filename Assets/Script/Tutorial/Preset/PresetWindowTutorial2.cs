@@ -21,7 +21,8 @@ public class PresetWindowTutorial2 : Tutorial
         manager.SetTextAreaPosition(2);
 
         string msg = "이 곳에서는 현재 프리셋에 저장할 행성을 선택할 수 있습니다.";
-        SetTextWithAnimation(msg).Forget();
+        var clip = GetClip(4,2);
+        SetTextWithAnimation(msg , clip).Forget();
         Debug.Log("Start Tutorial Preset 2");
     }
 
@@ -37,8 +38,9 @@ public class PresetWindowTutorial2 : Tutorial
         if(!isFirstUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
             isFirstUpdate = true;
+            var clip = GetClip(4, 3);
             string msg = "아래에서 행성의 정보를 확인할 수 있고\n선택 완료를 터치하면 타워 배치 화면으로 넘어갑니다.";
-            SetTextWithAnimation(msg , backGroundRayCastAble : false).Forget();
+            SetTextWithAnimation(msg , clip , backGroundRayCastAble : false).Forget();
             manager.SetTouchPlanelParent(intercactionButton.transform);
         }
     }
