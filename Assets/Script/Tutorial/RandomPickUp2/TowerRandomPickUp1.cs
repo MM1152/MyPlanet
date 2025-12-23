@@ -52,7 +52,8 @@ public class TowerRandomPickUp1 : Tutorial
     {
         manager.SetTutorialBackGround(true);
         manager.SetTouchPlanelParent(pickoneButton.transform);
-        SetTextWithAnimation(msg,  backGroundRayCastAble :false).Forget();
+        var clip = GetCombineClip(2, 6, 2, 7);
+        SetTextWithAnimation(msg, clip,  backGroundRayCastAble :false).Forget();
     }
 
     private void OnClickPickUpButton()

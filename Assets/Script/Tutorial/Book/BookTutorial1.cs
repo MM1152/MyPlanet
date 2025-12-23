@@ -21,7 +21,9 @@ public class BookTutorial1 : Tutorial
         manager.SetTextAreaPosition(2);
         manager.SetTutorialBackGround(true);
         manager.SetTouchPlanelParent(bookButton.transform);
-        SetTextWithAnimation(msg , backGroundRayCastAble : false).Forget();
+
+        var clip = GetCombineClip(2, 11, 2, 12);
+        SetTextWithAnimation(msg , clip, backGroundRayCastAble : false).Forget();
     }
 
     public override void TutorialExit()

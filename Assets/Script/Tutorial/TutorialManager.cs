@@ -133,7 +133,7 @@ public class TutorialManager : MonoBehaviour
         SetActiveTouchPanel(false);
         SetActiveTutorialTextArea(false);
         SetActiveTutorialTextEndImage(false);
-        tutorialTouchPanel.transform.SetParent(transform);
+        tutorialTouchPanel.transform.SetParent(transform);  
 
         curTutorial?.TutorialExit();
         curTutorial = curTutorialList[curIdx++];

@@ -6,6 +6,10 @@ using System.Runtime.CompilerServices;
 public class DebugTowerManager : TowerManager
 {
     private Tower currentPlaceTower;
+    protected override void Init()
+    {
+        
+    }
     protected override void Awake()
     {
         List<TowerTable.Data> towerDatas = DataTableManager.TowerTable.GetAll();

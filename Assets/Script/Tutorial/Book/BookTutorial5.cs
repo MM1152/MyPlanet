@@ -6,7 +6,8 @@ public class BookTutorial5 : Tutorial
     private bool isFirstUpdate = false;
     public override void TutorialEnter()
     {
-        SetTextWithAnimation(msg).Forget();
+        var clip = GetClip(2, 22);
+        SetTextWithAnimation(msg , clip).Forget();
         isFirstUpdate = false;
     }
 
