@@ -43,7 +43,7 @@ public class WarringWindow : Window
             canvasGroup.alpha -= Time.unscaledDeltaTime;
             await UniTask.Yield();
         }
-      manager.Close();  
+        manager.Close();
     }
 
 

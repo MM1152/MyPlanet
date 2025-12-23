@@ -177,6 +177,7 @@ public class TitleTowerPlaceEditWindow : Window
         showIndexPanels[placeHolds[idx].TowerData.ID].UpdatePlace(-1);
         placeHolds[idx].PlaceTower(null);
         FindOptionApplyTower(null);
+        Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_page_03);
     }
 
     private void Place(TowerTable.Data data)
@@ -187,14 +188,15 @@ public class TitleTowerPlaceEditWindow : Window
         {
             placeHolds[selectIndex].PlaceTower(data);
             showIndexPanels[data.ID].UpdatePlace(selectIndex + 1);
-            FindOptionApplyTower(data);
+            FindOptionApplyTower(data);            
         }
         else
         {
             SwapTower(selectIndex, data);
             showIndexPanels[data.ID].UpdatePlace(selectIndex + 1);
-            FindOptionApplyTower(data);
+            FindOptionApplyTower(data);                        
         }
+        Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_page_03);
     }
 
     private int ContainPresetList(int towerId)
@@ -300,6 +302,7 @@ public class TitleTowerPlaceEditWindow : Window
 
         placeHolds[selectIndex].transform.localScale = Vector3.one * 1.5f;
         placeHolds[selectIndex].Select();
+        Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_05);
     }
 
     private async UniTaskVoid RotateAsync(float from , float to , float duration)

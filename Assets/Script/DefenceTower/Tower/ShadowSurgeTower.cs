@@ -20,6 +20,7 @@ public class ShadowSurgeTower : Tower
 
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell02Thunder);
         var bullet = Managers.ObjectPoolManager.SpawnObject<ShadowSurge>(PoolsId.ShadowSurge);
         return bullet;
     }

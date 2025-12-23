@@ -21,9 +21,10 @@ public class Managers
 
     public static TouchManager TouchManager => Instance.touchManager;
     public static ObjectPoolManager ObjectPoolManager => Instance.objectPoolManager;
-
+    public static SoundManager SoundManager => Instance.soundManager;
     private TouchManager touchManager;
     private ObjectPoolManager objectPoolManager;
+    private SoundManager soundManager;
     private GameObject loadingProgress;
     private bool init;
 
@@ -42,6 +43,11 @@ public class Managers
         this.objectPoolManager.transform.SetParent(go.transform);
         await this.objectPoolManager.Init();
 
+        var soundManager = new GameObject("SoundManager");
+        this.soundManager = soundManager.AddComponent<SoundManager>();
+        this.soundManager.transform.SetParent(go.transform);
+        await this.soundManager.Init();
+
         var loadingProgress = await Addressables.LoadAssetAsync<GameObject>("LoadingPanel1").ToUniTask();
         this.loadingProgress = GameObject.Instantiate(loadingProgress, go.transform).transform.GetChild(0).gameObject;
 
@@ -53,6 +59,7 @@ public class Managers
     public void Release()
     {
         objectPoolManager?.Release();
+        soundManager?.StopAllAudioSources();
     }
 
     public async UniTask WaitForManagerInitalizedAsync()

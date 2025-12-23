@@ -58,6 +58,7 @@ public class Repulsor : BaseAttackPrefab
             if(isInAngle )
             {
                 //float force = effect.Val;
+                Managers.SoundManager.PlaySFX(AudiosId.jw3_swoosh_rod_pole_007);   
                 float force = 5f;
                 enemy.PushEnemy(dir , force , 1f);
             }

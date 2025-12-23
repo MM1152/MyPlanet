@@ -124,6 +124,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
             }
         }
         hp -= damage;
+        Managers.SoundManager.PlaySFX(AudiosId.Hit_10);
         textSpawnManager?.SpawnTextUI(damage.ToString(), transform.position).SetColor(Color.yellow);
         OnChanageHP();
         if (hp <= 0 && !isDead)

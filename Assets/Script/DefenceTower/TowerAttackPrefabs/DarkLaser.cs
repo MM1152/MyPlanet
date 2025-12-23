@@ -22,20 +22,21 @@ public class DarkLaser : BaseAttackPrefab
         var startPoint = Camera.main.ScreenToWorldPoint(
             new Vector3(screenRect.xMin, Random.Range(screenRect.yMin, screenRect.yMax),
             -Camera.main.transform.position.z));
-        // x ÁÂÇ¥¸¦ safeAreaÀÇ ÃÖ´ë(x + width)·Î ¼öÁ¤
+        // x ï¿½ï¿½Ç¥ï¿½ï¿½ safeAreaï¿½ï¿½ ï¿½Ö´ï¿½(x + width)ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         var endPoint = Camera.main.ScreenToWorldPoint(
             new Vector3(screenRect.xMax, Random.Range(screenRect.yMin, screenRect.yMax),
             -Camera.main.transform.position.z));
-        
+
         var plusDir = endPoint - startPoint;
         var reverseDir = startPoint - endPoint;
-
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell01Layer01);
         lineRenderer.SetPosition(0, startPoint + reverseDir);
         lineRenderer.SetPosition(1, endPoint + plusDir);
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell01Layer01);
         //var startPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenRect.x, Random.Range(screenRect.y,screenRect.height) , -Camera.main.transform.position.z));
         //var endPoint = Camera.main.ScreenToWorldPoint(new Vector3(screenRect.width, Random.Range(screenRect.y, screenRect.height), -Camera.main.transform.position.z));
-         
-        transform.position = (startPoint + endPoint) / 2; 
+
+        transform.position = (startPoint + endPoint) / 2;
         //transform.position = new Vector3(0f, endPoint.y - startPoint.y, 0f);
         transform.eulerAngles = Vector3.forward * 90f;
         var dir = endPoint - startPoint;
@@ -74,7 +75,7 @@ public class DarkLaser : BaseAttackPrefab
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.CompareTag(TagIds.EnemyTag))
+        if (collision.CompareTag(TagIds.EnemyTag))
         {
             if (attackIntervalTimer > 60f / tower.FullAttackSpeed) return;
 

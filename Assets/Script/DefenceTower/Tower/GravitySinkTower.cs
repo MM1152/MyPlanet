@@ -8,6 +8,7 @@ public class GravitySinkTower : UtilTower
         gravityWrap.Init(this);
         gravityWrap.Setting(tower.transform, TagIds.EnemyTag, BonusSlowPercent , true);
         gravityWrap.SetAssets(0);
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell01Layer01);
         return gravityWrap;
     }
 

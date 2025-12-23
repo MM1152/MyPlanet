@@ -20,6 +20,7 @@ public class VolcanoLauncher : Tower
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         Missile missile = Managers.ObjectPoolManager.SpawnObject<Missile>(PoolsId.Missile);
+        missile.SetHitSound(AudiosId.Hit_8);
         //GameObject.Instantiate(attackprefab).GetComponent<Missile>();
         return missile;
     }

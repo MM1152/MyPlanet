@@ -60,9 +60,9 @@ public abstract class RangeCheckDeathHandler : BaseDie
     {
         var rangePrefab = Managers.ObjectPoolManager.SpawnObject<TestRange>(PoolsId.TestRange);
         rangePrefab.transform.position = enemy.transform.position;
-        var spr = rangePrefab.GetComponent<SpriteRenderer>();
-        spr.color = enemy.spriteRenderer.color;
-        spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
+        // var spr = rangePrefab.GetComponent<SpriteRenderer>();
+        // spr.color = enemy.spriteRenderer.color;
+        // spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
         
         float visualScale = ridus * 2f; 
         rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);

@@ -24,6 +24,7 @@ public class HellFireGunTower : Tower
         {
             var dir = target.transform.position - TowerGameObject.transform.position;
 
+            projectile.SetHitSound(AudiosId.Hit_8);
             projectile.SetHitParticle(PoolsId.Hit13redlaser);
             var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash13redlaser);
             flash.transform.position = TowerGameObject.transform.position + dir.normalized * TowerGameObject.transform.localScale.x;

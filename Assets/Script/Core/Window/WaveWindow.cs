@@ -6,9 +6,6 @@ public class WaveWindow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI waveNumberText;
 
     [SerializeField] private TextMeshProUGUI waveTimerText;
-
-    // [SerializeField] private TextMeshProUGUI waveGoldText;
-
     [SerializeField] private SliderValue bossHealthSlider;
     [SerializeField] private TextMeshProUGUI bosscurrentHpText;
     [SerializeField] private TextMeshProUGUI bossNameText;

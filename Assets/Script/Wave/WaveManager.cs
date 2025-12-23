@@ -23,7 +23,7 @@ public class WaveManager : MonoBehaviour
     private Dictionary<int, List<SpawnPoint>> waves = new Dictionary<int, List<SpawnPoint>>();
     private List<SpawnPoint> currentWave = new List<SpawnPoint>();
     private List<Vector2> spawnPoints = new List<Vector2>();
-    public List<Vector2> SpawnPoints => spawnPoints;    
+    public List<Vector2> SpawnPoints => spawnPoints;
 
     [SerializeField]
     private SliderValue sliderValue;
@@ -80,7 +80,9 @@ public class WaveManager : MonoBehaviour
     private int stageId = 1;
     private bool isFinalStage => stageId >= DataTableManager.WaveTable.GetStageCount();
     private bool isGameEnded = false;
-    public bool isBossKilled = false;  
+    public bool isBossKilled = false;
+
+    private AudiosId currnetBgm;
 
 #if DEBUG_MODE
     [SerializeField] private Button skipWaveButton;
@@ -101,6 +103,17 @@ public class WaveManager : MonoBehaviour
         DataInit();
         ResetWave();
         TerraformingData.terraformingUnlockPoints.Clear();
+        if (stageId == 1)
+        {
+            currnetBgm = AudiosId.Universe_Music;
+            Managers.SoundManager.PlayBGM(currnetBgm);
+
+        }
+        else
+        {
+            currnetBgm = AudiosId.Simple_Acoustics;
+            Managers.SoundManager.PlayBGM(currnetBgm);
+        }
     }
 
     private void ResetWave()
@@ -257,7 +270,7 @@ public class WaveManager : MonoBehaviour
 
         if (waveClearCount <= 0 && allSpawned)
         {
-            if (isFinalWaveEnded&&isBossKilled)
+            if (isFinalWaveEnded && isBossKilled)
             {
                 EndGame(true);
             }
@@ -379,7 +392,13 @@ public class WaveManager : MonoBehaviour
             if (window is WarringWindow warringWindow)
             {
                 warringWindow.SetWarringUI(enemyType);
+                Managers.SoundManager.PlaySFX(AudiosId.sci_fi_alarm_siren_loop_01);
             }
+        }
+
+        if (enemyType == EnemyType.Boss && isBossKilled)
+        {
+            Managers.SoundManager.PlayBGM(AudiosId.Battle_Music);
         }
     }
 

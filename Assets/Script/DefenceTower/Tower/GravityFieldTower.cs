@@ -8,6 +8,7 @@ public class GravityFieldTower : UtilTower
         gravityWrap.Init(this);
         gravityWrap.Setting(planet, TagIds.EnemyTag , BonusSlowPercent);
         gravityWrap.SetAssets(0);
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell01Cast01);
         return gravityWrap;
     }
 

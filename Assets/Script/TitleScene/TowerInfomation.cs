@@ -75,6 +75,7 @@ public class TowerInfomation : MonoBehaviour
         if(!DisableTouch && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(this.gameObject))
         {
             OnTab?.Invoke(data);
+            Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_page_03);
         }
 
         if (!isPressed && Managers.TouchManager.TouchType == TouchTypes.LongPress && Managers.TouchManager.OnTargetUI(this.gameObject))

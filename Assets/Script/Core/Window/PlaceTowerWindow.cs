@@ -265,6 +265,11 @@ public class PlaceTowerWindow : Window
             }
         }
 
+        if(towerManager.CurrentLevel != 1)
+        {
+            Managers.SoundManager.PlaySFX(AudiosId.ui_menu_popup_message_reward_01);
+        }
+
         Time.timeScale = 0f;
         base.Open();
     }

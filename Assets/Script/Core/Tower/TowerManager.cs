@@ -253,6 +253,7 @@ public class TowerManager : MonoBehaviour
             LevelUp();
         }
         expSlider?.UpdateSlider(totalExp, levelUpExp, currentLevel, levelUpExp - totalExp);
+        Managers.SoundManager.PlaySFX(AudiosId.collect_item_03);
     }
 
     private void LevelUp()

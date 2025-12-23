@@ -27,6 +27,7 @@ public class FrostRepeaterTower : Tower
     {
         Bullet projectile = Managers.ObjectPoolManager.SpawnObject<FrostRepeaterBullet>(PoolsId.FrostRepeaterBullet);
         projectile.SetHitParticle(PoolsId.Hit6bluefire);
+        projectile.SetHitSound(AudiosId.Hit_8);
         var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash6bluefire);
         if(target != null)
         {

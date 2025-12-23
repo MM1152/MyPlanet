@@ -6,7 +6,8 @@ public class RepairPatch : Consumable
 {
     protected override void ResetItem()
     {
-        // º¹±¸ ÆÐÄ¡´Â Áï½Ã È¿°úÀÌ¹Ç·Î Æ¯º°È÷ ¸®¼ÂÇÒ °ÍÀÌ ¾øÀ½
+        Managers.SoundManager.PlaySFX(AudiosId.magic_light_bubble_01);
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ï¿½Ì¹Ç·ï¿½ Æ¯ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         GameObject.Destroy(uiTab);
     }
 

@@ -6,6 +6,7 @@ public class RPMBooster : Consumable
 {
     protected override void ResetItem()
     {
+        Managers.SoundManager.PlaySFX(AudiosId.retro_magic_spell_cast_04);
         var towers = towerManager.GetAllTower();
         for (int i = 0; i < towers.Count; i++)
         {
