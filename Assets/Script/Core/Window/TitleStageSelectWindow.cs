@@ -42,7 +42,7 @@ public class TitleStageSelectWindow : Window
 
                 manager.Open(WindowIds.TitlePresetWindow);
 
-                if(FirebaseManager.Instance.UserData.isClearFirstTutorial && !FirebaseManager.Instance.UserData.isClearPresetTutorial)
+                if(currentStageLayout.StageIdx != 1 && FirebaseManager.Instance.UserData.isClearFirstTutorial && !FirebaseManager.Instance.UserData.isClearPresetTutorial)
                     tutorialManager.InitTutorial(TutorialStep.Preset);
             }
         });
