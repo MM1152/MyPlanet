@@ -6,6 +6,7 @@ public class SteelOutputAmplifier : Consumable
 {
     protected override void ResetItem()
     {
+        Managers.SoundManager.PlaySFX(AudiosId.retro_magic_spell_cast_04);
         if (towerManager != null)
         {
             var steelTowers = towerManager.GetTowerToAttribute(ElementType.Steel);

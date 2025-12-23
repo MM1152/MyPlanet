@@ -53,6 +53,7 @@ public class BlackMineBullet : Bullet
 
                     var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
                     find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
+                    Managers.SoundManager.PlaySFX(hitSoundId);
 
                     if (enemyType == EnemyType.EliteMonster || enemyType == EnemyType.Boss)
                         return;

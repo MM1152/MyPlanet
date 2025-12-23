@@ -38,6 +38,7 @@ public class SelectOptionUI : MonoBehaviour
         {
             if (isOn)
             {
+                Managers.SoundManager.PlaySFX(AudiosId.ui_button_simple_click_06);
                 UpdateBackgroundImage(true);
                 OnChangeIndex?.Invoke(index);
             }

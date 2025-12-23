@@ -124,6 +124,7 @@ public class VictoryWindow : Window
             victoryTextBackground.SetActive(true);
             failTitle.SetActive(false);
             failTextBackground.SetActive(false);
+            Managers.SoundManager.PlayBGM(AudiosId.jingle_chime_04_positive);
         }
         else
         {
@@ -131,6 +132,7 @@ public class VictoryWindow : Window
             victoryTextBackground.SetActive(false);
             failTitle.SetActive(true);
             failTextBackground.SetActive(true);
+            Managers.SoundManager.PlayBGM(AudiosId.jingle_chime_22_negative);
         }
 
         SetRewards(isClear);

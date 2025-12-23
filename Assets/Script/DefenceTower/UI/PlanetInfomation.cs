@@ -142,6 +142,7 @@ public class PlanetInfomation : MonoBehaviour
         if(!Variable.IsTutorialActive && isSetting && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(gameObject))
         {
             OnClickPlanet?.Invoke(data, this);
+            Managers.SoundManager.PlaySFX(AudiosId.ui_button_simple_click_07);
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum WindowIds
@@ -70,6 +71,7 @@ public static class AddressableLabelIds
     public readonly static string TypeIds = "Type";
     public readonly static string ElementTypeIds = "Element";
     public readonly static string AttackTypeIds = "AttackType";
+    public readonly static string AudiosIds = "Audios";
 }
 
 public static class AddressableFormatPaths
@@ -187,6 +189,61 @@ public enum PoolsId
     BossPartner = 1600,
 }
 
+public enum AudiosId
+{
+    None = -1,
+    //BGM 
+    Universe_Music = 0,
+    Simple_Acoustics = 1,
+    Battle_Music = 2,
+    A_Dope_Chill_Session = 3,
+    Dry_To_Verb = 4,
+    //SFX
+    ui_button_simple_click_03 = 100,
+    ui_button_simple_click_05 = 101,
+    ui_button_simple_click_06 = 102,
+    ui_button_simple_click_07 = 103,
+    ui_menu_button_beep_12 = 104,
+    ui_menu_button_beep_13 = 105,
+    ui_menu_button_beep_16 = 106,
+    ui_menu_button_beep_17 = 107,
+    ui_menu_button_scroll_05 = 108,
+    ui_menu_button_scroll_page_03 = 109,
+    ui_menu_button_scroll_back_05 = 110,
+    ui_menu_button_confirm_03 = 111,
+    collect_item_03 = 112,
+    collect_item_05 = 113,
+    collect_item_11 = 114,
+    ui_menu_popup_message_04 = 115,
+    ui_menu_popup_message_reward_01 = 116,
+    magic_pop_open_01 = 117,
+    magic_pop_open_03 = 118,
+    cash_register_open_coins_cha_ching_01 = 119,
+    jingle_chime_04_positive = 120,
+    jingle_chime_22_negative = 121,
+    //Attack SFX
+    Flash_3 = 200,
+    Flash_14 = 201,
+    Hit_7 = 202,
+    Hit_8 = 203,
+    Hit_10 = 204,
+    sci_fi_weapon_laser_small_02 = 205,
+    SFX_Spell01Cast01 = 206,
+    SFX_Spell01CastLayer01 = 207,
+    SFX_Spell01CastLayer03 = 208,
+    SFX_Spell01Dark = 209,
+    SFX_Spell01Layer01 = 210,
+    SFX_Spell01Layer04 = 211,
+    SFX_Spell02Thunder = 212,
+    //item SFX
+    jw3_swoosh_rod_pole_007 = 300,
+    magic_flame_of_light_03 = 301,
+    magic_light_bubble_01 = 302,
+    retro_magic_spell_cast_04 = 303,
+
+    sci_fi_alarm_siren_loop_01 = 400,
+}
+
 public enum EnemyType
 {
     None = -1,
@@ -194,6 +251,13 @@ public enum EnemyType
     Ranged = 1,
     EliteMonster = 2,
     Boss = 3,
+}
+
+public enum SoundType
+{
+    None = -1,
+    BGM,
+    SFX
 }
 
 public static class AddressableNames
@@ -297,6 +361,55 @@ public static class AddressableNames
         { "BossPartner", PoolsId.BossPartner },
     };
 
+    private static readonly Dictionary<string, AudiosId> AudiosName = new()
+    {
+        {"Universe Music", AudiosId.Universe_Music },
+        {"Simple Acoustics", AudiosId.Simple_Acoustics },
+        {"Battle Music", AudiosId.Battle_Music },
+        {"A Dope Chill Session", AudiosId.A_Dope_Chill_Session },
+        {"Dry To Verb", AudiosId.Dry_To_Verb },
+        {"ui_button_simple_click_03", AudiosId.ui_button_simple_click_03 },
+        {"ui_button_simple_click_05", AudiosId.ui_button_simple_click_05 },
+        {"ui_button_simple_click_06", AudiosId.ui_button_simple_click_06 },
+        {"ui_button_simple_click_07", AudiosId.ui_button_simple_click_07 },
+        { "ui_menu_button_beep_12", AudiosId.ui_menu_button_beep_12 },
+        {"ui_menu_button_beep_13", AudiosId.ui_menu_button_beep_13 },
+        {"ui_menu_button_beep_16", AudiosId.ui_menu_button_beep_16 },
+        {"ui_menu_button_beep_17", AudiosId.ui_menu_button_beep_17 },
+        {"ui_menu_button_scroll_05", AudiosId.ui_menu_button_scroll_05 },
+        {"ui_menu_button_scroll_page_03", AudiosId.ui_menu_button_scroll_page_03 },
+        {"ui_menu_button_scroll_back_05", AudiosId.ui_menu_button_scroll_back_05 },
+        {"ui_menu_button_confirm_03", AudiosId.ui_menu_button_confirm_03 },
+        {"collect_item_03", AudiosId.collect_item_03 },
+        {"collect_item_05", AudiosId.collect_item_05 },
+        {"collect_item_11", AudiosId.collect_item_11 },
+        {"ui_menu_popup_message_04", AudiosId.ui_menu_popup_message_04 },
+        {"ui_menu_popup_message_reward_01", AudiosId.ui_menu_popup_message_reward_01 },
+        {"magic_pop_open_01", AudiosId.magic_pop_open_01 },
+        {"magic_pop_open_03", AudiosId.magic_pop_open_03 },
+        {"cash_register_open_coins_cha_ching_01", AudiosId.cash_register_open_coins_cha_ching_01 },
+        {"jingle_chime_04_positive", AudiosId.jingle_chime_04_positive },
+        {"jingle_chime_22_negative", AudiosId.jingle_chime_22_negative },
+        {"Flash 3", AudiosId.Flash_3 },
+        {"Flash 14", AudiosId.Flash_14 },
+        {"Hit 7", AudiosId.Hit_7 },
+        {"Hit 8", AudiosId.Hit_8 },
+        {"Hit 10", AudiosId.Hit_10 },
+        {"sci-fi_weapon_laser_small_02", AudiosId.sci_fi_weapon_laser_small_02 },
+        {"SFX_Spell01Cast01", AudiosId.SFX_Spell01Cast01 },
+        {"SFX_Spell01CastLayer01", AudiosId.SFX_Spell01CastLayer01 },
+        {"SFX_Spell01CastLayer03", AudiosId.SFX_Spell01CastLayer03 },
+        {"SFX_Spell01Dark", AudiosId.SFX_Spell01Dark },
+        {"SFX_Spell01Layer01", AudiosId.SFX_Spell01Layer01 },
+        {"SFX_Spell01Layer04", AudiosId.SFX_Spell01Layer04 },
+        {"SFX_Spell02Thunder", AudiosId.SFX_Spell02Thunder },
+        {"jw3_swoosh_rod_pole-007", AudiosId.jw3_swoosh_rod_pole_007 },
+        {"magic_flame_of_light_03", AudiosId.magic_flame_of_light_03 },
+        {"magic_light_bubble_01", AudiosId.magic_light_bubble_01 },
+        {"retro_magic_spell_cast_04", AudiosId.retro_magic_spell_cast_04 },
+        {"sci-fi_alarm_siren_loop_01", AudiosId.sci_fi_alarm_siren_loop_01 },
+    };
+
     public static PoolsId GetPoolsId(string name)
     {
         if (PoolsName.TryGetValue(name, out PoolsId id))
@@ -304,6 +417,14 @@ public static class AddressableNames
             return id;
         }
         return PoolsId.None;
+    }
+    public static AudiosId GetAudiosId(string name)
+    {
+        if (AudiosName.TryGetValue(name, out AudiosId id))
+        {
+            return id;
+        }
+        return AudiosId.None;
     }
 }
 

@@ -8,6 +8,7 @@ public class DelayFieldTower : UtilTower
         gravityWrap.Init(this);
         gravityWrap.Setting(planet, TagIds.EnemyProjectileTag, BonusSlowBulletSpeed);
         gravityWrap.SetAssets(1);
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell01Dark);
         return gravityWrap;
     }
 

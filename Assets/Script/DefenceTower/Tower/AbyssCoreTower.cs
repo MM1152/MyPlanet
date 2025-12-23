@@ -8,6 +8,7 @@ public class AbyssCoreTower : UtilTower
         gravityWrap.Init(this);
         gravityWrap.Setting(tower.transform, TagIds.EnemyProjectileTag, 0, isDeleteProjectile : true);
         gravityWrap.SetAssets(1);
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell01Dark); 
         return gravityWrap;
     }
 

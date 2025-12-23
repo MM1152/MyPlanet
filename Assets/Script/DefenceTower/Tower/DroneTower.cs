@@ -32,6 +32,7 @@ public class DroneTower : UtilTower
         drone.transform.position = tower.transform.position;
         drone.OnDie += OnDeadDrone;
         drones.Add(drone);
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell01Layer04);
         return drone;
     }
 

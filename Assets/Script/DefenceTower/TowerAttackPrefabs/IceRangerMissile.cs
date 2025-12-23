@@ -2,11 +2,14 @@ using UnityEngine;
 
 public class IceRangerMissile : Missile
 {
-    public override void Init(Tower data)
+
+   public override void Init(Tower data)
     {
         base.Init(data);
         poolsId = PoolsId.IceRangerMissile;
     }
+
+ 
     protected override void HitTarget(Collider2D collision)
     {
         var explosion = Managers.ObjectPoolManager.SpawnObject<Explosion>(PoolsId.Explosion);

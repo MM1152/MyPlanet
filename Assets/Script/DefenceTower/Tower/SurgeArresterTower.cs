@@ -23,6 +23,7 @@ public class SurgeArresterTower : Tower
 
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell02Thunder);
         return Managers.ObjectPoolManager.SpawnObject<Surge>(PoolsId.Surge);
     }
 }

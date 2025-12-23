@@ -12,6 +12,7 @@ public class SteelReaperTower : Tower
     {
         SniperBullet sniperBullet = Managers.ObjectPoolManager.SpawnObject<SniperBullet>(PoolsId.SniperBullet);
         sniperBullet.SetParticleId(PoolsId.Hit10bluelaser);
+        Managers.SoundManager.PlaySFX(AudiosId.sci_fi_weapon_laser_small_02);
         if(target != null)
         {
             var dir = (target.position - TowerGameObject.transform.position).normalized;

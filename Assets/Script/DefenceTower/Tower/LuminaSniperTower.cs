@@ -10,6 +10,7 @@ public class LuminaSniperTower : Tower
 
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
+        Managers.SoundManager.PlaySFX(AudiosId.sci_fi_weapon_laser_small_02);
         return Managers.ObjectPoolManager.SpawnObject<LuminaSniperBullet>(PoolsId.LuminaSniperBullet);
     }
 }

@@ -13,7 +13,7 @@ public class ChaosBeaconTower : UtilTower
         var dir = (tower.gameObject.transform.position - planet.transform.position).normalized;
         chaosBeacon.transform.position = tower.transform.position + (dir * BonusAttackRange / 2f);
         chaosBeacon.SetDir(dir);
-
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell01CastLayer01);
         return chaosBeacon;
     }
 }

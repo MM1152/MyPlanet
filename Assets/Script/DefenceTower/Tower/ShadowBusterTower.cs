@@ -18,6 +18,7 @@ public class ShadowBusterTower : Tower
     {
         var bullet = Managers.ObjectPoolManager.SpawnObject<ShadowBursterBullet>(PoolsId.ShadowBursterBullet);
         bullet.SetParticle(PoolsId.Hit23cube);
+        Managers.SoundManager.PlaySFX(AudiosId.Flash_3);
         if(target != null)
         {
             var dir = (target.position - TowerGameObject.transform.position).normalized;
