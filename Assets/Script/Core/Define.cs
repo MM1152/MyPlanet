@@ -486,6 +486,7 @@ public static class DataTableIds
     public static readonly string TowerRandomOptionValuePercentTable = "TowerRandomOptionValuePercentTable";
     public static readonly string TowerDuplicationRewardTable = "TowerDuplicationRewardTable";
     public static readonly string RewardListTable = "RewardListTable";
+    public static readonly string ClearWaveRewardTable = "ClearWaveRewardTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
