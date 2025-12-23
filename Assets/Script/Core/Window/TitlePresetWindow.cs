@@ -77,10 +77,12 @@ public class TitlePresetWindow : Window
             presetViewers[0].UpdatePreset(tempData);
             presetViewers[0].UpdateSelectButton(true);
             presetViewers[0].OnClickSelectButton();
+            presetViewers[0].DisableEditButton();
 
-            for(int i = 1; i < presetViewers.Count; i++)
+            for (int i = 1; i < presetViewers.Count; i++)
             {
                 Destroy(presetViewers[i].gameObject);
+                presetViewers.RemoveAt(i--);
             }
         }
         base.Open();

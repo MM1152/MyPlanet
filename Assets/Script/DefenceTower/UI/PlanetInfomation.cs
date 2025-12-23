@@ -103,9 +103,9 @@ public class PlanetInfomation : MonoBehaviour
     private void UpdateDisAble()
     {
         if (userData.UseAble)
-            disAblePanel.SetActive(false);
+            disAblePanel?.SetActive(false);
         else
-            disAblePanel.SetActive(true);
+            disAblePanel?.SetActive(true);
     }
 
     private void UpdateLevel(int level)

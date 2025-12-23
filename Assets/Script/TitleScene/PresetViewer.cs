@@ -90,5 +90,10 @@ public class PresetViewer : MonoBehaviour
     {
         OnChangeIndex?.Invoke(index);
     }
+
+    public void DisableEditButton()
+    {
+        editButton.interactable = false;
+    }
 }
     
