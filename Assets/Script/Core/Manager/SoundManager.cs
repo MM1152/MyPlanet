@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -7,9 +8,12 @@ public class SoundManager : MonoBehaviour
 {
     private Dictionary<AudiosId, AudioClip> audioClips = new Dictionary<AudiosId, AudioClip>();
     private List<AudioSource> allAudioSources = new List<AudioSource>();
-    private Queue<AudioSource> sfxPool = new Queue<AudioSource>();
+    // private Queue<AudioSource> sfxPool = new Queue<AudioSource>();
     private AudioSource currentBgmSource;
+    private AudioSource currentSfxSource;   
     private AudiosId currentBgmId = AudiosId.None;
+    private AudiosId currentSfxId = AudiosId.None;
+    public AudiosId CurrentBgmId => currentBgmId;  
 
     public async UniTask Init()
     {
@@ -27,31 +31,29 @@ public class SoundManager : MonoBehaviour
                 Debug.Log($"파일 로드가 되지않아요.. 에셋의 이름은? :{asset.name}");
             }
         }
+
+        currentBgmSource = gameObject.AddComponent<AudioSource>();
+        allAudioSources.Add(currentBgmSource);
+        currentSfxSource = gameObject.AddComponent<AudioSource>();
+        allAudioSources.Add(currentSfxSource);
     }
 
-    public void PlaySFX(AudiosId id, float volume = 1f)
+    public void PlaySFX(AudiosId id, float volume = 1f, bool loop = false)
     {
         if (audioClips.TryGetValue(id, out AudioClip clip))
         {
-            AudioSource audioSource;
-            if (sfxPool.Count > 0)
+            if (currentSfxSource == null)
             {
-                audioSource = sfxPool.Dequeue();
-            }
-            else
-            {
-                audioSource = gameObject.AddComponent<AudioSource>();
-                allAudioSources.Add(audioSource);
+                currentSfxSource = gameObject.AddComponent<AudioSource>();
+                allAudioSources.Add(currentSfxSource);
             }
 
-            audioSource.enabled = true;
-            audioSource.loop = false;
-            audioSource.playOnAwake = false;
-            audioSource.volume = volume;
-            audioSource.clip = null;
-
-            audioSource.PlayOneShot(clip, volume);
-            ReturnAudioSourcePool(audioSource, clip.length).Forget();
+            currentSfxSource.enabled = true;
+            currentSfxSource.loop = loop;
+            currentSfxSource.playOnAwake = false;
+            currentSfxSource.volume = volume;
+            currentSfxSource.clip = null;
+            currentSfxSource.PlayOneShot(clip, volume);
         }
         else
         {
@@ -85,11 +87,19 @@ public class SoundManager : MonoBehaviour
             currentBgmSource.clip = clip;
             currentBgmId = id;
             currentBgmSource.Play();
-            Debug.Log($"BGM 재생 시작 : {id}");
         }
         else
         {
             Debug.LogWarning($"오디오를 못찾겠군요... 그의 아이디는? {id}");
+        }
+    }
+
+    public void StopBGM()
+    {
+        if (currentBgmSource != null)
+        {
+            StopAudioSource(currentBgmSource);
+            currentBgmId = AudiosId.None;
         }
     }
 
@@ -99,40 +109,15 @@ public class SoundManager : MonoBehaviour
         {
             source.Stop();
             ResetSource(source);
-            if (source == currentBgmSource)
-            {
-                currentBgmId = AudiosId.None;
-                currentBgmSource = null;
-            }
-            if (sfxPool.Contains(source))
-            {
-                sfxPool.Enqueue(source);
-            }
         }
     }
 
     public void StopAllAudioSources()
     {
-        Debug.Log("Stop All Audio Sources 호출됨");
         foreach (var source in allAudioSources)
         {
             StopAudioSource(source);
         }
-    }
-
-    private async UniTask ReturnAudioSourcePool(AudioSource source, float delay)
-    {
-        await UniTask.Delay((int)(delay * 1000), true);
-        if (source == null)
-            return;
-        if (source == currentBgmSource)
-            return;
-
-        if (!allAudioSources.Contains(source))
-            return;
-
-        ResetSource(source);
-        sfxPool.Enqueue(source);
     }
 
     private void ResetSource(AudioSource source)
@@ -143,7 +128,6 @@ public class SoundManager : MonoBehaviour
         source.playOnAwake = false;
         source.loop = false;
         source.clip = null;
-        source.pitch = 1f;
         source.volume = 1f;
         source.enabled = false;
     }
@@ -156,8 +140,10 @@ public class SoundManager : MonoBehaviour
                 Destroy(source);
         }
         allAudioSources.Clear();
-        sfxPool.Clear();
+        currentBgmId = AudiosId.None;
         currentBgmSource = null;
+        currentSfxId = AudiosId.None;
+        currentSfxSource = null;
         audioClips.Clear();
     }
 
