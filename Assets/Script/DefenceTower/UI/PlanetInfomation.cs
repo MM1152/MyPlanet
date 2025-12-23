@@ -42,31 +42,42 @@ public class PlanetInfomation : MonoBehaviour
 
     private void OnDestroy()
     {
+        RemoveFirebaseOnChangeValue();
+    }
+
+    private void OnDisable()
+    {
+        RemoveFirebaseOnChangeValue();
+    }
+
+    private void RemoveFirebaseOnChangeValue()
+    {
+        if (data == null) return;
         var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
         var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
         var unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
-
         FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangedStar);
         FirebaseManager.Instance.Database.RemoveListner(levelPath, OnValueChangedLevel);
         FirebaseManager.Instance.Database.RemoveListner(unlockPath, OnValueChangedUnLock);
     }
 
-    public void UpdateTexts(PlanetTable.Data data)
+    private void AddFirebaseOnChangeValue()
     {
+        if (data == null) return;
         var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
         var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
         var unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
-        FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangedStar);
-        FirebaseManager.Instance.Database.RemoveListner(levelPath, OnValueChangedLevel);
-        FirebaseManager.Instance.Database.RemoveListner(unlockPath, OnValueChangedUnLock);
-        this.data = data;
-
-        path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
-        levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
-        unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
         FirebaseManager.Instance.Database.AddListner(path, OnValueChangedStar);
         FirebaseManager.Instance.Database.AddListner(levelPath, OnValueChangedLevel);
         FirebaseManager.Instance.Database.AddListner(unlockPath, OnValueChangedUnLock);
+
+    }
+
+    public void UpdateTexts(PlanetTable.Data data)
+    {
+        RemoveFirebaseOnChangeValue();
+        this.data = data;
+        AddFirebaseOnChangeValue();
 
         userData = FirebaseManager.Instance.PlanetData.GetOrigin(data.ID);
 
@@ -136,16 +147,19 @@ public class PlanetInfomation : MonoBehaviour
 
     private void OnValueChangedStar(object sender , ValueChangedEventArgs args)
     {
+        if (this == null && gameObject == null) return;
         UpdateStar(int.Parse(args.Snapshot.Value.ToString()));
     }
 
     private void OnValueChangedLevel(object sender, ValueChangedEventArgs args)
     {
+        if (this == null && gameObject == null) return;
         UpdateLevel(int.Parse(args.Snapshot.Value.ToString()));
     }
 
     private void OnValueChangedUnLock(object sender, ValueChangedEventArgs args)
     {
+        if (this == null && gameObject == null) return;
         UpdateDisAble();
     }
 }
