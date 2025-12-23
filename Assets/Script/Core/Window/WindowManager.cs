@@ -34,7 +34,7 @@ public class WindowManager : MonoBehaviour
         }
 
         if(pauseViewButton != null)
-            pauseViewButton.onClick.AddListener(() => Open(WindowIds.PauseWindow));
+            pauseViewButton.onClick.AddListener(() => { Open(WindowIds.PauseWindow); Managers.SoundManager.StopBGM(); });
 
         if(openStatusViewButton != null)
             openStatusViewButton.onClick.AddListener(() => Open(WindowIds.StatusWindow));

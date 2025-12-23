@@ -39,6 +39,7 @@ public class PauseWindow : Window
 
     private void OnClickContinuingButton()
     {
+        Managers.SoundManager.PlayBGM(Managers.SoundManager.CurrentBgmId); 
         manager.Close();
     }
 
