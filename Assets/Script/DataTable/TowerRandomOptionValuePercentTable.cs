@@ -35,9 +35,18 @@ public class TowerRandomOptionValuePercentTable : DataTable
         return towerRandomoptionPercentTable[grade_Id];
     }
 
-    public (float percent , int LMH) GetRandomOptionValuePercent(int grade_Id , float minValue , float maxValue)
+    // Limit 0 : 제한 없음
+    // Limit 1 : 중간 까지만 나옴
+    // Limit 2 : 하급에서만 나옴
+    public (float percent , int LMH) GetRandomOptionValuePercent(int grade_Id , float minValue , float maxValue , float limit = 0)
     {
         var data = GetData(grade_Id);
+
+        float maxProb = data.low_prob + data.mid_prob + data.high_prob;
+        if (limit == 1)
+            maxProb -= data.high_prob;
+        else if (limit== 2)
+            maxProb -= data.mid_prob + data.high_prob;
 
         float rand = Random.Range(0f, 1f);
         float sliceValue = (maxValue - minValue) / data.step_count;
@@ -71,4 +80,6 @@ public class TowerRandomOptionValuePercentTable : DataTable
             return (valueList[randomIndex] , 2);
         }
     }
+
+
 }

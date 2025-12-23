@@ -62,7 +62,7 @@ public class TowerRandomOptionValueTable : DataTable
         return towerRandomoptionTable[towerId];
     }
 
-    public (float percent , int LMH) GetRandomOptionValue(int towerId , int grade)
+    public (float percent , int LMH) GetRandomOptionValue(int towerId , int grade , int limit = 0)
     {
         var data = GetOptionData(towerId);
 
@@ -77,7 +77,7 @@ public class TowerRandomOptionValueTable : DataTable
             _ => 0
         };
 
-        return DataTableManager.TowerRandomOptionValuePercentTable.GetRandomOptionValuePercent(gradeId , data.random_min , randomValueMax);
+        return DataTableManager.TowerRandomOptionValuePercentTable.GetRandomOptionValuePercent(gradeId , data.random_min , randomValueMax , limit);
     }
 
     public bool IsMaxGrade(int towerId, int grade , float currentValue)

@@ -43,11 +43,7 @@ public class VictoryWindow : Window
         base.Init(manager);
         windowId = (int)WindowIds.VictoryWindow;
 
-        if(waveManager.StageId == 1)
-        {
-            nextStageButton.gameObject.SetActive(false);
-            replayButton.gameObject.SetActive(false);
-        }
+
 
 
         goldLayout.SetActive(false);
@@ -118,6 +114,13 @@ public class VictoryWindow : Window
     {
         bool isTutorial = Variable.IsTutorialActive;
         this.isClear = isClear;
+
+        if (waveManager.StageId == 1)
+        {
+            nextStageButton.gameObject.SetActive(false);
+            replayButton.gameObject.SetActive(false);
+        }
+
         if (isClear)
         {
             victoryTitle.SetActive(true);
