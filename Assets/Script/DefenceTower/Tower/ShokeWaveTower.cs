@@ -19,7 +19,7 @@ public class ShockWaveTower : UtilTower
         var shockWave = Managers.ObjectPoolManager.SpawnObject<ShockWave>(PoolsId.ShockWave);
         shockWave.Init(this);
         shockWave.SetFollowTarget(tower.transform);
-
+        Managers.SoundManager.PlaySFX(AudiosId.SFX_Spell01CastLayer03);
         return shockWave;
     }
 }

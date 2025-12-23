@@ -18,8 +18,8 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     protected PoolsId poolsId;
     protected IStatusEffect effect;
-
     private BasePlanet basePlaent;
+    protected AudiosId hitSoundId;
 
     private void Start()
     {
@@ -49,6 +49,11 @@ public abstract class BaseAttackPrefab : MonoBehaviour
 
     protected abstract void HitTarget(Collider2D collision);
 
+    public void SetHitSound(AudiosId hitSoundId)
+    {
+        this.hitSoundId = hitSoundId;
+    }
+
     public virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Enemy"))
@@ -64,12 +69,16 @@ public abstract class BaseAttackPrefab : MonoBehaviour
                 {
                     Debug.Log($"타워 공격력 {tower.TowerData.ATK}, 풀데미지 {tower.FullDamage}");
                     enemy.LastAttackerType = (ElementType)tower.TowerData.attribute;
-                    if(!tower.IsHelper)
+                    if (!tower.IsHelper)
                     {
                         basePlaent.PassiveSystem.CheckUseAblePassive(tower, null, enemy);
                     }
                 }
                 HitTarget(collision);
+                if (hitSoundId != AudiosId.None)
+                {
+                    Managers.SoundManager?.PlaySFX(hitSoundId);
+                }
             }
         }
     }

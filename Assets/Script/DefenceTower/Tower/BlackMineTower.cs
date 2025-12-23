@@ -11,6 +11,7 @@ public class BlackMineTower : Tower
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         var bullet = Managers.ObjectPoolManager.SpawnObject<BlackMineBullet>(PoolsId.BlackMineBullet);
+        bullet.SetHitSound(AudiosId.Hit_7);
         return bullet;
     }
 }

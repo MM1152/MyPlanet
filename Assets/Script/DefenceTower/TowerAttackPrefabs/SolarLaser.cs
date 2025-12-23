@@ -69,8 +69,8 @@ public class SolarLaser : BaseAttackPrefab
             0f);
 
 
-        // 0.3 µÎ²²°¡ linerederer ÀÇ 1 »çÀÌÁî
-        // 0.3 : 1 ºñÀ²
+        // 0.3 ï¿½Î²ï¿½ï¿½ï¿½ linerederer ï¿½ï¿½ 1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // 0.3 : 1 ï¿½ï¿½ï¿½ï¿½
         lineRenderer.SetPosition(0, tower.TowerGameObject.transform.position);
         lineRenderer.SetPosition(1, tower.TowerGameObject.transform.position + new Vector3(
             Mathf.Cos(angle * Mathf.Deg2Rad) * towerSize.x * transform.localScale.y * 2f,
@@ -88,8 +88,9 @@ public class SolarLaser : BaseAttackPrefab
         if (collision.CompareTag(TagIds.EnemyTag))
         {
             var find = collision.GetComponent<IDamageAble>();
-
+  
             var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
+            Managers.SoundManager.PlaySFX(AudiosId.Flash_14);
             find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
             basePlanet.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
 

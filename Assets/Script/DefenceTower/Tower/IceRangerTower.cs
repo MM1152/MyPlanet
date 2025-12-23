@@ -11,7 +11,7 @@ public class IceRangerTower : Tower
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         var missile = Managers.ObjectPoolManager.SpawnObject<IceRangerMissile>(PoolsId.IceRangerMissile);
-        missile.Init(this);
+        missile.SetHitSound(AudiosId.Hit_8);
         return missile;
     }
 }

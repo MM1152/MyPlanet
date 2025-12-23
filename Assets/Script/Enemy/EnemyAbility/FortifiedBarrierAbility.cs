@@ -33,8 +33,8 @@ public class FortifiedBarrierAbility : BaseAbility
             rangePrefab = Managers.ObjectPoolManager.SpawnObject<TestRange>(PoolsId.TestRange);
             rangePrefab.transform.SetParent(enemy.transform);
             rangePrefab.transform.position = enemy.transform.position;
-            var spr = rangePrefab.GetComponent<SpriteRenderer>();
-            spr.color = enemy.spriteRenderer.color;
+            // var spr = rangePrefab.GetComponent<SpriteRenderer>();
+            // spr.color = enemy.spriteRenderer.color;
             // spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
             float radius = enemy.transform.localScale.x;
             float visualScale = radius * 10f;

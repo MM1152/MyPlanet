@@ -57,6 +57,7 @@ public class MagmaBoomBullet : ProjectTile
         {
             FragmentBullet fragmentObj = Managers.ObjectPoolManager.SpawnObject<MagmaBoomFregment>(PoolsId.MagmaBoomFregment);
             fragmentObj.SetParticleId(PoolsId.Hit23cube1);
+            fragmentObj.SetHitSound(AudiosId.Hit_7);
             fragmentObj.transform.position = transform.position;
             fragmentObj.Init(tower);
             float angle = splitAngle * i;

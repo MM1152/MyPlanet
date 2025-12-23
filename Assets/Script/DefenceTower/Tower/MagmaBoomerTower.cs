@@ -3,6 +3,7 @@
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
         var bullet = Managers.ObjectPoolManager.SpawnObject<MagmaBoomBullet>(PoolsId.MagmaBoomBullet);
+        bullet.SetHitSound(AudiosId.Hit_7);  
 
         if(target != null)
         {

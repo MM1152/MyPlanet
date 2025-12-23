@@ -68,7 +68,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #if DEBUG_MODE
     public TextSpawnManager textSpawnManager;
 #endif
-    public SpriteRenderer spriteRenderer { get; private set; }
     public ZoneSearch zone;
     public Action abilityAction;
 
@@ -91,7 +90,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private float chaosDuration;
     private BasePlanet basePlanet;
     private CancellationTokenSource disAbleCtr;
-    private GameObject bossPartnerObj;
     [SerializeField] private BossPartner bossPartner;
 
     public EnemyAsset enemyAsset { get; set; }
@@ -99,8 +97,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public Transform rotObj;
     private void Awake()
     {
-
-        spriteRenderer = GetComponent<SpriteRenderer>();
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag)?.GetComponent<WaveManager>();
 #if DEBUG_MODE
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag)?.GetComponent<TextSpawnManager>();
@@ -134,9 +130,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         speed = enemyData.Speed * percent;
         baseRange = enemyData.Range;
         attackRange = baseRange;
-#if DEBUG_MODE
-        SetColor(enemyData.Attribute);
-#endif
         isChaos = false;
         target = GameObject.FindGameObjectWithTag(TargetTag);
         stateMachine.Init(stateMachine.idleState);
@@ -182,42 +175,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         };
     }
 
-
     private void ResetActions()
     {
         abilityAction = null;
         OnBuffRemoved = null;
     }
-
-#if DEBUG_MODE
-    private void SetColor(int typeEffectiveness)
-    {
-        switch (typeEffectiveness)
-        {
-            case 0:
-                spriteRenderer.color = Color.white;
-                break;
-            case 1:
-                spriteRenderer.color = Color.red;
-                break;
-            case 2:
-                spriteRenderer.color = Color.blue;
-                break;
-            case 3:
-                spriteRenderer.color = Color.gray;
-                break;
-            case 4:
-                spriteRenderer.color = Color.yellow;
-                break;
-            case 5:
-                spriteRenderer.color = Color.cyan;
-                break;
-            default:
-                spriteRenderer.color = Color.white;
-                break;
-        }
-    }
-#endif
 
     public void SetState(IState newState)
     {

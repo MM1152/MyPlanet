@@ -6,6 +6,7 @@ public class TempoModule : Consumable
 {
     protected override void ResetItem()
     {
+        Managers.SoundManager.PlaySFX(AudiosId.retro_magic_spell_cast_04);
         var towers = towerManager.GetAllTower();
         for (int i = 0; i < towers.Count; i++)
         {
@@ -16,7 +17,7 @@ public class TempoModule : Consumable
         }
         GameObject.Destroy(uiTab);
     }
-    protected override async UniTaskVoid UseItemAsync(float duration , CancellationTokenSource ctr)
+    protected override async UniTaskVoid UseItemAsync(float duration, CancellationTokenSource ctr)
     {
         try
         {

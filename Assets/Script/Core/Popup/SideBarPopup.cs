@@ -47,7 +47,8 @@ public class SideBarPopup : Popup
 
     private void OnClickEventButton()
     {
-        //FIX
+        windowManager.Open(WindowIds.TitleStackRewardPlayWindow);
+        OnClickCloseButton();
     }
 
     private void OnClickAttendanceButton()

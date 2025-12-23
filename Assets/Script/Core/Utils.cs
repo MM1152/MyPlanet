@@ -18,6 +18,8 @@ public static class Utils
 
     public static bool IsPointerOverUI(Vector2 screenPosition)
     {
+        if (EventSystem.current == null) return false;
+
         var pointerData = new PointerEventData(EventSystem.current)
         {
             position = screenPosition
