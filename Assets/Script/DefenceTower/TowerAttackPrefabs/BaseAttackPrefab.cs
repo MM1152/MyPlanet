@@ -67,7 +67,6 @@ public abstract class BaseAttackPrefab : MonoBehaviour
                 }
                 if (enemy != null)
                 {
-                    Debug.Log($"타워 공격력 {tower.TowerData.ATK}, 풀데미지 {tower.FullDamage}");
                     enemy.LastAttackerType = (ElementType)tower.TowerData.attribute;
                     if (!tower.IsHelper)
                     {

@@ -31,7 +31,7 @@ public class LuminaSniperBullet : Bullet
         timer += Time.deltaTime;
         if (target == null && targetDamageAble.IsDead || homingCount <= 0)
         {
-            if(timer > duration)
+            if (timer > duration)
             {
                 Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
             }
@@ -49,6 +49,22 @@ public class LuminaSniperBullet : Bullet
 
             if (target != null && !targetDamageAble.IsDead)
             {
+                var barrier = target.GetComponentInChildren<Barrier>();
+                if (barrier != null && !barrier.IsDead)
+                {
+                    var barrierDamageAble = barrier.GetComponent<IDamageAble>();
+                    if (barrierDamageAble != null)
+                    {
+                        var col = barrier.Collider;
+                        var startPos = lineRenderer.GetPosition(lineRenderer.positionCount - 2);
+                        float percent = tower.TypeEffectiveness.GetDamagePercent(barrier.ElementType);
+                        barrierDamageAble.OnDamage((int)(tower.CalcurateAttackDamage * percent));
+                        var endPos = col.ClosestPoint(startPos);
+                        lineRenderer.SetPosition(lineRenderer.positionCount - 1, endPos);
+                        continue;
+                    }
+                }
+
                 var find = target.GetComponent<IDamageAble>();
                 if (find != null)
                 {
@@ -69,24 +85,24 @@ public class LuminaSniperBullet : Bullet
                 homingCount = 0;
                 break;
             }
-            
+
         }
     }
 
     protected override void HitTarget(Collider2D collision)
     {
-        if(target != collision.gameObject.transform)
+        if (target != collision.gameObject.transform)
         {
             return;
         }
 
 
-        if(homingCount > 0)
+        if (homingCount > 0)
         {
             homingCount--;
-            if(enemy != null)
+            if (enemy != null)
             {
-               
+
             }
             else
             {

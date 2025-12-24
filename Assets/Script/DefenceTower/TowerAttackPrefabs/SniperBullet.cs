@@ -16,7 +16,7 @@ public class SniperBullet : ProjectTile
         poolsId = PoolsId.SniperBullet;
         speed = 15f;
 
-        transform.localScale = new Vector3(initScale.x * data.BonusWidthSize , initScale.y);
+        transform.localScale = new Vector3(initScale.x * data.BonusWidthSize, initScale.y);
     }
 
     public void SetParticleId(PoolsId particleId)
@@ -30,7 +30,7 @@ public class SniperBullet : ProjectTile
     {
         transform.position += dir * speed * Time.deltaTime;
         duration -= Time.deltaTime;
-        
+
         if (duration <= 0)
         {
             if (gameObject.activeSelf)
@@ -44,5 +44,11 @@ public class SniperBullet : ProjectTile
 
         var hitParticle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(particleId);
         hitParticle.transform.position = collision.ClosestPoint(transform.position);
+        
+        var barrier = collision.GetComponentInParent<Barrier>();
+        if(barrier != null && !barrier.IsDead)
+        {
+            Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+        }
     }
 }
