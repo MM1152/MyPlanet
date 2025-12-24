@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Mono.Cecil;
 public class TitleStackRewardPlayWindow : Window
 {
     [SerializeField] private GameObject[] rewardLayout;
@@ -52,10 +53,27 @@ public class TitleStackRewardPlayWindow : Window
         rewardValueText[2].text = datas[2].Num.ToString();
         rewardWaveText[2].text = datas[2].Wave.ToString();
 
-        rewardButtons[0].onClick.AddListener(async () => await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.UserData.GetGoods(datas[0].Num)));
-        rewardButtons[1].onClick.AddListener(async () => await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.UserData.GetGoods(datas[1].Num)));
-        rewardButtons[2].onClick.AddListener(async () => await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.UserData.GetGoods(datas[2].Num)));
+        rewardButtons[0].onClick.AddListener(() => OnClickRewardButtons(0).Forget());
+        rewardButtons[1].onClick.AddListener(() => OnClickRewardButtons(1).Forget());
+        rewardButtons[2].onClick.AddListener(() => OnClickRewardButtons(2).Forget());
 
+    }
+
+    private async UniTaskVoid OnClickRewardButtons(int idx)
+    {
+        userData.stackRewards[idx] = 1;
+        UniTask task = default;
+
+        if(idx == 0)
+           task = FirebaseManager.Instance.UserData.GetGoods(exp : datas[idx].Num);
+        else if (idx == 1)
+            task = FirebaseManager.Instance.UserData.GetGoods(gold : datas[idx].Num);
+        else if (idx == 2)
+            task = FirebaseManager.Instance.UserData.GetGoods(diamond : datas[idx].Num);
+
+        await Managers.Instance.WaitForLoadingAsync(task);
+
+        CheckData();
     }
 
     public override void Open()
@@ -86,9 +104,13 @@ public class TitleStackRewardPlayWindow : Window
 
         for(int i = 0; i < stackRewards.Length; i++)
         {
-            if(stackRewards[i] == 1 && userData.clearWaveCount >= datas[i].Wave)
+            if(stackRewards[i] == 0 && userData.clearWaveCount >= datas[i].Wave)
             {
                 rewardButtons[i].interactable = true;
+            }
+            else
+            {
+                rewardButtons[i].interactable = false;
             }
         }
     }

@@ -81,14 +81,12 @@ public class Managers
         {
             var data = await UniTask.WhenAll(task).AttachExternalCancellation(ctr.Token);
             loadingProgress.SetActive(false);
-            ctr.Dispose();
 
             return data[0];
         }
         catch (OperationCanceledException)
         {
             loadingProgress.SetActive(false);
-            ctr.Dispose();
             SceneManager.LoadScene(SceneIds.LoadingScene);
             return default((T1, T2));
         }
@@ -103,12 +101,10 @@ public class Managers
         {
             await UniTask.WhenAll(task).AttachExternalCancellation(ctr.Token);
             loadingProgress.SetActive(false);
-            ctr.Dispose();
         }
         catch (OperationCanceledException)
         {
             loadingProgress.SetActive(false);
-            ctr.Dispose();
             SceneManager.LoadScene(SceneIds.LoadingScene);
             return;
         }
@@ -123,12 +119,10 @@ public class Managers
         {
             await UniTask.WhenAll(task).AttachExternalCancellation(ctr.Token);
             loadingProgress.SetActive(false);
-            ctr.Dispose();
         }
         catch (OperationCanceledException)
         {
             loadingProgress.SetActive(false);
-            ctr.Dispose();
             SceneManager.LoadScene(SceneIds.LoadingScene);
             return;
         }
@@ -143,14 +137,12 @@ public class Managers
         {
             var data = await UniTask.WhenAll(task).AttachExternalCancellation(ctr.Token);
             loadingProgress.SetActive(false);
-            ctr.Dispose();
 
             return data[0];
         }
         catch (OperationCanceledException)
         {
             loadingProgress.SetActive(false);
-            ctr.Dispose();
             SceneManager.LoadScene(SceneIds.LoadingScene);
             return default(T);
         }
