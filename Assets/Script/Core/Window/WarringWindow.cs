@@ -34,7 +34,7 @@ public class WarringWindow : Window
     public void SetWarringUI(EnemyType enemyType)
     {
         warringText.alpha = 1f;
-        warringText.text = enemyType == EnemyType.EliteMonster ? $"<i>엘리트 보스 몬스터 출현!<i>" : $"<i>보스 몬스터 출현!<i>";
+        warringText.text = enemyType == EnemyType.EliteMonster ? $"<i>엘리트 몬스터 출현!<i>" : $"<i>보스 몬스터 출현!<i>";
     }
 
     private async UniTaskVoid WarringWindowDelayClose(float delay = 1f)
