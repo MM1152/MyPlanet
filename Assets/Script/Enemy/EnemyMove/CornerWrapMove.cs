@@ -106,13 +106,14 @@ public class CornerWrapMove : IMove
     {
         if (target == null) return;
 
-        direction = (target.transform.position - enemy.transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        var dir = (target.transform.position - enemy.transform.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     private void SwitchAttack(Enemy enemy)
     {
+        direction = Vector2.zero;
         enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
         currentPattern = CornerMovePattern.MoveingNextCorner;
     }
@@ -123,6 +124,7 @@ public class CornerWrapMove : IMove
         enemy.transform.position = Vector2.MoveTowards(enemy.transform.position, attackTargetPos, step);
         if (Vector2.Distance(enemy.transform.position, attackTargetPos) < 0.1f)
         {
+            direction = Vector2.zero;
             currentPattern = CornerMovePattern.Attacking;
             return;
         }

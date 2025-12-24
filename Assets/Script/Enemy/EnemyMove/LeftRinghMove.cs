@@ -88,8 +88,8 @@ public class LeftRinghMove : IMove
     {
         if (target == null) return;
 
-        direction = target.transform.position - enemy.transform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        var dir = (target.transform.position - enemy.transform.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 }
