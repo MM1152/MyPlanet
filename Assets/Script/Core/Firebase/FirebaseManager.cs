@@ -163,6 +163,10 @@ public class UserData : JsonSerialized
     public bool isClearStage1Tutorial;
     public bool isClearFirstTutorial;
     public bool isClearStage2Tutorial;
+
+    public int clearWaveCount;
+    public int[] stackRewards;
+
     public int version;
 
     public UserData()
@@ -173,6 +177,9 @@ public class UserData : JsonSerialized
 
         isClearPresetTutorial = false;
         isClearStage2Tutorial = false;
+
+        stackRewards = new int[] { 0, 0, 0 };
+        clearWaveCount = 0;
 
         version = FirebaseManager.Instance.Version;
     }
@@ -196,6 +203,12 @@ public class UserData : JsonSerialized
     public async UniTask ClearPresetTutorial()
     {
         isClearPresetTutorial = true;
+        await SaveAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId, this);
+    }
+
+    public async UniTask SaveClearWaveCount(int clearWave)
+    {
+        clearWaveCount += clearWave;
         await SaveAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId, this);
     }
 

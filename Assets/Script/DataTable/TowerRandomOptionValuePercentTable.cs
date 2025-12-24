@@ -48,7 +48,7 @@ public class TowerRandomOptionValuePercentTable : DataTable
         else if (limit== 2)
             maxProb -= data.mid_prob + data.high_prob;
 
-        float rand = Random.Range(0f, 1f);
+        float rand = Random.Range(0f, maxProb);
         float sliceValue = (maxValue - minValue) / data.step_count;
 
         List<float> valueList = new List<float>();

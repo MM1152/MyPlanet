@@ -38,14 +38,12 @@ public class VictoryWindow : Window
     private int expReward;
     private int diamondReward;
     private bool isClear;
+
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
         windowId = (int)WindowIds.VictoryWindow;
-
-
-
-
+         
         goldLayout.SetActive(false);
         expLayout.SetActive(false);
         diamondLayout.SetActive(false);
@@ -68,8 +66,15 @@ public class VictoryWindow : Window
 
     private async UniTaskVoid OnClickReplayButton()
     {
-        var task = FirebaseManager.Instance.UserData.GetGoods(goldReward, expReward, diamondReward);
-        await Managers.Instance.WaitForLoadingAsync(task);
+        List<UniTask> tasks = new List<UniTask>();
+
+        tasks.Add(FirebaseManager.Instance.UserData.GetGoods(goldReward, expReward, diamondReward));
+        if(waveManager.CurrentWaveIndex != 1)
+        {
+            tasks.Add(FirebaseManager.Instance.UserData.SaveClearWaveCount(waveManager.CurrentWaveIndex));
+        }
+
+        await Managers.Instance.WaitForLoadingAsync(tasks);
 
         Time.timeScale = (int)GameSpeed.CurrentSpeed;;
         SceneManager.LoadScene(SceneIds.LoadingScene);
@@ -80,6 +85,11 @@ public class VictoryWindow : Window
         // Time.timeScale = 1f;
         List<UniTask> tasks =  new List<UniTask>();
         tasks.Add(FirebaseManager.Instance.UserData.GetGoods(goldReward , expReward , diamondReward));
+        if (waveManager.CurrentWaveIndex != 1)
+        {
+            tasks.Add(FirebaseManager.Instance.UserData.SaveClearWaveCount(waveManager.CurrentWaveIndex));
+        }
+
         if (waveManager.StageId == 1)
         {
             if (isClear && !FirebaseManager.Instance.UserData.isClearStage1Tutorial)
@@ -100,8 +110,13 @@ public class VictoryWindow : Window
 
     private async UniTaskVoid OnClickNextStageButton()
     {
-        var task = FirebaseManager.Instance.UserData.GetGoods(goldReward, expReward, diamondReward);
-        await Managers.Instance.WaitForLoadingAsync(task);
+        List<UniTask> tasks = new List<UniTask>();
+        tasks.Add(FirebaseManager.Instance.UserData.GetGoods(goldReward, expReward, diamondReward));
+        if (waveManager.CurrentWaveIndex != 1)
+        {
+            tasks.Add(FirebaseManager.Instance.UserData.SaveClearWaveCount(waveManager.CurrentWaveIndex));
+        }
+        await Managers.Instance.WaitForLoadingAsync(tasks);
 
         manager.Close();
         
