@@ -27,10 +27,16 @@ public class TypeEffectiveness
     {
         return typeToDamageTable[TypeToInt, (int)targetType];
     }
-
-    public static float StaticGetDamagePercent(ElementType attackerType, ElementType targetType)
+    
+    public float GetDefenderDamagePercent(ElementType attackerType)
     {
-        var temp = new TypeEffectiveness();
-        return temp.typeToDamageTable[(int)attackerType, (int)targetType];
+        return typeToDamageTable[(int)attackerType, TypeToInt];
+    }
+
+    public float GetReverseDamagePercent(ElementType attackerType, ElementType targetType)
+    {
+        float percent = typeToDamageTable[(int)attackerType, (int)targetType];
+
+        return percent == 0f ? 0f : 1f / percent;
     }
 }

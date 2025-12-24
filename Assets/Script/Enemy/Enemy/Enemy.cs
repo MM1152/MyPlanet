@@ -1,7 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
@@ -90,8 +89,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private float chaosDuration;
     private BasePlanet basePlanet;
     private CancellationTokenSource disAbleCtr;
-    [SerializeField] private BossPartner bossPartner;
-
     public EnemyAsset enemyAsset { get; set; }
     public PoolsId enemyAssetPoolId { get; set; }
     public Transform rotObj;
@@ -116,6 +113,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public void Initallized(EnemyData.Data data)
     {
         this.enemyData = data;
+        ResetActions();
         stateMachine = new StateMachine(this);
         var stageData = DataTableManager.StageInfomationTable.Get(stageId);
         var percent = 1f;
@@ -138,11 +136,18 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         isKilledByPlayer = true;
         IsDead = false;
         attack = AttackManager.GetAttack(enemyType);
+        if (attack is BossAttack bossShotAttack) //후에 수정필요 
+        {
+            var shotStrategy = bossShotAttack.GetShotStrategy(ElementType, enemyData.ID) as TurnSimpleAttack;
+            if (shotStrategy != null)
+            {
+                shotStrategy.Init(this);
+            }
+        }
         die = DieManager.GetDie(enemyData.ID);
         ability = AbilityManager.GetAbility(enemyData.ID);
         move = MoveManager.GetMove(enemyType);
         zone?.Init(this);
-        ResetActions();
         ability?.SetEnemy(this);
         if (enemyLineRenderer != null)
         {
@@ -156,14 +161,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             this.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag)?.GetComponent<WaveWindow>();
             bossUi?.ShowBossUI(enemyData.HP);
-
-            if (data.ID == 3057)
-            {
-                bossPartner.gameObject.SetActive(true);
-            }
         }
 
-        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 #endif
         ReturnMoveAction = () =>
         {
@@ -179,6 +179,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         abilityAction = null;
         OnBuffRemoved = null;
+        // Clear barrier refill callbacks when reinitializing pooled enemies
+        OnBarrierRefill = null;
     }
 
     public void SetState(IState newState)
@@ -273,7 +275,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public void OnDamage(int damage)
     {
-        Debug.Log($"{this.name} is taking damage: {damage}");
         if (ability != null && ability.abilityType == AbilityType.OnDamage && ability.isActive)
         {
             damage = ability.OnDamage(damage);
@@ -282,10 +283,13 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (damage < 0) return;
 
         currentHP -= damage;
+        Debug.Log($"적이 {damage}만큼 데미지를 받았습니다. 남은 체력: {currentHP}");
         if (bossUi != null)
             bossUi.UpdateBossHP(currentHP, enemyData.HP);
 
-        int percent = Mathf.FloorToInt((float)currentHP / enemyData.HP * 100f);
+        Debug.Log($"적 남은 체력: {currentHP}/{enemyData.HP}");
+        int percent = (int)(((float)currentHP / enemyData.HP) * 100f);
+        Debug.Log($"적 남은 체력 백분율: {percent}%");
         OnBarrierRefill?.Invoke(percent);
 
 #if DEBUG_MODE
