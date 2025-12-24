@@ -17,6 +17,9 @@ public class TowerDuplicationRewardTable : DataTable
         public int L_piece_count { get; set; }
         public int M_piece_count { get; set; }
         public int H_piece_count { get; set; }
+
+        [Ignore] 
+        public ItemTable.Data TowerPieceItemData => DataTableManager.ItemTable.Get(item_ID);
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)

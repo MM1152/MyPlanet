@@ -82,9 +82,12 @@ public class TitleShopWindow : Window
 
         popupManager.ForceClose();
 
-        var popup = popupManager.Open<PurchaseTowerPopup>(PopupIds.PurchaseTowerPopup);
-        await Managers.Instance.WaitForLoadingAsync(popup.SetPickUpData(towerTableData));
-
+        var popup = popupManager.GetPopup(PopupIds.PurchaseTowerPopup);
+        if(popup is PurchaseTowerPopup purchaseTowerPopup)
+        {
+            await Managers.Instance.WaitForLoadingAsync(purchaseTowerPopup.SetPickUpData(towerTableData));
+            popupManager.Open<PurchaseTowerPopup>(PopupIds.PurchaseTowerPopup);
+        }
     }
 
     private void OnChangeGoldValue(object sender , ValueChangedEventArgs args)

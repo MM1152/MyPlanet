@@ -68,6 +68,7 @@ public class PopupManager : MonoBehaviour
 
     public void ForceClose()
     {
+        if (popupStack.Count == 0) return;
         var popup = popupStack.Pop();
         popup.Close();
         UpdateBackGroundPanel().Forget();
