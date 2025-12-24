@@ -8,65 +8,78 @@ public class FortifiedBarrierAbility : BaseAbility
     public int maxBarrierAmount = 3000;// 임시값
     public int barrierAmount;
     private float refillTimer = 5f; //임시 
-    public override bool isActive => barrierAmount > 0;
-    private float reductionDamage = 0.4f; //테이블연동필요 //피해감소율 
-#if DEBUG_MODE
-    TestRange rangePrefab;
-    bool setSprite = false;
-#endif
+    public override bool isActive => barrier == null || barrier.IsDead; // 베리어가 없을 때 활성화
+    private Barrier barrier;  // 풀링해서 가져와서 담아둘 베리어
+    private float reductionDamage = 0.4f; //피해감소율 설정테이블 연결필요 
+
 
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);
+        // barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);
+        barrierAmount = 100000; //임시
         maxBarrierAmount = barrierAmount;
+        enemy.OnDie += Barrier_OnDead;
+        CreateBarrier();
+    }
+
+    private void CreateBarrier()
+    {
+        if (barrier != null && barrier.gameObject != null && barrier.gameObject.activeSelf)
+        {
+            Debug.Log("기존 활성 베리어가 있어 새로 생성하지 않습니다.");
+            return;
+        }
+        var barrierObj = Managers.ObjectPoolManager.SpawnObject<Barrier>(PoolsId.SteelBarrier);
+        Debug.Log("베리어 오브젝트 풀에서 스폰 완료");
+        Debug.Log($"베리어 오브젝트 이름: {barrierObj.name}");
+        barrierObj.transform.SetParent(enemy.transform);
+        barrierObj.transform.localPosition = Vector3.zero;
+        barrier = barrierObj.GetComponent<Barrier>();
+        barrier.Init(barrierAmount, enemy.ElementType, enemy, OnBarrierDestroyed, reductionDamage);
+        StartRefillTimer().Forget();
     }
     public override int OnDamage(int damage)
     {
+        if (isActive) return damage;
 
-        if (!isActive) return damage;
-
-#if DEBUG_MODE
-        if (!setSprite)
-        {
-            setSprite = true;
-            rangePrefab = Managers.ObjectPoolManager.SpawnObject<TestRange>(PoolsId.TestRange);
-            rangePrefab.transform.SetParent(enemy.transform);
-            rangePrefab.transform.position = enemy.transform.position;
-            // var spr = rangePrefab.GetComponent<SpriteRenderer>();
-            // spr.color = enemy.spriteRenderer.color;
-            // spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
-            float radius = enemy.transform.localScale.x;
-            float visualScale = radius * 10f;
-            rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
-        }
-#endif
-
-        if (barrierAmount > 0)
-        {
-            var reduceDamageWithBarrier = damage * reductionDamage;
-            barrierAmount -= (int)reduceDamageWithBarrier;
-        }
-        Debug.Log($"베리어 데미지 흡수 {damage}, 남은 베리어: {barrierAmount}");
-
-        if (barrierAmount <= 0)
-        {
-            Debug.Log("베리어 파괴! 타이머 시작");
-            StartRefillTimer().Forget();
-            int overflowDamage = (int)(-barrierAmount / reductionDamage);
-            barrierAmount = 0;
-
-#if DEBUG_MODE
-            rangePrefab.gameObject.SetActive(false);
-#endif
-            return overflowDamage;
-        }
-
-        return 0;
+        Debug.Log("베리어가 없어서 읽히면 안되는데 여기로 옴");
+        return 0; // 데미지 0으로 처리해서 베리어가 다 흡수하게 함
     }
+
+    private void OnBarrierDestroyed(int overflowBaseDamage, ElementType attackerType)
+    {
+        Debug.Log("베리어가 파괴되어 적 데미지 처리 시작");
+        // 파괴될때 베리어에서 오바된 데미지값 넘겨서 실행할 함수
+        if (overflowBaseDamage > 0) // 남은 데미지가 있으면 적에게 전달
+        {
+            Debug.Log("베리어 파괴 후 적에게 오버한 데미지 전달");
+
+            float damagePercent = enemy.typeEffectiveness.GetDefenderDamagePercent(attackerType);
+            float finalDamage = overflowBaseDamage * damagePercent;
+            enemy.currentHP -= (int)finalDamage;
+            Debug.Log($"최종데미지 {finalDamage}, 적 남은체력: {enemy.currentHP}");
+            if (enemy.currentHP <= 0) // 적 사망 처리
+            {
+                barrier.transform.SetParent(null); // 베리어 분리
+                Managers.ObjectPoolManager.Despawn(PoolsId.IceBarrier, barrier.gameObject); // 베리어 디스폰
+                enemy.OnDead();
+            }
+        }
+        Debug.Log($"베리어 활성화 상태 {barrier.gameObject.activeSelf}");
+        Debug.Log("베리어 파괴 후 적 데미지 처리");
+    }
+
 
     public void RefillBarrier(int amount)
     {
+        if (barrier == null) return;
+
+        if (barrier.gameObject.activeSelf == false)
+        {
+            barrier.gameObject.SetActive(true);
+        }
+
         barrierAmount += amount;
 #if DEBUG_MODE
         var text = enemy.textSpawnManager.SpawnTextUI(amount.ToString(), enemy.transform.position);
@@ -83,17 +96,16 @@ public class FortifiedBarrierAbility : BaseAbility
     private async UniTaskVoid StartRefillTimer()
     {
         if (enemy == null) return;
-        await UniTask.Delay(System.TimeSpan.FromSeconds(refillTimer), ignoreTimeScale: false, cancellationToken: enemy.GetCancellationTokenOnDestroy());
-        RefillBarrier(maxBarrierAmount);
-
-#if DEBUG_MODE
-        if (rangePrefab != null)
+        while (enemy != null && enemy.gameObject.activeSelf)
         {
-            rangePrefab.gameObject.SetActive(true);
-            float radius = enemy.transform.localScale.x;
-            float visualScale = radius * 10f;
-            rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
+            await UniTask.Delay(System.TimeSpan.FromSeconds(refillTimer), ignoreTimeScale: false, cancellationToken: enemy.GetCancellationTokenOnDestroy());
+            RefillBarrier(maxBarrierAmount);
         }
-#endif
+    }
+
+       private void Barrier_OnDead(Enemy enemy)
+    {
+         barrier.transform.SetParent(null);
+         Managers.ObjectPoolManager.Despawn(PoolsId.SteelBarrier, barrier.gameObject); 
     }
 }

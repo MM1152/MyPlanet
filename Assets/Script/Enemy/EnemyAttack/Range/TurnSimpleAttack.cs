@@ -1,6 +1,5 @@
-using System;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
+
 
 public class TurnSimpleAttack : IShotStrategy
 {
@@ -8,15 +7,21 @@ public class TurnSimpleAttack : IShotStrategy
     private BossPartner bossPartner;
     private bool isBossTurn = true;
 
-    public void SetBossPartner(BossPartner partner)
+    public bool IsBossTurn() => isBossTurn;
+
+    public void Init(Enemy enemy)
     {
-        bossPartner = partner;
+        bossPartner = Managers.ObjectPoolManager.SpawnObject<BossPartner>(PoolsId.BossPartner);
+        if (bossPartner != null)
+        {
+            bossPartner.Init(enemy);
+        }
     }
 
-    public bool IsBossTurn() => isBossTurn;
 
     public void Shot(Enemy enemy, GameObject target)
     {
+        if (bossPartner == null) return;
         if (!isBossTurn) return;
         if (target == null) return;
         if (enemy == null) return;

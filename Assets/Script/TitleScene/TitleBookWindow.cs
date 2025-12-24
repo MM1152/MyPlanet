@@ -120,7 +120,7 @@ public class TitleBookWindow : Window
         goldText.text = FirebaseManager.Instance.UserData.gold.ToString("N0");
         expText.text = FirebaseManager.Instance.UserData.exp.ToString("N0");
         diamondText.text = FirebaseManager.Instance.UserData.diamond.ToString("N0");
-
+        Managers.SoundManager.PlayBGM(AudiosId.A_Dope_Chill_Session);
         base.Open();
     }
 

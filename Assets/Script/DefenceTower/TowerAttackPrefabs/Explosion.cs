@@ -24,7 +24,7 @@ public class Explosion : BaseAttackPrefab
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
             find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
-            find.StatusEffect.Apply(effect, find);
+            find.StatusEffect?.Apply(effect, find);
         }
     }
 

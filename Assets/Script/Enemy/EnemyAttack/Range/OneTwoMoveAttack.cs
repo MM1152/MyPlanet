@@ -98,6 +98,7 @@ public class OneTwoMoveAttack : IMove
 
     private void SwitchAttack(Enemy enemy)
     {
+        direction = Vector2.zero;
         enemy.stateMachine.ChangeState(enemy.stateMachine.attackState);
         currentState = OneTwoMoveState.WaitingMove;
     }
@@ -105,9 +106,8 @@ public class OneTwoMoveAttack : IMove
     private void RotateTowardsTarget(Enemy enemy)
     {
         if (enemy.target == null) return;
-
-        direction = (enemy.target.transform.position - enemy.transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        var dir = (enemy.target.transform.position - enemy.transform.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         enemy.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 

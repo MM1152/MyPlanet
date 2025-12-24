@@ -49,14 +49,17 @@ public class BlackMineBullet : Bullet
                 var find = collision.GetComponent<IDamageAble>();
                 if(find != null)
                 {
-                    var enemyType = collision.GetComponent<Enemy>().enemyType;
-
+                    var enemy = collision?.GetComponent<Enemy>();
+              
                     var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
                     find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
                     Managers.SoundManager.PlaySFX(hitSoundId);
 
-                    if (enemyType == EnemyType.EliteMonster || enemyType == EnemyType.Boss)
+                    if(enemy == null) return;
+                   
+                    if (enemy.enemyType == EnemyType.EliteMonster || enemy.enemyType == EnemyType.Boss)
                         return;
+
 
                     var dir = (transform.position - collision.transform.position).normalized;
                     collision.transform.position += dir * gravityScale * Time.deltaTime;

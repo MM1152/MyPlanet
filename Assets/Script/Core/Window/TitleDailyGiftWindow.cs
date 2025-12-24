@@ -44,7 +44,7 @@ public class TitleDailyGiftWindow : Window
     {
         base.Open();
         
-        // OpenµÉ ¶§ À§Ä¡ ¼³Á¤
+        // Openï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         PositionDailyGiftsAsync().Forget();
         CheckData();
     }
@@ -57,7 +57,7 @@ public class TitleDailyGiftWindow : Window
             dailyGiftLayouts[i].SetCheckBox(false);
         }
 
-        // ÇöÀç ¹ÞÀ» ¼ö ÀÖ´Â ¹üÀ§ ÆÇ´Ü
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½
         for(int i = 0; i <= userData.dailyGiftDate; i++)
         {
             if (userData.getDailyGift[i] == 1)
@@ -75,13 +75,13 @@ public class TitleDailyGiftWindow : Window
 
     private async UniTaskVoid PositionDailyGiftsAsync()
     {
-        // ÇÑ ÇÁ·¹ÀÓ ´ë±â
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         await UniTask.Yield();
 
-        // Canvas °­Á¦ ¾÷µ¥ÀÌÆ®
+        // Canvas ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         Canvas.ForceUpdateCanvases();
 
-        // ¸ðµç ·¹ÀÌ¾Æ¿ô À§Ä¡ ¼³Á¤
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾Æ¿ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
         for (int i = 0; i < dailyGiftLayouts.Count; i++)
         {
             PositionDailyGift(dailyGiftLayouts[i].transform, i);
@@ -97,7 +97,7 @@ public class TitleDailyGiftWindow : Window
         float cellHeight = height / 14;
         float yPos = index * cellHeight - height * 0.46f;
 
-        // RectTransform ¼³Á¤
+        // RectTransform ï¿½ï¿½ï¿½ï¿½
         giftRect.anchoredPosition = new Vector2(0f, yPos);
     }
 }

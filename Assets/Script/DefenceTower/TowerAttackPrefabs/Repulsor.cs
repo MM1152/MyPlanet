@@ -45,6 +45,7 @@ public class Repulsor : BaseAttackPrefab
         if (collision.CompareTag(TagIds.EnemyTag))
         {
             var enemy = collision.GetComponent<Enemy>();
+            if (enemy == null) return;  
             if (EnemyTypes.IsEliteMonster(enemy.enemyData.ID) || EnemyTypes.IsBossMonster(enemy.enemyData.ID))
                 return;
 

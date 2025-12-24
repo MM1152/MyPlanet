@@ -15,7 +15,7 @@ public class EnemyAsset : MonoBehaviour
         baseRotation = this.transform.rotation.eulerAngles;
         this.transform.SetParent(enemy.rotObj.transform, false);
         transform.localPosition = Vector3.zero;
-        transform.rotation = enemy.rotObj.transform.rotation * Quaternion.Euler(-180, -90, 90);
+        transform.rotation = enemy.rotObj.transform.rotation * Quaternion.Euler(-180, -120, 90);
         enemyMeshRenderer.sharedMaterial = material;
         
         if(enemy.enemyData.ID == 3057) //7스테이지보스가 유독큼
