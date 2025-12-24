@@ -130,7 +130,8 @@ public enum PoolsId
     LaserBeam4RedHit = 307,
 
 
-    Barrier = 500,
+    IceBarrier = 502,
+    SteelBarrier = 503,
     Exp = 400,
     DamageText = 600,
 
@@ -302,7 +303,8 @@ public static class AddressableNames
         { "Drone", PoolsId.Drone },
         { "Repulsor", PoolsId.Repulsor },
         { "ChaosBeacon", PoolsId.ChaosBeacon },
-        { "Barrier", PoolsId.Barrier },
+        { "IceBarrier", PoolsId.IceBarrier },
+        {"SteelBarrier", PoolsId.SteelBarrier },
         { "DarkLaserHitEffect", PoolsId.DarkLaserHitEffect },
         { "SolarLaserHitEffect", PoolsId.SolarLaserHitEffect },
         { "Flash 13 red laser", PoolsId.Flash13redlaser },

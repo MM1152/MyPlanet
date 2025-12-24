@@ -17,14 +17,14 @@ public class SoundPlayer : MonoBehaviour, IPointerDownHandler
     public bool touchToPlay = false;
     [Header("Touch Audio ID")]
     public AudiosId touchAudioId = AudiosId.None;
-    private void OnEnable()
-    {
-        if (playOnStart && soundType != SoundType.None && audioId != AudiosId.None)
-        {
-            PlaySound();
-            Debug.Log("사운드 플레이어가 시작과 동시에 사운드를 재생합니다.");
-        }
-    }
+    // private void OnEnable()
+    // {
+    //     if (playOnStart && soundType != SoundType.None && audioId != AudiosId.None)
+    //     {
+    //         PlaySound();
+    //         Debug.Log("사운드 플레이어가 시작과 동시에 사운드를 재생합니다.");
+    //     }
+    // }
 
     public void PlaySound()
     {

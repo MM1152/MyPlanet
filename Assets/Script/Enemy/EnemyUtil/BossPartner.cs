@@ -1,15 +1,13 @@
+using CsvHelper.Configuration.Attributes;
 using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 
 public class BossPartner : MonoBehaviour, IDamageAble
 {
-    [SerializeField] private Enemy enemy; // 부모 보스 참조
-    [SerializeField] private CircleCollider2D colli;
+    private Enemy enemy;
     private ElementType elementType => ElementType.Dark; // 보스 파트너의 속성 타입 어둠으로 고정?
     private ElementType targetElementType => ElementType.Light; // 타겟 속성 타입 빛으로 고정
-    private ElementType lastAttackerType => targetTypeEffectiveness.Type; // 마지막 공격자 타입 
-    private float controlScale = 0.3f; // 보스 파트너 크기 조절용
     private float radius; // Boss 반지름 
     private float radiusPlus = 1f; // 궤도값 구하기 위해 반지름 추가값
     private float orbitRadius => radius + radiusPlus; // 궤도 반지름
@@ -38,22 +36,23 @@ public class BossPartner : MonoBehaviour, IDamageAble
     private ParticleSystem hitParticle;
     private ParticleSystem flashParticle;
 
-    private void Start()
+    [SerializeField] CircleCollider2D circleCollider2D;
+    public void Init(Enemy enemy)
     {
-        radius = enemy.GetComponent<CircleCollider2D>().radius; // 부모 반지름 가져오고 궤도를 구해야함 
+        this.enemy = enemy;
+        this.transform.SetParent(enemy.transform, true);
+        var meshFilter = enemy.GetComponentInChildren<MeshFilter>();
+        if (meshFilter != null)
+        {
+            var bounds = meshFilter.sharedMesh.bounds;
+            radius = bounds.extents.magnitude * 0.3f;
+        }
+        // radius = enemy.GetComponent<CircleCollider2D>().radius; // 부모 반지름 가져오고 궤도를 구해야함 
         targetLayer = LayerMask.GetMask("Player");
-        // X, Y만 스케일 적용, Z는 원본 유지
-        this.transform.localScale = enemy.transform.localScale * controlScale;
+        this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         typeEffectiveness.Init(elementType); // 타입 효과 초기화
         angle = UnityEngine.Random.Range(0f, 360f); // 랜덤 시작 각도
-        if (enemy.attack is BossAttack bossAttack)
-        {
-            turnSimpleAttack = bossAttack.GetShotStrategy(enemy.ElementType, enemy.enemyData.ID) as TurnSimpleAttack;
-            if (turnSimpleAttack == null) return;
-            turnSimpleAttack.SetBossPartner(this);
-        }
         enemy.OnDie += Die;
-        targetLayer = LayerMask.GetMask("Player"); // 타겟 레이어   
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -67,14 +66,24 @@ public class BossPartner : MonoBehaviour, IDamageAble
 
     private void Update()
     {
-        UpdateSelfRotation(); // 자전 
+        // UpdateSelfRotation(); // 자전 
         UpdateOrbitPosition();// 공전
+        RotateTowardsTarget();
         AttackTurn(); // 보스와 주고받으며 공격
     }
 
     private void UpdateSelfRotation()
     {
         this.transform.Rotate(0, 0, selfRotaspeed * Time.deltaTime);
+    }
+
+    private void RotateTowardsTarget()
+    {
+        if (enemy.target == null) return;
+
+        var direction = enemy.target.transform.position - this.transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        this.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     private void UpdateOrbitPosition()
@@ -90,6 +99,19 @@ public class BossPartner : MonoBehaviour, IDamageAble
     {
         if (enemy.stateMachine.currentState != enemy.stateMachine.attackState)
             return;
+
+        if (turnSimpleAttack == null)
+        {
+            if(enemy.attack is BossAttack bossAttack)
+            {
+                 turnSimpleAttack = bossAttack.GetShotStrategy(enemy.ElementType, enemy.enemyData.ID) as TurnSimpleAttack;
+            }
+            else
+            {
+                Debug.LogError("BossAttack이 아닙니다.");   
+                return;
+            }
+        }
 
         if (!isAttackTurn) return;
 
@@ -148,7 +170,7 @@ public class BossPartner : MonoBehaviour, IDamageAble
         }
         Vector2 dir = (enemy.target.transform.position - this.transform.position).normalized;
         float dis = Vector2.Distance(this.transform.position, enemy.target.transform.position);
-        float offset = (colli != null) ? colli.radius * transform.lossyScale.x : transform.lossyScale.x * 0.5f;
+        float offset = circleCollider2D.radius * transform.lossyScale.x;
         startPoint = (Vector2)transform.position + dir * offset;
         lineRenderer.SetPosition(0, startPoint);
         FlashParticle(startPoint, dir, dis);
@@ -217,8 +239,8 @@ public class BossPartner : MonoBehaviour, IDamageAble
 
     public void OnDamage(int damage) // 보스가 데미지 입을때 같이 데미지 입게
     {
-        if (inLaserAttack) return;
         enemy.OnDamage(damage);
+        if (inLaserAttack) return;
         if (targetTypeEffectiveness.Type == targetElementType && !isWaiting)
         {
             inLaserAttack = true;
@@ -227,10 +249,6 @@ public class BossPartner : MonoBehaviour, IDamageAble
     }
 
     public void OnDead()
-    {
-    }
-
-    public void Die(Enemy enemy)
     {
         if (hitParticle != null)
         {
@@ -243,7 +261,12 @@ public class BossPartner : MonoBehaviour, IDamageAble
             Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
             flashParticle = null;
         }
-        Destroy(this.gameObject);
+        Managers.ObjectPoolManager.Despawn(PoolsId.BossPartner, this.gameObject);
+    }
+
+    public void Die(Enemy enemy)
+    {
+        OnDead();
     }
 
     public void Shot()

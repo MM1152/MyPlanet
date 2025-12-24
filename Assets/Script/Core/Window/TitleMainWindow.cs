@@ -75,7 +75,8 @@ public class TitleMainWindow : Window
         {
             tutorialManager.InitTutorial(TutorialStep.Stage1Enter);
         }
-
+         
+        Managers.SoundManager.PlayBGM(AudiosId.A_Dope_Chill_Session);   
     }
 
     private void OnChangeGoldValue(object sender , ValueChangedEventArgs args)

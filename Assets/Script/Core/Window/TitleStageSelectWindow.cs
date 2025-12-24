@@ -75,6 +75,7 @@ public class TitleStageSelectWindow : Window
         if(currentStageLayout != null)
             currentStageLayout.UpdateStageLayout(false, false, false);
         UpdateStageLayout(1);
+        Managers.SoundManager.PlayBGM(AudiosId.A_Dope_Chill_Session);
         base.Open();
     }
 }
