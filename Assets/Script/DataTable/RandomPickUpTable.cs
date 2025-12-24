@@ -109,6 +109,20 @@ public class RandomPickUpTable : DataTable
         return null;
     }
 
+    public Data GetTowerIdToData(int towerId)
+    {
+        var towerDatas = GetRandomPickUpDatasForTower();
+        foreach(var tower in towerDatas)
+        {
+            if(towerId == tower.connection_id)
+            {
+                return tower;
+            }
+        }
+
+        return null;
+    }
+
     public Data GetRandomDataForTower()
     {
         float rand = Random.Range(0f, towerWeight);

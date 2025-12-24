@@ -59,6 +59,10 @@ public class GravityWrap : BaseAttackPrefab
                 Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
             return;
         }
+        if(followTarget == null)
+        {
+            return;
+        }
         transform.position = followTarget.position;
     }
 

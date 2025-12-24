@@ -25,6 +25,7 @@ public enum WindowIds
     TowerInfomationWindow = 17,
     RandomPickUpWindow = 18,
     TitlePickUpResultWindow = 19,
+    TitleStackRewardPlayWindow = 20,
 }
 
 public enum PopupIds
@@ -36,6 +37,7 @@ public enum PopupIds
     SideBarPopup = 3,
     TextPopup = 4,
     RandomOptionPopup = 5,
+    PurchaseTowerPopup = 6,
 }
 
 public static class SceneIds

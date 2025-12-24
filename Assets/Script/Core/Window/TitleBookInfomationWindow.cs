@@ -36,6 +36,13 @@ public class TitleBookInfomationWindow : Window
         FirebaseManager.Instance.Database.AddListner(DataBasePaths.DiamondPath, OnValueChangeToDiamond);
     }
 
+    public void OnDestroy()
+    {
+        FirebaseManager.Instance.Database.RemoveListner(DataBasePaths.GoldPath, OnValueChangeToGold);
+        FirebaseManager.Instance.Database.RemoveListner(DataBasePaths.ExpPath, OnValueChangeToExp);
+        FirebaseManager.Instance.Database.RemoveListner(DataBasePaths.DiamondPath, OnValueChangeToDiamond);
+    }
+
     public override void Open()
     {
         base.Open();

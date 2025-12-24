@@ -75,6 +75,7 @@ public class Managers
     public async UniTask<(T1 , T2)> WaitForLoadingAsync<T1 , T2>(UniTask<(T1 , T2)> task)
     {
         ctr = new CancellationTokenSource();
+        ctr.CancelAfterSlim(10000);
         loadingProgress.SetActive(true);
         try
         {

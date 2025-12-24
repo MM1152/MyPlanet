@@ -63,49 +63,28 @@ public class TitleShopWindow : Window
             ("Price", shopTable.Price.ToString()),
             ("Name", DataTableManager.TowerTable.Get(shopTable.Tower_ID).Name)
         );
-        textPopup.SetTexts("아이템 구매" , formatingText , DataTableManager.StringTable.Get(6100) , DataTableManager.StringTable.Get(6101));
-        textPopup.SetButtonAction(OnClickBlueButton , () => OnClickRedButton(shopTable).Forget());
+        textPopup.SetTexts("아이템 구매" , formatingText  , DataTableManager.StringTable.Get(6101) ,  DataTableManager.StringTable.Get(6100));
+        textPopup.SetButtonAction(() => OnClickBlueButton(shopTable).Forget(), OnClickRedButton);
     }
 
-    private void OnClickBlueButton()
-    {
-        popupManager.ForceClose();
-    }
-
-    private async UniTaskVoid OnClickRedButton(ShopTable.Data purchaseData)
+    private async UniTaskVoid OnClickBlueButton(ShopTable.Data purchaseData)
     {
         var checkGoldTask = FirebaseManager.Instance.UserData.CheckGoodsAsync(DataBasePaths.GoldPath , purchaseData.Price);
         var result = await Managers.Instance.WaitForLoadingAsync(checkGoldTask);
 
         if (!result) return;
 
+        var task = FirebaseManager.Instance.UserData.UseGoods(useGoldAmount: purchaseData.Price);
+        await Managers.Instance.WaitForLoadingAsync(task);
+
         var currentTowerData = FirebaseManager.Instance.TowerData.Get(purchaseData.Tower_ID);
         var towerTableData = DataTableManager.TowerTable.Get(purchaseData.Tower_ID);
 
-        if (!currentTowerData.Unlock)
-        {
-            currentTowerData.Unlock = true;
-        }
-
-        //FIX : 임시로 랜덤 옵션 값 부여
-        var optionValue = Random.Range(towerTableData.Min_Value, towerTableData.Max_Value);
-        
-        if (optionValue > currentTowerData.OptionValue)
-        {
-            currentTowerData.OptionValue = optionValue;
-        }
-
-        var task = FirebaseManager.Instance.TowerData.Save(currentTowerData);
-        var useGoldTask = FirebaseManager.Instance.UserData.UseGoods(purchaseData.Price , 0);
-
-        var success = await Managers.Instance.WaitForLoadingAsync(task);
-        await Managers.Instance.WaitForLoadingAsync(useGoldTask);
-
-#if DEBUG_MODE
-        if (success.Item1)
-             Debug.Log("타워 데이터 저장성공");
-#endif
         popupManager.ForceClose();
+
+        var popup = popupManager.Open<PurchaseTowerPopup>(PopupIds.PurchaseTowerPopup);
+        await Managers.Instance.WaitForLoadingAsync(popup.SetPickUpData(towerTableData));
+
     }
 
     private void OnChangeGoldValue(object sender , ValueChangedEventArgs args)
@@ -122,4 +101,8 @@ public class TitleShopWindow : Window
         }
     }
 
+    private void OnClickRedButton()
+    {
+        popupManager.ForceClose();
+    }
 }
