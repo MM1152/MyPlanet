@@ -68,6 +68,7 @@ public class RandomPickUpWindow : Window
         {
             previousOpenPanel.SetActive(true);
         }
+        Managers.SoundManager.PlayBGM(AudiosId.Dry_To_Verb);
         base.Open();
     }
 
