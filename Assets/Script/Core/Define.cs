@@ -26,6 +26,7 @@ public enum WindowIds
     RandomPickUpWindow = 18,
     TitlePickUpResultWindow = 19,
     TitleStackRewardPlayWindow = 20,
+    TitleDailyGiftWindow = 21,
 }
 
 public enum PopupIds
@@ -487,6 +488,7 @@ public static class DataTableIds
     public static readonly string TowerDuplicationRewardTable = "TowerDuplicationRewardTable";
     public static readonly string RewardListTable = "RewardListTable";
     public static readonly string ClearWaveRewardTable = "ClearWaveRewardTable";
+    public static readonly string DailyGiftTable = "DailyGiftTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

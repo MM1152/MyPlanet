@@ -164,6 +164,9 @@ public class UserData : JsonSerialized
     public bool isClearFirstTutorial;
     public bool isClearStage2Tutorial;
 
+    public int[] getDailyGift;
+    public int dailyGiftDate;
+
     public int clearWaveCount;
     public int[] stackRewards;
 
@@ -172,16 +175,25 @@ public class UserData : JsonSerialized
     public UserData()
     {
         nickName = "NoName-" + UnityEngine.Random.Range(10000, 50000);
-        gold = 30000;
-        exp = 30000;
+        gold = 0;
+        exp = 0;
 
         isClearPresetTutorial = false;
         isClearStage2Tutorial = false;
+
+        getDailyGift = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        dailyGiftDate = -1;
 
         stackRewards = new int[] { 0, 0, 0 };
         clearWaveCount = 0;
 
         version = FirebaseManager.Instance.Version;
+    }
+
+    public async UniTask SaveDailyGift(int day)
+    {
+        getDailyGift[day] = 1;
+        await SaveAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId , this);
     }
 
     public async UniTask GetGoods(int gold = 0, int exp = 0, int diamond = 0)

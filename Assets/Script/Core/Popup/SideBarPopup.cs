@@ -54,6 +54,8 @@ public class SideBarPopup : Popup
     private void OnClickAttendanceButton()
     {
         //FIX
+        windowManager.Open(WindowIds.TitleDailyGiftWindow);
+        OnClickCloseButton();
     }
 
     private void OnClickBookButton()
