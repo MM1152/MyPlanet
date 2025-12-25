@@ -1,6 +1,7 @@
 ﻿using CsvHelper.Configuration.Attributes;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -137,5 +138,24 @@ public class PlanetTable : DataTable
             SubModel = await Addressables.LoadAssetAsync<GameObject>(subPath).ToUniTask();
         }
         Model = await Addressables.LoadAssetAsync<GameObject>(path).ToUniTask();
+    }
+
+    public Data GetRandomPlaentData(char[] limitGrade)
+    {
+        var planetDatas = GetAllData();
+        var limitPlanetDatas = planetDatas.Where(x =>
+        {
+            for(int i = 0; i < limitGrade.Length; i++)
+            {
+                if(x.grade == limitGrade[i].ToString())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }).ToList();
+
+        var randomIndex = Random.Range(0, limitPlanetDatas.Count());
+        return limitPlanetDatas[randomIndex];
     }
 }

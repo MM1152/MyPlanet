@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 public class ItemTable : DataTable
@@ -17,6 +18,7 @@ public class ItemTable : DataTable
         public int? Sell_Value { get; set; }
         public string Icon_Path { get; set; }
         public string Description { get; set; }
+        public int? Connection_Id { get; set; }
             
         [CsvHelper.Configuration.Attributes.Ignore]
         public string Name => DataTableManager.StringTable.Get(Item_Name ?? 0);
@@ -48,6 +50,21 @@ public class ItemTable : DataTable
         {
             return itemTable[id];
         }
+        return null;
+    }
+
+    public Data GetDataToPlenetId(int planetId)
+    {
+        var itemDatas = itemTable.Values.ToList();
+
+        foreach(var data in itemDatas)
+        {
+            if(data.Connection_Id == planetId) 
+            {
+                return data;
+            }
+        }
+
         return null;
     }
 }

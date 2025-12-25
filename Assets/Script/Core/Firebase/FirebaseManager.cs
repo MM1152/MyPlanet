@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Firebase.Database;
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,6 +24,9 @@ public class FirebaseManager
     public AsyncPlayerData AsyncPlayerData => asyncPlayerData;
 
     private bool initialize = false;
+
+    private long serverTime;
+    public long ServerTime => serverTime;
 
     private bool changeVersion = false;
     public bool ChangeVersion => changeVersion;
@@ -70,6 +74,8 @@ public class FirebaseManager
 
             initialize = true;
         }
+
+        serverTime = await database.GetServerTime();
     }
     
     /// <summary>
@@ -88,10 +94,21 @@ public class FirebaseManager
 
         if (result.success)
         {
+            
             // 현재 유저데이터가 존재한다면
             var data =  await database.GetData<UserData>(userPath);
 
             await UpdateDataToNewVersion(data.data , userPath);
+            
+            var playerPlayTime = Utils.CovertLongToServerTime(data.data.playTime);
+            var curServerTime = Utils.CovertLongToServerTime(serverTime);
+
+            if(playerPlayTime.Date < curServerTime.Date)
+            {
+                await data.data.ChangeDateToUpdatData();
+                data.data.playTime = serverTime;
+                await userData.SaveAsync(userPath , data.data);
+            }
 
             if (data.success)
             {
@@ -103,6 +120,8 @@ public class FirebaseManager
         {
             // 현재 유저데이터가 존재하지 않는다면
             UserData newUserData = new UserData();
+            await newUserData.InitalizedUserData();
+
             var success = await database.OverwriteJsonData(userPath , newUserData);
 
             if(success)
@@ -123,7 +142,7 @@ public class FirebaseManager
         {
             changeVersion = true;
             data.version = Version;
-            bool success = await Database.OverwriteJsonData<UserData>(userPath, data);
+            bool success = await Database.OverwriteJsonData<UserData>(userPath, data); 
             if (success)
             {
                 Debug.Log("Update UserData Success");
@@ -148,6 +167,7 @@ public class FirebaseManager
         LoadingScene.sceneId = SceneIds.TitleScene;
         SceneManager.LoadScene(SceneIds.LoadingScene);
     }
+
 }
 
 [Serializable]
@@ -171,8 +191,9 @@ public class UserData : JsonSerialized
     public int[] stackRewards;
 
     public int version;
+    public long playTime;
 
-    public UserData()
+    public async UniTask InitalizedUserData()
     {
         nickName = "NoName-" + UnityEngine.Random.Range(10000, 50000);
         gold = 0;
@@ -181,13 +202,21 @@ public class UserData : JsonSerialized
         isClearPresetTutorial = false;
         isClearStage2Tutorial = false;
 
-        getDailyGift = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        dailyGiftDate = -1;
+        getDailyGift = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        dailyGiftDate = 0;
 
         stackRewards = new int[] { 0, 0, 0 };
         clearWaveCount = 0;
 
         version = FirebaseManager.Instance.Version;
+        playTime = await FirebaseManager.Instance.Database.GetServerTime();
+    }
+
+    public async UniTask ChangeDateToUpdatData()
+    {
+        dailyGiftDate = Math.Clamp(++dailyGiftDate,0, 13);
+        stackRewards = new int[] { 0, 0, 0 };
+        clearWaveCount = 0;
     }
 
     public async UniTask SaveDailyGift(int day)

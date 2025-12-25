@@ -221,4 +221,14 @@ public class DataBase
             return false;
         }
     }
+
+    public async UniTask<long> GetServerTime()
+    {
+        DatabaseReference serverTimeRef = root.Child("utils/timestamp");
+
+        await serverTimeRef.SetValueAsync(ServerValue.Timestamp).AsUniTask();
+        var time = await serverTimeRef.GetValueAsync().AsUniTask();
+
+        return long.Parse(time.Value.ToString());
+    }
 }

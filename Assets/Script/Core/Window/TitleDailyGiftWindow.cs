@@ -29,7 +29,7 @@ public class TitleDailyGiftWindow : Window
         for (int i = 0; i < count; i++)
         {
             var daily = Instantiate(dailyGiftLayout, dailyGiftLayoutRoot);
-            daily.SetGiftData(datas[i]);
+            daily.SetGiftData(datas[i], i, DisableSlot);
             daily.SetInteraction(false);
 
             dailyGiftLayouts.Add(daily);
@@ -46,6 +46,12 @@ public class TitleDailyGiftWindow : Window
         
         // Open�� �� ��ġ ����
         PositionDailyGiftsAsync().Forget();
+        CheckData();
+    }
+
+    private void DisableSlot(int idx)
+    {
+        userData.SaveDailyGift(idx).Forget();
         CheckData();
     }
 

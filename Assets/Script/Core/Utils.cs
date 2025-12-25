@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -188,12 +189,18 @@ public static class Utils
             AudioClip temp = CombineAudioClips(result, validClips[i], $"{name}_step{i}");
             if (i > 1) // 중간 결과물은 메모리에서 해제 (첫 번째 원본 제외)
             {
-                Object.DestroyImmediate(result);
+                GameObject.DestroyImmediate(result);
             }
             result = temp;
         }
 
         return result;
+    }
+
+    public static DateTime CovertLongToServerTime(long timeStamp)
+    {
+        DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(timeStamp).UtcDateTime;
+        return dateTime.AddHours(9);
     }
 }
 
