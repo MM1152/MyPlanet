@@ -1,32 +1,27 @@
-using System;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public abstract class RangeCheckDeathHandler : BaseDie
 {
-    Collider2D[] targetColliders;
-
-    protected CircleCollider2D enemyCollider => enemy.enemyCollider;    
-    protected float ridus;
+    private Collider2D[] targetColliders;
+    protected CircleCollider2D enemyCollider => enemy.enemyCollider;
+    protected float radius;
     protected abstract string[] targets { get; }
+    protected Vector3 diePosition;
 
     private float SetRadius()
     {
         return enemy.ElementType switch
         {
-           ElementType.Fire => DataTableManager.OptionTable.GetValueDataToFloat(5029),
-           ElementType.Ice => DataTableManager.OptionTable.GetValueDataToFloat(5031),
-           _=> 0f,
+            ElementType.Fire => DataTableManager.OptionTable.GetValueDataToFloat(5029),
+            ElementType.Ice => DataTableManager.OptionTable.GetValueDataToFloat(5031),
+            _ => 0f,
         };
     }
     //범위 체크 
     protected void RangeCheck()
-    {        
-        ridus = enemy.enemyCollider.radius * SetRadius();    
-        targetColliders = Physics2D.OverlapCircleAll(enemy.transform.position, ridus, LayerMask.GetMask(targets));
-#if DEBUG_MODE
-        RangeCheckDelay().Forget();
-#endif
+    {
+        targetColliders = Physics2D.OverlapCircleAll(diePosition, radius, LayerMask.GetMask(targets));
+        Debug.Log($"Pos:{diePosition}, Radius:{radius}");
         if (targetColliders.Length > 0)
         {
             AbilltyToTarget(targetColliders);
@@ -41,8 +36,6 @@ public abstract class RangeCheckDeathHandler : BaseDie
             {
                 continue;
             }
-#if DEBUG_MODE
-#endif
             DieAbility(collider);
         }
     }
@@ -51,26 +44,11 @@ public abstract class RangeCheckDeathHandler : BaseDie
 
     public override void Die(Enemy enemy)
     {
+        diePosition = enemy.transform.position;
+        radius = enemy.enemyCollider.radius * SetRadius();
+
         RangeCheck();
         base.Die(enemy);
     }
-
-#if DEBUG_MODE
-    private async UniTaskVoid RangeCheckDelay()
-    {
-        var rangePrefab = Managers.ObjectPoolManager.SpawnObject<TestRange>(PoolsId.TestRange);
-        rangePrefab.transform.position = enemy.transform.position;
-        // var spr = rangePrefab.GetComponent<SpriteRenderer>();
-        // spr.color = enemy.spriteRenderer.color;
-        // spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 0.5f);
-        
-        float visualScale = ridus * 2f; 
-        rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
-        await UniTask.Delay(1000);
-        if(rangePrefab != null)
-        {
-            Managers.ObjectPoolManager.Despawn(PoolsId.TestRange, rangePrefab.gameObject);
-        }
-    }
-#endif
 }
+

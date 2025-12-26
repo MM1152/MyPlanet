@@ -396,7 +396,7 @@ public class WaveManager : MonoBehaviour
             if (window is WarringWindow warringWindow)
             {
                 warringWindow.SetWarringUI(enemyType);
-                Managers.SoundManager.PlaySFX(AudiosId.sci_fi_alarm_siren_loop_01);
+                Managers.SoundManager.PlaySFX(AudiosId.sci_fi_alarm_siren_loop_01,1f,true);
             }
         }
 

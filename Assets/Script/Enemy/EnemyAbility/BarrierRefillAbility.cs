@@ -9,8 +9,9 @@ public class BarrierRefillAbility : BaseAbility
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        zoneSearch = enemy.zone;
-        enemy.abilityAction += OnUpdate;        
+        zoneSearch = Managers.ObjectPoolManager.SpawnObject<ZoneSearch>(PoolsId.Zone);
+        zoneSearch.Init(enemy);
+        enemy.abilityAction += OnUpdate;
     }
 
     public override void OnUpdate()
@@ -21,7 +22,7 @@ public class BarrierRefillAbility : BaseAbility
         {
             if (targetEnemy == null || targetEnemy.IsDead) continue;
 
-            if (targetEnemy.ability is BarrierAbility barrierAbility&&enemy.ElementType== targetEnemy.ElementType)
+            if (targetEnemy.ability is BarrierAbility barrierAbility && enemy.ElementType == targetEnemy.ElementType)
             {
                 barrierAbility.RefillBarrier(refillAmount);
                 Debug.Log($"BarrierRefillAbility Refilled {refillAmount} HP to {targetEnemy.name}");

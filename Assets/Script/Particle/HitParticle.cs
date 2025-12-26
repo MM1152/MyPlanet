@@ -4,11 +4,12 @@ public class HitParticle : MonoBehaviour
 {
     private ParticleSystem particle;
     private float duration;
-
+    private Vector3 baseScale;
     public PoolsId PoolsId;
     private void Awake()
     {
         particle = GetComponent<ParticleSystem>();
+        baseScale = transform.localScale;
     }
 
     private void OnEnable()
@@ -19,10 +20,13 @@ public class HitParticle : MonoBehaviour
     private void Update()
     {
         duration -= Time.deltaTime;
-        if(duration <= 0f)
+        if (duration <= 0f)
         {
-            if(gameObject.activeSelf)
+            if (gameObject.activeSelf)
+            {
+                gameObject.transform.localScale = baseScale;    
                 Managers.ObjectPoolManager.Despawn(PoolsId, gameObject);
+            }
         }
     }
 }
