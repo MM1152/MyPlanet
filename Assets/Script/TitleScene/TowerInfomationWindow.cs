@@ -1,4 +1,7 @@
+using Cysharp.Threading.Tasks;
 using Firebase.Database;
+using System.IO;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -67,7 +70,21 @@ public class TowerInfomationWindow : Window
         currentTab?.SetActive(false);
         currentBackGround?.SetActive(false);
 
+        if(towerTableData != null)
+        {
+            var path = string.Format(DataBasePaths.TowerGradeFormating, towerTableData.ID);
+            FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangeGrade);
+        }
+
         base.Close();
+    }
+
+    private void OnDestroy()
+    {
+        if (towerTableData == null) return;
+
+        var path = string.Format(DataBasePaths.TowerGradeFormating, towerTableData.ID);
+        FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangeGrade);
     }
 
     public override void Init(WindowManager manager)
@@ -83,6 +100,7 @@ public class TowerInfomationWindow : Window
         closeButton.onClick.AddListener(() => { manager.Open(WindowIds.TitleBookWindow); });
         infomationButton.onClick.AddListener(() => OpenTab(infomationTab , infomationButtonBackGround));
         starUpgradeButton.onClick.AddListener(() => OpenTab(starUpgradeTab , starUpgradeBackGround));
+        upgradeButton.onClick.AddListener(() => UpgradeStar().Forget());
 
         userNameText.text = FirebaseManager.Instance.UserData.nickName;
 
@@ -117,8 +135,12 @@ public class TowerInfomationWindow : Window
 
         closeButton.onClick.AddListener(() => manager.Open(WindowIds.TitleBookWindow));
 
+        var path = string.Format(DataBasePaths.TowerGradeFormating, towerData.ID);
+        FirebaseManager.Instance.Database.AddListner(path, OnValueChangeGrade);
+
+        var pieceCount = DataTableManager.TowerGradeToPieceCountTable.GetPieceCount(towerData.ID , userTowerData.grade);
+
         towerNameText.text = towerData.Name;
-        towerPeiceCountText.text = $"부품 갯수 {userTowerData.TowerPartCount}/연결해야 됌";
 
         towerImage.sprite = towerTableData.towerImage;
 
@@ -152,6 +174,7 @@ public class TowerInfomationWindow : Window
             UpdateTextToUtilTypeTower(towerData as TowerTable.UtilTower);
         UpdateStar(userTowerData.grade);
         UpdateOptionValue(userTowerData);
+        UpdateSlider(userTowerData.grade);
     }
 
     private void UpdateOptionValue(TowerData.Data userTowerData)
@@ -166,6 +189,22 @@ public class TowerInfomationWindow : Window
         }
 
         towerOptionText.text = $"{currentOptionValue}% -> {nextOptionValue}%";
+    }
+
+    private void OnValueChangeGrade(object sender , ValueChangedEventArgs args)
+    {
+        var starCount = int.Parse(args.Snapshot.Value.ToString());
+        UpdateStar(starCount);
+        UpdateSlider(starCount);
+    }
+
+    private void UpdateSlider(int grade)
+    {
+        var pieceCount = DataTableManager.TowerGradeToPieceCountTable.GetPieceCount(towerTableData.ID, grade);
+        var curPieceCount = userTowerData.TowerPartCount;
+
+        pieceSlider.value =  (float)curPieceCount / pieceCount;
+        towerPeiceCountText.text = $"부품 갯수 {curPieceCount}/{pieceCount}";
     }
 
     private void ResetStar()
@@ -235,5 +274,14 @@ public class TowerInfomationWindow : Window
     private void OnChangeExpValue(object sender, ValueChangedEventArgs args)
     {
         expText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
+    }
+
+    private async UniTaskVoid UpgradeStar()
+    {
+        var pieceCount = DataTableManager.TowerGradeToPieceCountTable.GetPieceCount(towerTableData.ID, userTowerData.grade);
+
+        if (pieceCount > userTowerData.TowerPartCount || userTowerData.grade == 5) return;
+
+        await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.TowerData.UpgradeGrade(userTowerData.TowerId , pieceCount));
     }
 }

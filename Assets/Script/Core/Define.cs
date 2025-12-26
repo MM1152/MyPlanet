@@ -492,6 +492,7 @@ public static class DataTableIds
     public static readonly string RewardListTable = "RewardListTable";
     public static readonly string ClearWaveRewardTable = "ClearWaveRewardTable";
     public static readonly string DailyGiftTable = "DailyGiftTable";
+    public static readonly string TowerGradeToPieceCountTable = "TowerGradeToPieceCountTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
@@ -531,6 +532,7 @@ public static class DataBasePaths
 
     public static string TowerDataPathFormating => TowerPath + FirebaseManager.Instance.UserId + "/{0}";
     public static string TowerUnlockPathFormating => TowerDataPathFormating + "/Unlock";
+    public static string TowerGradeFormating => TowerDataPathFormating + "/grade";
 
     public static string AsyncStagePathFormating => AsyncPlayerPath + "stage{0}/";
     public static string AsyncPlayerSavePathFormating => AsyncStagePathFormating + FirebaseManager.Instance.UserId;

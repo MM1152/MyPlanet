@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using Mono.Cecil;
 public class TitleStackRewardPlayWindow : Window
 {
     [SerializeField] private GameObject[] rewardLayout;

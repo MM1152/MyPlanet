@@ -49,14 +49,7 @@ public class TowerData
     {
         if (towerDatas.TryGetValue(towerId, out var data))
         {
-            Data copyData = new Data()
-            {
-                TowerId = data.TowerId,
-                OptionValue = data.OptionValue,
-                Unlock = data.Unlock,
-                TowerPartCount = data.TowerPartCount
-            };
-            return copyData;
+            return data;
         } 
         return null;
     }
@@ -176,6 +169,18 @@ public class TowerData
         }
 
         data.OptionValue = optionValue;
+        return await Save(data);
+    }
+
+    public async UniTask<(bool success, string msg)> UpgradeGrade(int towerId, int usePieceCount)
+    {
+        if (!towerDatas.TryGetValue(towerId, out var data))
+        {
+            return (false, "존재하지 않는 타워 ID입니다.");
+        }
+
+        data.TowerPartCount -= usePieceCount;
+        data.grade += 1;
         return await Save(data);
     }
 

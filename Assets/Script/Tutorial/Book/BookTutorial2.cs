@@ -1,4 +1,3 @@
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 public class BookTutorial2 : Tutorial

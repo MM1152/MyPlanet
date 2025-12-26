@@ -77,6 +77,11 @@ public class TowerPickUpViewer : MonoBehaviour
     private void UpdateUI(RandomPickUpTable.Data data , bool isNew, (bool ,float) isDuplication)
     {
         var tower = DataTableManager.TowerTable.Get(data.connection_id);
+        var userTowerData = FirebaseManager.Instance.TowerData.Get(data.connection_id);
+        var pieceCount = DataTableManager.TowerGradeToPieceCountTable.GetPieceCount(tower.ID, userTowerData.grade);
+
+        sliderText.text = $"{userTowerData.TowerPartCount} / {pieceCount}";
+        slider.value = (float)userTowerData.TowerPartCount / pieceCount;
 
         towerImage.sprite = tower.towerImage;
 
@@ -121,6 +126,8 @@ public class TowerPickUpViewer : MonoBehaviour
         towerPickUpResult.gameObject.SetActive(true);
         towerPickUpResult.Setdatas(randomPickUpData , isNew , isDuplication);
         gameObject.SetActive(false);
+
+        closeButton.onClick.RemoveAllListeners();
     }
 
     private void OnClickCloseButtonToNextTowerInfoamtion()

@@ -99,7 +99,14 @@ public class FirebaseManager
             var data =  await database.GetData<UserData>(userPath);
 
             await UpdateDataToNewVersion(data.data , userPath);
-            
+
+
+            if (data.success)
+            {
+                userData = data.data;
+                Debug.Log($"Success Load UserData NickName : {userData.nickName}");
+            }
+
             var playerPlayTime = Utils.CovertLongToServerTime(data.data.playTime);
             var curServerTime = Utils.CovertLongToServerTime(serverTime);
 
@@ -110,11 +117,6 @@ public class FirebaseManager
                 await userData.SaveAsync(userPath , data.data);
             }
 
-            if (data.success)
-            {
-                userData = data.data;
-                Debug.Log($"Success Load UserData NickName : {userData.nickName}");
-            }
         }
         else
         {

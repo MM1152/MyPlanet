@@ -25,6 +25,7 @@ public class TowerInfomation : MonoBehaviour
     [SerializeField] private GameObject towerAttackImageBackGround;
 
     [SerializeField] private TextMeshProUGUI towerNameText;
+
     private TowerTable.Data data;
     private TowerData.Data userData;
 
@@ -58,6 +59,8 @@ public class TowerInfomation : MonoBehaviour
         else
             towerAttackImageBackGround.SetActive(false);
 
+        FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.TowerGradeFormating, data.ID), OnChangeGrade);
+
         towerImage.sprite = DataTableManager.TowerTable.Get(towerId).towerImage;
         backgroundImage.color = data.AttributeToColor.backGroundColor;
         outlineImage.color = data.AttributeToColor.outlineColor;
@@ -88,6 +91,12 @@ public class TowerInfomation : MonoBehaviour
             isPressed = false;
     }
 
+    private void OnChangeGrade(object sender, ValueChangedEventArgs args)
+    {
+        var grade = int.Parse(args.Snapshot.Value.ToString());
+        UpdateStar(grade);
+    }
+
     public void OnUnlockValueChanged(object sender, ValueChangedEventArgs args)
     {
         var result = bool.Parse(args.Snapshot.Value.ToString());
@@ -102,6 +111,7 @@ public class TowerInfomation : MonoBehaviour
         OnTab = null;
         OnLongTab = null;
         FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.TowerUnlockPathFormating, data.ID),OnUnlockValueChanged);
+        FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.TowerGradeFormating, data.ID), OnChangeGrade);
     }
 
     private void ResetStar()
