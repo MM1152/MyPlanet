@@ -44,6 +44,7 @@ public class LaserShot : IShotStrategy
             lineRenderer.positionCount = 2;
             isInitialized = true;
             obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
+            enemy.OnDie += LaserReset;
         }
 
         Vector2 dir = (target.transform.position - enemy.transform.position).normalized;
@@ -56,13 +57,12 @@ public class LaserShot : IShotStrategy
         hit = Physics2D.Raycast(startPoint, dir, dis, obstacleMask);
         if (hit.collider != null)
         {
-            if(hit.collider.CompareTag(target.tag) || hit.collider.CompareTag(TagIds.PlayerTag) 
+            if (hit.collider.CompareTag(target.tag) || hit.collider.CompareTag(TagIds.PlayerTag)
                 || hit.collider.CompareTag(TagIds.DefenseTowerTag))
             {
-                lineRenderer.SetPosition(1, hit.collider.transform.position);
+                lineRenderer.SetPosition(1, hit.collider.transform.position);              
+                HitParticle(hit.point);
             }
-            lineRenderer.SetPosition(1, hit.point);
-            HitParticle(hit.point);
         }
     }
 
@@ -77,14 +77,11 @@ public class LaserShot : IShotStrategy
         }
 
         if (flashParticle.transform.position == (Vector3)position) return;
-
         flashParticle.transform.position = position;
         flashParticle.transform.rotation = Quaternion.LookRotation(direction);
 
         var flashmain = flashParticle.main;
         flashmain.startRotation = dis / flashmain.startSpeed.constant;
-        var flashScale = flashParticle.transform.localScale ;
-        flashParticle.transform.localScale = new Vector3(flashScale.x, flashScale.y, dis);
     }
 
     private void HitParticle(Vector2 position)
@@ -103,7 +100,7 @@ public class LaserShot : IShotStrategy
         hitParticle.Play();
     }
 
-    public void LaserReset()
+    public void LaserReset(Enemy enemy)
     {
         if (lineRenderer != null)
         {
