@@ -135,6 +135,7 @@ public enum PoolsId
     IceBarrier = 502,
     SteelBarrier = 503,
     Exp = 400,
+    Zone = 500,
     DamageText = 600,
 
     TestRange = 900,
@@ -168,6 +169,8 @@ public enum PoolsId
     Hit20pinkarrow = 1026,
     Flash19circlebomb = 1027,
     Hit19circlebomb = 1028,
+    HitExplosionParticle = 1029,
+    HitHealParticle = 1030,
 
 
     Melee_Tier03 = 1200,
@@ -365,6 +368,9 @@ public static class AddressableNames
         { "StageBoss_09", PoolsId.StageBoss_09 },
         { "StageBoss_10", PoolsId.StageBoss_10 },
         { "BossPartner", PoolsId.BossPartner },
+        {"HitExplosionParticle",PoolsId.HitExplosionParticle},
+        {"HitHealParticle",PoolsId.HitHealParticle},
+        {"Zone", PoolsId.Zone },    
     };
 
     private static readonly Dictionary<string, AudiosId> AudiosName = new()

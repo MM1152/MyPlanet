@@ -5,7 +5,7 @@ using System;
 public class FortifiedBarrierAbility : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnDamage;
-    public int maxBarrierAmount = 3000;// 임시값
+    public int maxBarrierAmount = 5000;// 임시값
     public int barrierAmount;
     private float refillTimer = 5f; //임시 
     public override bool isActive => barrier == null || barrier.IsDead; // 베리어가 없을 때 활성화
@@ -16,8 +16,7 @@ public class FortifiedBarrierAbility : BaseAbility
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        // barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);
-        barrierAmount = 100000; //임시
+        barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);        
         maxBarrierAmount = barrierAmount;
         enemy.OnDie += Barrier_OnDead;
         CreateBarrier();

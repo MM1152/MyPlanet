@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HealZoneAbility : BaseAbility
@@ -8,9 +9,11 @@ public class HealZoneAbility : BaseAbility
     private ZoneSearch zoneSearch;
     public override void SetEnemy(Enemy enemy)
     {
-        base.SetEnemy(enemy);
-        zoneSearch = enemy.zone;
+        base.SetEnemy(enemy);        
+        zoneSearch = Managers.ObjectPoolManager.SpawnObject<ZoneSearch>(PoolsId.Zone);
+        zoneSearch.Init(enemy);
         enemy.abilityAction += OnUpdate;
+        enemy.OnDie += AbilityDie;
     }
 
     public override void OnUpdate()
@@ -22,6 +25,16 @@ public class HealZoneAbility : BaseAbility
             if (targetEnemy == null || targetEnemy.IsDead) continue;
             Debug.Log($"HealZoneAbility Healed {healAmount} HP to {targetEnemy.name}");
             targetEnemy.OnHeal(healAmount);
+        }
+    }
+
+    public void AbilityDie(Enemy enemy)
+    {
+        if (zoneSearch != null)
+        {
+            zoneSearch.ZoneDisable();
+            Managers.ObjectPoolManager.Despawn(PoolsId.Zone, zoneSearch.gameObject);
+            zoneSearch = null;
         }
     }
 }

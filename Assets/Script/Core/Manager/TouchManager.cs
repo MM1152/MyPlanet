@@ -50,8 +50,8 @@ public class TouchManager : MonoBehaviour
 
         touchPositionAction = new InputAction
         (
-            type : InputActionType.Value,
-            binding : "<Touchscreen>/position"
+            type: InputActionType.Value,
+            binding: "<Touchscreen>/position"
         );
 
         touchAction.started += OnTouchStart;
@@ -64,9 +64,9 @@ public class TouchManager : MonoBehaviour
 
     private void Update()
     {
-        if(isPressed && Vector2.Distance(startTouchPosition, endTouchPosition) < notTabToDragDistance)
+        if (isPressed && Vector2.Distance(startTouchPosition, endTouchPosition) < notTabToDragDistance)
         {
-            if(Time.unscaledTime - startTouchTime > longTabTime)
+            if (Time.unscaledTime - startTouchTime > longTabTime)
             {
                 touchTypes = TouchTypes.LongPress;
             }
@@ -141,14 +141,24 @@ public class TouchManager : MonoBehaviour
     {
         var result = FindUi();
 
-        foreach(var go in result)
+        foreach (var go in result)
         {
-            if(go.gameObject == targetUI)
+            if (go.gameObject == targetUI)
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public void CancleTouch()
+    {
+        isPressed = false;
+        isTabAble = false;
+        touchTypes = TouchTypes.None;
+        touchPhase = TouchPhase.None;
+        startTouchPosition = Vector2.zero;
+        endTouchPosition = Vector2.zero;
     }
 }

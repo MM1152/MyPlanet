@@ -52,8 +52,19 @@ public class SoundManager : MonoBehaviour
             currentSfxSource.loop = loop;
             currentSfxSource.playOnAwake = false;
             currentSfxSource.volume = volume;
-            currentSfxSource.clip = null;
-            currentSfxSource.PlayOneShot(clip, volume);
+
+            if (loop)
+            {
+                currentSfxSource.clip = clip;
+                currentSfxSource.Play();
+            }
+            else
+            {
+                currentSfxSource.clip = null;
+                currentSfxSource.PlayOneShot(clip, volume);
+            }
+
+            currentSfxId = id;
         }
         else
         {

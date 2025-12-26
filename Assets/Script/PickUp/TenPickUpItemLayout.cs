@@ -12,6 +12,7 @@ public class TenPickUpItemLayout : MonoBehaviour
     [Header("Images")]
     [SerializeField] private Image itemImage;
     [SerializeField] private Image rewardImage;
+    [SerializeField] private Image plaentImage;
 
     [Header("References")]
     [SerializeField] private Transform rewardRoot;
@@ -28,6 +29,15 @@ public class TenPickUpItemLayout : MonoBehaviour
         itemGrade.text = data.rarityToString;
         itemGrade.color = planetData.GradeToColor;
         newTextRoot.gameObject.SetActive(isNew);
+        if(data.RewardData.ItemData.ItemImage != null)
+        {
+            plaentImage.sprite = data.RewardData.ItemData.ItemImage;
+            rewardImage.sprite = data.RewardData.ItemData.ItemImage;
+        }
+        else
+        {
+            plaentImage.sprite = DataTableManager.PlanetTable.Get(data.connection_id).PlanetImage;
+        }
 
         rewardRoot.gameObject.SetActive(isDuplication.Item1);
         rewardText.text = $"x{(int)isDuplication.Item2}";

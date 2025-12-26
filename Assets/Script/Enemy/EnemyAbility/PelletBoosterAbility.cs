@@ -11,9 +11,12 @@ public class PelletBoosterAbility : BaseAbility
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        zoneSearch = enemy.zone;
+        zoneSearch = Managers.ObjectPoolManager.SpawnObject<ZoneSearch>(PoolsId.Zone);
+        zoneSearch.Init(enemy);
         enemy.abilityAction += OnUpdate;
         enemy.OnBuffRemoved += RemoveBonus;
+        enemy.OnDie += AbilityDie;
+
     }
 
     public override void OnUpdate()
@@ -33,7 +36,7 @@ public class PelletBoosterAbility : BaseAbility
                     spreadShot.SetBonusPellet(boostPellet);
                 }
             }
-        }    
+        }
     }
 
     private void RemoveBonus()
@@ -45,11 +48,21 @@ public class PelletBoosterAbility : BaseAbility
             if (targetEnemy.attack is ShotAttack shotAttack)
             {
                 var elementType = targetEnemy.ElementType;
-                if (shotAttack.GetShotStrategy(elementType)  is SpreadShot spreadShot)
+                if (shotAttack.GetShotStrategy(elementType) is SpreadShot spreadShot)
                 {
                     spreadShot.ResetPellet();
                 }
             }
+        }
+    }
+
+    public void AbilityDie(Enemy enemy)
+    {
+        if (zoneSearch != null)
+        {
+            zoneSearch.ZoneDisable();
+            Managers.ObjectPoolManager.Despawn(PoolsId.Zone, zoneSearch.gameObject);
+            zoneSearch = null;
         }
     }
 }

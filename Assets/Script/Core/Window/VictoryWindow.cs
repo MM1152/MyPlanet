@@ -79,7 +79,6 @@ public class VictoryWindow : Window
 
     private async UniTaskVoid OnClickExitButton()
     {
-        // Time.timeScale = 1f;
         List<UniTask> tasks =  new List<UniTask>();
         tasks.Add(FirebaseManager.Instance.UserData.GetGoods(goldReward , expReward , diamondReward));
         if (waveManager.CurrentWaveIndex != 1)

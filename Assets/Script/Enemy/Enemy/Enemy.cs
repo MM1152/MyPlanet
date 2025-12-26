@@ -14,7 +14,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private StatusEffect statusEffect = new StatusEffect();
     private WaveManager waveManager;
     public WaveManager WaveManager => waveManager;
-    public GameObject expPrefab;
     public EnemyData.Data enemyData;
     public StateMachine stateMachine;
     public bool IsDead { get; set; }
@@ -42,7 +41,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
     public float speed;
     public int atk;
-    [SerializeField]
     public float attackRange;
     private float baseRange;
     private bool bonusApplied = false;
@@ -67,7 +65,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 #if DEBUG_MODE
     public TextSpawnManager textSpawnManager;
 #endif
-    public ZoneSearch zone;
+    // public ZoneSearch zone;
     public Action abilityAction;
 
     public Action OnBuffRemoved;
@@ -147,7 +145,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         die = DieManager.GetDie(enemyData.ID);
         ability = AbilityManager.GetAbility(enemyData.ID);
         move = MoveManager.GetMove(enemyType);
-        zone?.Init(this);
+        // zone?.Init(this);
         ability?.SetEnemy(this);
         if (enemyLineRenderer != null)
         {
@@ -179,7 +177,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     {
         abilityAction = null;
         OnBuffRemoved = null;
-        // Clear barrier refill callbacks when reinitializing pooled enemies
         OnBarrierRefill = null;
     }
 
@@ -311,11 +308,10 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         int healAmount = Mathf.Min(heal, enemyData.HP - currentHP);
         currentHP += healAmount;
 #if DEBUG_MODE
-        if (healAmount > 0)
-        {
+
             var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
             text.SetColor(Color.green);
-        }
+        
 #endif
     }
 

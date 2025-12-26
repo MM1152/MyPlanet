@@ -8,10 +8,6 @@ public class BarrierAbility : BaseAbility
     public int barrierAmount;
     private bool active = true;
 
-#if DEBUG_MODE
-    TestRange rangePrefab;
-    bool setSprite = false;
-#endif
     public override bool isActive
     {
         get { return active; }
@@ -26,18 +22,6 @@ public class BarrierAbility : BaseAbility
     {
         if (!isActive) return damage;
 
-#if DEBUG_MODE
-        if (!setSprite)
-        {
-            setSprite = true;
-            rangePrefab = Managers.ObjectPoolManager.SpawnObject<TestRange>(PoolsId.TestRange);
-            rangePrefab.transform.SetParent(enemy.transform);
-            rangePrefab.transform.position = enemy.transform.position;
-            float radius = enemy.transform.localScale.x;
-            float visualScale = radius * 10f;
-            rangePrefab.transform.localScale = new Vector3(visualScale, visualScale, 1f);
-        }
-#endif
 
         barrierAmount -= damage;
         Debug.Log("베리어 데미지 흡수 " + damage + ", 남은 베리어: " + barrierAmount);
@@ -47,9 +31,6 @@ public class BarrierAbility : BaseAbility
             int overflowDamage = -barrierAmount;
             barrierAmount = 0;
             active = false;
-#if DEBUG_MODE
-            rangePrefab.gameObject.SetActive(false);
-#endif
             return overflowDamage;
         }
         return 0; 
