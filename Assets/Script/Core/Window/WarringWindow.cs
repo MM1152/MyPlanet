@@ -47,6 +47,7 @@ public class WarringWindow : Window
             await UniTask.Yield();
         }
         manager.Close();
+        Managers.SoundManager.StopSFX();
         closeEvent?.Invoke();
     }
 

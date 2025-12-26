@@ -98,8 +98,16 @@ public class SoundManager : MonoBehaviour
     {
         if (currentBgmSource != null)
         {
-            StopAudioSource(currentBgmSource);
-            currentBgmId = AudiosId.None;
+            currentBgmSource.Stop();    
+        }
+    }
+
+    public void StopSFX()
+    {
+        if (currentSfxSource != null)
+        {
+            StopAudioSource(currentSfxSource);
+            currentSfxId = AudiosId.None;
         }
     }
 
