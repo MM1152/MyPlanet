@@ -34,6 +34,7 @@ public class TowerInfomation : MonoBehaviour
     public bool DisableTouch { get; set; } = false;
 
     private bool isPressed = false;
+    
     public void Init(int towerId)
     {
         data = DataTableManager.TowerTable.Get(towerId);
@@ -93,12 +94,18 @@ public class TowerInfomation : MonoBehaviour
 
     private void OnChangeGrade(object sender, ValueChangedEventArgs args)
     {
+        // GameObject 파괴 여부 확인
+        if (this == null || gameObject == null) return;
+        
         var grade = int.Parse(args.Snapshot.Value.ToString());
         UpdateStar(grade);
     }
 
     public void OnUnlockValueChanged(object sender, ValueChangedEventArgs args)
     {
+        // GameObject 파괴 여부 확인
+        if (this == null || gameObject == null) return;
+        
         var result = bool.Parse(args.Snapshot.Value.ToString());
         if (result)
         {
@@ -110,25 +117,43 @@ public class TowerInfomation : MonoBehaviour
     {
         OnTab = null;
         OnLongTab = null;
-        FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.TowerUnlockPathFormating, data.ID),OnUnlockValueChanged);
-        FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.TowerGradeFormating, data.ID), OnChangeGrade);
+        
+        // 안전하게 리스너 제거
+        if (data != null && FirebaseManager.Instance != null && FirebaseManager.Instance.Database != null)
+        {
+            try
+            {
+                FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.TowerUnlockPathFormating, data.ID), OnUnlockValueChanged);
+                FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.TowerGradeFormating, data.ID), OnChangeGrade);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"TowerInfomation: Failed to remove Firebase listeners: {e.Message}");
+            }
+        }
     }
 
     private void ResetStar()
     {
+        if (starImage == null) return;
+        
         for(int i = 0; i < starImage.Length; i++)
         {
-            starImage[i].sprite = disableStar;
+            if (starImage[i] != null)
+                starImage[i].sprite = disableStar;
         }
     }
 
     private void UpdateStar(int starCount)
     {
+        if (starImage == null) return;
+        
         ResetStar();
 
-        for (int i = 0; i < starCount; i++)
+        for (int i = 0; i < starCount && i < starImage.Length; i++)
         {
-            starImage[i].sprite = enableStar;
+            if (starImage[i] != null)
+                starImage[i].sprite = enableStar;
         }
     }
 }

@@ -36,59 +36,69 @@ public class PlanetInfomation : MonoBehaviour
     private void Awake()
     {
         outline = GetComponent<Outline>();
-        outline.enabled = false;
-        
+        if (outline != null)
+            outline.enabled = false;
     }
 
     private void OnDestroy()
     {
-        RemoveFirebaseOnChangeValue();
+        RemoveFirebaseListeners();
     }
 
-    private void OnDisable()
+    private void RemoveFirebaseListeners()
     {
-        RemoveFirebaseOnChangeValue();
-    }
+        if (data != null && FirebaseManager.Instance != null && FirebaseManager.Instance.Database != null)
+        {
+            try
+            {
+                var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
+                var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
+                var unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
 
-    private void RemoveFirebaseOnChangeValue()
-    {
-        if (data == null) return;
-        var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
-        var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
-        var unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
-        FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangedStar);
-        FirebaseManager.Instance.Database.RemoveListner(levelPath, OnValueChangedLevel);
-        FirebaseManager.Instance.Database.RemoveListner(unlockPath, OnValueChangedUnLock);
-    }
-
-    private void AddFirebaseOnChangeValue()
-    {
-        if (data == null) return;
-        var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
-        var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
-        var unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
-        FirebaseManager.Instance.Database.AddListner(path, OnValueChangedStar);
-        FirebaseManager.Instance.Database.AddListner(levelPath, OnValueChangedLevel);
-        FirebaseManager.Instance.Database.AddListner(unlockPath, OnValueChangedUnLock);
-
+                FirebaseManager.Instance.Database.RemoveListner(path, OnValueChangedStar);
+                FirebaseManager.Instance.Database.RemoveListner(levelPath, OnValueChangedLevel);
+                FirebaseManager.Instance.Database.RemoveListner(unlockPath, OnValueChangedUnLock);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"PlanetInfomation: Failed to remove Firebase listeners: {e.Message}");
+            }
+        }
     }
 
     public void UpdateTexts(PlanetTable.Data data)
     {
-        RemoveFirebaseOnChangeValue();
+        // GameObject가 파괴되었는지 확인
+        if (this == null || gameObject == null) return;
+        
+        RemoveFirebaseListeners();
+        
         this.data = data;
-        AddFirebaseOnChangeValue();
+
+        if (data == null) return;
+
+        var path = string.Format(DataBasePaths.PlanetStarCountPathFormating, data.ID);
+        var levelPath = string.Format(DataBasePaths.PlanetLevelPathFormating, data.ID);
+        var unlockPath = string.Format(DataBasePaths.PlanetUnlockPathFormating, data.ID);
+        
+        FirebaseManager.Instance.Database.AddListner(path, OnValueChangedStar);
+        FirebaseManager.Instance.Database.AddListner(levelPath, OnValueChangedLevel);
+        FirebaseManager.Instance.Database.AddListner(unlockPath, OnValueChangedUnLock);
 
         userData = FirebaseManager.Instance.PlanetData.GetOrigin(data.ID);
 
-        planetNameText.text = data.Name;
-        planetGradeText.text = data.grade;
-        planetGradeText.color = data.GradeToColor;
-        planetElemetImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, data.Attribute);
-        planetTypeText.text = data.PlanetType;
-        planetLevelText.text = $"Lv. {userData.level:D2}";
+        if (planetNameText != null) planetNameText.text = data.Name;
+        if (planetGradeText != null)
+        {
+            planetGradeText.text = data.grade;
+            planetGradeText.color = data.GradeToColor;
+        }
+        if (planetElemetImage != null)
+            planetElemetImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, data.Attribute);
+        if (planetTypeText != null) planetTypeText.text = data.PlanetType;
+        if (planetLevelText != null) planetLevelText.text = $"Lv. {userData.level:D2}";
 
-        planetImage.sprite = data.PlanetImage;
+        if (planetImage != null) planetImage.sprite = data.PlanetImage;
 
         ResetStar();
         UpdateStar(userData.star);
@@ -97,30 +107,43 @@ public class PlanetInfomation : MonoBehaviour
 
     private void ResetStar()
     {
+        if (starImages == null) return;
+        
         for(int i = 0; i < starImages.Length; i++)
         {
-            starImages[i].sprite = disableStarSprite;
+            if (starImages[i] != null)
+                starImages[i].sprite = disableStarSprite;
         }
     }
 
     private void UpdateStar(int starCount)
     {
-        for (int i = 0; i < starCount; i++)
+        if (starImages == null) return;
+        
+        for (int i = 0; i < starCount && i < starImages.Length; i++)
         {
-            starImages[i].sprite = enableStarSprite;
+            if (starImages[i] != null)
+                starImages[i].sprite = enableStarSprite;
         }
     }
 
     private void UpdateDisAble()
     {
-        if (userData.UseAble)
-            disAblePanel?.SetActive(false);
-        else
-            disAblePanel?.SetActive(true);
+        // GameObject 파괴 여부 및 컴포넌트 null 체크
+        if (this == null || gameObject == null || disAblePanel == null) 
+            return;
+
+        if (userData != null && userData.UseAble)
+            disAblePanel.SetActive(false);
+        else if (disAblePanel != null)
+            disAblePanel.SetActive(true);
     }
 
     private void UpdateLevel(int level)
     {
+        if (this == null || gameObject == null || planetLevelText == null) 
+            return;
+        
         planetLevelText.text = $"Lv. {level:D2}";
     }
 
@@ -142,25 +165,30 @@ public class PlanetInfomation : MonoBehaviour
         if(!Variable.IsTutorialActive && isSetting && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(gameObject))
         {
             OnClickPlanet?.Invoke(data, this);
-            Managers.SoundManager.PlaySFX(AudiosId.ui_button_simple_click_07);
         }
     }
 
     private void OnValueChangedStar(object sender , ValueChangedEventArgs args)
     {
-        if (this == null && gameObject == null) return;
+        // GameObject 파괴 여부 확인
+        if (this == null || gameObject == null) return;
+        
         UpdateStar(int.Parse(args.Snapshot.Value.ToString()));
     }
 
     private void OnValueChangedLevel(object sender, ValueChangedEventArgs args)
     {
-        if (this == null && gameObject == null) return;
+        // GameObject 파괴 여부 확인
+        if (this == null || gameObject == null) return;
+        
         UpdateLevel(int.Parse(args.Snapshot.Value.ToString()));
     }
 
     private void OnValueChangedUnLock(object sender, ValueChangedEventArgs args)
     {
-        if (this == null && gameObject == null) return;
+        // GameObject 파괴 여부 확인 - 주요 에러 발생 지점
+        if (this == null || gameObject == null) return;
+        
         UpdateDisAble();
     }
 }

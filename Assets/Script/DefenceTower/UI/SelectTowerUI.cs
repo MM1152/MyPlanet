@@ -14,6 +14,7 @@ public class SelectTowerUI : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private Image backGroundImage;
     [SerializeField] private Image iconImage;
+    [SerializeField] private Image towerImage; // 선택된 타워 배경 이미지
 
     [Header("Tower UI")]
     [SerializeField] private Sprite towerBackGroundImage; // 배경 이미지 
@@ -77,7 +78,7 @@ public class SelectTowerUI : MonoBehaviour
         towerDescriptionText.text = "타워에 대한 간략한 설명";
         towerState.gameObject.SetActive(true);
         iconImage.sprite = towerIconBackgroundImage;
-
+        towerImage.sprite = data.TowerData.towerImage;
         var currentLevelData = DataTableManager.LevelUpTable.Get(data.TowerData.ID, data.Level);
         var nextLevelData = DataTableManager.LevelUpTable.Get(data.TowerData.ID, data.Level + 1);
         

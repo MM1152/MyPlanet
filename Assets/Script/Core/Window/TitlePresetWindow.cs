@@ -58,12 +58,18 @@ public class TitlePresetWindow : Window
 
     private void ChangeSelectPresetIndex(int changeIdx)
     {
-        if (currentSelectPresetIndex != -1)
+        if (currentSelectPresetIndex != -1 && currentSelectPresetIndex < presetViewers.Count)
         {
-            presetViewers[currentSelectPresetIndex].UpdateSelectButton(false);
+            if (presetViewers[currentSelectPresetIndex] != null)
+            {
+                presetViewers[currentSelectPresetIndex].UpdateSelectButton(false);
+            }
         }
         currentSelectPresetIndex = changeIdx;
-        presetViewers[currentSelectPresetIndex].UpdateSelectButton(true);
+        if (currentSelectPresetIndex < presetViewers.Count && presetViewers[currentSelectPresetIndex] != null)
+        {
+            presetViewers[currentSelectPresetIndex].UpdateSelectButton(true);
+        }
     }
 
     public override void Open()
@@ -74,14 +80,20 @@ public class TitlePresetWindow : Window
             tempData.TowerId = new List<int>() { 2003 , 2015 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 , -1 , -1};
             tempData.PlanetId = 1001;
 
-            presetViewers[0].UpdatePreset(tempData);
-            presetViewers[0].UpdateSelectButton(true);
-            presetViewers[0].OnClickSelectButton();
-            presetViewers[0].DisableEditButton();
+            if (presetViewers.Count > 0 && presetViewers[0] != null)
+            {
+                presetViewers[0].UpdatePreset(tempData);
+                presetViewers[0].UpdateSelectButton(true);
+                presetViewers[0].OnClickSelectButton();
+                presetViewers[0].DisableEditButton();
+            }
 
             for (int i = 1; i < presetViewers.Count; i++)
             {
-                Destroy(presetViewers[i].gameObject);
+                if (presetViewers[i] != null && presetViewers[i].gameObject != null)
+                {
+                    Destroy(presetViewers[i].gameObject);
+                }
                 presetViewers.RemoveAt(i--);
             }
         }
@@ -99,15 +111,31 @@ public class TitlePresetWindow : Window
 
     private void OnDestroy()
     {
-        FirebaseManager.Instance.PresetData.OnChangePresetData -= ChangePresetData;
+        if (FirebaseManager.Instance != null && FirebaseManager.Instance.PresetData != null)
+        {
+            FirebaseManager.Instance.PresetData.OnChangePresetData -= ChangePresetData;
+        }
+        
+        // 남아있는 프리셋 뷰어들 정리
+        foreach (var viewer in presetViewers)
+        {
+            if (viewer != null && viewer.gameObject != null)
+            {
+                Destroy(viewer.gameObject);
+            }
+        }
+        presetViewers.Clear();
     }
 
     private void UpdatePreset()
     {
-
+        // 기존 프리셋 뷰어들을 안전하게 제거
         for(int i = 0; i < presetViewers.Count; i++)
         {
-            Destroy(presetViewers[i].gameObject);
+            if (presetViewers[i] != null && presetViewers[i].gameObject != null)
+            {
+                Destroy(presetViewers[i].gameObject);
+            }
         }
         presetViewers.Clear();
 
@@ -123,7 +151,16 @@ public class TitlePresetWindow : Window
     private void ChangePresetData(int index)
     {
         Debug.Log("Preset ChangeData Call");
-        var presetData = FirebaseManager.Instance.PresetData.Get(index);
-        presetViewers[index].UpdatePreset(presetData);
+        
+        // 인덱스 유효성 및 null 체크
+        if (index >= 0 && index < presetViewers.Count && presetViewers[index] != null)
+        {
+            var presetData = FirebaseManager.Instance.PresetData.Get(index);
+            presetViewers[index].UpdatePreset(presetData);
+        }
+        else
+        {
+            Debug.LogWarning($"ChangePresetData: Invalid index {index} or viewer is null");
+        }
     }
 }

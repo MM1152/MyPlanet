@@ -176,20 +176,29 @@ public class TitleBookWindow : Window
 
     private void ChangeSelectPresetIndex(int changeIdx)
     {
-
-        if (currentSelectPresetIndex != -1)
+        if (currentSelectPresetIndex != -1 && currentSelectPresetIndex < presetViewers.Count)
         {
-            presetViewers[currentSelectPresetIndex].UpdateSelectButton(false);
+            if (presetViewers[currentSelectPresetIndex] != null)
+            {
+                presetViewers[currentSelectPresetIndex].UpdateSelectButton(false);
+            }
         }
         currentSelectPresetIndex = changeIdx;
-        presetViewers[currentSelectPresetIndex].UpdateSelectButton(true);
+        if (currentSelectPresetIndex < presetViewers.Count && presetViewers[currentSelectPresetIndex] != null)
+        {
+            presetViewers[currentSelectPresetIndex].UpdateSelectButton(true);
+        }
     }
 
     private void UpdatePreset()
     {
+        // 기존 프리셋 뷰어들을 안전하게 제거
         for (int i = 0; i < presetViewers.Count; i++)
         {
-            Destroy(presetViewers[i].gameObject);
+            if (presetViewers[i] != null && presetViewers[i].gameObject != null)
+            {
+                Destroy(presetViewers[i].gameObject);
+            }
         }
         presetViewers.Clear();
 
@@ -205,13 +214,53 @@ public class TitleBookWindow : Window
     private void ChangePresetData(int index)
     {
         Debug.Log("Preset ChangeData Call");
-        var presetData = FirebaseManager.Instance.PresetData.Get(index);
-        presetViewers[index].UpdatePreset(presetData);
+        
+        // 인덱스 유효성 및 null 체크
+        if (index >= 0 && index < presetViewers.Count && presetViewers[index] != null)
+        {
+            var presetData = FirebaseManager.Instance.PresetData.Get(index);
+            presetViewers[index].UpdatePreset(presetData);
+        }
+        else
+        {
+            Debug.LogWarning($"ChangePresetData: Invalid index {index} or viewer is null");
+        }
     }
 
     private void OnDestroy()
     {
-        FirebaseManager.Instance.PresetData.OnChangePresetData -= ChangePresetData;
+        if (FirebaseManager.Instance != null && FirebaseManager.Instance.PresetData != null)
+        {
+            FirebaseManager.Instance.PresetData.OnChangePresetData -= ChangePresetData;
+        }
+        
+        // 남아있는 정보 오브젝트들 정리
+        foreach (var planetInfo in planetInfomationList)
+        {
+            if (planetInfo != null && planetInfo.gameObject != null)
+            {
+                Destroy(planetInfo.gameObject);
+            }
+        }
+        planetInfomationList.Clear();
+        
+        foreach (var towerInfo in towerInfomationList)
+        {
+            if (towerInfo != null && towerInfo.gameObject != null)
+            {
+                Destroy(towerInfo.gameObject);
+            }
+        }
+        towerInfomationList.Clear();
+        
+        foreach (var presetViewer in presetViewers)
+        {
+            if (presetViewer != null && presetViewer.gameObject != null)
+            {
+                Destroy(presetViewer.gameObject);
+            }
+        }
+        presetViewers.Clear();
     }
 
     private void OpenBookInfomationWindow(PlanetTable.Data planetData , PlanetInfomation planetInfo)

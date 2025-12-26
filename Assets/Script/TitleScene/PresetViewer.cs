@@ -54,15 +54,24 @@ public class PresetViewer : MonoBehaviour
     {
         this.presetData = presetData;
 
+        // 기존 타워 정보들을 안전하게 제거
         for(int i = 0; i < towerInfos.Count; i++)
         {
-            Destroy(towerInfos[i].gameObject);
+            // null 체크 추가 - 이미 파괴되었을 수 있음
+            if (towerInfos[i] != null && towerInfos[i].gameObject != null)
+            {
+                Destroy(towerInfos[i].gameObject);
+            }
         }
 
         towerInfos.Clear();
 
-        var planetData = DataTableManager.PlanetTable.Get(presetData.PlanetId);
-        planetInfomation.UpdateTexts(planetData);
+        // planetInfomation null 체크 추가
+        if (planetInfomation != null)
+        {
+            var planetData = DataTableManager.PlanetTable.Get(presetData.PlanetId);
+            planetInfomation.UpdateTexts(planetData);
+        }
 
         for (int i = 0; i < presetData.TowerId.Count; i++)
         {
@@ -95,5 +104,20 @@ public class PresetViewer : MonoBehaviour
     {
         editButton.interactable = false;
     }
+
+    private void OnDestroy()
+    {
+        // 이벤트 정리
+        OnChangeIndex = null;
+        
+        // 남아있는 타워 정보들 정리
+        foreach (var towerInfo in towerInfos)
+        {
+            if (towerInfo != null && towerInfo.gameObject != null)
+            {
+                Destroy(towerInfo.gameObject);
+            }
+        }
+        towerInfos.Clear();
+    }
 }
-    
