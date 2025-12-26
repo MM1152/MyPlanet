@@ -29,6 +29,7 @@ public class InfomationTab : MonoBehaviour
     [Header("Images")]
     [SerializeField] private Image planetImage;
     [SerializeField] private Image planetElementTypeImage;
+    [SerializeField] private Image planetTypeImage;
     [SerializeField] private Image[] startsImages;
 
 #if DEBUG_MODE
@@ -74,6 +75,7 @@ public class InfomationTab : MonoBehaviour
         planetDescriptionText.text = planetTableData.Explanation;
         planetElementTypeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, planetTableData.Attribute);
         planetImage.sprite =  planetTableData.PlanetImage;
+        planetTypeImage.sprite = planetTableData.PlanetTypeImage;
         var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
         UpdatePeiceCount(userPlanetData.count);
 #if DEBUG_MODE

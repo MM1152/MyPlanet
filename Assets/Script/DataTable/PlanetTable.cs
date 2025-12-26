@@ -73,7 +73,8 @@ public class PlanetTable : DataTable
         };
         [Ignore]
         public Sprite PlanetImage { get; set; }
-
+        [Ignore]
+        public Sprite PlanetTypeImage => DataTableManager.SpriteTable.Get(DataTableIds.PlanetTypeSpriteTable, planet_type);
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)

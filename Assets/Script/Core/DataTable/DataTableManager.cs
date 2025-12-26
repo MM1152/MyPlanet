@@ -108,6 +108,7 @@ public static class DataTableManager
             clearWaveRewardTable.LoadAsync(DataTableIds.ClearWaveRewardTable),
             daliyGiftTable.LoadAsync(DataTableIds.DailyGiftTable),
             towerGradeToPieceCountTable.LoadAsync(DataTableIds.TowerGradeToPieceCountTable),
+            spriteTable.LoadAsync(DataTableIds.PlanetTypeSpriteTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

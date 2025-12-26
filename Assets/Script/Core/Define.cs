@@ -474,6 +474,7 @@ public static class DataTableIds
     public static readonly string EffectTable = "EffectTable";
     public static readonly string LevelUpTable = "LevelUpTable";
     public static readonly string TypeSpriteTable = "TypeSpriteTable";
+    public static readonly string PlanetTypeSpriteTable = "PlanetTypeSpriteTable";
     public static readonly string ElementSpriteTable = "ElementSpriteTable";
     public static readonly string AttackTypeSpriteTable = "AttackTypeSpriteTable";
     public static readonly string OptionTable = "OptionTable";
