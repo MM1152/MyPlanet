@@ -10,7 +10,8 @@ public class RangeBoostAbility : BaseAbility
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        zoneSearch = enemy.zone;
+        zoneSearch = Managers.ObjectPoolManager.SpawnObject<ZoneSearch>(PoolsId.Zone);
+        zoneSearch.Init(enemy);
         enemy.abilityAction += OnUpdate;
         enemy.OnBuffRemoved += RemoveBonus;
     }
@@ -21,8 +22,8 @@ public class RangeBoostAbility : BaseAbility
 
         foreach (var targetEnemy in zoneSearch.enemiesInZone)
         {
-            if (targetEnemy == null || targetEnemy.IsDead||targetEnemy.attackRange <= 0) continue;
-                   
+            if (targetEnemy == null || targetEnemy.IsDead || targetEnemy.attackRange <= 0) continue;
+
             targetEnemy.SetBonusRange(boostRange);
         }
     }
@@ -31,7 +32,7 @@ public class RangeBoostAbility : BaseAbility
     {
         foreach (var targetEnemy in zoneSearch.enemiesInZone)
         {
-            if (targetEnemy == null || targetEnemy.IsDead||targetEnemy.attackRange <= 0) continue;
+            if (targetEnemy == null || targetEnemy.IsDead || targetEnemy.attackRange <= 0) continue;
 
             targetEnemy.ResetRange();
 

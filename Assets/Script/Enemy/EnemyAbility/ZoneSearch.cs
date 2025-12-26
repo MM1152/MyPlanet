@@ -17,6 +17,8 @@ public class ZoneSearch : MonoBehaviour
         if (circleCollider == null) return;
 
         this.enemy = enemy;
+        this.transform.parent = enemy.transform;
+        this.transform.localPosition = Vector3.zero;
         float scale = transform.lossyScale.x;
         circleCollider.radius = SetScaledRadius();
     }

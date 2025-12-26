@@ -8,8 +8,9 @@ public class HealZoneAbility : BaseAbility
     private ZoneSearch zoneSearch;
     public override void SetEnemy(Enemy enemy)
     {
-        base.SetEnemy(enemy);
-        zoneSearch = enemy.zone;
+        base.SetEnemy(enemy);        
+        zoneSearch = Managers.ObjectPoolManager.SpawnObject<ZoneSearch>(PoolsId.Zone);
+        zoneSearch.Init(enemy);
         enemy.abilityAction += OnUpdate;
     }
 

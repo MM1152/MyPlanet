@@ -11,7 +11,8 @@ public class PelletBoosterAbility : BaseAbility
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        zoneSearch = enemy.zone;
+        zoneSearch = Managers.ObjectPoolManager.SpawnObject<ZoneSearch>(PoolsId.Zone);
+        zoneSearch.Init(enemy);
         enemy.abilityAction += OnUpdate;
         enemy.OnBuffRemoved += RemoveBonus;
     }

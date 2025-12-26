@@ -5,7 +5,7 @@ using UnityEngine;
 public class DivergentBarrier : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnDamage; // 데미지 받았을 때 발동하는 능력
-    public int barrierAmount = 100000; // 임시값 베리어 양
+    public int barrierAmount = 5000; // 임시값 베리어 양
     public ElementType barrierElementType = ElementType.Ice; // 이 어빌리티가 가진 적이 베리어에 넣어줄 속성 
     public override bool isActive => barrier == null || (refillCount > 0 && barrier.IsDead); // 베리어가 없거나 리필 가능할 때 활성화
     public Barrier barrier;  // 풀링해서 가져와서 담아둘 베리어 
