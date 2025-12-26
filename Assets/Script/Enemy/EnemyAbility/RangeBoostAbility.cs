@@ -14,6 +14,7 @@ public class RangeBoostAbility : BaseAbility
         zoneSearch.Init(enemy);
         enemy.abilityAction += OnUpdate;
         enemy.OnBuffRemoved += RemoveBonus;
+        enemy.OnDie += AbilityDie;
     }
 
     public override void OnUpdate()
@@ -36,6 +37,15 @@ public class RangeBoostAbility : BaseAbility
 
             targetEnemy.ResetRange();
 
+        }
+    }
+    public void AbilityDie(Enemy enemy)
+    {
+        if (zoneSearch != null)
+        {
+            zoneSearch.ZoneDisable();
+            Managers.ObjectPoolManager.Despawn(PoolsId.Zone, zoneSearch.gameObject);
+            zoneSearch = null;
         }
     }
 }

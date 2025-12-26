@@ -20,7 +20,8 @@ public class ZoneSearch : MonoBehaviour
         this.transform.parent = enemy.transform;
         this.transform.localPosition = Vector3.zero;
         float scale = transform.lossyScale.x;
-        circleCollider.radius = SetScaledRadius();
+        circleCollider.radius *= SetScaledRadius();
+        Debug.Log($"zone 생성 확인필요 ");
     }
 
     private float SetScaledRadius()
@@ -52,7 +53,7 @@ public class ZoneSearch : MonoBehaviour
 
         if (collision.CompareTag(TagIds.DroneTag))
         {
-            if(this.enemy.enemyType == EnemyType.Ranged)
+            if (this.enemy.enemyType == EnemyType.Ranged)
             {
                 var drone = collision.GetComponent<Drone>();
                 var percent = drone.Tower.BonusDroneTargetedPercent / 100f;
@@ -84,4 +85,17 @@ public class ZoneSearch : MonoBehaviour
             }
         }
     }
+
+    public void ZoneDisable()
+    {
+        enemiesInZone.Clear();
+        this.gameObject.transform.parent = null;
+        this.gameObject.SetActive(false);
+    }
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, circleCollider.radius);
+    }
+
 }
