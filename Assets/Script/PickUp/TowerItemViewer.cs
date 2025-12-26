@@ -34,6 +34,12 @@ public class TowerItemViewer : MonoBehaviour
         bonusTopGameObject.SetActive(false);
         sliderLayout[0].SetActive(false);
         sliderLayout[1].SetActive(false);
+
+        var userTowerData = FirebaseManager.Instance.TowerData.Get(data.connection_id);
+        var towerPieceCount = DataTableManager.TowerGradeToPieceCountTable.GetPieceCount(data.connection_id, userTowerData.grade);
+        sliderText.text = userTowerData.TowerPartCount + "/" + towerPieceCount;
+        partCountSlider.value = (float)userTowerData.TowerPartCount / towerPieceCount;
+
         optionValueLayout.SetActive(false);
 
         var userData = FirebaseManager.Instance.TowerData.Get(data.connection_id);

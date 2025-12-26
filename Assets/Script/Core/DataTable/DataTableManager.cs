@@ -36,6 +36,8 @@ public static class DataTableManager
     public static RewardListTable RewardListTable => Get<RewardListTable>(DataTableIds.RewardListTable);
     public static SoundTable SoundsTable => Get<SoundTable>(DataTableIds.SoundTable);
     public static ClearWaveRewardTable ClearWaveRewardTable => Get<ClearWaveRewardTable>(DataTableIds.ClearWaveRewardTable);
+    public static DailyGiftTable DaliyGiftTable => Get<DailyGiftTable>(DataTableIds.DailyGiftTable);
+    public static TowerGradeToPieceCountTable TowerGradeToPieceCountTable => Get<TowerGradeToPieceCountTable>(DataTableIds.TowerGradeToPieceCountTable);
 
     static DataTableManager()
     {
@@ -71,6 +73,8 @@ public static class DataTableManager
         var rewardListTable = new RewardListTable();
         var soundTable = new SoundTable();
         var clearWaveRewardTable = new ClearWaveRewardTable();
+        var daliyGiftTable = new DailyGiftTable();
+        var towerGradeToPieceCountTable = new TowerGradeToPieceCountTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -102,6 +106,8 @@ public static class DataTableManager
             rewardListTable.LoadAsync(DataTableIds.RewardListTable),
             soundTable.LoadAsync(DataTableIds.SoundTable),
             clearWaveRewardTable.LoadAsync(DataTableIds.ClearWaveRewardTable),
+            daliyGiftTable.LoadAsync(DataTableIds.DailyGiftTable),
+            towerGradeToPieceCountTable.LoadAsync(DataTableIds.TowerGradeToPieceCountTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

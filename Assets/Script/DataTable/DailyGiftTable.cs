@@ -1,39 +1,39 @@
 using CsvHelper.Configuration.Attributes;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine;
 using System.Collections.Generic;
-
+using System.Linq;
 public class DailyGiftTable : DataTable
 {
-    private List<Data> dailyGiftTable = new List<Data>();
+    private Dictionary<int , Data> dailyGiftTable = new Dictionary<int, Data>();
+
     public class Data
     {
         public int ID { get; set; }
-        public int Type { get; set; } 
+        public int Type { get; set; }
         public int Num { get; set; }
 
         [Ignore]
-        public Sprite ItemImage { get; set; }
+        public ItemTable.Data ItemData => DataTableManager.ItemTable.Get(Type);
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
     {
         var path = string.Format(FormatPath, filename);
-        var textAsset = await Addressables.LoadAssetAsync<TextAsset>(path);
-
-        var result = await LoadCSV<Data>(textAsset.text);
+        var textAssets = await Addressables.LoadAssetAsync<TextAsset>(path);
+        var result = await LoadCSV<Data>(textAssets.text);
 
         foreach(var data in result)
         {
-            dailyGiftTable.Add(data);
+            dailyGiftTable.Add(data.ID, data);
         }
 
         return (filename, this);
     }
 
-    public List<Data> GetDailyGiftDatas() 
+    public List<Data> Get()
     {
-        return dailyGiftTable;
+        return dailyGiftTable.Values.ToList();
     }
 }

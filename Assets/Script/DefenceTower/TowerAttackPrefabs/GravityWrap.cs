@@ -21,7 +21,7 @@ public class GravityWrap : BaseAttackPrefab
         utiltower = data as UtilTower;
         poolsId = PoolsId.GravityWrap;
         transform.localScale = new Vector3(FullRange, FullRange, FullRange);
-        duration = tower.BonusDuration;
+        duration = utiltower.FullDuration;
     }
 
     public void Setting(Transform followTarget , string targetTag , float slowSpeedPercent , bool isElete = false , bool isDeleteProjectile = false)
