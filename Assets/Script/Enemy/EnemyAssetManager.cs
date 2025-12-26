@@ -7,8 +7,9 @@ public class EnemyAssetManager : MonoBehaviour
     // 각각의 에셋이 담긴 프리팹은 
     [SerializeField] private Material redMaterial;//교체할 머티리얼들
     [SerializeField] private Material blueMaterial;
-    [SerializeField] private Material greenMaterial;
+    [SerializeField] private Material steelMaterial;
     [SerializeField] private Material yellowMaterial;
+    [SerializeField] private Material purpleMaterial;
     [SerializeField] private Material defaultMaterial;
     private ObjectPoolManager poolManager;//오브젝트풀 매니저
     private PoolsId poolId;
@@ -51,6 +52,8 @@ public class EnemyAssetManager : MonoBehaviour
             ElementType.Fire => redMaterial,
             ElementType.Ice => blueMaterial,
             ElementType.Light => yellowMaterial,
+            ElementType.Steel => steelMaterial,
+            ElementType.Dark => purpleMaterial,
             _ => defaultMaterial,
         };
     }

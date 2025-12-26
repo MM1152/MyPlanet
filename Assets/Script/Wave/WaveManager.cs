@@ -73,6 +73,8 @@ public class WaveManager : MonoBehaviour
     private GameObject warringWindow;
     [SerializeField]
     private TextMeshProUGUI warringText;
+    [SerializeField]
+    private float bgmSound = 2f;
 
     [SerializeField]
     private WaveWindow waveWindow;
@@ -113,13 +115,13 @@ public class WaveManager : MonoBehaviour
         if (stageId == 1)
         {
             currnetBgm = AudiosId.Universe_Music;
-            Managers.SoundManager.PlayBGM(currnetBgm);
+            Managers.SoundManager.PlayBGM(currnetBgm,bgmSound);
 
         }
         else
         {
             currnetBgm = AudiosId.Simple_Acoustics;
-            Managers.SoundManager.PlayBGM(currnetBgm);
+            Managers.SoundManager.PlayBGM(currnetBgm,bgmSound);
         }
     }
 
@@ -400,9 +402,9 @@ public class WaveManager : MonoBehaviour
             }
         }
 
-        if (enemyType == EnemyType.Boss && isBossKilled)
+        if (enemyType == EnemyType.Boss && !isBossKilled)
         {
-            Managers.SoundManager.PlayBGM(AudiosId.Battle_Music);
+            Managers.SoundManager.PlayBGM(AudiosId.Battle_Music,bgmSound);
         }
     }
 

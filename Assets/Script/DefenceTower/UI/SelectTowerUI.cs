@@ -74,7 +74,6 @@ public class SelectTowerUI : MonoBehaviour
         this.towerData = data.TowerData;
         towerNameText.text = $"[{towerData.Name}]" + (data.Level == 0 ? "" : $"+{data.Level}단계");
         slotIndexText.text = data.SlotIndex + "번 슬롯";
-        towerDescriptionText.text = "타워에 대한 간략한 설명";
         towerState.gameObject.SetActive(true);
         iconImage.sprite = towerIconBackgroundImage;
 
@@ -148,7 +147,7 @@ public class SelectTowerUI : MonoBehaviour
         }
         else if (diff > 0)
         {
-            upgradeList.Add($"[{effectName}] +{diff}");
+            upgradeList.Add($"[{effectName}] +{Mathf.Abs(diff)}");
         }
     }
 
@@ -159,7 +158,6 @@ public class SelectTowerUI : MonoBehaviour
         this.consumeData = data;
         towerNameText.text = data.Name;
         slotIndexText.text = "소모품";
-        towerDescriptionText.text = "소모품에 대한 간략한 설명";
         towerState.text = data.Description;
         // towerState.gameObject.SetActive(false);
         iconImage.sprite = consumableIconImage;

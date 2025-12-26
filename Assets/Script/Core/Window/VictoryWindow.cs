@@ -1,9 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -82,7 +79,6 @@ public class VictoryWindow : Window
 
     private async UniTaskVoid OnClickExitButton()
     {
-        // Time.timeScale = 1f;
         List<UniTask> tasks =  new List<UniTask>();
         tasks.Add(FirebaseManager.Instance.UserData.GetGoods(goldReward , expReward , diamondReward));
         if (waveManager.CurrentWaveIndex != 1)
