@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class TowerRandomPickUp1 : Tutorial
 {
-    private string msg = "다음은 새로운 타워입니다.\n1회 개발을 눌러보세요";
+    private string msg = "다음은 새로운 타워입니다.\n1회 뽑기을 눌러보세요";
 
     private WindowManager windowManager;
     private PopupManager popupManager;
@@ -14,7 +14,7 @@ public class TowerRandomPickUp1 : Tutorial
 
     public override void TutorialEnter()
     {
-        manager.SetTextAreaPosition(1);
+        manager.SetTextAreaPosition(3);
         manager.SetTutorialBackGround(false);
         windowManager = GameObject.FindWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
         popupManager = GameObject.FindWithTag(TagIds.PopupManager).GetComponent<PopupManager>();

@@ -30,6 +30,7 @@ public class TowerRandomPickUp2 : Tutorial
     public override void TutorialExit()
     {
         okButton.onClick.RemoveListener(OnClickOkButton);
+        Variable.IsTutorialActive = false;
     }
 
     public override void TutorialUpdate()

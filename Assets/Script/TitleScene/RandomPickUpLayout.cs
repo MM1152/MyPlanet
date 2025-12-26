@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 public class RandomPickUpLayout : MonoBehaviour
 {
     [Header("Texts")]
@@ -57,7 +58,18 @@ public class RandomPickUpLayout : MonoBehaviour
 
     private async UniTaskVoid OnClickBlueButton(int count)
     {
-        // FIX : 재화도 추가로 집어넣어야함
+        var sucess = await FirebaseManager.Instance.UserData.CheckGoodsAsync(DataBasePaths.DiamondPath, count * 100);
+
+        if (!sucess && !Variable.IsTutorialActive)
+        {
+            return;
+        }
+
+        List<UniTask> tasks = new List<UniTask>();
+        if(!Variable.IsTutorialActive)
+        {
+            FirebaseManager.Instance.UserData.UseGoods(0, 0, count * 100).Forget();
+        }
         List<RandomPickUpTable.Data> datas = new List<RandomPickUpTable.Data>();
         List<bool> isNews = new List<bool>();
         List<(bool duplication , float precData)> isDuplication = new List<(bool duplication, float precData)>();

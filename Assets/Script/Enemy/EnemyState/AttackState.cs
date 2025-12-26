@@ -38,7 +38,7 @@ public class AttackState : IState
         if (enemy.attack is ShotAttack shotAttack &&
         shotAttack.GetShotStrategy(enemy.ElementType) is LaserShot laserShot)
         {
-            laserShot.LaserReset();
+            laserShot.LaserReset(enemy);
         }
 
         if( enemy.attack is EliteMonsterAttack eliteMonsterAttack &&

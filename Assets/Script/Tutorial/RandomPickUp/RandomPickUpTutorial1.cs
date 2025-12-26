@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class  RandomPickUpTutorial1 : Tutorial
 {
-    private string msg = "플레이하고 얻은 재화를 통해 새로운 행성과 타워를 뽑을 수 있습니다.\n가챠 탭을 선택하세요";
+    private string msg = "플레이하고 얻은 재화를 통해 새로운 행성과 타워를 뽑을 수 있습니다.\n뽑기 탭을 선택하세요";
     private WindowManager windowManager;
     private Button gachaTabButton;
     public override void TutorialEnter()

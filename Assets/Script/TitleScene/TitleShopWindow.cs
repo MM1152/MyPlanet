@@ -51,7 +51,7 @@ public class TitleShopWindow : Window
 
     public override void Open()
     {
-        FirebaseManager.Instance.Database.RemoveListner(DataBasePaths.GoldPath, OnChangeGoldValue);
+        FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath, OnChangeGoldValue);
         Managers.SoundManager.PlayBGM(AudiosId.Dry_To_Verb);
         base.Open();
     }

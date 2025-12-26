@@ -3,14 +3,16 @@ using UnityEngine.UI;
 
 public class RandomPickUpTutorial2 : Tutorial
 {
-    private string msg = "우선 새로운 행성을 찾아봅시다.\n1회 탐사를 선택하세요\n탐사 비용을 지원해드리겠습니다.";
+    private string msg = "우선 새로운 행성을 찾아봅시다.\n1회 뽑기를 선택하세요\n탐사 비용을 지원해드리겠습니다.";
     private Button pickOneButton;
     private Button blueButton;
 
     private PopupManager popupManager;
     public override void TutorialEnter()
     {
+        Variable.IsTutorialActive = true;
         manager.SetTutorialBackGround(true);
+        manager.SetTextAreaPosition(3);
         pickOneButton = GameObject.FindWithTag(TagIds.TutorialTaget).GetComponent<Button>();
         popupManager = GameObject.FindWithTag(TagIds.PopupManager).GetComponent<PopupManager>();
         var popup = popupManager.GetPopup(PopupIds.TextPopup);
