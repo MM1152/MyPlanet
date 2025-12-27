@@ -45,14 +45,14 @@ public class RandomPickUpLayout : MonoBehaviour
     public void OnClickPickOneButton()
     {
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
-        popup.SetTexts("뽑기를 진행하시겠습니까?" , $"{titleText.text}뽑기를 진행합니다.\n100다이아가 소모됩니다." , "취소" , "뽑기");
+        popup.SetTexts("뽑기를 진행하시겠습니까?" , $"{titleText.text} 뽑기를 진행합니다.\n100다이아가 소모됩니다." , "취소" , "뽑기");
         popup.SetButtonAction(() => OnClickBlueButton(1).Forget(), OnClickRedButton);
     }
 
     public void OnClickPickTenButton()
     {
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
-        popup.SetTexts("뽑기를 진행하시겠습니까?", $"{titleText.text}뽑기를 진행합니다.\n1000다이아가 소모됩니다.", "취소", "뽑기");
+        popup.SetTexts("뽑기를 진행하시겠습니까?", $"{titleText.text} 뽑기를 진행합니다.\n1000다이아가 소모됩니다.", "취소", "뽑기");
         popup.SetButtonAction(() => OnClickBlueButton(10).Forget(), OnClickRedButton);
     }
 

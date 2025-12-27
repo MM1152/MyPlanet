@@ -65,7 +65,6 @@ public class TutorialManager : MonoBehaviour
     {
         if(!init)
             Init();
-
     }
 
     private void Init()

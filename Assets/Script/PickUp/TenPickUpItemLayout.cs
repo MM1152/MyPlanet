@@ -29,7 +29,7 @@ public class TenPickUpItemLayout : MonoBehaviour
         itemGrade.text = data.rarityToString;
         itemGrade.color = planetData.GradeToColor;
         newTextRoot.gameObject.SetActive(isNew);
-        if(data.RewardData.ItemData.ItemImage != null)
+        if(data.RewardData != null)
         {
             plaentImage.sprite = data.RewardData.ItemData.ItemImage;
             rewardImage.sprite = data.RewardData.ItemData.ItemImage;
@@ -37,6 +37,7 @@ public class TenPickUpItemLayout : MonoBehaviour
         else
         {
             plaentImage.sprite = DataTableManager.PlanetTable.Get(data.connection_id).PlanetImage;
+            rewardImage.sprite = DataTableManager.ItemTable.GetDataToPlenetId(data.connection_id).ItemImage;
         }
 
         rewardRoot.gameObject.SetActive(isDuplication.Item1);
