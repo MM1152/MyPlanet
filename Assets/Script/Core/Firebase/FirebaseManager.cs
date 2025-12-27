@@ -193,6 +193,7 @@ public class UserData : JsonSerialized
     public int[] stackRewards;
 
     public int version;
+    public int clearStage;
     public long playTime;
 
     public async UniTask InitalizedUserData()
@@ -209,6 +210,7 @@ public class UserData : JsonSerialized
 
         stackRewards = new int[] { 0, 0, 0 };
         clearWaveCount = 0;
+        clearStage = 0;
 
         version = FirebaseManager.Instance.Version;
         playTime = await FirebaseManager.Instance.Database.GetServerTime();
@@ -233,6 +235,16 @@ public class UserData : JsonSerialized
         this.exp += exp;
         this.diamond += diamond;
         await SaveAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId , this);
+    }
+
+    public async UniTask ClearStage(int clearStageIdx)
+    {
+        int clearMaxStage = Mathf.Max(clearStage, clearStageIdx);
+        if(clearMaxStage != clearStage)
+        {
+            clearStage = clearMaxStage;
+            await SaveAsync(DataBasePaths.UserPath + FirebaseManager.Instance.UserId, this);
+        }
     }
 
     public async UniTask UseGoods(int useGoldAmount = 0, int useExpAmount = 0 , int useDiaAmount = 0)

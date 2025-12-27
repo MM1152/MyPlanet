@@ -70,11 +70,13 @@ public class InfomationTab : MonoBehaviour
 
 
         planetGradeText.text = planetTableData.grade;
+        planetGradeText.color = planetTableData.GradeToColor;
         planetTypeText.text = planetTableData.PlanetType;
         planetElemetTypeText.text = planetTableData.AttributeType;
         planetDescriptionText.text = planetTableData.Explanation;
         planetElementTypeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, planetTableData.Attribute);
         planetImage.sprite =  planetTableData.PlanetImage;
+        planetImage.preserveAspect = true;
         planetTypeImage.sprite = planetTableData.PlanetTypeImage;
         var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
         UpdatePeiceCount(userPlanetData.count);

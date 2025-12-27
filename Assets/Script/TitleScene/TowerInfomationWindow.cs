@@ -143,6 +143,7 @@ public class TowerInfomationWindow : Window
         towerNameText.text = towerData.Name;
 
         towerImage.sprite = towerTableData.towerImage;
+        towerImage.preserveAspect = true;
 
         if (towerTableData.ElementImage == null)
             elementLayout.SetActive(false);

@@ -68,6 +68,15 @@ public class TitleStageSelectWindow : Window
         bool activeLeftArrow = currentSelectStage > 0;  
         bool activeRightArrow = currentSelectStage < stageLayouts.Count - 1;
         currentStageLayout.UpdateStageLayout(activeLeftArrow, activeRightArrow, true);
+
+        if(currentStageLayout.IsUnlock)
+        {
+            selectButton.interactable = true;
+        }
+        else
+        {
+            selectButton.interactable = false;
+        }
     }
 
     public override void Open()

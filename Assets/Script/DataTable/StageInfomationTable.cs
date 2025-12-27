@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine;
 using System.Collections.Generic;
+using CsvHelper.Configuration.Attributes;
 
 public class StageInfomationTable : DataTable
 {
@@ -20,6 +21,11 @@ public class StageInfomationTable : DataTable
         public int CLEAR_REWARD2_COUNT { get; set; }
         public int CLEAR_REWARD3 { get; set; }
         public int CLEAR_REWARD3_COUNT { get; set; }
+        [CsvHelper.Configuration.Attributes.Name("STAGE_IMAGE")]
+        public string stage_image { get; set; }
+
+        [Ignore]
+        public Sprite StageImage { get; set; }
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -30,6 +36,10 @@ public class StageInfomationTable : DataTable
 
         foreach (var data in datas)
         {
+            if(!string.IsNullOrEmpty(data.stage_image))
+            {
+                data.StageImage = await Addressables.LoadAssetAsync<Sprite>(data.stage_image).ToUniTask();
+            }
             stageTable.Add(data.STAGE_ID, data);
         }
 

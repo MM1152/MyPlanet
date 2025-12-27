@@ -1,4 +1,5 @@
 using Firebase.Database;
+using Mono.Cecil.Cil;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,8 +30,6 @@ public class PlanetInfoViewer : MonoBehaviour
 
     private void Awake()
     {
-        
-
         infomationButton.onClick.AddListener(() => UpdateTab(infomationTab.gameObject, infomationTabBackGround, infomationButton.image.color));
         levelUpbutton.onClick.AddListener(() => UpdateTab(levelUpTab.gameObject,levelUpTabBackGround, levelUpbutton.image.color));
         starUpgradeButton.onClick.AddListener(() => UpdateTab(starUpgradeTab.gameObject, starUpgradeBackGround, starUpgradeButton.image.color));
@@ -59,7 +58,7 @@ public class PlanetInfoViewer : MonoBehaviour
         levelUpTab.UpdateData(planetData);
         infomationTab.UpdateData(planetData);
         starUpgradeTab.UpdateData(planetData);
-
+         
         UpdateTab(infomationTab.gameObject , infomationTabBackGround , infomationButton.image.color);
         CheckUseAblePlanet(planetUserData);
     }
@@ -70,12 +69,10 @@ public class PlanetInfoViewer : MonoBehaviour
         if (!useAble)
         {
             levelUpbutton.interactable = false;
-            starUpgradeButton.interactable = false;
         }
         else
         {
             levelUpbutton.interactable = true;
-            starUpgradeButton.interactable = true;
         }
     }
 
@@ -98,4 +95,16 @@ public class PlanetInfoViewer : MonoBehaviour
         levelText.text = string.Format("LV.{0}", args.Snapshot.Value.ToString());
     }
 
+    private void OnValueChangeUnlock(object sender, ValueChangedEventArgs args)
+    {
+        bool isUnlocked = bool.Parse(args.Snapshot.Value.ToString());
+        if (isUnlocked)
+        {
+            levelUpbutton.interactable = true;
+        }
+        else
+        {
+            levelUpbutton.interactable = false;
+        }
+    }
 }

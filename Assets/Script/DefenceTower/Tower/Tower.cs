@@ -194,6 +194,9 @@ public abstract class Tower
                     Target = null;
                     return false;
                 }
+
+                var dir = (target.position - TowerGameObject.transform.position).normalized ;
+                TowerGameObject.transform.localEulerAngles = new Vector3(0, 0, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + -90f);
             }
 
             attackAble = false;

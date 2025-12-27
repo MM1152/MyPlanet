@@ -3,6 +3,8 @@ using Firebase.Database;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+
 using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class PlanetStarUpgradeTab : MonoBehaviour
@@ -43,6 +45,7 @@ public class PlanetStarUpgradeTab : MonoBehaviour
         FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetPeiceCountPathFormating , this.planetTableData.ID) ,OnValueChangeCount);
         userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
         planetImage.sprite = planetTableData.PlanetImage;
+        planetImage.preserveAspect = true;
         upgradeButton.interactable = true;
         UpdateData();
     }
@@ -58,6 +61,15 @@ public class PlanetStarUpgradeTab : MonoBehaviour
     private void UpdatePeiceCount(PlanetTable.Data planetTableData , PlanetData.Data userPlanetData)
     {
         // 5성까지 찍었을떄
+        if(!userPlanetData.unlocked)
+        {
+            starCountSlider.value = 1f;
+            currentPeiceCountText.text = $"해금하기 : {userPlanetData.count}/10";
+            needPeiceCountText.text = $"해금하기";
+            starCountSlider.value = (float)userPlanetData.count / 10;
+            return;
+        }
+
         if (userPlanetData.NeedPeiceCount == 0)
         {
             upgradeButton.interactable = false;
@@ -67,7 +79,7 @@ public class PlanetStarUpgradeTab : MonoBehaviour
             return;
         }
 
-        needPieceCount = (int)planetTableData.NeedPeiceCountPercent * userPlanetData.NeedPeiceCount;
+        needPieceCount = (int)(planetTableData.NeedPeiceCountPercent * userPlanetData.NeedPeiceCount);
         currentPieceCount = userPlanetData.count;
 
         currentPeiceCountText.text = $"조각 개수 : {currentPieceCount}/{needPieceCount}";
@@ -95,8 +107,22 @@ public class PlanetStarUpgradeTab : MonoBehaviour
 
     private async UniTask OnClickUpgradeButton()
     {
+        if (!userPlanetData.unlocked && userPlanetData.count >= 10)
+        {
+            List<UniTask> tasks = new List<UniTask>();
+
+            tasks.Add(FirebaseManager.Instance.PlanetData.UnlockPlanetAsync(planetTableData.ID));
+            tasks.Add(FirebaseManager.Instance.PlanetData.AddPieceCountAsync(planetTableData.ID, -10));
+
+            await Managers.Instance.WaitForLoadingAsync(tasks);
+            upgradeButton.interactable = true;
+            UpdateData();
+            return;
+        }
+
         if (needPieceCount == 0)
             return;
+
 
         if (needPieceCount <= currentPieceCount)
         {
@@ -113,7 +139,7 @@ public class PlanetStarUpgradeTab : MonoBehaviour
         // 등급별 기본 ID 계산
         int baseId = grade switch
         {
-            "C" => 5059,
+            "C" => 5041,
             "B" => 5065,
             "A" => 5071,
             "S" => 5077,
@@ -131,9 +157,15 @@ public class PlanetStarUpgradeTab : MonoBehaviour
 
     private void UpdateUnlockSlotText(PlanetTable.Data planetTableData, PlanetData.Data userPlanetData)
     {
-        int currentSlots = GetUnlockSlotCount(planetTableData.grade, userPlanetData.star);
-        int nextSlots = userPlanetData.star < 5 ? GetUnlockSlotCount(planetTableData.grade, userPlanetData.star + 1) : 0;
+        int currentSlots = DataTableManager.PlanetTable.GetUnlockAbleSlotCount(planetTableData.ID , userPlanetData.star);
+        int nextSlots = userPlanetData.star < 5 ? DataTableManager.PlanetTable.GetUnlockAbleSlotCount(planetTableData.ID, userPlanetData.star + 1) : 0;
         
+        if(!userPlanetData.unlocked)
+        {
+            unlockSlotText.text = $"0 >> {currentSlots}";
+            return;
+        }
+
         if(nextSlots == 0)
         {
             unlockSlotText.text = $"{currentSlots} (MAX)";

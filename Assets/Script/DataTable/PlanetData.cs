@@ -42,11 +42,11 @@ public class PlanetData
 
         public int NeedPeiceCount => star switch
         {
-            0 => DataTableManager.OptionTable.GetValueDataToInt(5050),
-            1 => DataTableManager.OptionTable.GetValueDataToInt(5051),
-            2 => DataTableManager.OptionTable.GetValueDataToInt(5052),
-            3 => DataTableManager.OptionTable.GetValueDataToInt(5053),
-            4 => DataTableManager.OptionTable.GetValueDataToInt(5054),
+            0 => DataTableManager.OptionTable.GetValueDataToInt(5093),
+            1 => DataTableManager.OptionTable.GetValueDataToInt(5094),
+            2 => DataTableManager.OptionTable.GetValueDataToInt(5095),
+            3 => DataTableManager.OptionTable.GetValueDataToInt(5096),
+            4 => DataTableManager.OptionTable.GetValueDataToInt(5097),
             _ => 0
         };
         

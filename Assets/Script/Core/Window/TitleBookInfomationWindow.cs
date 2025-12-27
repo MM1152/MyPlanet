@@ -1,4 +1,4 @@
-                                                                                        using Firebase.Database;
+using Firebase.Database;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -67,4 +67,5 @@ public class TitleBookInfomationWindow : Window
     {
         diamondText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
     }
+
 }

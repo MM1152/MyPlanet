@@ -71,6 +71,12 @@ public class VictoryWindow : Window
             tasks.Add(FirebaseManager.Instance.UserData.SaveClearWaveCount(waveManager.CurrentWaveIndex));
         }
 
+
+        if (isClear)
+        {
+            tasks.Add(FirebaseManager.Instance.UserData.ClearStage(waveManager.StageId));
+        }
+
         await Managers.Instance.WaitForLoadingAsync(tasks);
 
         Time.timeScale = (int)GameSpeed.CurrentSpeed;;
@@ -96,6 +102,11 @@ public class VictoryWindow : Window
                 tasks.Add(FirebaseManager.Instance.UserData.SaveAsync(path, FirebaseManager.Instance.UserData));
             }
         }
+        
+        if(isClear)
+        {
+            tasks.Add(FirebaseManager.Instance.UserData.ClearStage(waveManager.StageId));
+        }
 
         await Managers.Instance.WaitForLoadingAsync(tasks);
 
@@ -112,6 +123,12 @@ public class VictoryWindow : Window
         {
             tasks.Add(FirebaseManager.Instance.UserData.SaveClearWaveCount(waveManager.CurrentWaveIndex));
         }
+
+        if (isClear)
+        {
+            tasks.Add(FirebaseManager.Instance.UserData.ClearStage(waveManager.StageId));
+        }
+
         await Managers.Instance.WaitForLoadingAsync(tasks);
 
         manager.Close();

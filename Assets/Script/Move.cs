@@ -49,7 +49,7 @@ public class Move : MonoBehaviour
         if (Cube == null || Shape == null)
             return;
 
-        Cube.transform.Rotate(Vector3.up, selfRotaspeed * Time.deltaTime);
+        //Cube.transform.Rotate(Vector3.up, selfRotaspeed * Time.deltaTime);
 
         if (jotstickInput.magnitude != 0f)
         {
