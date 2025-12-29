@@ -9,6 +9,7 @@ public class VictoryWindow : Window
 {
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI playTimeText;
+    [SerializeField] private TextMeshProUGUI stageIdText;
 
     [Header("Buttons")]
     [SerializeField] private Button replayButton;
@@ -121,7 +122,7 @@ public class VictoryWindow : Window
         SceneManager.LoadScene(SceneIds.LoadingScene);
     }
 
-    public void SetVictoryUI(float timer, bool isClear,bool lastStage)
+    public void SetVictoryUI(float timer, bool isClear,bool lastStage,int stageId)
     {
         bool isTutorial = Variable.IsTutorialActive;
         this.isClear = isClear;
@@ -149,6 +150,7 @@ public class VictoryWindow : Window
             Managers.SoundManager.PlaySFX(AudiosId.jingle_chime_22_negative);
         }
 
+        stageIdText.text = $"{stageId} STAGE";
         SetRewards(isClear);
         replayButton.interactable = !isTutorial;     
         nextStageButton.interactable = (isClear && !lastStage && !isTutorial);
