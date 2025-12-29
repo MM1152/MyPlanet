@@ -72,7 +72,7 @@ public class RotatingLaserAttack : IShotStrategy
 
         if (!isInitialized)
         {
-            screenBounds = Utils.GetScreenRect();
+            screenBounds = Utils.GetScreenToWorldRect();
             laserRenderer = enemy.enemyLineRenderer;
             laserRenderer.enabled = true;
             laserRenderer.startWidth = enemy.transform.localScale.y * 0.3f;

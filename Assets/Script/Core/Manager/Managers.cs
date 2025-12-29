@@ -65,6 +65,7 @@ public class Managers
     {
         objectPoolManager?.Release();
         soundManager?.StopAllAudioSources();
+        touchManager?.CancelTouch();
     }
 
     public async UniTask WaitForManagerInitalizedAsync()

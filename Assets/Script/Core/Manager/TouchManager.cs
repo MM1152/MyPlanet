@@ -75,6 +75,7 @@ public class TouchManager : MonoBehaviour
 
     private void OnTouchPosition(InputAction.CallbackContext context)
     {
+        if (touchPhase != TouchPhase.Start && touchPhase != TouchPhase.Performed) return;
         touchPhase = TouchPhase.Performed;
         endTouchPosition = context.ReadValue<Vector2>();
         var distance = Vector2.Distance(startTouchPosition, endTouchPosition);
@@ -99,13 +100,18 @@ public class TouchManager : MonoBehaviour
         isPressed = true;
 
         startTouchPosition = touchPositionAction.ReadValue<Vector2>();
-        endTouchPosition = startTouchPosition;
+        endTouchPosition = startTouchPosition;  
     }
 
     private void OnTouchEnd(InputAction.CallbackContext context)
     {
         touchPhase = TouchPhase.End;
-        if (touchTypes == TouchTypes.NoTab || touchTypes == TouchTypes.Drag) return;
+
+        if (touchTypes == TouchTypes.NoTab || touchTypes == TouchTypes.Drag)
+        {
+            touchTypes = TouchTypes.None;
+            return;
+        }
         if (!isTabAble) return;
 
         if (Time.unscaledTime - startTouchTime > longTabTime)
@@ -121,8 +127,19 @@ public class TouchManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        touchTypes = TouchTypes.None;
-        touchPhase = TouchPhase.None;
+        if(TouchType != TouchTypes.Drag)
+        {
+            touchTypes = TouchTypes.None;
+        }
+        if(TouchPhase == TouchPhase.End)
+        {
+            touchPhase = TouchPhase.None;
+        }
+    }
+
+    public Vector3 GetCurrentTouchPosition()
+    {
+        return endTouchPosition;
     }
 
     private List<RaycastResult> FindUi()
@@ -152,7 +169,7 @@ public class TouchManager : MonoBehaviour
         return false;
     }
 
-    public void CancleTouch()
+    public void CancelTouch()
     {
         isPressed = false;
         isTabAble = false;

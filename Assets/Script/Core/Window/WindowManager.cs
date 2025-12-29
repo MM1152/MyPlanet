@@ -48,7 +48,7 @@ public class WindowManager : MonoBehaviour
     public Window Open(WindowIds id)
     {
         Variable.IsJoyStickActive = false;
-        Managers.TouchManager.CancleTouch();
+        //Managers.TouchManager.CancelTouch();
         cureentWindow?.Close();
         cureentWindow = windowTable[(int)id];
         cureentWindow.Open();
