@@ -1,4 +1,5 @@
 ﻿using Firebase.Database;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,6 +18,8 @@ public class TitleMainWindow : Window
     [SerializeField] private TextMeshProUGUI userGold;
     [SerializeField] private TextMeshProUGUI userDiamond;
     [SerializeField] private TextMeshProUGUI userExpText;
+    [Header("Images")]
+    [SerializeField] private Image userProfileIconImage;
     [Header("References")]
     [SerializeField] private TutorialManager tutorialManager;
 
@@ -38,7 +41,10 @@ public class TitleMainWindow : Window
         FirebaseManager.Instance.Database.AddListner(DataBasePaths.ExpPath, OnChangeExpValue);
 
         selectStageButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
-        userNickNameText.text = FirebaseManager.Instance.UserData.nickName;
+
+        userNickNameText.text = FirebaseManager.Instance.Auth.CurrentUser.DisplayName;
+        userProfileIconImage.sprite = FirebaseManager.Instance.Auth.UserIconSprite;
+
         userGold.text = FirebaseManager.Instance.UserData.gold.ToString();
         userDiamond.text = FirebaseManager.Instance.UserData.diamond.ToString();
         logoutButton.onClick.AddListener(() =>

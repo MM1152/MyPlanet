@@ -16,6 +16,7 @@ public class LoadingScene : MonoBehaviour
     [Header("Firebase AuthLogin")]
     [SerializeField] private GameObject loginPanel;
     [SerializeField] private Button annymousLoginButton;
+    [SerializeField] private Button googleLoginButton;
 
     private CancellationTokenSource ctr;
 
@@ -26,9 +27,33 @@ public class LoadingScene : MonoBehaviour
         {
             WaitForLoginAsync().Forget();
             annymousLoginButton.interactable = false;
+            googleLoginButton.interactable = false;
         });
+
+        googleLoginButton.onClick.AddListener(() =>
+        {
+            WaitForGoogleLoginAsync().Forget();
+            annymousLoginButton.interactable = false;
+            googleLoginButton.interactable = false;
+        });
+
+
         await LoadSceneAsync(sceneId);
     } 
+
+    private async UniTaskVoid WaitForGoogleLoginAsync()
+    {
+        (string userId , bool success) = await FirebaseManager.Instance.Auth.SignInGoogleLoginAsync();
+        if(success)
+        {
+            loginPanel.SetActive(false);
+        }
+        else
+        {
+            annymousLoginButton.interactable = true;
+            googleLoginButton.interactable = true;
+        }
+    }
 
     private async UniTaskVoid WaitForLoginAsync()
     {
@@ -40,6 +65,7 @@ public class LoadingScene : MonoBehaviour
         else
         {
             annymousLoginButton.interactable = true;
+            googleLoginButton.interactable = true;
         }
     }
 
