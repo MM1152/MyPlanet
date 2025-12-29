@@ -420,7 +420,7 @@ public class WaveManager : MonoBehaviour
             if (window is VictoryWindow victoryWindow)
             {
 
-                victoryWindow.SetVictoryUI(playTimeTimer, isClear, isFinalStage);
+                victoryWindow.SetVictoryUI(playTimeTimer, isClear, isFinalStage, stageId);
             }
         }
     }
