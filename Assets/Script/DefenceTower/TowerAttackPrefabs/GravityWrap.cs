@@ -11,7 +11,7 @@ public class GravityWrap : BaseAttackPrefab
     
     protected List<IMoveAble> moveAbles = new List<IMoveAble>();
     private UtilTower utiltower;
-    private float FullRange => utiltower.UtilTowerData.range + tower.BonusAttackRange;
+    private float FullRange => utiltower.UtilTowerData?.range ?? 0 + tower.BonusAttackRange;
     [SerializeField] private GameObject[] filedParticle;
 
     public override void Init(Tower data)

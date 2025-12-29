@@ -14,7 +14,7 @@ public class TitleTowerPlaceEditWindow : Window
 {
     [SerializeField] private TowerInfomation towerInfomation;
     [SerializeField] private Transform towerInfomationRoot;
-    [SerializeField] private Image circle;
+    [SerializeField] protected Image circle;
     [SerializeField] private TowerPlaceHold towerPlaceObject;
     [SerializeField] private ShowIndexPanel showIndexPanel;
     [SerializeField] private Button saveButton;
@@ -55,6 +55,8 @@ public class TitleTowerPlaceEditWindow : Window
     private WindowIds prevWindow;
     private (int left, int right) prevApplyOptionSlots = (-1, -1);
 
+    protected bool inGameViewer = false;
+
     public override void Close()
     {
         if(presetData != null)
@@ -68,7 +70,7 @@ public class TitleTowerPlaceEditWindow : Window
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
-        windowId = (int)WindowIds.TitleTowerPlaceEditWindow;
+        windowId = (int)WindowIds.TitleTowerPlaceEditWindow;    
 
         Canvas.ForceUpdateCanvases();
         circleSize = new Vector3(circle.rectTransform.rect.width , circle.rectTransform.rect.height);
@@ -142,15 +144,20 @@ public class TitleTowerPlaceEditWindow : Window
                 continue;
 
             var towerInfo = Instantiate(towerInfomation, towerInfomationRoot);
-            towerInfo.OnTab += Place;
-            towerInfo.OnLongTab += ShowInfomationTower;
+            if(!inGameViewer)
+            {
+                towerInfo.OnTab += Place;
+                towerInfo.OnLongTab += ShowInfomationTower;
+            }
 
             var path = string.Format(DataBasePaths.TowerUnlockPathFormating, towerList[i].ID);
             FirebaseManager.Instance.Database.AddListner(path, towerInfo.OnUnlockValueChanged);
 
             var showIndexPanel = Instantiate(this.showIndexPanel, towerInfo.transform);
-            showIndexPanel.OnTab += UnPlace;
-
+            if (!inGameViewer)
+            {
+                showIndexPanel.OnTab += UnPlace;
+            }
             towerInfo.Init(towerList[i].ID);
             towerInfos.Add(towerInfo);
 
@@ -306,7 +313,7 @@ public class TitleTowerPlaceEditWindow : Window
                 OpenUnLockSlotPopup(idx);
 
                 if (placeHold.DisAble) return;
-                if (idx == selectIndex)
+                if (idx == selectIndex && !inGameViewer)
                 {
                     UnPlace(idx);
                     return;
@@ -323,6 +330,8 @@ public class TitleTowerPlaceEditWindow : Window
 
     private void CheckPlaceHoldUnlockAble()
     {
+        if (inGameViewer) return;
+
         var unlockAbleSlotCount = DataTableManager.PlanetTable.GetUnlockAbleSlotCount(planetData.id, planetData.star);
         var currentOpenSlotCount = planetData.openSlot.Count(x => x != -1);
 
@@ -346,8 +355,8 @@ public class TitleTowerPlaceEditWindow : Window
 
         float rotateAngle = angle * idx;
         float currentAngle = angle * selectIndex;
-        RotateAsync(currentAngle , rotateAngle , 0.2f).Forget();
         isRotate = true;
+        RotateAsync(currentAngle , rotateAngle , 0.2f).Forget();
         selectIndex = idx;
 
         placeHolds[selectIndex].transform.localScale = Vector3.one * 1.5f;
@@ -363,9 +372,9 @@ public class TitleTowerPlaceEditWindow : Window
     {
         float delta = Mathf.DeltaAngle(to, from);
         float speed = delta / duration;
-        for (float i = 0; i <= duration; i += Time.deltaTime)
+        for (float i = 0; i <= duration; i += Time.unscaledDeltaTime)
         {
-            circle.transform.eulerAngles += new Vector3(0f, 0f, speed * Time.deltaTime);
+            circle.transform.eulerAngles += new Vector3(0f, 0f, speed * Time.unscaledDeltaTime);
             await UniTask.Yield();
         }
 
@@ -432,8 +441,11 @@ public class TitleTowerPlaceEditWindow : Window
     {
         if (placeHolds[selectIdx].UnLockAble)
         {
-            var popup = popupManager.Open<UnLockPopup>(PopupIds.UnLockPopup);
-            popup.Setting(selectIdx , UnLock);
+            var popup = popupManager?.Open<UnLockPopup>(PopupIds.UnLockPopup);
+            if(popup != null)
+            {
+                popup.Setting(selectIdx, UnLock);
+            }
         }
     }
 

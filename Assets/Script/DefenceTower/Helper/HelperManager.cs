@@ -20,6 +20,9 @@ public class HelperManager : MonoBehaviour
     [SerializeField] private float spawnInterval = 10f;
     [SerializeField] private int spawnHelperCount = 2;
     private float curInterval;
+
+    [SerializeField] private HelperViewer[] helperViewers;
+    public HelperViewer[] HelperViewers => helperViewers;
     private async UniTaskVoid Start()
     {
         if (Variable.IsTutorialActive) return;
@@ -33,7 +36,7 @@ public class HelperManager : MonoBehaviour
             {
                 var rand = UnityEngine.Random.Range(0, userDatas.Count);
                 var helper = Instantiate(this.helper);
-                helper.Init(userDatas[i], this);
+                helper.Init(userDatas[i], this , helperViewers[i]);
                 helpers.Add(helper);
             }
             SpawnHelpers().Forget();
@@ -71,14 +74,20 @@ public class HelperManager : MonoBehaviour
         {
             this.userDatas.Add(asyncUserData.datas[0]);
             this.userDatas.Add(asyncUserData.datas[1]);
+
+            helperViewers[0].SetUserData(this.userDatas[0]);
+            helperViewers[1].SetUserData(this.userDatas[1]);
         }
     }
 
     private async UniTaskVoid SpawnHelpers()
     {
         await UniTask.WaitUntil(() => waveManager.CurrentWaveIndex == waveManager.MaxWave , cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
-        
-        while(true)
+
+        helperViewers[0].SetActive(true);
+        helperViewers[1].SetActive(true);
+
+        while (true)
         {
             await UniTask.Yield(cancellationToken: this.gameObject.GetCancellationTokenOnDestroy());
             curInterval += Time.deltaTime;

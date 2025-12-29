@@ -5,10 +5,12 @@ public class InGameTowerPlaceUI : MonoBehaviour
     [Header("References")]
     [SerializeField] private RectTransform canvasRect;
     [SerializeField] private GameObject checkDragTargetUI;
+    [SerializeField] private GameObject checkDragTargetUI2;
     [SerializeField] private GameObject moveTargetUI;
 
     public bool isDrag = false;
     public bool isTargeted = false;
+    public bool isTowerPlaceMode = false;
 
     private void Start()
     {
@@ -23,11 +25,13 @@ public class InGameTowerPlaceUI : MonoBehaviour
             moveTargetUI.transform.position = new Vector3(moveTargetUI.transform.position.x, Managers.TouchManager.endTouchPosition.y, 0f);
             Time.timeScale = 0;
         }
+
+
     }
 
     private void CheckDragAble()
     {
-        if (Managers.TouchManager.TouchPhase == TouchPhase.Start && Managers.TouchManager.OnTargetUI(checkDragTargetUI))
+        if (Managers.TouchManager.TouchPhase == TouchPhase.Start && (Managers.TouchManager.OnTargetUI(checkDragTargetUI) || Managers.TouchManager.OnTargetUI(checkDragTargetUI2)))
         {
             isTargeted = true;
         }
@@ -37,9 +41,10 @@ public class InGameTowerPlaceUI : MonoBehaviour
             isDrag = true;
             moveTargetUI.SetActive(true);
         }
-        else if (Managers.TouchManager.TouchPhase == TouchPhase.End)
+        else if (isTargeted && Managers.TouchManager.TouchPhase == TouchPhase.End)
         {
             UpdatePanel();
+            
         }
     }
 
@@ -47,7 +52,7 @@ public class InGameTowerPlaceUI : MonoBehaviour
     {
         if(CheckPosition())
         {
-            moveTargetUI.GetComponent<RectTransform>().position = new Vector3(moveTargetUI.transform.position.x, 1010);
+            moveTargetUI.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, moveTargetUI.GetComponent<RectTransform>().rect.height - 90f);
         }
         else
         {

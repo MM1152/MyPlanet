@@ -7,7 +7,7 @@ public class UtilTower : Tower
     public TowerTable.UtilTower UtilTowerData => utiltowerData;
     protected Transform planet;
     protected Transform defenseTower;
-    private float FullCoolTime => utiltowerData.Duration + BonusDuration + BonusCoolTime;
+    private float FullCoolTime => utiltowerData?.Duration ?? 0 + BonusDuration + BonusCoolTime;
     public float FullDuration => utiltowerData.Duration + BonusDuration;
     private float timer = 0f;
     
