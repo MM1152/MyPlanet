@@ -195,6 +195,7 @@ public enum PoolsId
     StageBoss_10 = 1509,
 
     BossPartner = 1600,
+    BossLaserPartner = 1601,
 }
 
 public enum AudiosId
@@ -368,9 +369,11 @@ public static class AddressableNames
         { "StageBoss_09", PoolsId.StageBoss_09 },
         { "StageBoss_10", PoolsId.StageBoss_10 },
         { "BossPartner", PoolsId.BossPartner },
+        {"BossLaserPartner", PoolsId.BossLaserPartner },
         {"HitExplosionParticle",PoolsId.HitExplosionParticle},
         {"HitHealParticle",PoolsId.HitHealParticle},
         {"Zone", PoolsId.Zone },    
+        
     };
 
     private static readonly Dictionary<string, AudiosId> AudiosName = new()

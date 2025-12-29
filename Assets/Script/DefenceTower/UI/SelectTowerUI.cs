@@ -59,6 +59,7 @@ public class SelectTowerUI : MonoBehaviour
             else
             {
                 UpdateBackgroundImage(false);
+                OnChangeIndex?.Invoke(-1);  
             }
         });
     }
@@ -192,7 +193,6 @@ public class SelectTowerUI : MonoBehaviour
     {
         towerData = null;
         consumeData = null;
-
         toggle.isOn = false;
     }
 

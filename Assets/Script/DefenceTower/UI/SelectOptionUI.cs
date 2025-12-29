@@ -45,6 +45,7 @@ public class SelectOptionUI : MonoBehaviour
             else
             {
                 UpdateBackgroundImage(false);
+                OnChangeIndex?.Invoke(-1); 
             }
         });
     }
@@ -100,10 +101,10 @@ public class SelectOptionUI : MonoBehaviour
         toggle.interactable = active;
     }
 
-    // public void ResetOutline()
-    // {
-    //     tower = null;
-    //     optionBase = null;
-    //     toggle.isOn = false;
-    // }
+    public void ResetOutline()
+    {
+        tower = null;
+        optionBase = null;
+        toggle.isOn = false;
+    }
 }

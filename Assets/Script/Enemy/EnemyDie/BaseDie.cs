@@ -18,7 +18,8 @@ public class BaseDie
 
     public virtual void Die(Enemy enemy)
     {        
-        if (enemy.isKilledByPlayer)
+        if (enemy.isKilledByPlayer
+        && enemy.enemyData.EXP > 0)
         {
             var exp = Managers.ObjectPoolManager.SpawnObject<Exp>(PoolsId.Exp);
             exp.transform.position = enemy.transform.position;

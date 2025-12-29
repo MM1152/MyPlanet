@@ -86,11 +86,9 @@ public class PlaceTowerWindow : Window
         for (int i = 0; i < allTowers.Count; i++)
         {
             if (allTowers[i] == null) continue;
+            if(allTowers[i].TowerData.Type == 2) continue;
 
-            var nextLevelData = DataTableManager.LevelUpTable.Get(
-                allTowers[i].TowerData.ID,
-                allTowers[i].Level + 1
-            );
+            var nextLevelData = DataTableManager.LevelUpTable.Get(allTowers[i].TowerData.ID,allTowers[i].Level + 1);
 
             if (nextLevelData != null)
             {

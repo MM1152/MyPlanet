@@ -52,23 +52,22 @@ public class OptionUpgradeWindow : Window
                 availableTowers.Add(allTowers[i]);
             }
         }
-
-        for(int i = 0; i < selectOptionUIs.Count; i++)
+        var fillCount = Mathf.Min(selectOptionUIs.Count, availableTowers.Count);
+        for(int i = 0; i < fillCount; i++)
         {
-            if (i < availableTowers.Count)
-            {
+            
                 int randomIndex = Random.Range(0, availableTowers.Count);
                 var towerData = availableTowers[randomIndex];
                 availableTowers.RemoveAt(randomIndex);
 
                 selectOptionUIs[i].gameObject.SetActive(true);
                 selectOptionUIs[i].SetInteractive(true);
-                selectOptionUIs[i].SetTowerData(towerData);
-            }
-            else
-            {
-                selectOptionUIs[i].gameObject.SetActive(false);
-            }
+                selectOptionUIs[i].SetTowerData(towerData); 
+        }
+        for(int i = fillCount; i < selectOptionUIs.Count; i++)
+        {
+            selectOptionUIs[i].gameObject.SetActive(false);
+            selectOptionUIs[i].SetInteractive(false);
         }
 
         selectIndex = -1;

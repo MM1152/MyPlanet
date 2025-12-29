@@ -5,8 +5,19 @@ using UnityEngine.EventSystems;
 
 public static class Utils
 {
-    private static Rect screenRect;
-    static Utils()
+    // private static Rect screenRect;
+    // static Utils()
+    // {
+    //     var camera = Camera.main;
+    //     var zDistance = Mathf.Abs(camera.transform.position.z);
+
+    //     var bottomLeft = camera.ScreenToWorldPoint(new Vector3(0, 0, zDistance));
+    //     var topRight = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, zDistance));
+
+    //     screenRect = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+    // }
+
+    public static Rect GetScreenRect()
     {
         var camera = Camera.main;
         var zDistance = Mathf.Abs(camera.transform.position.z);
@@ -14,7 +25,7 @@ public static class Utils
         var bottomLeft = camera.ScreenToWorldPoint(new Vector3(0, 0, zDistance));
         var topRight = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, zDistance));
 
-        screenRect = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+        return new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
     }
 
     public static bool IsPointerOverUI(Vector2 screenPosition)
@@ -49,10 +60,10 @@ public static class Utils
         return text;
     }
 
-    public static Rect GetScreenBounds()
-    {
-        return screenRect;
-    }
+    // public static Rect GetScreenBounds()
+    // {
+    //     return screenRect;
+    // }
 
     public static void Suffle<T>(IList<T> target)
     {
@@ -68,56 +79,56 @@ public static class Utils
     }
 
     /// <summary>
-    /// µÎ °³ÀÇ AudioClipÀ» ¼øÂ÷ÀûÀ¸·Î ÇÕÃÄ¼­ ÇÏ³ªÀÇ AudioClipÀ¸·Î ¸¸µì´Ï´Ù.
+    /// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ AudioClipï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¼ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ AudioClipï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
     /// </summary>
-    /// <param name="clip1">Ã¹ ¹øÂ° ¿Àµð¿À Å¬¸³</param>
-    /// <param name="clip2">µÎ ¹øÂ° ¿Àµð¿À Å¬¸³</param>
-    /// <param name="name">ÇÕÃÄÁø Å¬¸³ÀÇ ÀÌ¸§</param>
-    /// <returns>ÇÕÃÄÁø AudioClip</returns>
+    /// <param name="clip1">Ã¹ ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½</param>
+    /// <param name="clip2">ï¿½ï¿½ ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½</param>
+    /// <param name="name">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½</param>
+    /// <returns>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ AudioClip</returns>
     public static AudioClip CombineAudioClips(AudioClip clip1, AudioClip clip2, string name = "CombinedClip")
     {
         if (clip1 == null || clip2 == null)
         {
-            Debug.LogWarning("CombineAudioClips: ÇÏ³ª ÀÌ»óÀÇ AudioClipÀÌ nullÀÔ´Ï´Ù.");
+            Debug.LogWarning("CombineAudioClips: ï¿½Ï³ï¿½ ï¿½Ì»ï¿½ï¿½ï¿½ AudioClipï¿½ï¿½ nullï¿½Ô´Ï´ï¿½.");
             return clip1 ?? clip2;
         }
 
-        // µÎ Å¬¸³ÀÇ ÁÖÆÄ¼ö°¡ ´Ù¸£¸é °æ°í
+        // ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         if (clip1.frequency != clip2.frequency)
         {
-            Debug.LogWarning($"CombineAudioClips: Å¬¸³µéÀÇ ÁÖÆÄ¼ö°¡ ´Ù¸¨´Ï´Ù. ({clip1.frequency} vs {clip2.frequency})");
+            Debug.LogWarning($"CombineAudioClips: Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½Ï´ï¿½. ({clip1.frequency} vs {clip2.frequency})");
         }
 
-        // µÎ Å¬¸³ÀÇ Ã¤³Î ¼ö°¡ ´Ù¸£¸é °æ°í
+        // ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         if (clip1.channels != clip2.channels)
         {
-            Debug.LogWarning($"CombineAudioClips: Å¬¸³µéÀÇ Ã¤³Î ¼ö°¡ ´Ù¸¨´Ï´Ù. ({clip1.channels} vs {clip2.channels})");
+            Debug.LogWarning($"CombineAudioClips: Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½Ï´ï¿½. ({clip1.channels} vs {clip2.channels})");
         }
 
-        // ´õ ³ôÀº ÁÖÆÄ¼ö¿Í Ã¤³Î ¼ö¸¦ »ç¿ë
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         int frequency = Mathf.Max(clip1.frequency, clip2.frequency);
         int channels = Mathf.Max(clip1.channels, clip2.channels);
 
-        // ÃÑ »ùÇÃ ¼ö °è»ê
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½
         int clip1Samples = clip1.samples;
         int clip2Samples = clip2.samples;
         int totalSamples = clip1Samples + clip2Samples;
 
-        // »õ·Î¿î AudioClip »ý¼º
+        // ï¿½ï¿½ï¿½Î¿ï¿½ AudioClip ï¿½ï¿½ï¿½ï¿½
         AudioClip combinedClip = AudioClip.Create(name, totalSamples, channels, frequency, false);
 
-        // Ã¹ ¹øÂ° Å¬¸³ µ¥ÀÌÅÍ °¡Á®¿À±â
+        // Ã¹ ï¿½ï¿½Â° Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         float[] clip1Data = new float[clip1Samples * clip1.channels];
         clip1.GetData(clip1Data, 0);
 
-        // µÎ ¹øÂ° Å¬¸³ µ¥ÀÌÅÍ °¡Á®¿À±â
+        // ï¿½ï¿½ ï¿½ï¿½Â° Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         float[] clip2Data = new float[clip2Samples * clip2.channels];
         clip2.GetData(clip2Data, 0);
 
-        // ÇÕÃÄÁø µ¥ÀÌÅÍ ¹è¿­ »ý¼º
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ ï¿½ï¿½ï¿½ï¿½
         float[] combinedData = new float[totalSamples * channels];
 
-        // Ã¹ ¹øÂ° Å¬¸³ µ¥ÀÌÅÍ º¹»ç (Ã¤³Î ¼ö ¸ÂÃã)
+        // Ã¹ ï¿½ï¿½Â° Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (Ã¤ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
         for (int i = 0; i < clip1Samples; i++)
         {
             for (int ch = 0; ch < channels; ch++)
@@ -131,7 +142,7 @@ public static class Utils
             }
         }
 
-        // µÎ ¹øÂ° Å¬¸³ µ¥ÀÌÅÍ º¹»ç (Ã¤³Î ¼ö ¸ÂÃã)
+        // ï¿½ï¿½ ï¿½ï¿½Â° Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (Ã¤ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
         for (int i = 0; i < clip2Samples; i++)
         {
             for (int ch = 0; ch < channels; ch++)
@@ -145,27 +156,27 @@ public static class Utils
             }
         }
 
-        // ÇÕÃÄÁø µ¥ÀÌÅÍ¸¦ »õ Å¬¸³¿¡ ¼³Á¤
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         combinedClip.SetData(combinedData, 0);
 
         return combinedClip;
     }
 
     /// <summary>
-    /// ¿©·¯ °³ÀÇ AudioClipÀ» ¼øÂ÷ÀûÀ¸·Î ÇÕÃÄ¼­ ÇÏ³ªÀÇ AudioClipÀ¸·Î ¸¸µì´Ï´Ù.
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ AudioClipï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ä¼ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ AudioClipï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
     /// </summary>
-    /// <param name="clips">ÇÕÄ¥ ¿Àµð¿À Å¬¸³µé</param>
-    /// <param name="name">ÇÕÃÄÁø Å¬¸³ÀÇ ÀÌ¸§</param>
-    /// <returns>ÇÕÃÄÁø AudioClip</returns>
+    /// <param name="clips">ï¿½ï¿½Ä¥ ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½</param>
+    /// <param name="name">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½</param>
+    /// <returns>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ AudioClip</returns>
     public static AudioClip CombineMultipleAudioClips(AudioClip[] clips, string name = "CombinedClip")
     {
         if (clips == null || clips.Length == 0)
         {
-            Debug.LogWarning("CombineMultipleAudioClips: Å¬¸³ ¹è¿­ÀÌ nullÀÌ°Å³ª ºñ¾îÀÖ½À´Ï´Ù.");
+            Debug.LogWarning("CombineMultipleAudioClips: Å¬ï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ nullï¿½Ì°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½Ï´ï¿½.");
             return null;
         }
 
-        // nullÀÌ ¾Æ´Ñ Å¬¸³µé¸¸ ÇÊÅÍ¸µ
+        // nullï¿½ï¿½ ï¿½Æ´ï¿½ Å¬ï¿½ï¿½ï¿½é¸¸ ï¿½ï¿½ï¿½Í¸ï¿½
         List<AudioClip> validClips = new List<AudioClip>();
         foreach (var clip in clips)
         {
@@ -175,19 +186,19 @@ public static class Utils
 
         if (validClips.Count == 0)
         {
-            Debug.LogWarning("CombineMultipleAudioClips: À¯È¿ÇÑ Å¬¸³ÀÌ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("CombineMultipleAudioClips: ï¿½ï¿½È¿ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             return null;
         }
 
         if (validClips.Count == 1)
             return validClips[0];
 
-        // Ã¹ ¹øÂ° Å¬¸³ºÎÅÍ ½ÃÀÛÇØ¼­ ¼øÂ÷ÀûÀ¸·Î ÇÕÄ¡±â
+        // Ã¹ ï¿½ï¿½Â° Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½
         AudioClip result = validClips[0];
         for (int i = 1; i < validClips.Count; i++)
         {
             AudioClip temp = CombineAudioClips(result, validClips[i], $"{name}_step{i}");
-            if (i > 1) // Áß°£ °á°ú¹°Àº ¸Þ¸ð¸®¿¡¼­ ÇØÁ¦ (Ã¹ ¹øÂ° ¿øº» Á¦¿Ü)
+            if (i > 1) // ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¸ð¸®¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (Ã¹ ï¿½ï¿½Â° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
             {
                 GameObject.DestroyImmediate(result);
             }
