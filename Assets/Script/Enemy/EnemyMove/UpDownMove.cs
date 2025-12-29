@@ -36,7 +36,7 @@ public class UpDownMove : IMove
 
     public void Init(Enemy enemy)
     {
-        screenBounds = Utils.GetScreenBounds();
+        screenBounds = Utils.GetScreenRect();
         enemyCollider = enemy.GetComponent<Collider2D>();
         enemyBounds = enemyCollider.bounds;
         currentPattern = UpDownPattern.ToAttackPoint;

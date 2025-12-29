@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RectRandomShotAttack : IShotStrategy
 {
-    private Rect screenBounds => Utils.GetScreenBounds();
+    private Rect screenBounds;
     private LayerMask targetLayer = LayerMask.GetMask("DefenseTower", "Player"); // 타겟 레이어
     private Vector3 startPoint;
     private bool isLaserActive = false;
@@ -61,6 +61,7 @@ public class RectRandomShotAttack : IShotStrategy
 
     private void LineInitialized(Enemy enemy)
     {
+        screenBounds = Utils.GetScreenRect();
         lineRenderer.enabled = true;
         lineRenderer.startWidth = enemy.transform.localScale.x * 0.3f;
         lineRenderer.endWidth = enemy.transform.localScale.x * 0.3f;
