@@ -196,6 +196,7 @@ public enum PoolsId
 
     BossPartner = 1600,
     BossLaserPartner = 1601,
+    BossLaserPartnerPos = 1602,
 }
 
 public enum AudiosId
@@ -369,6 +370,7 @@ public static class AddressableNames
         { "StageBoss_09", PoolsId.StageBoss_09 },
         { "StageBoss_10", PoolsId.StageBoss_10 },
         { "BossPartner", PoolsId.BossPartner },
+        {"BossLaserPartnerPos", PoolsId.BossLaserPartnerPos },
         {"BossLaserPartner", PoolsId.BossLaserPartner },
         {"HitExplosionParticle",PoolsId.HitExplosionParticle},
         {"HitHealParticle",PoolsId.HitHealParticle},

@@ -6,9 +6,8 @@ public class RandomLaserAttack : IShotStrategy
 {
     private LineRenderer laserRenderer;
     private RaycastHit2D hit;
-    private LayerMask obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
+    private LayerMask obstacleMask;
     private bool isInitialized = false;
-    private bool isTargetHit = false;
     private List<Vector2> laserPoints = new List<Vector2>();
     private Vector2 currentStartPoint;
     private float duration = 3; //설정테이블or 공속
@@ -19,11 +18,35 @@ public class RandomLaserAttack : IShotStrategy
     private float startWidth = 0f;
     private float endWidth = 0f;
     private float lineWidth = 0f;
+    private List<GameObject> bossPartnerObject = new List<GameObject>();
+    private float partnerScale = 0.05f;
+    private int maxPartnerCount = 2;
+    private int[] partnerPositionsX = new int[] { 0, 2 };
+    private Rect screenRect;
+    private float alpha = 1f;
+    public void Init(Enemy enemy)
+    {
+        screenRect = Utils.GetScreenRect();
+        laserPoints.Clear();
+        var centerY = (enemy.target.transform.position.y + screenRect.yMax) / 2;
+        laserPoints.Add(new Vector2(screenRect.xMin + (enemy.enemyCollider.radius * 2f + alpha), centerY)); // Left
+        laserPoints.Add(new Vector2((screenRect.xMin + screenRect.xMax) / 2, centerY)); // Mid
+        laserPoints.Add(new Vector2(screenRect.xMax - (enemy.enemyCollider.radius * 2f + alpha), centerY)); // Right
 
+        for (int i = 0; i < maxPartnerCount; i++)
+        {
+            var partner = Managers.ObjectPoolManager.SpawnObject<Transform>(PoolsId.BossLaserPartnerPos);
+            partner.gameObject.SetActive(true);
+            partner.localScale = Vector3.one * partnerScale;
+            partner.position = new Vector3(laserPoints[partnerPositionsX[i]].x, laserPoints[partnerPositionsX[i]].y, 0f);
+            bossPartnerObject.Add(partner.gameObject);
+        }
+    }
     private void InitializeLaserRenderer(Enemy enemy)
     {
         if (isInitialized == false)
         {
+            obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
             laserRenderer = enemy.enemyLineRenderer;
             laserRenderer.enabled = true;
             laserRenderer.startWidth = enemy.transform.localScale.y * 0.4f;
@@ -33,11 +56,8 @@ public class RandomLaserAttack : IShotStrategy
             laserRenderer.positionCount = 2;
             isInitialized = true;
             growTime = 0f;
-            laserPoints.Clear();
-            laserPoints.Add(enemy.transform.position - (enemy.transform.localScale.x * 0.5f) * Vector3.right); // Left 
-            laserPoints.Add(enemy.transform.position); // Mid
-            laserPoints.Add(enemy.transform.position + (enemy.transform.localScale.x * 0.5f) * Vector3.right); // Right
             currentStartPoint = laserPoints[Random.Range(0, laserPoints.Count)];
+            Debug.Log($"{nameof(RandomLaserAttack)} 초기화 완료. 시작 지점: {currentStartPoint}");
             enemy.OnDie += LaserReset;
         }
     }
@@ -45,6 +65,7 @@ public class RandomLaserAttack : IShotStrategy
     private void ResetLaserPoint()
     {
         if (laserPoints.Count == 0) return;
+
         var index = Random.Range(0, laserPoints.Count);
         if (laserPoints[index] == currentStartPoint)
         {
@@ -54,6 +75,14 @@ public class RandomLaserAttack : IShotStrategy
         laserRenderer.enabled = false;
         laserRenderer.positionCount = 0;
         growTime = 0f;
+    }
+    private void RotateTowardsTarget(Enemy enemy, Transform partner)
+    {
+        if (enemy.target == null) return;
+
+        var dir = (enemy.target.transform.position - partner.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        partner.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     public void LaserUpdate(Enemy enemy, GameObject target)
@@ -66,6 +95,11 @@ public class RandomLaserAttack : IShotStrategy
             return;
         }
 
+        foreach (var bossPartner in bossPartnerObject)
+        {
+            RotateTowardsTarget(enemy, bossPartner.transform);
+        }
+
         if (laserRenderer.startWidth <= 0f)
         {
             ResetLaserPoint();
@@ -75,9 +109,7 @@ public class RandomLaserAttack : IShotStrategy
             endWidth = 0f;
             laserRenderer.startWidth = startWidth;
             laserRenderer.endWidth = startWidth;
-
         }
-
 
         Vector2 dir = (target.transform.position - (Vector3)currentStartPoint).normalized;
         float dis = Vector2.Distance(currentStartPoint, target.transform.position);
@@ -168,6 +200,13 @@ public class RandomLaserAttack : IShotStrategy
             hitParticle = null;
             flashParticle = null;
         }
+        foreach (var bossPartnerObject in bossPartnerObject)
+        {
+            bossPartnerObject.transform.SetParent(null);
+            Managers.ObjectPoolManager.Despawn(PoolsId.BossLaserPartner, bossPartnerObject);
+        }
+        bossPartnerObject.Clear();
         isInitialized = false;
+        enemy.OnDie -= LaserReset;
     }
 }

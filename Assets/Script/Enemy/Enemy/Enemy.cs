@@ -141,11 +141,15 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             {
                 shotStrategy.Init(this);
             }
+            var laserShotStrategy = bossShotAttack.GetShotStrategy(ElementType, enemyData.ID) as RandomLaserAttack;
+            if (laserShotStrategy != null)
+            {
+                laserShotStrategy.Init(this);
+            }
         }
         die = DieManager.GetDie(enemyData.ID);
         ability = AbilityManager.GetAbility(enemyData.ID);
         move = MoveManager.GetMove(enemyType);
-        // zone?.Init(this);
         ability?.SetEnemy(this);
         if (enemyLineRenderer != null)
         {
@@ -309,9 +313,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         currentHP += healAmount;
 #if DEBUG_MODE
 
-            var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
-            text.SetColor(Color.green);
-        
+        var text = textSpawnManager.SpawnTextUI(healAmount.ToString(), this.transform.position);
+        text.SetColor(Color.green);
+
 #endif
     }
 
