@@ -18,10 +18,10 @@ public class RotatingLaserAttack : IShotStrategy
 
     Vector2 endPoint = Vector2.zero;
 
-    public float rotationInterval = 10f;
+    public float rotationInterval = 3f;
 
     private float rotationSpeed = 0.5f;
-    private float rotationAngle = 90f;
+    private float rotationAngle = 45f;
 
     private float currentAngle = 0f;
     private float maxdistance = 0f;
@@ -34,7 +34,7 @@ public class RotatingLaserAttack : IShotStrategy
 
     private float delayTimer = 0f;
 
-    private float damageTimer = 0.1f;
+    private float damageTimer;
     private Vector2 startPoint = Vector2.zero;
 
     private ParticleSystem hitParticle;
@@ -42,24 +42,23 @@ public class RotatingLaserAttack : IShotStrategy
 
     public void Shot(Enemy enemy, GameObject target)
     {
-        if (hit.collider != null)
+        if (enemy == null) return;
+        if (target == null) return;
+        if (hit.collider == null) return;
+
+        damageTimer += Time.deltaTime;
+        if (damageTimer > enemy.fireInterval)
         {
-            damageTimer += Time.deltaTime;
-            if (damageTimer > enemy.fireInterval)
+            var find = hit.collider.GetComponent<IDamageAble>();
+            if (find != null)
             {
-                if (hit.collider.gameObject.layer == target.layer)
-                {
-                    var find = hit.collider.GetComponent<IDamageAble>();
-                    if (find != null)
-                    {
-                        float percent = enemy.TypeEffectiveness.GetDamagePercent(find.ElementType);
-                        find.OnDamage(Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue));
-                    }
-                }
+                float percent = enemy.TypeEffectiveness.GetDamagePercent(find.ElementType);
+                find.OnDamage(Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue));
+                Debug.Log($"[RotatingLaserAttack] 적중 대상: {find}, 위치: {hit.point}");
+                Debug.Log($"[RotatingLaserAttack] 데미지: {(int)((enemy.atk - find.Defense) * percent)}");
                 damageTimer = 0f;
             }
         }
-
     }
 
     public void UpdateLaser(Enemy enemy, GameObject target)
@@ -84,7 +83,6 @@ public class RotatingLaserAttack : IShotStrategy
             maxdistance = Mathf.Max(screenBounds.width, screenBounds.height) * 1.5f;
             startAngle = 0f;
             delayTimer = 0f;
-            damageTimer = enemy.fireInterval;
             obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
             enemy.OnDie += LaserReset;
         }
@@ -97,11 +95,11 @@ public class RotatingLaserAttack : IShotStrategy
             startPoint = enemy.transform.position + (Vector3)dirFixed * (enemy.transform.localScale.x * 0.5f);
             laserRenderer.SetPosition(0, startPoint);
             FlashParticle(startPoint, dirFixed, maxdistance);
-            RaycastHit2D hitTemp = Physics2D.Raycast(enemy.transform.position, dirFixed, maxdistance, obstacleMask);
-            if (hitTemp.collider != null)
+            hit = Physics2D.Raycast(enemy.transform.position, dirFixed, maxdistance, obstacleMask);
+            if (hit.collider != null)
             {
-                laserRenderer.SetPosition(1, hitTemp.point);
-                HitParticle(hitTemp.point);
+                laserRenderer.SetPosition(1, hit.point);
+                HitParticle(hit.point);
             }
             else
             {
@@ -189,13 +187,13 @@ public class RotatingLaserAttack : IShotStrategy
             laserRenderer.enabled = false;
             laserRenderer.positionCount = 0; ;
             enemy.attackInterval = 0f;
-            if(hitParticle != null)
+            if (hitParticle != null)
             {
                 Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
                 hitParticle = null;
             }
-            
-            if(flashParticle != null)
+
+            if (flashParticle != null)
             {
                 Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
                 flashParticle = null;

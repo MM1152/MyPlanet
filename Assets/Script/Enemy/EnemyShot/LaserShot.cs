@@ -14,20 +14,19 @@ public class LaserShot : IShotStrategy
 
     public void Shot(Enemy enemy, GameObject target)
     {
-        if (target == null || hit.collider == null)
+        if (target == null)
         {
             lineRenderer.enabled = false;
             return;
         }
 
-        if (hit.collider.gameObject.layer == target.layer)
+        if (hit.collider == null) return;
+
+        var find = hit.collider.GetComponent<IDamageAble>();
+        if (find != null)
         {
-            var find = hit.collider.GetComponent<IDamageAble>();
-            if (find != null)
-            {
-                float percent = enemy.TypeEffectiveness.GetDamagePercent(find.ElementType);
-                find.OnDamage(Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue));
-            }
+            float percent = enemy.TypeEffectiveness.GetDamagePercent(find.ElementType);
+            find.OnDamage(Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue));
         }
     }
 
@@ -60,7 +59,7 @@ public class LaserShot : IShotStrategy
             if (hit.collider.CompareTag(target.tag) || hit.collider.CompareTag(TagIds.PlayerTag)
                 || hit.collider.CompareTag(TagIds.DefenseTowerTag))
             {
-                lineRenderer.SetPosition(1, hit.collider.transform.position);              
+                lineRenderer.SetPosition(1, hit.collider.transform.position);
                 HitParticle(hit.point);
             }
         }

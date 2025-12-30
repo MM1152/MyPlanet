@@ -17,6 +17,8 @@ public class CounterLaserAbility : BaseAbility
     private Vector2 startPoint;
     private ParticleSystem hitParticle;
     private ParticleSystem flashParticle;
+    private float attackInterval = 0.5f;
+    private float attackTimer = 0f;
 
 
     public override void SetEnemy(Enemy enemy)
@@ -90,8 +92,12 @@ public class CounterLaserAbility : BaseAbility
         RaycastHit2D hit = Physics2D.Raycast(startPoint, dir, dis, targetLayer);
         if (hit.collider != null)
         {
-            HitParticle(hit.point); 
             lineRenderer.SetPosition(1, hit.point);
+            HitParticle(hit.point); 
+
+            attackTimer += Time.deltaTime;
+            if( attackTimer < attackInterval) return;
+            attackTimer = 0f;
             var find = hit.collider.GetComponent<IDamageAble>();
             if (find != null)
             {
