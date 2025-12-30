@@ -48,6 +48,7 @@ public class PlanetPickUpResult : MonoBehaviour
         gradeText.text = planetData.grade;
         typeText.text = planetData.PlanetType;
         planetNameText.text = randomPlanetData.RewardName;
+        planetTypeImage.sprite = DataTableManager.PlanetTable.Get(randomPlanetData.connection_id).PlanetTypeImage;
         elemetImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, planetData.Attribute);
 
 
