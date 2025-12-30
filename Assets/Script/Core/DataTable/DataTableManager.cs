@@ -38,6 +38,7 @@ public static class DataTableManager
     public static ClearWaveRewardTable ClearWaveRewardTable => Get<ClearWaveRewardTable>(DataTableIds.ClearWaveRewardTable);
     public static DailyGiftTable DaliyGiftTable => Get<DailyGiftTable>(DataTableIds.DailyGiftTable);
     public static TowerGradeToPieceCountTable TowerGradeToPieceCountTable => Get<TowerGradeToPieceCountTable>(DataTableIds.TowerGradeToPieceCountTable);
+    public static BounsSpawnEnemysTable BounsSpawnEnemys => Get<BounsSpawnEnemysTable>(DataTableIds.BounsSpawnEnemysTable);
 
     static DataTableManager()
     {
@@ -75,6 +76,7 @@ public static class DataTableManager
         var clearWaveRewardTable = new ClearWaveRewardTable();
         var daliyGiftTable = new DailyGiftTable();
         var towerGradeToPieceCountTable = new TowerGradeToPieceCountTable();
+        var BounsSpawnEnemys = new BounsSpawnEnemysTable();
 
         var tasks = new List<UniTask<(string id, DataTable table)>>
         {
@@ -109,6 +111,7 @@ public static class DataTableManager
             daliyGiftTable.LoadAsync(DataTableIds.DailyGiftTable),
             towerGradeToPieceCountTable.LoadAsync(DataTableIds.TowerGradeToPieceCountTable),
             spriteTable.LoadAsync(DataTableIds.PlanetTypeSpriteTable),
+            BounsSpawnEnemys.LoadAsync(DataTableIds.BounsSpawnEnemysTable),
         };
 
         var datas = await UniTask.WhenAll(tasks);

@@ -350,7 +350,7 @@ public static class AddressableNames
         { "Laser beam 4 red Hit", PoolsId.LaserBeam4RedHit },
         { "Melee_Tier03", PoolsId.Melee_Tier03 },
         { "Melee_Tier02", PoolsId.Melee_Tier02 },
-        { "Melee_Tier01", PoolsId.Melee_Tier01 },   
+        { "Melee_Tier01", PoolsId.Melee_Tier01 },
         { "Ranged_Tier02", PoolsId.Ranged_Tier02 },
         { "Ranged_Tier01", PoolsId.Ranged_Tier01 },
         { "EliteMonster_Fire", PoolsId.EliteMonster_Fire },
@@ -372,8 +372,8 @@ public static class AddressableNames
         {"BossLaserPartner", PoolsId.BossLaserPartner },
         {"HitExplosionParticle",PoolsId.HitExplosionParticle},
         {"HitHealParticle",PoolsId.HitHealParticle},
-        {"Zone", PoolsId.Zone },    
-        
+        {"Zone", PoolsId.Zone },
+
     };
 
     private static readonly Dictionary<string, AudiosId> AudiosName = new()
@@ -503,6 +503,7 @@ public static class DataTableIds
     public static readonly string ClearWaveRewardTable = "ClearWaveRewardTable";
     public static readonly string DailyGiftTable = "DailyGiftTable";
     public static readonly string TowerGradeToPieceCountTable = "TowerGradeToPieceCountTable";
+    public static readonly string BounsSpawnEnemysTable = "BounsSpawnEnemysTable";  
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

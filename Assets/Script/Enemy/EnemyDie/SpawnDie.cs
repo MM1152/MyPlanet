@@ -13,7 +13,7 @@ public class SpawnDie : BaseDie
         if (enemy.currentHP <= 0)
         {
             var waveManager = enemy.WaveManager;
-            var enemySpawnManager = enemy.enemySpawnManager;
+            var enemySpawnManager = enemy.EnemySpawnManager;
 
             var spawnEnemys = enemySpawnManager.SpawnEnemy(spawnEnemyID, spawnCount);
             foreach (var spawnEnemy in spawnEnemys)
