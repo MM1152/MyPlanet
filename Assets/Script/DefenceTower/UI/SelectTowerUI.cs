@@ -161,8 +161,8 @@ public class SelectTowerUI : MonoBehaviour
         towerNameText.text = data.Name;
         slotIndexText.text = "소모품";
         towerState.text = data.Description;
-        // towerState.gameObject.SetActive(false);
         iconImage.sprite = consumableIconImage;
+        towerImage.sprite = data.consumableImage;
 
         UpdateBackgroundImage(false);
     }

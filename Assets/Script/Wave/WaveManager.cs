@@ -123,6 +123,7 @@ public class WaveManager : MonoBehaviour
             currnetBgm = AudiosId.Simple_Acoustics;
             Managers.SoundManager.PlayBGM(currnetBgm,bgmSound);
         }
+        waveWindow.SetWaveBackgroundImage(DataTableManager.StageInfomationTable.Get(stageId).StageImage);
     }
 
     private void ResetWave()

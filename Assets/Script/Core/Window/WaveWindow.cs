@@ -11,6 +11,7 @@ public class WaveWindow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bossNameText;
     [SerializeField] private TextMeshProUGUI bossTotalHpText;
     [SerializeField] private Image terraformingHightlightImage;
+    [SerializeField] private Image waveBackgroundImage;
 
     public Image TerraformingHighlightImage => terraformingHightlightImage;
     private void Awake()
@@ -26,6 +27,14 @@ public class WaveWindow : MonoBehaviour
     public void SetWaveTimerText(float timeRemaining)
     {
         waveTimerText.text = $"{(int)(timeRemaining/60):00}:{(int)(timeRemaining%60):00}";
+    }
+    
+    public  void SetWaveBackgroundImage(Sprite sprite)
+    {
+       if(waveBackgroundImage != null)
+        {
+            waveBackgroundImage.sprite = sprite;
+        }
     }
 
     public void ShowBossUI(int maxHP)

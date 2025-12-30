@@ -4,9 +4,10 @@ using TMPro;
 
 public class TerraformingStatusPopUpWindow : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI nameText;
-    [SerializeField] TextMeshProUGUI levelText;
-    [SerializeField] TextMeshProUGUI descriptionText;
+    [SerializeField] private Image terraformingImage;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private Button closeButton;
 
     public void Awake()
@@ -17,11 +18,12 @@ public class TerraformingStatusPopUpWindow : MonoBehaviour
           
         });
     }
-    public void SetUI(string name, int level, string description)
+    public void SetUI(string name, int level, string description, Sprite image)
     {
         nameText.text = name;
         levelText.text = $"{level} 단계";
         descriptionText.text = description;
+        terraformingImage.sprite = image;
     }
     public void Open()
     {
