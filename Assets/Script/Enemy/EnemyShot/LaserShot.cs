@@ -105,8 +105,8 @@ public class LaserShot : IShotStrategy
         {
             lineRenderer.enabled = false;
             lineRenderer.positionCount = 0;
-            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
-            Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
+            if (hitParticle != null) Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedHit, hitParticle.gameObject);
+            if (flashParticle != null) Managers.ObjectPoolManager.Despawn(PoolsId.LaserBeam4RedFlash, flashParticle.gameObject);
             hitParticle = null;
             flashParticle = null;
         }
