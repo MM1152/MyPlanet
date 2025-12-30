@@ -11,7 +11,7 @@ public class SplitbornDie : BaseDie
         if (enemy.currentHP <= 0 && active)
         {
             var waveManager = enemy.WaveManager;
-            var enemySpawnManager = enemy.enemySpawnManager;
+            var enemySpawnManager = enemy.EnemySpawnManager;
 
             var spawnEnemys = enemySpawnManager.SpawnEnemy(enemy.enemyData.ID, spawnCount);
             foreach (var spawnEnemy in spawnEnemys)

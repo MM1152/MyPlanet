@@ -57,7 +57,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public BaseDie die;
     public IMove move;
     public BaseAbility ability;
-    public EnemySpawnManager enemySpawnManager;
+    private EnemySpawnManager enemySpawnManager;
+    public EnemySpawnManager EnemySpawnManager => enemySpawnManager;
 
     // public float TestRangeRadius;
     public bool isKilledByPlayer { get; set; }
@@ -90,13 +91,18 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public EnemyAsset enemyAsset { get; set; }
     public PoolsId enemyAssetPoolId { get; set; }
     public Transform rotObj;
+    private BounsSpawnEnemysManager bounsSpawnEnemysManager;
+    public BounsSpawnEnemysManager BounsSpawnEnemysManager => bounsSpawnEnemysManager;
+    private GameObject spawnManagers;
     private void Awake()
     {
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag)?.GetComponent<WaveManager>();
 #if DEBUG_MODE
         textSpawnManager = GameObject.FindWithTag(TagIds.TextUISpawnManagerTag)?.GetComponent<TextSpawnManager>();
 #endif
-        enemySpawnManager = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag)?.GetComponent<EnemySpawnManager>();
+        spawnManagers = GameObject.FindWithTag(TagIds.EnemySpawnManagerTag);
+        enemySpawnManager = spawnManagers?.GetComponent<EnemySpawnManager>();
+        bounsSpawnEnemysManager = spawnManagers?.GetComponent<BounsSpawnEnemysManager>();
         typeEffectiveness = new TypeEffectiveness();
         enemyPredictionPoisition.Init(this);
         basePlanet = GameObject.FindWithTag(TagIds.PlayerTag).GetComponent<BasePlanet>();
@@ -147,6 +153,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         move = MoveManager.GetMove(enemyType);
         // zone?.Init(this);
         ability?.SetEnemy(this);
+        bounsSpawnEnemysManager?.Initialize(enemyData.ID, this);    
+
         if (enemyLineRenderer != null)
         {
             enemyLineRenderer.enabled = false;

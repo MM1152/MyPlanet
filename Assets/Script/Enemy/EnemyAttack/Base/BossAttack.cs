@@ -7,18 +7,18 @@ public class BossAttack : BaseShotAttack
     public BossAttack()
     {
         bossShotStrategies = new Dictionary<(ElementType, int), IShotStrategy>()
-        {
-            { (ElementType.Normal, 0), new NormalStrategy() },
-            { (ElementType.Fire, 0), new NormalStrategy() },
-            { (ElementType.Fire, 3037), new RandomLaserAttack() }, 
-            { (ElementType.Ice, 0), new NormalStrategy() },
+         {
+        //     { (ElementType.Normal, 0), new NormalStrategy() },
+        //     { (ElementType.Fire, 0), new NormalStrategy() },
+            // { (ElementType.Ice, 0), new NormalStrategy() },
             { (ElementType.Steel, 3027), new RapidFireAttack() },
             { (ElementType.Steel, 3032), new MissileRainAttack() },
-            { (ElementType.Steel, 3042), new HomingArcAttack() }, 
-            { (ElementType.Steel, 3062), new HomingArcAttack() },
+            { (ElementType.Fire, 3037), new RandomLaserAttack() },
+            { (ElementType.Steel, 3042), new HomingArcAttack() },
             { (ElementType.Light, 3047), new VortexLaserAttack() },
             { (ElementType.Dark, 3052), new ShadowSummonAttack() },
-            { (ElementType.Light, 3057), new TurnSimpleAttack() }, 
+            { (ElementType.Light, 3057), new TurnSimpleAttack() },
+            { (ElementType.Steel, 3062), new HomingArcAttack() },
             { (ElementType.Fire, 3067), new MultShotAttack(new RapidFireAttack(),new MissileRainAttack()) },
             { (ElementType.Steel, 3072), new RectRandomShotAttack() },
         };
@@ -26,14 +26,14 @@ public class BossAttack : BaseShotAttack
     public override void Attack(Enemy enemy)
     {
         var strategy = GetShotStrategy(enemy.ElementType, enemy.enemyData.ID);
-        
+
         if (strategy is TurnSimpleAttack turnStrategy && !turnStrategy.IsBossTurn())
         {
-            return; 
+            return;
         }
 
         enemy.attackInterval += Time.deltaTime;
-        
+
         if (strategy is RandomLaserAttack randomLaserAttack)
         {
             randomLaserAttack.LaserUpdate(enemy, enemy.GetTarget());
@@ -48,7 +48,7 @@ public class BossAttack : BaseShotAttack
         }
     }
 
-    public  IShotStrategy GetShotStrategy(ElementType elementType, int id)
+    public IShotStrategy GetShotStrategy(ElementType elementType, int id)
     {
         if (bossShotStrategies.ContainsKey((elementType, id)))
         {
