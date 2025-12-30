@@ -9,6 +9,7 @@ public class Auth
     private FirebaseAuth auth;
     public string UserId => auth.CurrentUser?.UserId ?? string.Empty;
     public FirebaseUser CurrentUser => auth.CurrentUser;
+    public string UserDisplayName => string.IsNullOrEmpty(auth.CurrentUser.DisplayName) ? FirebaseManager.Instance.UserData.nickName : auth.CurrentUser.DisplayName;
     public Sprite UserIconSprite { get; private set; }
 
     public void Init()
@@ -58,8 +59,6 @@ public class Auth
             Credential credential = GoogleAuthProvider.GetCredential(userData.IdToken, null);
 
             await auth.SignInWithCredentialAsync(credential).AsUniTask();
-            UserIconSprite = await DownLoadIconImage(auth.CurrentUser.PhotoUrl);
-
             return (auth.CurrentUser.DisplayName, true);
         }
         catch (System.Exception ex)
@@ -70,7 +69,7 @@ public class Auth
         }
     }
 
-    private async UniTask<Sprite> DownLoadIconImage(System.Uri path)
+    public async UniTask DownLoadIconImage(System.Uri path)
     {
         var www = UnityWebRequestTexture.GetTexture(path);
 
@@ -78,11 +77,11 @@ public class Auth
         if(result.result == UnityWebRequest.Result.ConnectionError)
         {
             Debug.Log(result.error);
-            return null;
+            return;
         }
 
         Texture2D iconImage = ((DownloadHandlerTexture)result.downloadHandler).texture;
-        return Sprite.Create(iconImage , new Rect(0,0,iconImage.width,iconImage.height), Vector2.one * 0.5f);
+        UserIconSprite = Sprite.Create(iconImage , new Rect(0,0,iconImage.width,iconImage.height), Vector2.one * 0.5f);
     }
 
     public void Logout()

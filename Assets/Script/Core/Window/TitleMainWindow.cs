@@ -42,7 +42,7 @@ public class TitleMainWindow : Window
 
         selectStageButton.onClick.AddListener(() => manager.Open(WindowIds.TitleStageSelectedWindow));
 
-        userNickNameText.text = FirebaseManager.Instance.Auth.CurrentUser.DisplayName;
+        userNickNameText.text = FirebaseManager.Instance.Auth.UserDisplayName;
         userProfileIconImage.sprite = FirebaseManager.Instance.Auth.UserIconSprite;
 
         userGold.text = FirebaseManager.Instance.UserData.gold.ToString();

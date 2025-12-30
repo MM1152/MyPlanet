@@ -15,6 +15,10 @@ public class TitleBookInfomationWindow : Window
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private TextMeshProUGUI expText;
     [SerializeField] private TextMeshProUGUI diamondText;
+    [SerializeField] private TextMeshProUGUI userNameText;
+
+    [Header("Images")]
+    [SerializeField] private Image userIconImage;
 
 
     public Button ExitButton => exitButton;
@@ -30,6 +34,9 @@ public class TitleBookInfomationWindow : Window
         exitButton.onClick.AddListener(() => {
             manager.Open(WindowIds.TitleBookWindow);
         });
+
+        userNameText.text = FirebaseManager.Instance.Auth.UserDisplayName;
+        userIconImage.sprite = FirebaseManager.Instance.Auth.UserIconSprite;
 
         FirebaseManager.Instance.Database.AddListner(DataBasePaths.GoldPath, OnValueChangeToGold);
         FirebaseManager.Instance.Database.AddListner(DataBasePaths.ExpPath, OnValueChangeToExp);

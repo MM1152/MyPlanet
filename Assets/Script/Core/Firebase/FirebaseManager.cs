@@ -198,7 +198,14 @@ public class UserData : JsonSerialized
 
     public async UniTask InitalizedUserData()
     {
-        nickName = "NoName-" + UnityEngine.Random.Range(10000, 50000);
+        if(string.IsNullOrEmpty(FirebaseManager.Instance.Auth.CurrentUser.DisplayName))
+        {
+            nickName = "GuestUser-" + UnityEngine.Random.Range(10000, 50000);
+        }
+        else
+        {
+            nickName = FirebaseManager.Instance.Auth.CurrentUser.DisplayName;
+        }
         gold = 0;
         exp = 0;
 

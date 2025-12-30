@@ -12,6 +12,10 @@ public class TitleBookWindow : Window
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private TextMeshProUGUI expText;
     [SerializeField] private TextMeshProUGUI diamondText;
+    [SerializeField] private TextMeshProUGUI userNameText;
+
+    [Header("Images")]
+    [SerializeField] private Image userIconImage;
 
     [Header("Buttons")]
     [SerializeField] private Button planetButton;
@@ -77,6 +81,9 @@ public class TitleBookWindow : Window
         towerButton.onClick.AddListener(() => OnClickBookButton(towerBook, towerButtonBackGround));
         planetButton.onClick.AddListener(() => OnClickBookButton(planetBook, planetButtonBackGround));
         presetButton.onClick.AddListener(() => OnClickBookButton(presetBook , presetButtonBackGround));
+
+        userNameText.text = FirebaseManager.Instance.Auth.UserDisplayName;
+        userIconImage.sprite = FirebaseManager.Instance.Auth.UserIconSprite;
 
         homeButton.onClick.AddListener(() =>
         {

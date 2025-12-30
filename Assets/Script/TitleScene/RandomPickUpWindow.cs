@@ -18,6 +18,10 @@ public class RandomPickUpWindow : Window
     [SerializeField] private TextMeshProUGUI diamondText;
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private TextMeshProUGUI expText;
+    [SerializeField] private TextMeshProUGUI userNickName;
+    [Header("Images")]
+    [SerializeField] private Image userIconImage;
+
     [Header("Ref")]
     [SerializeField] private GameObject planetPickUpPanel;
     [SerializeField] private GameObject towerPickUpPanel;
@@ -60,6 +64,9 @@ public class RandomPickUpWindow : Window
         diamondText.text = FirebaseManager.Instance.UserData.diamond.ToString();
         goldText.text = FirebaseManager.Instance.UserData.gold.ToString();
         expText.text = FirebaseManager.Instance.UserData.exp.ToString();
+
+        userNickName.text = FirebaseManager.Instance.Auth.UserDisplayName;
+        userIconImage.sprite = FirebaseManager.Instance.Auth.UserIconSprite;
     }
 
     public override void Open()

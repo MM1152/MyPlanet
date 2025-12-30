@@ -43,6 +43,7 @@ public class TowerInfomationWindow : Window
     [SerializeField] private Image towerTypeImage;
     [SerializeField] private Image towerAttackTypeImage;
     [SerializeField] private Image towerElementImage;
+    [SerializeField] private Image userIconImage;
     [SerializeField] private Image[] starImages;
     [Header("Sprite")]
     [SerializeField] private Sprite enableStar;
@@ -102,7 +103,8 @@ public class TowerInfomationWindow : Window
         starUpgradeButton.onClick.AddListener(() => OpenTab(starUpgradeTab , starUpgradeBackGround));
         upgradeButton.onClick.AddListener(() => UpgradeStar().Forget());
 
-        userNameText.text = FirebaseManager.Instance.UserData.nickName;
+        userNameText.text = FirebaseManager.Instance.Auth.UserDisplayName;
+        userIconImage.sprite = FirebaseManager.Instance.Auth.UserIconSprite;
 
         goldText.text = FirebaseManager.Instance.UserData.gold.ToString();
         diamondText.text = FirebaseManager.Instance.UserData.diamond.ToString();

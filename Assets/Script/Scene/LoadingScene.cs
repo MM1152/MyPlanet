@@ -22,6 +22,9 @@ public class LoadingScene : MonoBehaviour
 
     public async UniTaskVoid Start()
     {
+#if UNITY_EDITOR
+        googleLoginButton.interactable = false;
+#endif
         loginPanel.SetActive(false);
         annymousLoginButton.onClick.AddListener(() =>
         {
@@ -85,7 +88,7 @@ public class LoadingScene : MonoBehaviour
 
         Managers.Instance.Release();
 
-        currentProgress.text = "4팀 레츠고 좀만 더 고생하자.";
+        currentProgress.text = "초기화 중....";
         await DataTableManager.WaitForInitalizeAsync();
 
         await FirebaseManager.Instance.WaitForInitalizedAsync();
@@ -102,6 +105,10 @@ public class LoadingScene : MonoBehaviour
             await FirebaseManager.Instance.FindUserDataInDatabase();    
         }
         FirebaseManager.Instance.Release();
+        if(FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl != null)
+        {
+            await FirebaseManager.Instance.Auth.DownLoadIconImage(FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl);
+        }
         await FirebaseManager.Instance.PresetData.WaitForInitalizeAsync();
         await FirebaseManager.Instance.PlanetData.WaitForInitalizeAsync();
         await FirebaseManager.Instance.TowerData.WaitForInitializeAsync();

@@ -26,7 +26,7 @@ public class RandomLaserAttack : IShotStrategy
     private float alpha = 1f;
     public void Init(Enemy enemy)
     {
-        screenRect = Utils.GetScreenRect();
+        screenRect = Utils.GetScreenToWorldRect();
         laserPoints.Clear();
         var centerY = (enemy.target.transform.position.y + screenRect.yMax) / 2;
         laserPoints.Add(new Vector2(screenRect.xMin + (enemy.enemyCollider.radius * 2f + alpha), centerY)); // Left
