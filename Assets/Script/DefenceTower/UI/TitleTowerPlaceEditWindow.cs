@@ -441,12 +441,24 @@ public class TitleTowerPlaceEditWindow : Window
     {
         if (placeHolds[selectIdx].UnLockAble)
         {
-            var popup = popupManager?.Open<UnLockPopup>(PopupIds.UnLockPopup);
+            var popup = popupManager?.Open<TextPopup>(PopupIds.TextPopup);
             if(popup != null)
             {
-                popup.Setting(selectIdx, UnLock);
+                popup.SetTexts("슬릇 해금하기", "슬릇을 해금하시겠습니까?" , "취소하기" , "해금하기");
+                popup.SetButtonAction(() => OnClickBlueButton(selectIdx), OnClickRedButton);
             }
         }
+    }
+
+    private void OnClickBlueButton(int idx)
+    {
+        UnLock(idx);
+        popupManager.ForceClose();
+    }
+
+    private void OnClickRedButton()
+    {
+        popupManager.ForceClose();
     }
 
     private void UnLock(int idx)

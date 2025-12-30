@@ -53,7 +53,7 @@ public class ConsumableManager : MonoBehaviour
     public List<ConsumalbeTable.Data> GetAllData()
     {
         if (!init) Init();
-        return useAbleConsumList;
+        return useAbleConsumList.ToList();
     }
 
     public void SetConsumable(ConsumalbeTable.Data data)

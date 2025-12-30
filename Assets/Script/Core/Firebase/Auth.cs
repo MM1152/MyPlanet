@@ -15,6 +15,15 @@ public class Auth
     public void Init()
     {
         auth = FirebaseAuth.DefaultInstance;
+
+        GoogleSignIn.Configuration = new GoogleSignInConfiguration
+        {
+            WebClientId = "596297009977-hr66tt0ebbvj4r1g4qrrfhpasb5adgd1.apps.googleusercontent.com",
+            RequestIdToken = true,
+            UseGameSignIn = false,
+            RequestEmail = true,
+            RequestProfile = true,
+        };
     }
 
     public async UniTask<(string id, bool sucess)> SignInAnonymouslyAsync()
@@ -43,15 +52,6 @@ public class Auth
     {
         try
         {
-            GoogleSignIn.Configuration = new GoogleSignInConfiguration
-            {
-                WebClientId = "596297009977-hr66tt0ebbvj4r1g4qrrfhpasb5adgd1.apps.googleusercontent.com",
-                RequestIdToken = true,
-                UseGameSignIn = false,
-                RequestEmail = true,
-                RequestProfile = true,
-            };
-
             // 로그인 이후 토큰값 불러옴
             GoogleSignInUser userData = await GoogleSignIn.DefaultInstance.SignIn().AsUniTask();
 

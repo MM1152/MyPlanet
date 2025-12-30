@@ -46,8 +46,8 @@ public class LoadingScene : MonoBehaviour
 
     private async UniTaskVoid WaitForGoogleLoginAsync()
     {
-        (string userId , bool success) = await FirebaseManager.Instance.Auth.SignInGoogleLoginAsync();
-        if(success)
+        (string userId, bool success) = await FirebaseManager.Instance.Auth.SignInGoogleLoginAsync();
+        if (success)
         {
             loginPanel.SetActive(false);
         }

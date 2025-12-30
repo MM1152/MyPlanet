@@ -63,6 +63,7 @@ public class TowerTable : DataTable
         public int Option { get; set; }
         public float Min_Value { get; set; }
         public float Max_Value { get; set; }
+        [Name("Rnage")]
         public float Attack_Range { get; set; }
         [Name("Buff_Explantion")]
         public int buff_Explantion { get; set; }

@@ -23,8 +23,6 @@ public class PlaceTowerWindow : Window
     private List<SelectTowerUI> selectTowerUIs = new List<SelectTowerUI>(); //선택할 타워 UI들 
     private int selectTowerIndex = -1; //처음 선택된 타워 인덱스
     private bool isStartTutorial = false;
-    private List<Tower> availableTowers = new List<Tower>(); //사용 가능한 타워들
-    private List<ConsumalbeTable.Data> availableConsumables = new List<ConsumalbeTable.Data>(); //사용 가능한 소모품들
 
 #if DEBUG_MODE
     [Header("�̰� ���� Ÿ�� ID �� �ֱ�")]
@@ -77,86 +75,63 @@ public class PlaceTowerWindow : Window
         if (Variable.IsTutorialActive) 
             return;
 
-        selectTowerIndex = -1;
         levelText.text = $"Lv. {towerManager.CurrentLevel}";
 
-        availableTowers.Clear();
+        var allTowers = towerManager.GetAllTower().Where(x => x != null).ToList();
+        Utils.Suffle(allTowers);
 
-        var allTowers = towerManager.GetAllTower();
-        for (int i = 0; i < allTowers.Count; i++)
+        // 레벨이 1일때는 타입 1 타워만 나오도록 설정
+        if (towerManager.CurrentLevel == 1)
         {
-            if (allTowers[i] == null) continue;
-            if(allTowers[i].TowerData.Type == 2) continue;
-
-            var nextLevelData = DataTableManager.LevelUpTable.Get(allTowers[i].TowerData.ID,allTowers[i].Level + 1);
-
-            if (nextLevelData != null)
+            int uiIdx = 0;
+            for(int i = 0; i < allTowers.Count && uiIdx < 3; i++)
             {
-                availableTowers.Add(allTowers[i]);
+                if (allTowers[i] == null || allTowers[i].TowerData.Type != 1)
+                    continue;
+
+                var nextLevelData = DataTableManager.LevelUpTable.Get(allTowers[i].TowerData.ID, allTowers[i].Level + 1);
+                if(nextLevelData != null)
+                {
+                    selectTowerUIs[uiIdx++].SetTowerData(allTowers[i]);
+                }
             }
         }
-            
-        availableConsumables.Clear();
-        var sourceConsumables = consumableManager.GetAllData();
-        for (int i = 0; i < sourceConsumables.Count; i++)
+        // 이후부터는 모든 타워 혹은 소모품이 나올 수 있도록 구현
+        else
         {
-            availableConsumables.Add(sourceConsumables[i]);
-        }
+            var consumes = consumableManager.GetAllData();
+            Utils.Suffle(consumes);
 
-        for (int i = 0; i < selectTowerUIs.Count; i++)
-        {
-            selectTowerUIs[i].gameObject.SetActive(false);
-        }
+            int uiIdx = 0;
+            while(uiIdx < 3)
+            {
+                bool isTower = Random.Range(0f, 1f) < towerSpawnPercent;
+                if (isTower)
+                {
+                    LevelUpTable.Data levelUpData = null;
+                    int towerIdx = 0;
+                    do
+                    {
+                        levelUpData = DataTableManager.LevelUpTable.Get(allTowers[towerIdx].TowerData.ID, allTowers[towerIdx].Level + 1);
+                        if(levelUpData != null)
+                        {
+                            selectTowerUIs[uiIdx++].SetTowerData(allTowers[towerIdx]);
+                            allTowers.RemoveAt(towerIdx);
+                        }
+                        towerIdx++;
+                    } while (levelUpData == null && towerIdx < allTowers.Count);
 
-        for (int slotIndex = 0; slotIndex < selectTowerUICount; slotIndex++)
-        {
-            if (towerManager.CurrentLevel == 1 && availableTowers.Count == 0)
-            {
-                break;
-            }
-
-            if (availableTowers.Count == 0 && availableConsumables.Count == 0)
-            {
-                break;
-            }
-
-            bool isTower;
-            if (towerManager.CurrentLevel == 1)
-            {
-                isTower = true;
-            }
-            else if (availableTowers.Count == 0)
-            {
-                isTower = false;
-            }
-            else if (availableConsumables.Count == 0)
-            {
-                isTower = true;
-            }
-            else
-            {
-                isTower = Random.Range(0f, 1f) < towerSpawnPercent;
-            }
-
-            if (isTower)
-            {
-                int randomIndex = Random.Range(0, availableTowers.Count);
-                var tower = availableTowers[randomIndex];
-                availableTowers.RemoveAt(randomIndex);
-
-                selectTowerUIs[slotIndex].gameObject.SetActive(true);
-                selectTowerUIs[slotIndex].SetInteractive(true);
-                selectTowerUIs[slotIndex].SetTowerData(tower);
-            }
-            else
-            {
-                int randomIndex = Random.Range(0, availableConsumables.Count);
-                var consumable = availableConsumables[randomIndex];
-                availableConsumables.RemoveAt(randomIndex);
-
-                selectTowerUIs[slotIndex].gameObject.SetActive(true);
-                selectTowerUIs[slotIndex].SetInteractive(true);
-                selectTowerUIs[slotIndex].SetConsumableData(consumable);
+                    if(levelUpData == null)
+                    {
+                        selectTowerUIs[uiIdx++].SetConsumableData(consumes[0]);
+                        consumes.RemoveAt(0);
+                    }
+                }
+                else
+                {
+                    selectTowerUIs[uiIdx++].SetConsumableData(consumes[0]);
+                    consumes.RemoveAt(0);
+                }
             }
         }
 
@@ -176,6 +151,10 @@ public class PlaceTowerWindow : Window
             selectTowerUIs[i].ResetOutline();
         }
 
+        for(int i = 0; i < selectTowerUIs.Count; i++)
+        {
+            selectTowerUIs[i].gameObject.SetActive(false);
+        }
 
         base.Close();
     }

@@ -12,7 +12,6 @@ public class RandomPickUpTutorial2 : Tutorial
     {
         Variable.IsTutorialActive = true;
         manager.SetTutorialBackGround(true);
-        manager.SetTextAreaPosition(3);
         pickOneButton = GameObject.FindWithTag(TagIds.TutorialTaget).GetComponent<Button>();
         popupManager = GameObject.FindWithTag(TagIds.PopupManager).GetComponent<PopupManager>();
         var popup = popupManager.GetPopup(PopupIds.TextPopup);
@@ -23,7 +22,7 @@ public class RandomPickUpTutorial2 : Tutorial
 
         pickOneButton.onClick.AddListener(OnClickPickOneButton);
         var combineClip = GetCombineClip((2, 2), (2, 3), (2, 4));
-        manager.SetTextAreaPosition(1);
+        manager.SetTextAreaPosition(3);
         manager.SetTouchPlanelParent(pickOneButton.transform);
         SetTextWithAnimation(msg, combineClip , backGroundRayCastAble: false).Forget();
     }

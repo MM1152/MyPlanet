@@ -21,6 +21,10 @@ public class HelperViewer : MonoBehaviour
 
     private async UniTaskVoid SetUserIconImage(AsyncPlayerData.Data data)
     {
+        if (string.IsNullOrEmpty(data.imageUrl))
+        {
+            return;
+        }
         userIcon.sprite = await FirebaseManager.Instance.Auth.DownLoadIconImage(new Uri(data.imageUrl));
     }
 

@@ -59,7 +59,7 @@ public class HelperManager : MonoBehaviour
             playerTowerIds = towerManager.GetAllTower().Select(tower => tower != null ? tower.TowerData.ID : -1).ToList(),
             //playerTowerLevels = towerManager.GetAllTower().Select(tower => tower.Level).ToList(),
             playerTowerFullDamages = towerManager.GetAllTower().Select(tower => tower != null ? tower.FullDamage : -1).ToList(),
-            imageUrl = FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl.ToString(),
+            imageUrl = FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl == null ? string.Empty : FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl.ToString(),
         };
 
         await FirebaseManager.Instance.AsyncPlayerData.SaveAsyncData(stageId, asyncUserData);
