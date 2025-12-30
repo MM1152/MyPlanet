@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class SelectOptionUI : MonoBehaviour
 {
     [Header("Images")]
-    [SerializeField] private Image iconImage;
+    [SerializeField] private Image iconBgImage;
     [SerializeField] private Image backgroundImage;
+    [SerializeField] private Image iconImageLeft;
+    [SerializeField] private Image iconImageRight;
     [Header("Sprites")]
     [SerializeField] private Sprite backgroundSprite;
     [SerializeField] private Sprite selectOptionBackgroundSprite;
@@ -55,11 +57,13 @@ public class SelectOptionUI : MonoBehaviour
         return tower;
     }
 
-    public void SetTowerData(Tower data)
+    public void SetTowerData(Tower data,Sprite iconSpriteLeft,Sprite iconSpriteRight)
     {
         tower = data;
-        // this.optionBase = data.Option;
-        slotIndexText.text = data.SlotIndex + "번 슬롯";
+        
+        // slotIndexText.text = data.SlotIndex + "번 슬롯";
+        iconImageLeft.sprite = iconSpriteLeft;
+        iconImageRight.sprite = iconSpriteRight;
         
         newRandomOption = RandomOptionData.GetRandomOption();
 
@@ -75,7 +79,9 @@ public class SelectOptionUI : MonoBehaviour
         {
             bonusAmount = DataTableManager.OptionTable.GetValueDataToInt(5016);
         }
-        
+        var str= newRandomOption.option.GetOptionStringFormatting();
+
+        slotIndexText.text = $"{str.Substring(0, str.Length - 2)} 강화";
         descriptionText.text = $"[{newRandomOption.option.GetOptionStringFormatting()}] + {bonusAmount}%";
         
         UpdateBackgroundImage(false);

@@ -20,13 +20,15 @@ public class OptionUpgradeWindow : Window
     {
         base.Close();
     }
+    [Header("Sprites")]
+    [SerializeField] private List<Sprite> sprites = new List<Sprite>();
 
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
         windowId = (int)WindowIds.OptionUpgradeWindow;
 
-        for(int i = 0; i < selectOptionUIRoot.childCount; i++)
+        for (int i = 0; i < selectOptionUIRoot.childCount; i++)
         {
             var optionUi = selectOptionUIRoot.GetChild(i).GetComponentInChildren<SelectOptionUI>();
             int index = i;
@@ -53,18 +55,22 @@ public class OptionUpgradeWindow : Window
             }
         }
         var fillCount = Mathf.Min(selectOptionUIs.Count, availableTowers.Count);
-        for(int i = 0; i < fillCount; i++)
+        for (int i = 0; i < fillCount; i++)
         {
-            
-                int randomIndex = Random.Range(0, availableTowers.Count);
-                var towerData = availableTowers[randomIndex];
-                availableTowers.RemoveAt(randomIndex);
 
-                selectOptionUIs[i].gameObject.SetActive(true);
-                selectOptionUIs[i].SetInteractive(true);
-                selectOptionUIs[i].SetTowerData(towerData); 
+            int randomIndex = Random.Range(0, availableTowers.Count);
+            var towerData = availableTowers[randomIndex];
+            availableTowers.RemoveAt(randomIndex);
+
+            selectOptionUIs[i].gameObject.SetActive(true);
+            selectOptionUIs[i].SetInteractive(true);
+
+            var lefticonindex = towerData.SlotIndex/10;
+            var righticonindex = towerData.SlotIndex % 10;
+
+            selectOptionUIs[i].SetTowerData(towerData, GetIndexIconSprite(lefticonindex), GetIndexIconSprite(righticonindex));
         }
-        for(int i = fillCount; i < selectOptionUIs.Count; i++)
+        for (int i = fillCount; i < selectOptionUIs.Count; i++)
         {
             selectOptionUIs[i].gameObject.SetActive(false);
             selectOptionUIs[i].SetInteractive(false);
@@ -78,11 +84,19 @@ public class OptionUpgradeWindow : Window
         if (selectIndex == -1) return;
         var towerData = selectOptionUIs[selectIndex].GetTowerData();
         var bonusAmount = selectOptionUIs[selectIndex].GetBonusAmount();
-   
+
         towerData.Option.ResetRandomOption();
         towerData.Option.AddBonusOptionValue(bonusAmount);
         towerData.Option.SetRandomOption();
         Debug.Log($"선택 보너스{bonusAmount}% 적용 완료");
         manager.Close();
+    }
+
+   
+
+    public Sprite GetIndexIconSprite(int index)
+    {
+        if (index < 0 || index >= sprites.Count) return null;
+        return sprites[index];
     }
 }
