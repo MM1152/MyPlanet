@@ -23,6 +23,7 @@ public class UserProfilePopup : Popup
         Sprite userIcon = FirebaseManager.Instance.Auth.UserIconSprite;
         if(userIcon != null)
         {
+            userImage.color = Color.white;
             userImage.sprite = userIcon;
         }
 

@@ -21,7 +21,7 @@ public class ConsumableUI : MonoBehaviour
         this.consumable = cosumable;
         this.consumable.SetUI(this.gameObject);
         consumableNameText.text = consumable.ConsumData.Name;
-       Debug.Log($"{consumable.ConsumData.consumableImage == null} : {consumable.ConsumData.Name}");
+        Debug.Log($"{consumable.ConsumData.consumableImage == null} : {consumable.ConsumData.Name}");
         consumableIcon.sprite = consumable.ConsumData.consumableImage;
     }
 

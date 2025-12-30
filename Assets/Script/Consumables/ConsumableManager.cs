@@ -14,23 +14,27 @@ public class ConsumableManager : MonoBehaviour
     private ConsumableFactory consumableFactory = new ConsumableFactory();
     private List<ConsumalbeTable.Data> useAbleConsumList;
 
+    private bool init = false;
     private void Init()
     {
         useAbleConsumList = DataTableManager.ConsumalbeTable.GetDatasWithCondition(towerManger.GetAllTower());
+        init = true;
+    }
 
-        //임시 테스트용
+    private void UpdateConsume()
+    {
         var useAbleConsumableKeys = consumableFactory.GetAllKeys();
         var removeList = new List<ConsumalbeTable.Data>();
-       
-        for(int i = 0;i < useAbleConsumList.Count; i++)
+
+        for (int i = 0; i < useAbleConsumList.Count; i++)
         {
             if (!useAbleConsumableKeys.Contains(useAbleConsumList[i].Item_id))
             {
                 removeList.Add(useAbleConsumList[i]);
             }
         }
-        
-        foreach(var item in removeList)
+
+        foreach (var item in removeList)
         {
             useAbleConsumList.Remove(item);
         }
@@ -38,24 +42,23 @@ public class ConsumableManager : MonoBehaviour
 
     public ConsumalbeTable.Data GetRandomData()
     {
-        if (useAbleConsumList == null) Init();
         int rand = Random.Range(0, useAbleConsumList.Count);
         return useAbleConsumList[rand];
     }
 
     public ConsumalbeTable.Data GetData(int index)
     {
-        if (useAbleConsumList == null) Init();
         return useAbleConsumList[index];
     }
     public List<ConsumalbeTable.Data> GetAllData()
     {
-        if (useAbleConsumList == null) Init();
+        if (!init) Init();
         return useAbleConsumList;
     }
 
     public void SetConsumable(ConsumalbeTable.Data data)
     {
+        UpdateConsume();
         Consumable consumable = consumableFactory.CreateInstance(data.Item_id);
         consumable.Init(towerManger, planet, data);
         ConsumableUI ui = Instantiate(consumableUI, consumableUIRoot);

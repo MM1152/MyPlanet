@@ -51,6 +51,7 @@ public class ArcMissileBullet : EnemyProjectileSimple
         }
         
         Vector2 targetDir = (target.transform.position - transform.position).normalized;
+        turnSpeed += Time.deltaTime;
         movedir = Vector2.MoveTowards(movedir, targetDir, turnSpeed  * Time.deltaTime).normalized;
         
         float angle = Mathf.Atan2(movedir.y, movedir.x) * Mathf.Rad2Deg - 90f;
