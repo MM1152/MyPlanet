@@ -31,7 +31,7 @@ public class OneTwoMoveAttack : IMove
     {
         this.enemy = enemy;
         delayTime = initDelayTime;
-        screenBounds = Utils.GetScreenRect();
+        screenBounds = Utils.GetScreenToWorldRect();
         var centerY = (enemy.target.transform.position.y + screenBounds.yMax) / 2;
         middlePosition = new Vector2(enemy.target.transform.position.x, centerY);
         topPosition = middlePosition + Vector2.up * centerYAlpha;

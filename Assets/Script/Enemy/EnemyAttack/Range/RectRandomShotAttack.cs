@@ -61,7 +61,7 @@ public class RectRandomShotAttack : IShotStrategy
 
     private void LineInitialized(Enemy enemy)
     {
-        screenBounds = Utils.GetScreenRect();
+        screenBounds = Utils.GetScreenToWorldRect();
         lineRenderer.enabled = true;
         lineRenderer.startWidth = enemy.transform.localScale.x * 0.3f;
         lineRenderer.endWidth = enemy.transform.localScale.x * 0.3f;

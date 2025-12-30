@@ -27,6 +27,7 @@ public enum WindowIds
     TitlePickUpResultWindow = 19,
     TitleStackRewardPlayWindow = 20,
     TitleDailyGiftWindow = 21,
+    InGamePlaceTowerWindow = 22,
 }
 
 public enum PopupIds

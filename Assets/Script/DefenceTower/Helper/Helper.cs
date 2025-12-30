@@ -8,15 +8,17 @@ public class Helper : MonoBehaviour
     private AsyncPlayerData.Data userData;
     private List<Tower> towers = new List<Tower>();
     private HelperManager manager;
+    private HelperViewer helperViewer;
 
     public float duration = 5f;
     private float speed;
     private Vector3 dir;
     public Vector3 endPos;
     public Vector3 startPos;
-    public void Init(AsyncPlayerData.Data userData, HelperManager manager)
+    public void Init(AsyncPlayerData.Data userData, HelperManager manager , HelperViewer helperViewer)
     {
         this.manager = manager;
+        this.helperViewer = helperViewer;
 
         for(int i = 0; i< userData.playerTowerIds.Count; i++)
         {
@@ -57,6 +59,8 @@ public class Helper : MonoBehaviour
 
         speed = Vector3.Distance(startPos, endPos) / duration;
         dir = (endPos - startPos).normalized;
+
+        helperViewer.RotationActive(true);
     }
 
     private void Update()
@@ -68,6 +72,7 @@ public class Helper : MonoBehaviour
                 speed = 0;
                 dir = Vector3.zero;
                 gameObject.SetActive(false);
+                helperViewer.RotationActive(false);
                 return;
             }
 

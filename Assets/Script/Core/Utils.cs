@@ -17,7 +17,7 @@ public static class Utils
     //     screenRect = new Rect(bottomLeft.x, bottomLeft.y, topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
     // }
 
-    public static Rect GetScreenRect()
+    public static Rect GetScreenToWorldRect()
     {
         var camera = Camera.main;
         var zDistance = Mathf.Abs(camera.transform.position.z);

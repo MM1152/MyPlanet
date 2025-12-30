@@ -36,7 +36,7 @@ public class VortexLaserAttack : IShotStrategy
         this.enemy = enemy;
         obstacleMask = LayerMask.GetMask("DefenseTower", "Player");
         initialized = true;
-        screenRect = Utils.GetScreenRect();   
+        screenRect = Utils.GetScreenToWorldRect();   
         baseLineRenderer = enemy.enemyLineRenderer;
         lineRenderers = new List<LineRenderer>();
         baseLineRenderer.startWidth = enemy.transform.localScale.y * 0.2f;
