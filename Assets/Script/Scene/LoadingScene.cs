@@ -107,7 +107,7 @@ public class LoadingScene : MonoBehaviour
         FirebaseManager.Instance.Release();
         if(FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl != null)
         {
-            await FirebaseManager.Instance.Auth.DownLoadIconImage(FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl);
+            FirebaseManager.Instance.Auth.UserIconSprite = await FirebaseManager.Instance.Auth.DownLoadIconImage(FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl);
         }
         await FirebaseManager.Instance.PresetData.WaitForInitalizeAsync();
         await FirebaseManager.Instance.PlanetData.WaitForInitalizeAsync();

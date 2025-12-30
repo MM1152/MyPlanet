@@ -9,7 +9,6 @@ public class TitleMainWindow : Window
 {
     [Header("Buttons")]
     [SerializeField] private Button selectStageButton;
-    [SerializeField] private Button logoutButton;
     [SerializeField] private Button debugModeSceneButton;
     [SerializeField] private Button bookOpenButton;
     [SerializeField] private Button randomPickUpButton;
@@ -22,6 +21,7 @@ public class TitleMainWindow : Window
     [SerializeField] private Image userProfileIconImage;
     [Header("References")]
     [SerializeField] private TutorialManager tutorialManager;
+    [SerializeField] private PopupManager popupManager;
 
     public Button SelectStageButton => selectStageButton;
     public Button GachaButton => randomPickUpButton;
@@ -47,10 +47,6 @@ public class TitleMainWindow : Window
 
         userGold.text = FirebaseManager.Instance.UserData.gold.ToString();
         userDiamond.text = FirebaseManager.Instance.UserData.diamond.ToString();
-        logoutButton.onClick.AddListener(() =>
-        {
-            FirebaseManager.Instance.Logout();
-        });
         randomPickUpButton.onClick.AddListener(() => manager.Open(WindowIds.RandomPickUpWindow));
 #if UNITY_EDITOR
         debugModeSceneButton.onClick.AddListener(() =>

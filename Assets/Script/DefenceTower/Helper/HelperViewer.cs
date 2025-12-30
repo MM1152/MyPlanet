@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +16,12 @@ public class HelperViewer : MonoBehaviour
     public void SetUserData(AsyncPlayerData.Data data)
     {
         userNickNameText.text = data.playerNickName;
+        SetUserIconImage(data).Forget();
+    }
+
+    private async UniTaskVoid SetUserIconImage(AsyncPlayerData.Data data)
+    {
+        userIcon.sprite = await FirebaseManager.Instance.Auth.DownLoadIconImage(new Uri(data.imageUrl));
     }
 
     public void SetActive(bool active)

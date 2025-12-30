@@ -34,6 +34,11 @@ public class PopupManager : MonoBehaviour
         return popupTable[(int)id] as T;
     }
 
+    public void Open(int id)
+    {
+        Open<Popup>((PopupIds)id);
+    }
+
     private async UniTaskVoid WaitForPushEndFrameAsync(Popup popup)
     {
         await UniTask.WaitForEndOfFrame();

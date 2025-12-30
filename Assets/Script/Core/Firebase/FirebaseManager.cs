@@ -195,6 +195,7 @@ public class UserData : JsonSerialized
     public int version;
     public int clearStage;
     public long playTime;
+    public string imageUri;
 
     public async UniTask InitalizedUserData()
     {
@@ -205,6 +206,7 @@ public class UserData : JsonSerialized
         else
         {
             nickName = FirebaseManager.Instance.Auth.CurrentUser.DisplayName;
+            imageUri = FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl.ToString();
         }
         gold = 0;
         exp = 0;

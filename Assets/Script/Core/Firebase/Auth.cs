@@ -10,7 +10,7 @@ public class Auth
     public string UserId => auth.CurrentUser?.UserId ?? string.Empty;
     public FirebaseUser CurrentUser => auth.CurrentUser;
     public string UserDisplayName => string.IsNullOrEmpty(auth.CurrentUser.DisplayName) ? FirebaseManager.Instance.UserData.nickName : auth.CurrentUser.DisplayName;
-    public Sprite UserIconSprite { get; private set; }
+    public Sprite UserIconSprite { get; set; }
 
     public void Init()
     {
@@ -69,7 +69,7 @@ public class Auth
         }
     }
 
-    public async UniTask DownLoadIconImage(System.Uri path)
+    public async UniTask<Sprite> DownLoadIconImage(System.Uri path)
     {
         var www = UnityWebRequestTexture.GetTexture(path);
 
@@ -77,11 +77,11 @@ public class Auth
         if(result.result == UnityWebRequest.Result.ConnectionError)
         {
             Debug.Log(result.error);
-            return;
+            return null;
         }
 
         Texture2D iconImage = ((DownloadHandlerTexture)result.downloadHandler).texture;
-        UserIconSprite = Sprite.Create(iconImage , new Rect(0,0,iconImage.width,iconImage.height), Vector2.one * 0.5f);
+        return Sprite.Create(iconImage , new Rect(0,0,iconImage.width,iconImage.height), Vector2.one * 0.5f);
     }
 
     public void Logout()

@@ -25,6 +25,9 @@ public class HelperManager : MonoBehaviour
     public HelperViewer[] HelperViewers => helperViewers;
     private async UniTaskVoid Start()
     {
+        helperViewers[0].gameObject.SetActive(false);
+        helperViewers[1].gameObject.SetActive(false);
+
         if (Variable.IsTutorialActive) return;
 
         SaveUserData().Forget();
@@ -41,6 +44,7 @@ public class HelperManager : MonoBehaviour
             }
             SpawnHelpers().Forget();
         }
+
     }
 
     private async UniTask SaveUserData()
@@ -55,6 +59,7 @@ public class HelperManager : MonoBehaviour
             playerTowerIds = towerManager.GetAllTower().Select(tower => tower != null ? tower.TowerData.ID : -1).ToList(),
             //playerTowerLevels = towerManager.GetAllTower().Select(tower => tower.Level).ToList(),
             playerTowerFullDamages = towerManager.GetAllTower().Select(tower => tower != null ? tower.FullDamage : -1).ToList(),
+            imageUrl = FirebaseManager.Instance.Auth.CurrentUser.PhotoUrl.ToString(),
         };
 
         await FirebaseManager.Instance.AsyncPlayerData.SaveAsyncData(stageId, asyncUserData);

@@ -41,6 +41,7 @@ public enum PopupIds
     RandomOptionPopup = 5,
     PurchaseTowerPopup = 6,
     DailyGiftPopup = 7,
+    UserProfilePopup = 8,
 }
 
 public static class SceneIds

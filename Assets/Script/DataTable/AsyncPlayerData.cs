@@ -9,6 +9,7 @@ public class AsyncPlayerData
     {
         public string playerNickName;
         public int playerPlanetId;
+        public string imageUrl;
         public List<int> playerTowerIds;
         public List<int> playerTowerLevels;
         public List<int> playerTowerFullDamages;
