@@ -132,25 +132,22 @@ public class RandomLaserAttack : IShotStrategy
 
     public void Shot(Enemy enemy, GameObject target)
     {
-        if (target == null || hit.collider == null)
+        if (target == null)
         {
             if (laserRenderer != null) laserRenderer.enabled = false;
             return;
         }
 
-        if (hit.collider != null)
+        if(hit.collider == null) return;    
+
+        var find = hit.collider.GetComponent<IDamageAble>();
+        if (find != null)
         {
-            if (hit.collider.gameObject.layer == target.layer)
-            {
-                var find = hit.collider.GetComponent<IDamageAble>();
-                if (find != null)
-                {
-                    float percent = enemy.TypeEffectiveness.GetDamagePercent(find.ElementType);
-                    var damage = Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue);
-                    find.OnDamage(damage);
-                    enemy.OnHeal(damage / 2);
-                }
-            }
+            Debug.Log($"[RandomLaserAttack] 적중 대상: {find}, 위치: {hit.point}");
+            float percent = enemy.TypeEffectiveness.GetDamagePercent(find.ElementType);
+            var damage = Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue);
+            find.OnDamage(damage);
+            enemy.OnHeal(damage / 2);
         }
     }
 

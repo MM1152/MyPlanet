@@ -45,7 +45,7 @@ public class VortexLaserAttack : IShotStrategy
         baseLineRenderer.positionCount = 2;
         lineRenderers.Add(baseLineRenderer);
         currentAngles.Add(0f);
-        damageIntervals.Add(0f);
+        damageIntervals.Add(enemy.fireInterval);
         flashParticle = new List<ParticleSystem>();
         hitParticle = new List<ParticleSystem>();
         for(int i =0 ; i<= lineCount; i++)
@@ -73,7 +73,7 @@ public class VortexLaserAttack : IShotStrategy
             lr.endColor = Color.red;
             lineRenderers.Add(lr);
             currentAngles.Add((i + 1) * (angle / (lineCount + 1)));
-            damageIntervals.Add(0f);
+            damageIntervals.Add(enemy.fireInterval);
         }
         enemy.OnDie += ClearLineRenderers;
     }
@@ -153,7 +153,7 @@ public class VortexLaserAttack : IShotStrategy
                 {
                     float percent = enemy.TypeEffectiveness.GetDamagePercent(find.ElementType);
                     find.OnDamage(Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue));
-                    damageIntervals[i] = 0.5f;
+                    damageIntervals[i] = enemy.fireInterval;
                 }
             }
             else
