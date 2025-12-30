@@ -7,7 +7,7 @@ public class UtilTower : Tower
     public TowerTable.UtilTower UtilTowerData => utiltowerData;
     protected Transform planet;
     protected Transform defenseTower;
-    private float FullCoolTime => utiltowerData.Duration + BonusDuration + BonusCoolTime;
+    private float FullCoolTime => utiltowerData?.Duration ?? 0 + BonusDuration + BonusCoolTime;
     public float FullDuration => utiltowerData.Duration + BonusDuration;
     private float timer = 0f;
     
@@ -34,7 +34,7 @@ public class UtilTower : Tower
 
     protected override BaseAttackPrefab CreateAttackPrefab()
     {
-        Debug.Log("»ó¼Ó¹Þ¾Æ¼­ ½á¾ßÇÔ");
+        Debug.Log("ï¿½ï¿½Ó¹Þ¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½");
         return null;
     }
 }
