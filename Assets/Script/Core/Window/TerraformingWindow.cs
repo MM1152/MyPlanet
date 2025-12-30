@@ -9,8 +9,8 @@ public class TerraformingWindow : Window
     public Button rightButton;
 
     [SerializeField] private TextMeshProUGUI levelText;
-    // [SerializeField] private Image leftIconImage;   
-    // [SerializeField] private Image rightIconImage;      
+    [SerializeField] private Image leftIconImage;
+    [SerializeField] private Image rightIconImage;
     [SerializeField] private TextMeshProUGUI leftTitleText;
     [SerializeField] private TextMeshProUGUI rightTitleText;
 
@@ -31,13 +31,13 @@ public class TerraformingWindow : Window
         windowId = (int)WindowIds.TerraformingWindow;
     }
 
-    public void SetUI(string leftTitle, string leftDesc, string rightTitle, string rightDesc, int point)
+    public void SetUI(string leftTitle, string leftDesc, string rightTitle, string rightDesc, int point, Sprite leftIcon, Sprite rightIcon)
     {
-        // leftIconImage.sprite = leftIcon;
+        leftIconImage.sprite = leftIcon;
         leftTitleText.text = leftTitle;
         leftDescText.text = leftDesc;
 
-        // rightIconImage.sprite = rightIcon;
+        rightIconImage.sprite = rightIcon;
         rightTitleText.text = rightTitle;
         rightDescText.text = rightDesc;
 

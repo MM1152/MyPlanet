@@ -55,7 +55,7 @@ public class Terraforming : MonoBehaviour
             TerraformingData.GetTerraformingDescriptionDataKey(left.T_description),
             TerraformingData.GetTerraformingNameDataKey(right.Terra_name),
             TerraformingData.GetTerraformingDescriptionDataKey(right.T_description),
-            point);
+            point,left.T_image,right.T_image );
 
 
         terraformingWindow.leftButton.onClick.RemoveAllListeners();
