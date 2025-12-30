@@ -18,11 +18,15 @@ public class ConsumalbeTable : DataTable
         public float effect_value { get; set; }
         public int duration { get; set; }
         public int Item_description { get; set; }
+        public string Image_path { get; set; }
 
         [CsvHelper.Configuration.Attributes.Ignore]
         public ICondition condition;
         public string Name => DataTableManager.StringTable.Get(name_id);
         public string Description => DataTableManager.StringTable.Get(Item_description);
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public Sprite consumableImage;
+
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -32,10 +36,11 @@ public class ConsumalbeTable : DataTable
 
         var result = await LoadCSV<Data>(textAssets.text);
 
-        foreach(var data in result)
+        foreach (var data in result)
         {
             consumableTable.Add(data.Item_id, data);
             data.condition = conditionFactory.CreateInstance(data.Item_Condition);
+            data.consumableImage = await Addressables.LoadAssetAsync<Sprite>(data.Image_path).ToUniTask();
         }
 
         return (filename, this);
@@ -55,11 +60,11 @@ public class ConsumalbeTable : DataTable
     {
         var lists = new List<Data>();
 
-        foreach(var consumable in consumableTable.Values)
+        foreach (var consumable in consumableTable.Values)
         {
-            foreach(var tower in towers)
+            foreach (var tower in towers)
             {
-                if(consumable.condition.CheckCondition(tower , null, null) && !lists.Contains(consumable))
+                if (consumable.condition.CheckCondition(tower, null, null) && !lists.Contains(consumable))
                 {
                     lists.Add(consumable);
                 }

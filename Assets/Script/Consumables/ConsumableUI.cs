@@ -6,6 +6,8 @@ public class ConsumableUI : MonoBehaviour
 {
     [Header("Images")]
     [SerializeField] private Image consumableImage;
+    [Header("Icons")]
+    [SerializeField] private Image consumableIcon;
 
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI consumableNameText;
@@ -19,6 +21,8 @@ public class ConsumableUI : MonoBehaviour
         this.consumable = cosumable;
         this.consumable.SetUI(this.gameObject);
         consumableNameText.text = consumable.ConsumData.Name;
+       Debug.Log($"{consumable.ConsumData.consumableImage == null} : {consumable.ConsumData.Name}");
+        consumableIcon.sprite = consumable.ConsumData.consumableImage;
     }
 
     private void Update()
@@ -26,7 +30,7 @@ public class ConsumableUI : MonoBehaviour
         if (consumable != null)
         {
             consumable.Update(Time.deltaTime);
-            cosumableDurationText.text = $"{(int)consumable.GetDuration()}√ ";
+            cosumableDurationText.text = $"{(int)consumable.GetDuration()/60:D2}:{(int)consumable.GetDuration()%60:D2}";
             if (consumable.GetDuration() <= 0f)
             {
                 consumable = null;

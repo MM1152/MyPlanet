@@ -17,6 +17,9 @@ public class TerraformingTable : DataTable
         public float T_effect_value { get; set; }
         public int T_effct_target { get; set; }
         public int T_description { get; set; }
+        public string Image_path { get; set; }
+        [CsvHelper.Configuration.Attributes.Ignore]
+        public Sprite T_image { get; set; } 
     }
 
     public override async UniTask<(string, DataTable)> LoadAsync(string filename)
@@ -37,6 +40,7 @@ public class TerraformingTable : DataTable
             {
                 terraformingPointTable[data.unlock_point] = new List<Data> { data };
             }
+             data.T_image = await Addressables.LoadAssetAsync<Sprite>(data.Image_path).ToUniTask();
         }
 
         return (filename, this as DataTable);
