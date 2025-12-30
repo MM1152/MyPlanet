@@ -94,6 +94,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     private BounsSpawnEnemysManager bounsSpawnEnemysManager;
     public BounsSpawnEnemysManager BounsSpawnEnemysManager => bounsSpawnEnemysManager;
     private GameObject spawnManagers;
+    private int maxHP;
     private void Awake()
     {
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag)?.GetComponent<WaveManager>();
@@ -128,6 +129,9 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
 
         currentHP = (int)(enemyData.HP * percent);
+        maxHP = currentHP;
+        Debug.Log($"적 아이디 : {enemyData.ID}");
+        Debug.Log($"적 체력 초기화: {currentHP}/{enemyData.HP} (스테이지 배율: {percent})");
         atk = (int)(enemyData.ATK * percent);
         speed = enemyData.Speed * percent;
         baseRange = enemyData.Range;
@@ -170,7 +174,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         {
             this.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag)?.GetComponent<WaveWindow>();
-            bossUi?.ShowBossUI(enemyData.HP);
+            bossUi?.ShowBossUI(currentHP);
         }
 
         if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
@@ -294,11 +298,12 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         currentHP -= damage;
         Debug.Log($"적이 {damage}만큼 데미지를 받았습니다. 남은 체력: {currentHP}");
         if (bossUi != null)
-            bossUi.UpdateBossHP(currentHP, enemyData.HP);
+            bossUi.UpdateBossHP(currentHP, maxHP);
 
-        Debug.Log($"적 남은 체력: {currentHP}/{enemyData.HP}");
-        int percent = (int)(((float)currentHP / enemyData.HP) * 100f);
+        Debug.Log($"적 남은 체력: {currentHP}/{maxHP}");
+        int percent = (int)(((float)currentHP / maxHP) * 100f);
         Debug.Log($"적 남은 체력 백분율: {percent}%");
+
         OnBarrierRefill?.Invoke(percent);
 
 #if DEBUG_MODE

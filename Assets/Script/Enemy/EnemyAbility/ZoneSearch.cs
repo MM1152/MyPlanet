@@ -4,6 +4,7 @@ using UnityEngine;
 public class ZoneSearch : MonoBehaviour
 {
     private Enemy enemy;
+    private float baseRadius;
     private CircleCollider2D circleCollider;
     public List<Enemy> enemiesInZone = new List<Enemy>();
 
@@ -15,7 +16,7 @@ public class ZoneSearch : MonoBehaviour
     public void Init(Enemy enemy)
     {
         if (circleCollider == null) return;
-
+        baseRadius = circleCollider.radius;
         this.enemy = enemy;
         this.transform.parent = enemy.transform;
         this.transform.localPosition = Vector3.zero;
@@ -89,6 +90,7 @@ public class ZoneSearch : MonoBehaviour
     public void ZoneDisable()
     {
         enemiesInZone.Clear();
+        circleCollider.radius = baseRadius;
         this.gameObject.transform.parent = null;
         this.gameObject.SetActive(false);
     }
