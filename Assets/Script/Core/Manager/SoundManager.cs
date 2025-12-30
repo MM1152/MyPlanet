@@ -38,7 +38,7 @@ public class SoundManager : MonoBehaviour
         allAudioSources.Add(currentSfxSource);
     }
 
-    public void PlaySFX(AudiosId id, float volume = 1f, bool loop = false)
+    public void PlaySFX(AudiosId id, float volume = .7f, bool loop = false)
     {
         if (audioClips.TryGetValue(id, out AudioClip clip))
         {
@@ -72,7 +72,7 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlayBGM(AudiosId id, float volume = 1f, bool loop = true)
+    public void PlayBGM(AudiosId id, float volume = .3f, bool loop = true)
     {
         if (currentBgmId == id && currentBgmSource != null && currentBgmSource.isPlaying)
         {

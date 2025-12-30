@@ -8,7 +8,7 @@ public class SoundPlayer : MonoBehaviour, IPointerDownHandler
     [Header("Audio ID")]
     public AudiosId audioId = AudiosId.None;
     [Header("Volume")]
-    public float volume = 1f;
+    public float volume = .3f;
     [Header("Loop")]
     public bool loop = false;
     [Header("Play On Start")]

@@ -74,7 +74,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI warringText;
     [SerializeField]
-    private float bgmSound = 2f;
+    private float bgmSound = .3f;
 
     [SerializeField]
     private WaveWindow waveWindow;

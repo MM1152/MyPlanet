@@ -80,6 +80,7 @@ public class TutorialManager : MonoBehaviour
         init = true;
         gameObject.SetActive(false);
         audioSource = GetComponent<AudioSource>();
+        audioSource.volume = 6f;
     }
 
 
