@@ -24,7 +24,8 @@ public class IronMine : Mine
 
     protected override Explosion CreateExplosion()
     {
-        var hit = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Hit17novaviolet);
+        // var hit = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Hit17novaviolet);
+        var hit = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.ArcaneExplosionNormal);
         hit.transform.position = this.transform.position;
         return Managers.ObjectPoolManager.SpawnObject<IronMineExplosion>(PoolsId.IronMineExplosion);
     }

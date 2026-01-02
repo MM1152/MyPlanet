@@ -37,11 +37,12 @@ public class WaveWindow : MonoBehaviour
         }
     }
 
-    public void ShowBossUI(int maxHP)
+    public void ShowBossUI(int maxHP, int bossNameID)
     {
         bosscurrentHpText?.gameObject.SetActive(true);
         bossHealthSlider?.gameObject.SetActive(true);
         bossNameText?.gameObject.SetActive(true);
+        bossNameText.text = DataTableManager.StringTable.Get(bossNameID);
         bossTotalHpText?.gameObject.SetActive(true);
         bosscurrentHpText.text = maxHP.ToString();        
         bossTotalHpText.text = maxHP.ToString();

@@ -39,7 +39,7 @@ public class SolarLaser : BaseAttackPrefab
         var percentX = tower.BonusWidthSize * baseScale.x / baseScale.x;
 
         gameObject.transform.localScale = new Vector2(tower.BonusWidthSize * baseScale.x, tower.BonusAttackRange * baseScale.y);
-        lineRenderer.startWidth = 1 * percentX;
+        lineRenderer.startWidth = 0.5f * percentX;
     }
 
     public void UpdateLaser(float angle)

@@ -207,6 +207,7 @@ public class BasePlanet : MonoBehaviour, IDamageAble
     {
         hpSlider?.UpdateSlider(hp, maxHp, $"{((float)FullHp / maxHp) * 100f:F2}", FullHp, maxHp);
         shieldSlider?.UpdateSlider(shield, maxHp, "", "");
+        hpSlider?.UpdateFillImageColor();
     }
 
     public void AddBonusDFSPercent(float percent, float duration)

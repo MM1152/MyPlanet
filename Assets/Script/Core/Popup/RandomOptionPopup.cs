@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class RandomOptionPopup : Popup
 {
+    [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private PriorityTextLayout probabilityText;
     [SerializeField] private Transform probabilityTextRoot;
     [SerializeField] private Button closeButton;
@@ -29,6 +30,11 @@ public class RandomOptionPopup : Popup
 
     public void SetRandomPickUpList(List<RandomPickUpTable.Data> randomPickUpList)
     {
+        if(randomPickUpList.Count > 0)
+        {
+            titleText.text = randomPickUpList[0].IsPlanetReward ? "행성 뽑기" : "가챠 뽑기";
+        }
+
         if(randomPickUpList.Count > probabilityTexts.Count)
         {
             for(int i = probabilityTexts.Count; i < randomPickUpList.Count; i++)

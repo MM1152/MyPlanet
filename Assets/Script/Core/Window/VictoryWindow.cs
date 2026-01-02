@@ -21,6 +21,7 @@ public class VictoryWindow : Window
     [SerializeField] private GameObject failTitle;
     [SerializeField] private GameObject failTextBackground;
     [SerializeField] private GameObject nextStageButtonObject;
+    [SerializeField] private GameObject replayButtonObject;
 
     [SerializeField] private GameObject goldLayout;
     [SerializeField] private GameObject expLayout;
@@ -141,14 +142,8 @@ public class VictoryWindow : Window
 
     public void SetVictoryUI(float timer, bool isClear,bool lastStage,int stageId)
     {
-        bool isTutorial = Variable.IsTutorialActive;
         this.isClear = isClear;
 
-        if (waveManager.StageId == 1)
-        {
-            nextStageButton.gameObject.SetActive(false);
-            replayButton.gameObject.SetActive(false);
-        }
 
         if (isClear)
         {
@@ -168,10 +163,19 @@ public class VictoryWindow : Window
         }
 
         stageIdText.text = $"{stageId} STAGE";
-        SetRewards(isClear);
-        replayButton.interactable = !isTutorial;     
-        nextStageButton.interactable = (isClear && !lastStage && !isTutorial);
+        SetRewards(isClear);    
+        nextStageButtonObject.SetActive(isClear && !lastStage);
         playTimeText.text = $"플레이 타임 | {(int)(timer / 60):00}분 {(int)(timer % 60):00}초";
+
+        if (waveManager.StageId == 1)
+        {
+            nextStageButtonObject.SetActive(false);
+            replayButtonObject.SetActive(false);
+        }
+        else if(replayButtonObject.activeSelf == false)
+        {
+            replayButtonObject.SetActive(true);
+        }
     }
 
     public void SetRewards(bool isClear)
@@ -187,23 +191,25 @@ public class VictoryWindow : Window
             goldLayout.SetActive(true);
             expLayout.SetActive(true);
             diamondLayout.SetActive(true);
-            goldText.text = $"+ {rewardData.CLEAR_REWARD1_COUNT}";
-            expText.text = $"+ {rewardData.CLEAR_REWARD2_COUNT}";
+            goldText.text = $"+ {rewardData.CLEAR_REWARD1_COUNT*Terraforming.terraformingGoldGainBonus}";
+            expText.text = $"+ {rewardData.CLEAR_REWARD2_COUNT*Terraforming.terraformingExpGainBonus}";
             diamondText.text = $"+ {rewardData.CLEAR_REWARD3_COUNT}";
-
-            goldReward = rewardData.CLEAR_REWARD1_COUNT;
-            expReward = rewardData.CLEAR_REWARD2_COUNT;
+Debug.Log($"골드보상 전{rewardData.CLEAR_REWARD1_COUNT} / 보너스 {Terraforming.terraformingGoldGainBonus} / 최종 {(int)(rewardData.CLEAR_REWARD1_COUNT * Terraforming.terraformingGoldGainBonus)}");
+Debug.Log($"경험치보상 전{rewardData.CLEAR_REWARD2_COUNT} / 보너스 {Terraforming.terraformingExpGainBonus} / 최종 {(int)(rewardData.CLEAR_REWARD2_COUNT * Terraforming.terraformingExpGainBonus)}");
+            goldReward = (int)(rewardData.CLEAR_REWARD1_COUNT*Terraforming.terraformingGoldGainBonus);
+            expReward = (int)(rewardData.CLEAR_REWARD2_COUNT*Terraforming.terraformingExpGainBonus);
             diamondReward = rewardData.CLEAR_REWARD3_COUNT;
         }
         else
         {
             goldLayout.SetActive(true);
             expLayout.SetActive(true);
-            goldText.text = $"+ {(int)(rewardData.CLEAR_REWARD1_COUNT * percent)}";
-            expText.text = $"+ {(int)(rewardData.CLEAR_REWARD2_COUNT * percent)}";
-
-            goldReward = (int)(rewardData.CLEAR_REWARD1_COUNT * percent);
-            expReward = (int)(rewardData.CLEAR_REWARD2_COUNT * percent);
+            goldText.text = $"+ {(int)(rewardData.CLEAR_REWARD1_COUNT * percent*Terraforming.terraformingGoldGainBonus)}";
+            expText.text = $"+ {(int)(rewardData.CLEAR_REWARD2_COUNT * percent*Terraforming.terraformingExpGainBonus)}";
+Debug.Log($"골드보상 전{rewardData.CLEAR_REWARD1_COUNT} / 보너스 {Terraforming.terraformingGoldGainBonus} / 최종 {(int)(rewardData.CLEAR_REWARD1_COUNT * Terraforming.terraformingGoldGainBonus)}");
+Debug.Log($"경험치보상 전{rewardData.CLEAR_REWARD2_COUNT} / 보너스 {Terraforming.terraformingExpGainBonus} / 최종 {(int)(rewardData.CLEAR_REWARD2_COUNT * Terraforming.terraformingExpGainBonus)}");
+            goldReward = (int)(rewardData.CLEAR_REWARD1_COUNT * percent*Terraforming.terraformingGoldGainBonus);
+            expReward = (int)(rewardData.CLEAR_REWARD2_COUNT * percent*Terraforming.terraformingExpGainBonus);
             diamondReward = 0;
         }
     }
