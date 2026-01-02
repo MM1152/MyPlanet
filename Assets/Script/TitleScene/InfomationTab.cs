@@ -42,12 +42,12 @@ public class InfomationTab : MonoBehaviour
     private void Awake()
     {
 #if DEBUG_MODE
-        debugAddPieceButton.gameObject.SetActive(true);
-        debugAddPieceButton.onClick.AddListener(() =>
-        {
-            OnClickAddPiece().Forget();
-        });
-        unlockButton.onClick.AddListener(() => OnClickUnlock().Forget());
+        //debugAddPieceButton.gameObject.SetActive(true);
+        //debugAddPieceButton.onClick.AddListener(() =>
+        //{
+        //    OnClickAddPiece().Forget();
+        //});
+        //unlockButton.onClick.AddListener(() => OnClickUnlock().Forget());
 #endif
     }
 
@@ -81,12 +81,12 @@ public class InfomationTab : MonoBehaviour
         var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID);
         UpdatePeiceCount(userPlanetData.count);
 #if DEBUG_MODE
-        debugAddPieceButton.interactable = true;
-        if (!userPlanetData.UseAble)
-        {
-            debugAddPieceButton.interactable = false;
-        }
-        unlockButton.interactable = !userPlanetData.UseAble;
+        //debugAddPieceButton.interactable = true;
+        //if (!userPlanetData.UseAble)
+        //{
+        //    debugAddPieceButton.interactable = false;
+        //}
+        //unlockButton.interactable = !userPlanetData.UseAble;
 #endif
         ResetStar();
         var starCount = FirebaseManager.Instance.PlanetData.GetOrigin(planetTableData.ID).star;
