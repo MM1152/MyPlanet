@@ -39,9 +39,10 @@ public class PlayGamePopup : Popup
         base.Open();
     }
 
-    public void UpdatePresetData(PresetData.InGameData presetData)
+    public void UpdatePresetData(PresetData.InGameData presetData,string presetName)
     {
         stageText.text = $"{presetData.stageId:D3}";
-        presetText.text = presetData.data.PresetName;
+        //  presetText.text = presetData.data.PresetName;
+        presetText.text = presetName;
     }
 }
