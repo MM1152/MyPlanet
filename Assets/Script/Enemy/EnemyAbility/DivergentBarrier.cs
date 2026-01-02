@@ -4,18 +4,25 @@ using UnityEngine;
 
 public class DivergentBarrier : BaseAbility
 {
-    public override AbilityType abilityType => AbilityType.OnDamage; // 데미지 받았을 때 발동하는 능력
-    public int barrierAmount = 5000; // 임시값 베리어 양
-    public ElementType barrierElementType = ElementType.Ice; // 이 어빌리티가 가진 적이 베리어에 넣어줄 속성 
-    public override bool isActive => barrier == null || (refillCount > 0 && barrier.IsDead); // 베리어가 없거나 리필 가능할 때 활성화
-    public Barrier barrier;  // 풀링해서 가져와서 담아둘 베리어 
-    private int refillCount = 2; // 회복 카운트 
+    public override AbilityType abilityType => AbilityType.OnDamage;
+    public int barrierAmount;
+    private List<float> barrierPercents = new List<float>();
+    private int barrierPercentIndex = 0;
+    public ElementType barrierElementType = ElementType.Ice;
+    public override bool isActive => barrier == null || (refillCount > 0 && barrier.IsDead);
+    public Barrier barrier;
+    private int refillCount = 2; // 회복 카운트 => 설정테이블 연결 
 
     private int[] refillSteps = new int[] { 50, 25 }; // 체력 퍼센트 기준 후에 수정? 
     private HashSet<int> refillStepHold = new HashSet<int>(); // 이미 리필된 스텝들
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
+        for (int i = 5075; i <= 5075 + refillSteps.Length; i++)
+        {
+            float percent = DataTableManager.OptionTable.GetValueDataToFloat(i);
+            barrierPercents.Add(percent);
+        }
         enemy.OnBarrierRefill += AbilityBarrierRefill;
         enemy.OnDie += Barrier_OnDead;
         CreateBarrier();
@@ -36,6 +43,7 @@ public class DivergentBarrier : BaseAbility
         barrierObj.transform.localPosition = Vector3.zero;
         barrier = barrierObj.GetComponent<Barrier>();
         barrier.Init(barrierAmount, barrierElementType, enemy, OnBarrierDestroyed);
+        barrierPercentIndex = 0;
         refillCount = 2;
         refillStepHold.Clear();
     }
@@ -47,7 +55,7 @@ public class DivergentBarrier : BaseAbility
         if (overflowBaseDamage > 0) // 남은 데미지가 있으면 적에게 전달
         {
             Debug.Log("베리어 파괴 후 적에게 오버한 데미지 전달");
-            
+
             float damagePercent = enemy.typeEffectiveness.GetDefenderDamagePercent(attackerType);
             float finalDamage = overflowBaseDamage * damagePercent;
             enemy.currentHP -= (int)finalDamage;
@@ -75,8 +83,9 @@ public class DivergentBarrier : BaseAbility
             {
                 Debug.Log($"베리어 리필 트리거됨. 현재 체력 퍼센트: {amount}%, 리필 스텝: {step}%, 남은 리필 횟수: {refillCount}");
                 refillStepHold.Add(step);
-
-                barrier?.RefillBarrier(barrierAmount);
+                var refill = enemy.MaxHp * barrierPercents[barrierPercentIndex];
+                barrier?.RefillBarrier((int)refill);
+                barrierPercentIndex++;
                 refillCount--;
                 break;
             }
@@ -93,7 +102,7 @@ public class DivergentBarrier : BaseAbility
 
     private void Barrier_OnDead(Enemy enemy)
     {
-         barrier.transform.SetParent(null);
-         Managers.ObjectPoolManager.Despawn(PoolsId.IceBarrier, barrier.gameObject); 
+        barrier.transform.SetParent(null);
+        Managers.ObjectPoolManager.Despawn(PoolsId.IceBarrier, barrier.gameObject);
     }
 }

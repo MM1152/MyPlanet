@@ -36,6 +36,8 @@ public class BossPartner : MonoBehaviour, IDamageAble
     private ParticleSystem hitParticle;
     private ParticleSystem flashParticle;
 
+    private int laserDamage;
+
     [SerializeField] CircleCollider2D circleCollider2D;
     public void Init(Enemy enemy)
     {
@@ -51,6 +53,7 @@ public class BossPartner : MonoBehaviour, IDamageAble
         this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         typeEffectiveness.Init(elementType); // 타입 효과 초기화
         angle = UnityEngine.Random.Range(0f, 360f); // 랜덤 시작 각도
+        laserDamage = DataTableManager.OptionTable.GetValueDataToInt(5068); // 데미지 옵션테이블에서 불러오기   
         enemy.OnDie += Die;
     }
 
@@ -182,7 +185,7 @@ public class BossPartner : MonoBehaviour, IDamageAble
             if (find != null)
             {
                 float percent = typeEffectiveness.GetDamagePercent(find.ElementType);
-                find.OnDamage(Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue));
+                find.OnDamage(Mathf.Clamp((int)((laserDamage - find.Defense) * percent), 1, int.MaxValue));
             }
         }
     }

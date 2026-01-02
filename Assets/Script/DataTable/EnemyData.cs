@@ -14,6 +14,7 @@ public class EnemyData : DataTable
     public class Data
     {
         public int ID { get; set; }        
+        public int BOSS_NAME { get; set; }
         public int Attribute { get; set; } = -1;                   
         public int Speed { get; set; }
         public int HP { get; set; }

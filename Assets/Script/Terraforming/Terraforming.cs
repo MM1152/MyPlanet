@@ -9,10 +9,14 @@ public class Terraforming : MonoBehaviour
 
     [SerializeField] private TerraformingWindow terraformingWindow;
 
-    [SerializeField] private StatusWindow statusWindow;
+    // [SerializeField] private StatusWindow statusWindow;
+    [SerializeField] private InGamePlaceTowerWindow gamePlaceTowerWindow;
     private static BasePlanet basePlanet;
     private static Move defenceTowerMove;
     private static TowerManager towerManager;
+    
+    public static float terraformingGoldGainBonus = 1f;
+    public static float terraformingExpGainBonus = 1f;
 
     public Dictionary<int, TerraformingTable.Data> terraformingChoiceData = new Dictionary<int, TerraformingTable.Data>();    
 
@@ -34,6 +38,8 @@ public class Terraforming : MonoBehaviour
         basePlanet = GameObject.FindGameObjectWithTag(TagIds.PlayerTag)?.GetComponent<BasePlanet>();
         defenceTowerMove = GameObject.FindGameObjectWithTag(TagIds.DefenseTowerTag)?.GetComponent<Move>();
         towerManager = GameObject.FindGameObjectWithTag(TagIds.TowerManagerTag)?.GetComponent<TowerManager>();
+        terraformingGoldGainBonus = 1f;
+        terraformingExpGainBonus = 1f;
     }
 
     public void SetPoint(int point)
@@ -73,7 +79,8 @@ public class Terraforming : MonoBehaviour
          if (point > TerraformingData.terrformingOpenValues.Length)
               return;
     
-         statusWindow.SetTerraformingState(point-1, data);
+        //  statusWindow.SetTerraformingState(point-1, data);
+            gamePlaceTowerWindow.SetTerraformingState(point-1, data);
    }     
 
 #if DEBUG_MODE
@@ -131,16 +138,12 @@ public class Terraforming : MonoBehaviour
 
     private static void GoldGainUpgrade(float effectValue)
     {
-#if DEBUG_MODE
-        Debug.Log("골드 획득량 증가");
-#endif
+        terraformingGoldGainBonus += effectValue;
     }
 
     private static void ExpGainUpgrade(float effectValue)
     {
-#if DEBUG_MODE
-        Debug.Log("경험치 획득량 증가");
-#endif
+        terraformingExpGainBonus += effectValue;
     }
 
     private static void MaxHealthUpgrade(float effectValue)

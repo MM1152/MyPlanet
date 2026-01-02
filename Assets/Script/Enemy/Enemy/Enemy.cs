@@ -95,6 +95,8 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
     public BounsSpawnEnemysManager BounsSpawnEnemysManager => bounsSpawnEnemysManager;
     private GameObject spawnManagers;
     private int maxHP;
+    public int MaxHp => maxHP;
+    private EnemyHpUI enemyHpUI;
     private void Awake()
     {
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag)?.GetComponent<WaveManager>();
@@ -161,24 +163,29 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         ability = AbilityManager.GetAbility(enemyData.ID);
         move = MoveManager.GetMove(enemyType);
         ability?.SetEnemy(this);
-        bounsSpawnEnemysManager?.Initialize(enemyData.ID, this);    
+        bounsSpawnEnemysManager?.Initialize(enemyData.ID, this);
 
         if (enemyLineRenderer != null)
         {
             enemyLineRenderer.enabled = false;
             enemyLineRenderer.positionCount = 0;
         }
-#if DEBUG_MODE
+
 
         if (EnemyTypes.IsBossMonster(data.ID))
         {
             this.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             bossUi = GameObject.FindGameObjectWithTag(TagIds.WaveWindowTag)?.GetComponent<WaveWindow>();
-            bossUi?.ShowBossUI(currentHP);
+            bossUi?.ShowBossUI(currentHP,enemyData.BOSS_NAME);
         }
 
-        if (EnemyTypes.IsEliteMonster(data.ID)) this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-#endif
+        if (EnemyTypes.IsEliteMonster(data.ID))
+        {
+            this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            enemyHpUI = Managers.ObjectPoolManager.SpawnObject<EnemyHpUI>(PoolsId.EnemyHpUI);
+            enemyHpUI.Init(this);
+        }
+
         ReturnMoveAction = () =>
         {
             if (!IsDead && (EnemyTypes.IsEliteMonster(data.ID) || (EnemyTypes.IsBossMonster(data.ID) && data.ID == 3067)))
@@ -353,6 +360,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
             OnTerraformingValueChanged = null;
         }
 
+        enemyHpUI?.Release();
         OnBarrierRefill = null;
         OnDie?.Invoke(this);
         OnDie = null;

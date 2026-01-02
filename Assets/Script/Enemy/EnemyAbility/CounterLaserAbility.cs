@@ -1,6 +1,7 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
+using Unity.Android.Gradle.Manifest;
 public class CounterLaserAbility : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnDamage;
@@ -9,17 +10,17 @@ public class CounterLaserAbility : BaseAbility
     private LayerMask targetLayer; // 타겟 레
     private bool inLaserAttack = false; // 레이저 공격 중인지 여부
     private bool isWaiting = false; // 다음 공격까지의 대기상태여부 
-    private float laserDealy = 2f; // 다음 공격까지 대기시간
+    private float laserDealy; // 다음 공격까지 대기시간
     private LineRenderer lineRenderer;
     private float laserDuration = 0f;
-    private float laserMaxDuration = 2f;
+    private float laserMaxDuration;
     private ElementType targetElementType => ElementType.Dark; // 타겟 속성 타입 어둠으로 고정 테이블 
     private Vector2 startPoint;
     private ParticleSystem hitParticle;
     private ParticleSystem flashParticle;
     private float attackInterval = 0.5f;
     private float attackTimer = 0f;
-
+    private int laserDamage;
 
     public override void SetEnemy(Enemy enemy)
     {
@@ -28,6 +29,9 @@ public class CounterLaserAbility : BaseAbility
         lineRenderer = enemy.enemyLineRenderer;
         lineRenderer.enabled = false;
         isActive = true;
+        laserDamage = DataTableManager.OptionTable.GetValueDataToInt(5068); // 데미지 옵션테이블에서 불러오기
+        laserMaxDuration = DataTableManager.OptionTable.GetValueDataToFloat(5069); // 지속시간 옵션테이블에서 불러오기
+        laserDealy = DataTableManager.OptionTable.GetValueDataToFloat(5070); // 대기시간 옵션테이블에서 불러오기
         enemy.OnDie += LaserReset;
     }
 
@@ -102,7 +106,7 @@ public class CounterLaserAbility : BaseAbility
             if (find != null)
             {
                 float percent = enemy.typeEffectiveness.GetDamagePercent(find.ElementType);
-                find.OnDamage(Mathf.Clamp((int)((enemy.atk - find.Defense) * percent), 1, int.MaxValue));
+                find.OnDamage(Mathf.Clamp((int)((laserDamage - find.Defense) * percent), 1, int.MaxValue));
             }
         }
     }

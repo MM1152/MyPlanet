@@ -1,17 +1,25 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
+
 public class SliderValue : MonoBehaviour
 {
     [SerializeField] private string FormatingString;
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private Image fillImage;
+    [SerializeField] private Sprite greenFillSprite;
+    [SerializeField] private Sprite yellowFillSprite;
+    [SerializeField] private Sprite redFillSprite;
     private Slider slider;
 
     private void Awake()
     {
         slider = GetComponent<Slider>();
+    }
+    
+    public void UpdateSlider(int value , int maxValue)
+    {
+        slider.value = (float)value / maxValue;
     }
 
     public void UpdateSlider(int value , int maxValue, object args)
@@ -52,5 +60,23 @@ public class SliderValue : MonoBehaviour
             text.text = msg;
         }
         slider.value = (float)value / maxValue;
+    }
+
+    public void UpdateFillImageColor()
+    {
+        if(fillImage ==null) return;
+
+        if (slider.value > 0.4f)
+        {
+            fillImage.sprite = greenFillSprite;
+        }
+        else if (slider.value > 0.15f)
+        {
+            fillImage.sprite = yellowFillSprite;
+        }
+        else
+        {
+            fillImage.sprite = redFillSprite;
+        }
     }
 }

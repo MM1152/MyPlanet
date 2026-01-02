@@ -5,8 +5,9 @@ using System;
 public class FortifiedBarrierAbility : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnDamage;
-    public int maxBarrierAmount = 5000;// 임시값
+    public int maxBarrierAmount;
     public int barrierAmount;
+    private float barrierPercent;
     private float refillTimer = 5f; //임시 
     public override bool isActive => barrier == null || barrier.IsDead; // 베리어가 없을 때 활성화
     private Barrier barrier;  // 풀링해서 가져와서 담아둘 베리어
@@ -16,8 +17,9 @@ public class FortifiedBarrierAbility : BaseAbility
     public override void SetEnemy(Enemy enemy)
     {
         base.SetEnemy(enemy);
-        barrierAmount = DataTableManager.OptionTable.GetValueDataToInt(5033);        
-        maxBarrierAmount = barrierAmount;
+        barrierPercent = DataTableManager.OptionTable.GetValueDataToFloat(5068);
+        maxBarrierAmount = (int)(enemy.MaxHp * barrierPercent);     
+        barrierAmount = maxBarrierAmount;
         enemy.OnDie += Barrier_OnDead;
         CreateBarrier();
     }

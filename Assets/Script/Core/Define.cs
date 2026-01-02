@@ -138,7 +138,8 @@ public enum PoolsId
     SteelBarrier = 503,
     Exp = 400,
     Zone = 500,
-    DamageText = 600,
+    EnemyHpUI = 600,
+    DamageText = 700,
 
     TestRange = 900,
 
@@ -173,6 +174,7 @@ public enum PoolsId
     Hit19circlebomb = 1028,
     HitExplosionParticle = 1029,
     HitHealParticle = 1030,
+    ArcaneExplosionNormal = 1031,
 
 
     Melee_Tier03 = 1200,
@@ -345,6 +347,7 @@ public static class AddressableNames
         { "FrostBoomerBullet", PoolsId.FrostBoomerBullet },
         { "Flash 2 electro", PoolsId.Flash2electro },
         { "Flash 17 nova violet", PoolsId.Flash17novaviolet },
+        {"ArcaneExplosionNormal", PoolsId.ArcaneExplosionNormal },
         { "Hit 17 nova violet", PoolsId.Hit17novaviolet },
         { "Hit 20 pink arrow", PoolsId.Hit20pinkarrow },
         { "Flash 19 circle bomb", PoolsId.Flash19circlebomb },
@@ -377,6 +380,7 @@ public static class AddressableNames
         {"HitExplosionParticle",PoolsId.HitExplosionParticle},
         {"HitHealParticle",PoolsId.HitHealParticle},
         {"Zone", PoolsId.Zone },
+        {"EnemyHpCanvas",PoolsId.EnemyHpUI}
 
     };
 
