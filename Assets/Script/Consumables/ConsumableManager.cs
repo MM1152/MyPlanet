@@ -13,6 +13,7 @@ public class ConsumableManager : MonoBehaviour
 
     private ConsumableFactory consumableFactory = new ConsumableFactory();
     private List<ConsumalbeTable.Data> useAbleConsumList;
+    private const int maxConsumableCount = 2;
 
     private bool init = false;
     private void Init()
