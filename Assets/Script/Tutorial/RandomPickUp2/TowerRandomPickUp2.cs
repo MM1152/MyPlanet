@@ -39,7 +39,7 @@ public class TowerRandomPickUp2 : Tutorial
         {
             isFirstUpdate = true;
             var clip = GetCombineClip(2, 9, 2, 10);
-            SetTextWithAnimation(msgs[1], backGroundRayCastAble : false).Forget();
+            SetTextWithAnimation(msgs[1], clip : clip, backGroundRayCastAble : false).Forget();
         }
         else if (isFirstUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {

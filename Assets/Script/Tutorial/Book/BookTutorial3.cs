@@ -23,7 +23,7 @@ public class BookTutorial3 : Tutorial
             
         manager.SetTutorialBackGround(true);
         var clip = GetClip(2,15);
-        SetTextWithAnimation(msg , backGroundRayCastAble : false).Forget();
+        SetTextWithAnimation(msg , clip : clip , backGroundRayCastAble : false).Forget();
     }
 
     public override void TutorialExit()
