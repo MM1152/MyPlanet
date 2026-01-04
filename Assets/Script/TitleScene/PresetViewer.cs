@@ -5,7 +5,9 @@ using System;
 using TMPro;
 
 public class PresetViewer : MonoBehaviour
-{
+{ 
+    [SerializeField] private TextMeshProUGUI presetNameText;
+    public string PresetName => presetNameText.text;
     [SerializeField] private TowerInfomation towerInfomation;
     [SerializeField] private Transform towerInfomationRoot;
     [SerializeField] private Button editButton;
@@ -18,6 +20,7 @@ public class PresetViewer : MonoBehaviour
     private List<TowerInfomation> towerInfos = new List<TowerInfomation>();
     private PresetData.Data presetData;
     public PresetData.Data PresetData => presetData;
+    // public string PresetName => presetData.PresetName;
     private Action<int> OnChangeIndex;
     private int index;
     
@@ -53,7 +56,7 @@ public class PresetViewer : MonoBehaviour
     public void UpdatePreset(PresetData.Data presetData)
     {
         this.presetData = presetData;
-
+        
         // 기존 타워 정보들을 안전하게 제거
         for(int i = 0; i < towerInfos.Count; i++)
         {
@@ -81,6 +84,7 @@ public class PresetViewer : MonoBehaviour
             towerInfo.Init(presetData.TowerId[i]);
             towerInfos.Add(towerInfo);
         }
+        presetNameText.text = $"프리셋 {index + 1}";
     }
 
     public void UpdateSelectButton(bool active)

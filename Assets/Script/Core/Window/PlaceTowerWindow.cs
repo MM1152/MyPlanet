@@ -112,13 +112,19 @@ public class PlaceTowerWindow : Window
                     int towerIdx = 0;
                     do
                     {
+                        if( towerIdx >= allTowers.Count) break;
+
                         levelUpData = DataTableManager.LevelUpTable.Get(allTowers[towerIdx].TowerData.ID, allTowers[towerIdx].Level + 1);
                         if(levelUpData != null)
                         {
                             selectTowerUIs[uiIdx++].SetTowerData(allTowers[towerIdx]);
                             allTowers.RemoveAt(towerIdx);
                         }
-                        towerIdx++;
+                        else
+                        {
+                            towerIdx++;
+                        }
+            
                     } while (levelUpData == null && towerIdx < allTowers.Count);
 
                     if(levelUpData == null)

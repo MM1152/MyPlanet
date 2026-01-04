@@ -16,7 +16,7 @@ public class TitlePresetWindow : Window
     public Button GameStartButton => gameStartButton;
 
     private List<PresetViewer> presetViewers = new List<PresetViewer>();
-    private int currentSelectPresetIndex = -1;
+    private int currentSelectPresetIndex = 0;
 
     public override void Init(WindowManager manager)
     {
@@ -48,11 +48,11 @@ public class TitlePresetWindow : Window
             {
                 return;
             }
-
+            var presetName = presetViewers[currentSelectPresetIndex].PresetName;    
             LoadingScene.sceneId = SceneIds.GameScene;
             FirebaseManager.Instance.PresetData.SetGameData(presetData);
             var popup = popupManger.Open<PlayGamePopup>(PopupIds.PlayGamePopup);
-            popup.UpdatePresetData(FirebaseManager.Instance.PresetData.GetGameData());
+            popup.UpdatePresetData(FirebaseManager.Instance.PresetData.GetGameData(), presetName);
         });
     }
 
@@ -146,6 +146,7 @@ public class TitlePresetWindow : Window
             presetViewers.Add(presetViewer);
             presetViewer.CurrentWindowId = (WindowIds)windowId;
         }
+        presetViewers[currentSelectPresetIndex].UpdateSelectButton(true);
     }
 
     private void ChangePresetData(int index)

@@ -28,7 +28,7 @@ public class RandomPickUpLayout : MonoBehaviour
     {
         this.randomPickList = randomPickList;
         sortedPickList = randomPickList;
-        sortedPickList.Sort((a, b) => b.probability.CompareTo(a.probability));
+        sortedPickList.Sort((a, b) => a.probability.CompareTo(b.probability));
         isPlanetPickUp = randomPickList[0].IsPlanetReward;
 
         probabiltyButton.onClick.AddListener(OnClickProbabilityButton);
@@ -45,14 +45,14 @@ public class RandomPickUpLayout : MonoBehaviour
     public void OnClickPickOneButton()
     {
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
-        popup.SetTexts("»Ì±â¸¦ ÁøÇàÇÏ½Ã°Ú½À´Ï±î?" , $"{titleText.text} »Ì±â¸¦ ÁøÇàÇÕ´Ï´Ù.\n100´ÙÀÌ¾Æ°¡ ¼Ò¸ðµË´Ï´Ù." , "Ãë¼Ò" , "»Ì±â");
+        popup.SetTexts("ë½‘ê¸°ë¥¼ ì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", $"{titleText.text} ë½‘ê¸°ë¥¼ ì§„í–‰í•©ë‹ˆë‹¤.\n100ë‹¤ì´ì•„ê°€ ì†Œëª¨ë©ë‹ˆë‹¤.", "ì·¨ì†Œ", "í™•ì¸");
         popup.SetButtonAction(() => OnClickBlueButton(1).Forget(), OnClickRedButton);
     }
 
     public void OnClickPickTenButton()
     {
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
-        popup.SetTexts("»Ì±â¸¦ ÁøÇàÇÏ½Ã°Ú½À´Ï±î?", $"{titleText.text} »Ì±â¸¦ ÁøÇàÇÕ´Ï´Ù.\n1000´ÙÀÌ¾Æ°¡ ¼Ò¸ðµË´Ï´Ù.", "Ãë¼Ò", "»Ì±â");
+        popup.SetTexts("ë½‘ê¸°ë¥¼ ì§„í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?", $"{titleText.text} ë½‘ê¸°ë¥¼ ì§„í–‰í•©ë‹ˆë‹¤.\n1000ë‹¤ì´ì•„ê°€ ì†Œëª¨ë©ë‹ˆë‹¤.", "ì·¨ì†Œ", "í™•ì¸");
         popup.SetButtonAction(() => OnClickBlueButton(10).Forget(), OnClickRedButton);
     }
 
@@ -118,21 +118,21 @@ public class RandomPickUpLayout : MonoBehaviour
         var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(data.connection_id);
         if(data.reward_type == 1)
         {
-            //¿ÏÁ¦
+            //ï¿½ï¿½ï¿½ï¿½
             if(userPlanetData.unlocked)
             {
-                // ÇØ±Ý µÇ¾îÀÖ´Â »óÅÂ
+                // ï¿½Ø±ï¿½ ï¿½Ç¾ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½
                 return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, 10) , false, (true , 10f));
             }
             else
             {
-                // ÇØ±Ý ¾ÈµÇ¾îÀÖ´Â »óÅÂ
+                // ï¿½Ø±ï¿½ ï¿½ÈµÇ¾ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½
                 return (FirebaseManager.Instance.PlanetData.UnlockPlanetAsync(userPlanetData.id) , true, (false , 0f));
             }
         }
         else
         {
-            //Á¶°¢
+            //ï¿½ï¿½ï¿½ï¿½
             return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, data.amount ?? 0) , false, (true , data.amount ?? 0));
         }
     }
@@ -143,19 +143,19 @@ public class RandomPickUpLayout : MonoBehaviour
         var randomOptionTable = DataTableManager.TowerRandomOptionValueTable;
         var randomOptionData = randomOptionTable.GetOptionData(userTowerData.TowerId);
         var randomOptionValue = randomOptionTable.GetRandomOptionValue(userTowerData.TowerId , userTowerData.grade);
-        // 1. ÇöÀç À¯Àú°¡ °¡Áö°í ÀÖ´Â Å¸¿ö¸¦ »ÌÀ» ½Ã RandomOption °ª ºñ±³
-        // 2. ´õ ³ôÀ¸¸é ±³Ã¼, ¾Æ´Ï¶ó¸é Á¶°¢À¸·Î ±³Ã¼
-        // 3. Ã³À½¾ò´Â Å¸¿ö¶ó¸é ±×³É ¹Ú¾Æ³õ±â
+        // 1. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ RandomOption ï¿½ï¿½ ï¿½ï¿½
+        // 2. ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼, ï¿½Æ´Ï¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
+        // 3. Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½Ú¾Æ³ï¿½ï¿½ï¿½
 
         if (userTowerData.Unlock)
         {
-            // ´õ ³ôÀº°ª »Ì¾Æ¼­ ±³Ã¼
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¾Æ¼ï¿½ ï¿½ï¿½Ã¼
             if(userTowerData.OptionValue < randomOptionValue.percent)
             {
                 var prevOptionValue = userTowerData.OptionValue;
                 return (FirebaseManager.Instance.TowerData.UpdateOptionValueAsync(userTowerData,randomOptionValue.percent), false, (true, prevOptionValue));
             }
-            // ´õ ³·Àº°ª »Ì¾Æ¼­ Á¶°¢À¸·Î ±³Ã¼
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
             else
             {
                 var duplicationPiece = DataTableManager.TowerDuplicationRewardTable.GetDuplicationPartCount(userTowerData.TowerId, randomOptionData.GetGradeToId(userTowerData.grade), randomOptionValue.LMH);
@@ -164,7 +164,7 @@ public class RandomPickUpLayout : MonoBehaviour
         }
         else
         {
-            // Ã³À½ ¾òÀº Å¸¿ö
+            // Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½
             return (FirebaseManager.Instance.TowerData.UnlockAsync(userTowerData, randomOptionValue.percent), true, (false, 0f));
         }
     }

@@ -73,8 +73,6 @@ public class WaveManager : MonoBehaviour
     private GameObject warringWindow;
     [SerializeField]
     private TextMeshProUGUI warringText;
-    [SerializeField]
-    private float bgmSound = .3f;
 
     [SerializeField]
     private WaveWindow waveWindow;
@@ -115,13 +113,13 @@ public class WaveManager : MonoBehaviour
         if (stageId == 1)
         {
             currnetBgm = AudiosId.Universe_Music;
-            Managers.SoundManager.PlayBGM(currnetBgm,bgmSound);
+            Managers.SoundManager.PlayBGM(currnetBgm);
 
         }
         else
         {
             currnetBgm = AudiosId.Simple_Acoustics;
-            Managers.SoundManager.PlayBGM(currnetBgm,bgmSound);
+            Managers.SoundManager.PlayBGM(currnetBgm);
         }
         waveWindow.SetWaveBackgroundImage(DataTableManager.StageInfomationTable.Get(stageId).StageImage);
     }
@@ -405,7 +403,7 @@ public class WaveManager : MonoBehaviour
 
         if (enemyType == EnemyType.Boss && !isBossKilled)
         {
-            Managers.SoundManager.PlayBGM(AudiosId.Battle_Music,bgmSound);
+            Managers.SoundManager.PlayBGM(AudiosId.Battle_Music);
         }
     }
 

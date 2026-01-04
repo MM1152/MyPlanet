@@ -22,12 +22,16 @@ public class TitleMainWindow : Window
     [Header("References")]
     [SerializeField] private TutorialManager tutorialManager;
     [SerializeField] private PopupManager popupManager;
+    [SerializeField] private Image backgroundImage;
 
     public Button SelectStageButton => selectStageButton;
     public Button GachaButton => randomPickUpButton;
 
     public override void Close()
     {
+       var color = backgroundImage.color;
+        color.a = 1f;
+        backgroundImage.color = color;
         base.Close();
     }
 
@@ -54,7 +58,7 @@ public class TitleMainWindow : Window
             LoadingScene.sceneId = SceneIds.DebugModeScene;
             SceneManager.LoadScene(SceneIds.LoadingScene);
         });
-        debugModeSceneButton.gameObject.SetActive(true);
+        // debugModeSceneButton.gameObject.SetActive(true);
 #endif
         bookOpenButton.onClick.AddListener(() =>
         {
@@ -65,6 +69,9 @@ public class TitleMainWindow : Window
     public override void Open()
     {
         base.Open();
+        var color = backgroundImage.color;
+        color.a = 0f;
+        backgroundImage.color = color;
         if (FirebaseManager.Instance.UserData.isClearStage1Tutorial)
         {
             if (!FirebaseManager.Instance.UserData.isClearRandomPickUpTutorial)
