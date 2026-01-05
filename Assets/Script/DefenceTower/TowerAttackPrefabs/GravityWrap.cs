@@ -79,6 +79,8 @@ public class GravityWrap : BaseAttackPrefab
 
     public override void OnTriggerEnter2D(Collider2D collision)
     {
+        if(string.IsNullOrEmpty(targetTag)) return;
+        
         if(collision.CompareTag(targetTag))
         {
             var enemy = collision.GetComponent<Enemy>();

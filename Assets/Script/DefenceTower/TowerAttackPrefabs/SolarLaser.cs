@@ -87,15 +87,34 @@ public class SolarLaser : BaseAttackPrefab
 
         if (collision.CompareTag(TagIds.EnemyTag))
         {
-            var find = collision.GetComponent<IDamageAble>();
-  
-            var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
-            Managers.SoundManager.PlaySFX(AudiosId.Flash_14);
-            find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
-            basePlanet.PassiveSystem.CheckUseAblePassive(tower, null, collision.GetComponent<Enemy>());
+            var enemy = collision.GetComponent<Enemy>();
+            if (enemy == null && collision.attachedRigidbody != null)
+            {
+                enemy = collision.attachedRigidbody.GetComponentInParent<Enemy>();
+            }
+            if (enemy == null) return;
 
-            var hitParticle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.SolarLaserHitEffect);
-            hitParticle.transform.position = collision.ClosestPoint(transform.position);
+            var barrier = enemy.GetComponentInChildren<Barrier>();
+            if (barrier != null && !barrier.IsDead)
+            {
+                var percent = tower.TypeEffectiveness.GetDamagePercent(barrier.ElementType);
+                Managers.SoundManager.PlaySFX(AudiosId.Flash_14);
+                barrier.OnDamage((int)(tower.CalcurateAttackDamage * percent));
+                var hitParticle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.SolarLaserHitEffect);
+                hitParticle.transform.position = collision.ClosestPoint(transform.position);
+                return;
+            }
+
+            var find = enemy.GetComponent<IDamageAble>();
+            if (find == null) return;
+  
+            var damagePercent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
+            Managers.SoundManager.PlaySFX(AudiosId.Flash_14);
+            find.OnDamage((int)(tower.CalcurateAttackDamage * damagePercent));
+            basePlanet.PassiveSystem.CheckUseAblePassive(tower, null, enemy);
+
+            var hitParticle2 = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.SolarLaserHitEffect);
+            hitParticle2.transform.position = collision.ClosestPoint(transform.position);
         }
        
     }

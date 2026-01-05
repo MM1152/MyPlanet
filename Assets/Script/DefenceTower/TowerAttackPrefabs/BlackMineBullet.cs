@@ -46,26 +46,35 @@ public class BlackMineBullet : Bullet
         {
             if(attackTimer >= attackInterval)
             {
-                var find = collision.GetComponent<IDamageAble>();
+                var enemy = collision.GetComponent<Enemy>();
+                if (enemy == null && collision.attachedRigidbody != null)
+                {
+                    enemy = collision.attachedRigidbody.GetComponentInParent<Enemy>();
+                }
+                if (enemy == null) return;
+
+                var barrier = enemy.GetComponentInChildren<Barrier>();
+                if (barrier != null && !barrier.IsDead)
+                {
+                    var percent = tower.TypeEffectiveness.GetDamagePercent(barrier.ElementType);
+                    barrier.OnDamage((int)(tower.CalcurateAttackDamage * percent));
+                    Managers.SoundManager.PlaySFX(hitSoundId);
+                    return;
+                }
+
+                var find = enemy.GetComponent<IDamageAble>();
                 if(find != null)
                 {
-                    var enemy = collision?.GetComponent<Enemy>();
-              
                     var percent = tower.TypeEffectiveness.GetDamagePercent(find.ElementType);
                     find.OnDamage((int)(tower.CalcurateAttackDamage * percent));
                     Managers.SoundManager.PlaySFX(hitSoundId);
 
-                    if(enemy == null) return;
-                   
                     if (enemy.enemyType == EnemyType.EliteMonster || enemy.enemyType == EnemyType.Boss)
                         return;
 
-
                     var dir = (transform.position - collision.transform.position).normalized;
                     collision.transform.position += dir * gravityScale * Time.deltaTime;
-
                 }
-               
             }
         }
     }

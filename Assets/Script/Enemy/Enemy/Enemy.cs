@@ -356,6 +356,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
 
         enemyHpUI?.Release();
+        enemyHpUI = null;
         OnBarrierRefill = null;
         OnDie?.Invoke(this);
         OnDie = null;

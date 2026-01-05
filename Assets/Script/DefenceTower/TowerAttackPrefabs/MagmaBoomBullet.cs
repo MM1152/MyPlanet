@@ -52,7 +52,7 @@ public class MagmaBoomBullet : ProjectTile
         float splitAngle = 360f / spawnFragmentCount;
         var flash = Managers.ObjectPoolManager.SpawnObject<HitParticle>(PoolsId.Flash23cube1);
         flash.transform.position = transform.position;
-
+        Managers.SoundManager.PlaySFX(AudiosId.Hit_7);
         for (int i = 0; i < spawnFragmentCount; i++)
         {
             FragmentBullet fragmentObj = Managers.ObjectPoolManager.SpawnObject<MagmaBoomFregment>(PoolsId.MagmaBoomFregment);

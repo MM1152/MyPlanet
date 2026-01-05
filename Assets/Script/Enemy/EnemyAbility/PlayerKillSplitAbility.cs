@@ -38,6 +38,8 @@ public class PlayerKillSplitAbility : BaseAbility
 
     private void RemoveBonus()
     {
+        if (zoneSearch == null) return;
+
         foreach (var targetEnemy in zoneSearch.enemiesInZone)
         {
             if (targetEnemy == null || targetEnemy.IsDead) continue;

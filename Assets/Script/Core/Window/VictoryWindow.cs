@@ -191,8 +191,8 @@ public class VictoryWindow : Window
             goldLayout.SetActive(true);
             expLayout.SetActive(true);
             diamondLayout.SetActive(true);
-            goldText.text = $"+ {rewardData.CLEAR_REWARD1_COUNT*Terraforming.terraformingGoldGainBonus}";
-            expText.text = $"+ {rewardData.CLEAR_REWARD2_COUNT*Terraforming.terraformingExpGainBonus}";
+            goldText.text = $"+ {(int)(rewardData.CLEAR_REWARD1_COUNT*Terraforming.terraformingGoldGainBonus)}";
+            expText.text = $"+ {(int)(rewardData.CLEAR_REWARD2_COUNT*Terraforming.terraformingExpGainBonus)}";
             diamondText.text = $"+ {rewardData.CLEAR_REWARD3_COUNT}";
 Debug.Log($"골드보상 전{rewardData.CLEAR_REWARD1_COUNT} / 보너스 {Terraforming.terraformingGoldGainBonus} / 최종 {(int)(rewardData.CLEAR_REWARD1_COUNT * Terraforming.terraformingGoldGainBonus)}");
 Debug.Log($"경험치보상 전{rewardData.CLEAR_REWARD2_COUNT} / 보너스 {Terraforming.terraformingExpGainBonus} / 최종 {(int)(rewardData.CLEAR_REWARD2_COUNT * Terraforming.terraformingExpGainBonus)}");

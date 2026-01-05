@@ -31,8 +31,34 @@ public class FragmentBullet : ProjectTile
 
     protected override void HitTarget(Collider2D collision)
     {
-        var find = collision.GetComponent<IDamageAble>();
+        var enemy = collision.GetComponent<Enemy>();
+        if (enemy == null && collision.attachedRigidbody != null)
+        {
+            enemy = collision.attachedRigidbody.GetComponentInParent<Enemy>();
+        }
+        if (enemy == null) return;
+
+        var barrier = enemy.GetComponentInChildren<Barrier>();
+        if (barrier != null && !barrier.IsDead)
+        {
+            var percent = tower.TypeEffectiveness.GetDamagePercent(barrier.ElementType);
+            barrier.OnDamage((int)(tower.CalcurateAttackDamage * percent));
+            
+            if(gameObject.activeSelf)
+            {
+                Managers.ObjectPoolManager.Despawn(poolsId, this.gameObject);
+                if(particleId != PoolsId.None)
+                {
+                    var hitParticle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(particleId);
+                    hitParticle.transform.position = collision.ClosestPoint(transform.position);
+                }
+            }
+            return;
+        }
+
+        var find = enemy.GetComponent<IDamageAble>();
         if (find != null && find.IsDead) return;
+        
         base.HitTarget(collision);
         if(gameObject.activeSelf)
         {
