@@ -125,7 +125,7 @@ public class LoadingScene : MonoBehaviour
 
         loadingText.text = "Game Start";
 
-        await UniTask.WaitUntil(() => Managers.TouchManager.TouchType == TouchTypes.Tab);
+        // await UniTask.WaitUntil(() => Managers.TouchManager.TouchType == TouchTypes.Tab);
         await Addressables.LoadSceneAsync(sceneId).ToUniTask();
     }
 

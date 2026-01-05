@@ -29,6 +29,7 @@ public class LevelUpTab : MonoBehaviour
 
     private PlanetTable.Data planetData;
     private PlanetData.Data planetUserData;
+    [SerializeField] private PopupManager popupManager;
 
     private void Awake()
     {
@@ -38,9 +39,9 @@ public class LevelUpTab : MonoBehaviour
 
     public void UpdateData(PlanetTable.Data planetData)
     {
-        FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetStarCountPathFormating , planetData.ID), OnValueChangedStarCount);
+        FirebaseManager.Instance.Database.RemoveListner(string.Format(DataBasePaths.PlanetStarCountPathFormating, planetData.ID), OnValueChangedStarCount);
         this.planetData = planetData;
-        FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetStarCountPathFormating , planetData.ID), OnValueChangedStarCount);
+        FirebaseManager.Instance.Database.AddListner(string.Format(DataBasePaths.PlanetStarCountPathFormating, planetData.ID), OnValueChangedStarCount);
 
         levelUpButton.interactable = true;
         planetUserData = FirebaseManager.Instance.PlanetData.GetOrigin(planetData.ID);
@@ -54,9 +55,9 @@ public class LevelUpTab : MonoBehaviour
     public void UpdateText()
     {
         if (!planetUserData.UseAble) return;
-        var upgradeData  = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID , planetUserData.level + 1);
-        var prevData  = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID , planetUserData.level);
-        if(upgradeData != null)
+        var upgradeData = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID, planetUserData.level + 1);
+        var prevData = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID, planetUserData.level);
+        if (upgradeData != null)
         {
             hpText.text = prevData.HP.ToString("N0") + " >> " + upgradeData.HP.ToString("N0");
             atkText.text = prevData.ATK.ToString("N0") + " >> " + upgradeData.ATK.ToString("N0");
@@ -83,8 +84,8 @@ public class LevelUpTab : MonoBehaviour
         var goldResult = await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.Database.GetDataToValue(goldPath));
         var expResult = await Managers.Instance.WaitForLoadingAsync(FirebaseManager.Instance.Database.GetDataToValue(expPath));
 
-        var needGold = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID , planetUserData.level + 1).Gold;
-        var needExp = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID , planetUserData.level + 1).Exp;
+        var needGold = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID, planetUserData.level + 1).Gold;
+        var needExp = DataTableManager.PlanetLevelUpTable.GetData(planetData.ID, planetUserData.level + 1).Exp;
 
         var gold = int.Parse(goldResult.Item1.ToString());
         var exp = int.Parse(expResult.Item1.ToString());
@@ -100,11 +101,20 @@ public class LevelUpTab : MonoBehaviour
 
             UpdateText();
         }
+        else
+        {
+            var popup = popupManager?.Open<TextPopup>(PopupIds.TextPopup);
+            if(popup != null)
+            {
+                popup.SetTexts("레벨업 실패!", " 재료가 부족합니다. ", "취소", "확인");
+                popup.SetButtonAction(() => popupManager.ForceClose(), () => popupManager.ForceClose());
+            }
+        }
     }
 
     private void ResetStar()
     {
-        for(int i = 0; i < starImages.Length; i++)
+        for (int i = 0; i < starImages.Length; i++)
         {
             starImages[i].sprite = disableStar;
         }
@@ -114,13 +124,13 @@ public class LevelUpTab : MonoBehaviour
     {
         ResetStar();
 
-        for(int i = 0; i < starCount; i++)
+        for (int i = 0; i < starCount; i++)
         {
             starImages[i].sprite = enableStar;
         }
     }
 
-    private void OnValueChangedStarCount(object sender , ValueChangedEventArgs args)
+    private void OnValueChangedStarCount(object sender, ValueChangedEventArgs args)
     {
         var starCount = int.Parse(args.Snapshot.Value.ToString());
         UpdateStar(starCount);

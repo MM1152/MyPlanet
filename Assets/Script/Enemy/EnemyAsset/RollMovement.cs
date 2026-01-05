@@ -6,6 +6,6 @@ public class RollMovement : EnemyAssetMove
     public override void Move()
     {
         float angle = speed * Time.deltaTime;
-        enemyAsset.transform.localRotation *= Quaternion.AngleAxis(-angle, Vector3.right);
+        enemyAsset.transform.localRotation *= Quaternion.AngleAxis(-angle, Vector3.forward);
     }
 }

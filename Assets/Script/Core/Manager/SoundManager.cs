@@ -15,6 +15,15 @@ public class SoundManager : MonoBehaviour
     private AudiosId currentSfxId = AudiosId.None;
     public AudiosId CurrentBgmId => currentBgmId;  
 
+    public float GetClipLength(AudiosId id)
+    {
+        if (audioClips.TryGetValue(id, out AudioClip clip))
+        {
+            return clip.length;
+        }
+        return 0f;
+    }
+
     public async UniTask Init()
     {
         var assets = await Addressables.LoadAssetsAsync<AudioClip>(AddressableLabelIds.AudiosIds);

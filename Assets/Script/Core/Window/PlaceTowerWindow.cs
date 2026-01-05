@@ -55,6 +55,12 @@ public class PlaceTowerWindow : Window
         {
             towerManager.PlaceTower(towerData);
 
+            var inGameWindow = manager.GetWindow(WindowIds.InGamePlaceTowerWindow) as InGamePlaceTowerWindow;
+            if (inGameWindow != null)
+            {
+                inGameWindow.UpdateTowerActivationState();
+            }
+
             if (!isStartTutorial && FirebaseManager.Instance.PresetData.GetGameData().stageId == 2 && !FirebaseManager.Instance.UserData.isClearStage2Tutorial)
             {
                 isStartTutorial = true;

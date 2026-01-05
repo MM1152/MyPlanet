@@ -58,6 +58,7 @@ public class TitleBookWindow : Window
     public List<PlanetInfomation> PlanetInfomationList => planetInfomationList;
     public Button PresetTabButton => presetButton;
     public Button TowerTablButton => towerButton;
+    [SerializeField] private Dropdown presetDropdown;
 
     public override void Init(WindowManager manager)
     {
@@ -199,7 +200,7 @@ public class TitleBookWindow : Window
 
     private void UpdatePreset()
     {
-        // ±âÁ¸ ÇÁ¸®¼Â ºä¾îµéÀ» ¾ÈÀüÇÏ°Ô Á¦°Å
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½
         for (int i = 0; i < presetViewers.Count; i++)
         {
             if (presetViewers[i] != null && presetViewers[i].gameObject != null)
@@ -222,7 +223,7 @@ public class TitleBookWindow : Window
     {
         Debug.Log("Preset ChangeData Call");
         
-        // ÀÎµ¦½º À¯È¿¼º ¹× null Ã¼Å©
+        // ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ ï¿½ï¿½ null Ã¼Å©
         if (index >= 0 && index < presetViewers.Count && presetViewers[index] != null)
         {
             var presetData = FirebaseManager.Instance.PresetData.Get(index);
@@ -241,7 +242,7 @@ public class TitleBookWindow : Window
             FirebaseManager.Instance.PresetData.OnChangePresetData -= ChangePresetData;
         }
         
-        // ³²¾ÆÀÖ´Â Á¤º¸ ¿ÀºêÁ§Æ®µé Á¤¸®
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         foreach (var planetInfo in planetInfomationList)
         {
             if (planetInfo != null && planetInfo.gameObject != null)
