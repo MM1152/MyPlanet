@@ -6,7 +6,7 @@ public enum SpeedType
 {
     OneSpeed = 1,
     TwoSpeed = 2,
-    ThreeSpeed = 3
+    // ThreeSpeed = 3
 }
 public class GameSpeed : MonoBehaviour
 {
@@ -26,12 +26,12 @@ public class GameSpeed : MonoBehaviour
                 }
                 else if(currentSpeed == SpeedType.TwoSpeed)
                 {
-                    SetGameSpeed(SpeedType.ThreeSpeed);
-                }
-                else if(currentSpeed == SpeedType.ThreeSpeed)
-                {
                     SetGameSpeed(SpeedType.OneSpeed);
                 }
+                // else if(currentSpeed == SpeedType.ThreeSpeed)
+                // {
+                //     SetGameSpeed(SpeedType.OneSpeed);
+                // }
             });
 
         SetGameSpeed(currentSpeed);

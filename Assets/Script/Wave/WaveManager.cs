@@ -257,6 +257,10 @@ public class WaveManager : MonoBehaviour
         if (!isFinalWaveEnded)
         {
             waveElapsedTime += Time.deltaTime;
+            if (waveElapsedTime > waveDuration)
+            {
+                waveElapsedTime = waveDuration;
+            }
             waveWindow.SetWaveTimerText(waveDuration - waveElapsedTime);
         }
         else

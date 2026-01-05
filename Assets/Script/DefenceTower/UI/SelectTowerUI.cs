@@ -144,7 +144,7 @@ public class SelectTowerUI : MonoBehaviour
         {
             if (diff < 0)
             {
-                upgradeList.Add($"[{effectName}] -{Mathf.Abs(diff):F0}");
+                upgradeList.Add($"[{effectName}] -{Mathf.Abs(diff):F1}");
             }
         }
         else if (diff > 0)
