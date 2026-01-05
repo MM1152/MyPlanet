@@ -87,6 +87,7 @@ public class TitleSelectPlanetWindow : Window
 
         presetData.PlanetId = planetData.ID;
 
+        Managers.SoundManager.PlaySFX(AudiosId.ui_button_simple_click_07);
         UpdateDescription(planetData);
     }
 

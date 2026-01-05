@@ -238,7 +238,7 @@ public class TitleTowerPlaceEditWindow : Window
         showIndexPanels[placeHolds[idx].TowerData.ID].UpdatePlace(-1);
         placeHolds[idx].PlaceTower(null);
         FindOptionApplyTower(null);
-        Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_page_03);
+        Managers.SoundManager.PlaySFX(AudiosId.ui_button_simple_click_07);
         ResetUpgradeLayout();
         UpdateUpgradeLayout();
         UpdateStatTexts();
@@ -260,7 +260,7 @@ public class TitleTowerPlaceEditWindow : Window
             showIndexPanels[data.ID].UpdatePlace(selectIndex + 1);
             FindOptionApplyTower(data);
         }
-        Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_page_03);
+        Managers.SoundManager.PlaySFX(AudiosId.ui_button_simple_click_07);
         UpdateStatTexts();
     }
     //6.6 , 283.3

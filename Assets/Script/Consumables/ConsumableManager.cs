@@ -90,6 +90,10 @@ public class ConsumableManager : MonoBehaviour
 
     public void SetConsumable(ConsumalbeTable.Data data)
     {
+        if (System.Enum.TryParse<AudiosId>(data.Sound, out var soundId))
+        {
+            Managers.SoundManager.PlaySFX(soundId);
+        }
         var con = activeConsumables.Find(x => x.itemId == data.Item_id);
         if (con != null)
         {

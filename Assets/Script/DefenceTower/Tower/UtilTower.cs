@@ -9,7 +9,7 @@ public class UtilTower : Tower
     protected Transform defenseTower;
     private float FullCoolTime => utiltowerData?.Duration ?? 0 + BonusDuration + BonusCoolTime;
     public float FullDuration => utiltowerData.Duration + BonusDuration;
-    private float timer = 0f;
+    protected float timer = 0f;
     
     public override void Init(GameObject tower, TowerManager manager, TowerTable.Data data, int slotIndex)
     {

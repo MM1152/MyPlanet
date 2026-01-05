@@ -88,6 +88,7 @@ public class SideBarPopup : Popup
         manager.ForceClose();
         var popup = manager.Open<TextPopup>(PopupIds.TextPopup);
         popup.SetTexts("게임 종료", "정말로 게임을 종료하시겠습니까?", "게임종료", "돌아가기");
-        popup.SetButtonAction(() => Application.Quit(), () => manager.ForceClose());
+        popup.SetButtonAction(() => popup.Close(),() => Application.Quit());
+        popup.SetButtonAudio(AudiosId.ui_button_simple_click_05, AudiosId.ui_button_simple_click_05);
     }
 }

@@ -47,6 +47,7 @@ public class RandomPickUpLayout : MonoBehaviour
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
         popup.SetTexts("뽑기를 진행하시겠습니까?", $"{titleText.text} 뽑기를 진행합니다.\n100다이아가 소모됩니다.", "취소", "확인");
         popup.SetButtonAction(() => OnClickBlueButton(1).Forget(), OnClickRedButton);
+        popup.SetButtonAudio(AudiosId.ui_menu_button_beep_17, AudiosId.ui_button_simple_click_05);
     }
 
     public void OnClickPickTenButton()
@@ -54,6 +55,7 @@ public class RandomPickUpLayout : MonoBehaviour
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
         popup.SetTexts("뽑기를 진행하시겠습니까?", $"{titleText.text} 뽑기를 진행합니다.\n1000다이아가 소모됩니다.", "취소", "확인");
         popup.SetButtonAction(() => OnClickBlueButton(10).Forget(), OnClickRedButton);
+        popup.SetButtonAudio(AudiosId.ui_menu_button_beep_17, AudiosId.ui_button_simple_click_05);
     }
 
     private async UniTaskVoid OnClickBlueButton(int count)
@@ -64,7 +66,8 @@ public class RandomPickUpLayout : MonoBehaviour
         {
             var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
             popup.SetTexts("뽑기 실패!", "다이아가 부족합니다.", "취소", "확인");
-            popup.SetButtonAction(() => popupManager.ForceClose(),() => popupManager.ForceClose());
+            popup.SetButtonAction(() => popupManager.ForceClose(), () => popupManager.ForceClose());
+            popup.SetButtonAudio(AudiosId.ui_button_simple_click_05, AudiosId.ui_button_simple_click_05);
             return;
         }
 

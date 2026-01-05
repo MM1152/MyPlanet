@@ -81,7 +81,7 @@ public class TitleBookWindow : Window
 
         towerButton.onClick.AddListener(() => OnClickBookButton(towerBook, towerButtonBackGround));
         planetButton.onClick.AddListener(() => OnClickBookButton(planetBook, planetButtonBackGround));
-        presetButton.onClick.AddListener(() => OnClickBookButton(presetBook , presetButtonBackGround));
+        presetButton.onClick.AddListener(() => OnClickBookButton(presetBook, presetButtonBackGround));
 
         userNameText.text = FirebaseManager.Instance.Auth.UserDisplayName;
         userIconImage.sprite = FirebaseManager.Instance.Auth.UserIconSprite;
@@ -105,9 +105,9 @@ public class TitleBookWindow : Window
         currentBackGround = planetButtonBackGround;
     }
 
-    private void OnClickBookButton(GameObject targetBook , GameObject targetBackGround)
+    private void OnClickBookButton(GameObject targetBook, GameObject targetBackGround)
     {
-        if(currentOpenBook != null)
+        if (currentOpenBook != null)
         {
             currentOpenBook.SetActive(false);
             currentBackGround.SetActive(false);
@@ -118,7 +118,7 @@ public class TitleBookWindow : Window
         currentOpenBook.SetActive(true);
         currentBackGround.SetActive(true);
     }
-    
+
 
     public override void Open()
     {
@@ -134,7 +134,7 @@ public class TitleBookWindow : Window
 
     public override void Close()
     {
-        if(currentOpenBook != null)
+        if (currentOpenBook != null)
         {
             currentOpenBook.SetActive(false);
             currentBackGround.SetActive(false);
@@ -145,10 +145,10 @@ public class TitleBookWindow : Window
     private void InitPlanetInfoList()
     {
         var planetDatas = DataTableManager.PlanetTable.GetAllData();
-        
-        for(int i = 0; i < planetDatas.Count; i++)
+
+        for (int i = 0; i < planetDatas.Count; i++)
         {
-            var planetInfo = Instantiate(planetInfomation , planetInfomationRoot);
+            var planetInfo = Instantiate(planetInfomation, planetInfomationRoot);
             planetInfomationList.Add(planetInfo);
             planetInfo.OnClickPlanet += OpenBookInfomationWindow;
             planetInfo.UpdateTexts(planetDatas[i]);
@@ -172,7 +172,7 @@ public class TitleBookWindow : Window
 
             towerInfo.OnTab += OnTabTowerInfomation;
 
-            var path = string.Format(DataBasePaths.TowerUnlockPathFormating , towerDatas[i].ID);
+            var path = string.Format(DataBasePaths.TowerUnlockPathFormating, towerDatas[i].ID);
             FirebaseManager.Instance.Database.AddListner(path, towerInfo.OnUnlockValueChanged);
         }
     }
@@ -222,7 +222,7 @@ public class TitleBookWindow : Window
     private void ChangePresetData(int index)
     {
         Debug.Log("Preset ChangeData Call");
-        
+
         // �ε��� ��ȿ�� �� null üũ
         if (index >= 0 && index < presetViewers.Count && presetViewers[index] != null)
         {
@@ -241,7 +241,7 @@ public class TitleBookWindow : Window
         {
             FirebaseManager.Instance.PresetData.OnChangePresetData -= ChangePresetData;
         }
-        
+
         // �����ִ� ���� ������Ʈ�� ����
         foreach (var planetInfo in planetInfomationList)
         {
@@ -251,7 +251,7 @@ public class TitleBookWindow : Window
             }
         }
         planetInfomationList.Clear();
-        
+
         foreach (var towerInfo in towerInfomationList)
         {
             if (towerInfo != null && towerInfo.gameObject != null)
@@ -260,7 +260,7 @@ public class TitleBookWindow : Window
             }
         }
         towerInfomationList.Clear();
-        
+
         foreach (var presetViewer in presetViewers)
         {
             if (presetViewer != null && presetViewer.gameObject != null)
@@ -271,11 +271,12 @@ public class TitleBookWindow : Window
         presetViewers.Clear();
     }
 
-    private void OpenBookInfomationWindow(PlanetTable.Data planetData , PlanetInfomation planetInfo)
+    private void OpenBookInfomationWindow(PlanetTable.Data planetData, PlanetInfomation planetInfo)
     {
+         Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_page_03);
         var window = manager.Open(WindowIds.TitleBookInfomationWindow);
 
-        if(window is TitleBookInfomationWindow bookInfoWindow)
+        if (window is TitleBookInfomationWindow bookInfoWindow)
         {
             bookInfoWindow.UpdatePlanetData(planetData);
         }
@@ -283,9 +284,10 @@ public class TitleBookWindow : Window
 
     private void OnTabTowerInfomation(TowerTable.Data towerData)
     {
+        Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_page_03);
         var window = windowManager.Open(WindowIds.TowerInfomationWindow);
-        
-        if(window is TowerInfomationWindow tower)
+
+        if (window is TowerInfomationWindow tower)
         {
             tower.SettingTowerData(towerData);
         }
