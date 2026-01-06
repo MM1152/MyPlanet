@@ -513,7 +513,7 @@ public static class DataTableIds
     public static readonly string ClearWaveRewardTable = "ClearWaveRewardTable";
     public static readonly string DailyGiftTable = "DailyGiftTable";
     public static readonly string TowerGradeToPieceCountTable = "TowerGradeToPieceCountTable";
-    public static readonly string BounsSpawnEnemysTable = "BounsSpawnEnemysTable";  
+    public static readonly string BounsSpawnEnemysTable = "BounsSpawnEnemysTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {
@@ -748,6 +748,9 @@ public static class LevelUpEffectDescriptions
         { 14 , "정지 시간" },
         { 15 , "퍼지는 각도" },
         { 16 , "탄환 속도" },
+        { 17, "드론 갯수"},
+        { 18, "드론 HP"},
+        { 19, "드론 타겟팅 확률"}
     };
 
     public static string GetLevelUpEffectDescription(int var)

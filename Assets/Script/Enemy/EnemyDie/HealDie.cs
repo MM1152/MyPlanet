@@ -4,10 +4,11 @@ public class HealDie : RangeCheckDeathHandler
 {
     protected override string[] targets => new string[] { "Enemy" };
 
-    protected  PoolsId particleId => PoolsId.HitHealParticle;
+    protected PoolsId particleId => PoolsId.HitHealParticle;
 
     private int healPercent;
-    
+
+    private bool hasSpawnedParticle = false;
     private int SetHealPercent()
     {
         return enemy.ElementType switch
@@ -24,16 +25,23 @@ public class HealDie : RangeCheckDeathHandler
         {
             find.OnHeal(healPercent);
         }
-           HitParticle();
+
+        if (!hasSpawnedParticle)
+        {
+            hasSpawnedParticle = true;
+            Debug.Log($"죽은 포지션 {diePosition}");
+            HitParticle();
+        }
     }
 
     private void HitParticle()
     {
-        var particle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(particleId);     
+        Debug.Log("호출");
+        var particle = Managers.ObjectPoolManager.SpawnObject<HitParticle>(particleId);
+        particle.transform.localScale = particle.transform.localScale * radius;
         particle.transform.position = diePosition;
-        particle.transform.localScale = particle.transform.localScale * radius;   
         Debug.Log($"Explosion Particle Spawned at {diePosition} with scale {particle.transform.localScale}");
-        Debug.Log($"{particle.transform.position} Heal {healPercent} HP to Enemy" );  
+        Debug.Log($"{particle.transform.position} Heal {healPercent} HP to Enemy");
     }
 }
 
