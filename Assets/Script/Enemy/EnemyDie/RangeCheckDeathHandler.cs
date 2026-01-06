@@ -46,6 +46,8 @@ public abstract class RangeCheckDeathHandler : BaseDie
     {
         diePosition = enemy.transform.position;
         radius = enemy.enemyCollider.radius * SetRadius();
+        Debug.Log($"Enemy Died at 포지션 {diePosition} with 반지름 {radius}");
+        Debug.Log($"적 포지션{enemy.transform.position} Trigger RangeCheckDeathHandler");
 
         RangeCheck();
         base.Die(enemy);

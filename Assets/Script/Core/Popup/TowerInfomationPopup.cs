@@ -49,12 +49,43 @@ public class TowerInfomationPopup : Popup
         towerFireRateText.text = towerData.Fire_Rate.ToString();
         towerRangeText.text = towerData.Attack_Range.ToString();
         towerDescriptionText.text = towerData.Explanatoin;
-        towerOptionText.text = towerData.Buff_Explanation;
+    
+        string optionString = "";
+
+        if(towerData.Option == 2)
+        {
+            optionString = $"양쪽 {towerData.Option_Range}칸";
+        }
+        else if(towerData.Option == 0)
+        {
+            optionString = $"왼쪽 {towerData.Option_Range}칸";
+        }
+        else if(towerData.Option == 1)
+        {
+            optionString = $"오른쪽 {towerData.Option_Range}칸";
+        }
+
+        optionString += RandomOptionData.optionTable[towerData.Option].option.GetOptionStringFormatting() + " " + FirebaseManager.Instance.TowerData.GetOptionValue(towerData.ID) + "%";
+
+        towerOptionText.text = optionString;
             //randomOptionData.GetData(towerData.Option).option.GetOptionStringFormatting();
 
-        towerAttackTypeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.AttackTypeSpriteTable , towerData.ATK_Type);
-        towerTypeImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.TypeSpriteTable , towerData.Type);
-        towerElementImage.sprite = DataTableManager.SpriteTable.Get(DataTableIds.ElementSpriteTable, towerData.attribute);
+        towerAttackTypeImage.sprite = towerData.AttackTypeImage;
+        towerTypeImage.sprite = towerData.TypeImage;
+        towerElementImage.sprite = towerData.ElementImage;
         
+        if(towerData is TowerTable.UtilTower utilsTower)
+        {
+            towerAttackTypeImage.gameObject.SetActive(false);
+            towerElementImage.gameObject.SetActive(false);
+
+            towerAttackType.text = "";
+            towerElementText.text = "";
+        }
+        else
+        {
+            towerAttackTypeImage.gameObject.SetActive(true);
+            towerElementImage.gameObject.SetActive(true);
+        }
     }
 }
