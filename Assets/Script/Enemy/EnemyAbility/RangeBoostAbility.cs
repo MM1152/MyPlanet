@@ -31,6 +31,8 @@ public class RangeBoostAbility : BaseAbility
 
     private void RemoveBonus()
     {
+        if (zoneSearch == null) return;
+
         foreach (var targetEnemy in zoneSearch.enemiesInZone)
         {
             if (targetEnemy == null || targetEnemy.IsDead || targetEnemy.attackRange <= 0) continue;

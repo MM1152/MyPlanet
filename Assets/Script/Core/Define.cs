@@ -175,6 +175,7 @@ public enum PoolsId
     HitExplosionParticle = 1029,
     HitHealParticle = 1030,
     ArcaneExplosionNormal = 1031,
+    LevelUpParticle = 1032,
 
 
     Melee_Tier03 = 1200,
@@ -380,7 +381,8 @@ public static class AddressableNames
         {"HitExplosionParticle",PoolsId.HitExplosionParticle},
         {"HitHealParticle",PoolsId.HitHealParticle},
         {"Zone", PoolsId.Zone },
-        {"EnemyHpCanvas",PoolsId.EnemyHpUI}
+        {"EnemyHpCanvas",PoolsId.EnemyHpUI},
+        {"LevelUpParticle",PoolsId.LevelUpParticle}
 
     };
 

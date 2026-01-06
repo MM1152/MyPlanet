@@ -41,7 +41,7 @@ public class TitleTowerPlaceEditWindow : Window
 
     private List<TowerPlaceHold> placeHolds = new List<TowerPlaceHold>();
     private List<UpgradeLayout> upgradeLayouts = new List<UpgradeLayout>();
-    private Dictionary<int,ShowIndexPanel> showIndexPanels = new Dictionary<int, ShowIndexPanel>();
+    private Dictionary<int, ShowIndexPanel> showIndexPanels = new Dictionary<int, ShowIndexPanel>();
     private List<TowerInfomation> towerInfos = new List<TowerInfomation>();
 
     private float angle;
@@ -56,10 +56,11 @@ public class TitleTowerPlaceEditWindow : Window
     private (int left, int right) prevApplyOptionSlots = (-1, -1);
 
     protected bool inGameViewer = false;
+    [SerializeField] private TowerManager towerManager;
 
     public override void Close()
     {
-        if(presetData != null)
+        if (presetData != null)
         {
             presetData.TowerId = placeHolds.Select(x => x.TowerData != null ? x.TowerData.ID : -1).ToList();
         }
@@ -70,17 +71,40 @@ public class TitleTowerPlaceEditWindow : Window
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
-        windowId = (int)WindowIds.TitleTowerPlaceEditWindow;    
+        windowId = (int)WindowIds.TitleTowerPlaceEditWindow;
 
         Canvas.ForceUpdateCanvases();
-        circleSize = new Vector3(circle.rectTransform.rect.width , circle.rectTransform.rect.height);
+        circleSize = new Vector3(circle.rectTransform.rect.width, circle.rectTransform.rect.height);
 
         closeButton.onClick.AddListener(() => manager.Open(WindowIds.TitleSelectPlanetWindow));
         saveButton.onClick.AddListener(() =>
         {
+            if (!HasAttackTower())
+            {
+                var popup = popupManager?.Open<TextPopup>(PopupIds.TextPopup);
+                if (popup != null)
+                {
+                    popup.SetTexts("저장 불가", "공격 타워가\n 최소 1개 이상 있어야 합니다.", "취소", "확인");
+                    popup.SetButtonAction(() => popupManager.ForceClose(), () => popupManager.ForceClose());
+                }
+                return;
+            }
+
             saveButton.interactable = false;
             WaitForSaveAsync().Forget();
         });
+    }
+
+    private bool HasAttackTower()
+    {
+        foreach (var placeHold in placeHolds)
+        {
+            if (placeHold.TowerData != null && placeHold.TowerData.Type == 1)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private async UniTaskVoid WaitForSaveAsync()
@@ -105,7 +129,7 @@ public class TitleTowerPlaceEditWindow : Window
         base.Open();
     }
 
-    public void SetPresetData(PresetData.Data presetData , int presetIndex)
+    public void SetPresetData(PresetData.Data presetData, int presetIndex)
     {
         this.presetData = presetData;
         this.presetIndex = presetIndex;
@@ -136,7 +160,7 @@ public class TitleTowerPlaceEditWindow : Window
     private void UpdateTowerList()
     {
         var towerList = DataTableManager.TowerTable.GetAll();
-        
+
         for (int i = 0; i < towerList.Count; i++)
         {
             // 일단 임시로 막아놓은거임
@@ -144,7 +168,7 @@ public class TitleTowerPlaceEditWindow : Window
                 continue;
 
             var towerInfo = Instantiate(towerInfomation, towerInfomationRoot);
-            if(!inGameViewer)
+            if (!inGameViewer)
             {
                 towerInfo.OnTab += Place;
                 towerInfo.OnLongTab += ShowInfomationTower;
@@ -179,13 +203,13 @@ public class TitleTowerPlaceEditWindow : Window
     private void ShowInfomationTower(TowerTable.Data towerData)
     {
         var popup = popupManager.Open<TowerInfomationPopup>(PopupIds.TowerInfomationPopup);
-        if(popup != null)
+        if (popup != null)
         {
             popup.UpdateTexts(towerData);
         }
     }
 
-    private void SwapTower(int idx , TowerTable.Data data)
+    private void SwapTower(int idx, TowerTable.Data data)
     {
         UnPlace(selectIndex);
         Place(data);
@@ -196,7 +220,7 @@ public class TitleTowerPlaceEditWindow : Window
         if (isRotate) return;
         if (!placeHolds[idx].Placed()) return;
         if (!popupManager.Interactable) return;
-        
+
         var towerData = placeHolds[idx].TowerData;
         int targetIndex = towerData.Option_Range;
 
@@ -214,7 +238,7 @@ public class TitleTowerPlaceEditWindow : Window
         showIndexPanels[placeHolds[idx].TowerData.ID].UpdatePlace(-1);
         placeHolds[idx].PlaceTower(null);
         FindOptionApplyTower(null);
-        Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_page_03);
+        Managers.SoundManager.PlaySFX(AudiosId.ui_button_simple_click_07);
         ResetUpgradeLayout();
         UpdateUpgradeLayout();
         UpdateStatTexts();
@@ -228,24 +252,24 @@ public class TitleTowerPlaceEditWindow : Window
         {
             placeHolds[selectIndex].PlaceTower(data);
             showIndexPanels[data.ID].UpdatePlace(selectIndex + 1);
-            FindOptionApplyTower(data);            
+            FindOptionApplyTower(data);
         }
         else
         {
             SwapTower(selectIndex, data);
             showIndexPanels[data.ID].UpdatePlace(selectIndex + 1);
-            FindOptionApplyTower(data);                        
+            FindOptionApplyTower(data);
         }
-        Managers.SoundManager.PlaySFX(AudiosId.ui_menu_button_scroll_page_03);
+        Managers.SoundManager.PlaySFX(AudiosId.ui_button_simple_click_07);
         UpdateStatTexts();
     }
     //6.6 , 283.3
     //-11.79999 , 283.3
     private int ContainPresetList(int towerId)
     {
-        for(int i = 0; i < presetData.TowerId.Count; i++)
+        for (int i = 0; i < presetData.TowerId.Count; i++)
         {
-            if(presetData.TowerId[i] == towerId)
+            if (presetData.TowerId[i] == towerId)
             {
                 return i + 1;
             }
@@ -308,8 +332,15 @@ public class TitleTowerPlaceEditWindow : Window
             }
             placeHold.PlaceTower(towerData);
 
+            if (inGameViewer)
+            { 
+                 bool active = CheckTowerActivation(i, towerData);
+                 placeHold.SetActiveTowerImage(active);
+            }
+
             int idx = i;
-            placeHold.button.onClick.AddListener(() => {
+            placeHold.button.onClick.AddListener(() =>
+            {
                 OpenUnLockSlotPopup(idx);
 
                 if (placeHold.DisAble) return;
@@ -321,11 +352,35 @@ public class TitleTowerPlaceEditWindow : Window
 
                 RotateCircle(idx);
                 firstImage.sprite = numbers[(idx + 1) % 10];
-                secondImage.sprite = numbers[(idx + 1) /10];
+                secondImage.sprite = numbers[(idx + 1) / 10];
             });
         }
 
         CheckPlaceHoldUnlockAble();
+    }
+
+    private bool CheckTowerActivation(int slotIndex, TowerTable.Data towerData)
+    {
+        if (towerData == null) return false;
+        if (towerManager == null) return false;
+        if (slotIndex < 0 || slotIndex >= towerManager.Towers.Count) return false;
+
+        var tower = towerManager.GetTower(slotIndex);
+        if (tower == null) return false;
+
+        return tower.Level >= 1 && tower.UseAble;
+    }
+
+    public void UpdateTowerActivationState()
+    {
+        if (!inGameViewer) return;
+        
+        for (int i = 0; i < placeHolds.Count; i++)
+        {
+            var towerData = placeHolds[i].TowerData;
+            bool active = CheckTowerActivation(i, towerData);
+            placeHolds[i].SetActiveTowerImage(active);
+        }
     }
 
     private void CheckPlaceHoldUnlockAble()
@@ -335,11 +390,11 @@ public class TitleTowerPlaceEditWindow : Window
         var unlockAbleSlotCount = DataTableManager.PlanetTable.GetUnlockAbleSlotCount(planetData.id, planetData.star);
         var currentOpenSlotCount = planetData.openSlot.Count(x => x != -1);
 
-        bool unlockAble = unlockAbleSlotCount - currentOpenSlotCount == 0 ? false : true; 
+        bool unlockAble = unlockAbleSlotCount - currentOpenSlotCount == 0 ? false : true;
 
-        for(int i = 0; i < placeHolds.Count; i++)
+        for (int i = 0; i < placeHolds.Count; i++)
         {
-            if(planetData.openSlot[i] == -1)
+            if (planetData.openSlot[i] == -1)
             {
                 placeHolds[i].SetUnLockAble(unlockAble);
             }
@@ -356,7 +411,7 @@ public class TitleTowerPlaceEditWindow : Window
         float rotateAngle = angle * idx;
         float currentAngle = angle * selectIndex;
         isRotate = true;
-        RotateAsync(currentAngle , rotateAngle , 0.2f).Forget();
+        RotateAsync(currentAngle, rotateAngle, 0.2f).Forget();
         selectIndex = idx;
 
         placeHolds[selectIndex].transform.localScale = Vector3.one * 1.5f;
@@ -368,7 +423,7 @@ public class TitleTowerPlaceEditWindow : Window
         UpdateUpgradeLayout();
     }
 
-    private async UniTaskVoid RotateAsync(float from , float to , float duration)
+    private async UniTaskVoid RotateAsync(float from, float to, float duration)
     {
         float delta = Mathf.DeltaAngle(to, from);
         float speed = delta / duration;
@@ -382,7 +437,7 @@ public class TitleTowerPlaceEditWindow : Window
         isRotate = false;
     }
 
-    private void FindOptionApplyTower(TowerTable.Data towerData) 
+    private void FindOptionApplyTower(TowerTable.Data towerData)
     {
         if (prevApplyOptionSlots.left != -1)
         {
@@ -399,40 +454,40 @@ public class TitleTowerPlaceEditWindow : Window
         if (towerData == null) return;
         int targetIndex = towerData.Option_Range;
 
-        if (towerData.Option_type == 0) prevApplyOptionSlots = GetBothSideSlots(selectIndex, targetIndex); 
-        else if (towerData.Option_type == 1) prevApplyOptionSlots = (GetLeftSlots(selectIndex, targetIndex) , -1); 
-        else if (towerData.Option_type == 2) prevApplyOptionSlots = (-1 , GetRightSlots(selectIndex, targetIndex));
+        if (towerData.Option_type == 0) prevApplyOptionSlots = GetBothSideSlots(selectIndex, targetIndex);
+        else if (towerData.Option_type == 1) prevApplyOptionSlots = (GetLeftSlots(selectIndex, targetIndex), -1);
+        else if (towerData.Option_type == 2) prevApplyOptionSlots = (-1, GetRightSlots(selectIndex, targetIndex));
 
         if (prevApplyOptionSlots.left != -1)
         {
             placeHolds[prevApplyOptionSlots.left].Select();
-            placeHolds[prevApplyOptionSlots.left].GetBonusOptionDataTowerIndex(selectIndex , placeHolds[selectIndex].TowerData);
+            placeHolds[prevApplyOptionSlots.left].GetBonusOptionDataTowerIndex(selectIndex, placeHolds[selectIndex].TowerData);
             upgradeLayouts[prevApplyOptionSlots.left].GiveUpgrade();
         }
         if (prevApplyOptionSlots.right != -1)
         {
             placeHolds[prevApplyOptionSlots.right].Select();
-            placeHolds[prevApplyOptionSlots.right].GetBonusOptionDataTowerIndex(selectIndex , placeHolds[selectIndex].TowerData);
+            placeHolds[prevApplyOptionSlots.right].GetBonusOptionDataTowerIndex(selectIndex, placeHolds[selectIndex].TowerData);
             upgradeLayouts[prevApplyOptionSlots.right].GiveUpgrade();
         }
 
         placeHolds[selectIndex].Select();
     }
 
-    private int GetLeftSlots(int index , int targetIndex )
+    private int GetLeftSlots(int index, int targetIndex)
     {
-        return Utils.ClampIndex(index - targetIndex , placeHolds.Count);
+        return Utils.ClampIndex(index - targetIndex, placeHolds.Count);
     }
 
-    private int GetRightSlots(int index , int targetIndex)
+    private int GetRightSlots(int index, int targetIndex)
     {
         return Utils.ClampIndex(index + targetIndex, placeHolds.Count);
     }
 
-    private (int left , int right) GetBothSideSlots(int index , int targetIndex)
+    private (int left, int right) GetBothSideSlots(int index, int targetIndex)
     {
-        int left = GetLeftSlots(index , targetIndex);
-        int right = GetRightSlots(index , targetIndex);
+        int left = GetLeftSlots(index, targetIndex);
+        int right = GetRightSlots(index, targetIndex);
 
         return (left, right);
     }
@@ -442,9 +497,9 @@ public class TitleTowerPlaceEditWindow : Window
         if (placeHolds[selectIdx].UnLockAble)
         {
             var popup = popupManager?.Open<TextPopup>(PopupIds.TextPopup);
-            if(popup != null)
+            if (popup != null)
             {
-                popup.SetTexts("슬릇 해금하기", "슬릇을 해금하시겠습니까?" , "취소하기" , "해금하기");
+                popup.SetTexts("슬릇 해금하기", "슬릇을 해금하시겠습니까?", "취소하기", "해금하기");
                 popup.SetButtonAction(() => OnClickBlueButton(selectIdx), OnClickRedButton);
             }
         }
@@ -484,7 +539,7 @@ public class TitleTowerPlaceEditWindow : Window
     {
         TowerTable.Data currentData = placeHolds[selectIndex].TowerData;
 
-        if(currentData == null)
+        if (currentData == null)
         {
             status1Title.text = "-";
             status1Value.text = "-";
@@ -495,7 +550,7 @@ public class TitleTowerPlaceEditWindow : Window
             return;
         }
 
-         
+
         status1Title.text = currentData.GetFormaingStat1.Split(' ')[0];
         status1Value.text = currentData.GetFormaingStat1.Split(' ')[1];
         status2Title.text = currentData.GetFormaingStat2.Split(' ')[0];
@@ -511,7 +566,7 @@ public class TitleTowerPlaceEditWindow : Window
 
     private void UpdateUpgradeLayout()
     {
-        foreach(var otherTowerIndex in placeHolds[selectIndex].applyBonusOptionValueTowerTable.Keys)
+        foreach (var otherTowerIndex in placeHolds[selectIndex].applyBonusOptionValueTowerTable.Keys)
         {
             upgradeLayouts[otherTowerIndex].ResiveUpgrade();
         }

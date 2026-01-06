@@ -50,4 +50,17 @@ public class TextPopup : Popup
         blueButton.onClick.AddListener(blueButtonAction);
     }
 
+    public void SetButtonAudio(AudiosId blueButtonAudio = AudiosId.None, AudiosId redButtonAudio = AudiosId.None)
+    {
+        if (blueButtonAudio != AudiosId.None)
+        {
+            blueButton.onClick.AddListener(() => Managers.SoundManager.PlaySFX(blueButtonAudio));
+        }
+
+        if (redButtonAudio != AudiosId.None)
+        {
+            redButton.onClick.AddListener(() => Managers.SoundManager.PlaySFX(redButtonAudio));
+        }
+    }
+
 }

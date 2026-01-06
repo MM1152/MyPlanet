@@ -30,7 +30,6 @@ public class PlaceTowerWindow : Window
     [Header("�̰� ���� �Ҹ�ǰ ID �� �ֱ�")]
     public int consumableId;
 #endif
-
     public override void Init(WindowManager manager)
     {
         base.Init(manager);
@@ -38,7 +37,7 @@ public class PlaceTowerWindow : Window
         for (int i = 0; i < selectTowerUIRoot.childCount; i++)
         {
             SelectTowerUI obj = selectTowerUIRoot.GetChild(i).GetComponentInChildren<SelectTowerUI>();
-            if( obj == null ) continue; 
+            if (obj == null) continue;
             obj.Initalized(i, (value) => selectTowerIndex = value);
             selectTowerUIs.Add(obj);
         }
@@ -54,6 +53,12 @@ public class PlaceTowerWindow : Window
         if (towerData != null)
         {
             towerManager.PlaceTower(towerData);
+
+            var inGameWindow = manager.GetWindow(WindowIds.InGamePlaceTowerWindow) as InGamePlaceTowerWindow;
+            if (inGameWindow != null)
+            {
+                inGameWindow.UpdateTowerActivationState();
+            }
 
             if (!isStartTutorial && FirebaseManager.Instance.PresetData.GetGameData().stageId == 2 && !FirebaseManager.Instance.UserData.isClearStage2Tutorial)
             {
@@ -72,7 +77,7 @@ public class PlaceTowerWindow : Window
 
     public override void Open()
     {
-        if (Variable.IsTutorialActive) 
+        if (Variable.IsTutorialActive)
             return;
 
         levelText.text = $"Lv. {towerManager.CurrentLevel}";
@@ -84,13 +89,13 @@ public class PlaceTowerWindow : Window
         if (towerManager.CurrentLevel == 1)
         {
             int uiIdx = 0;
-            for(int i = 0; i < allTowers.Count && uiIdx < 3; i++)
+            for (int i = 0; i < allTowers.Count && uiIdx < 3; i++)
             {
                 if (allTowers[i] == null || allTowers[i].TowerData.Type != 1)
                     continue;
 
                 var nextLevelData = DataTableManager.LevelUpTable.Get(allTowers[i].TowerData.ID, allTowers[i].Level + 1);
-                if(nextLevelData != null)
+                if (nextLevelData != null)
                 {
                     selectTowerUIs[uiIdx++].SetTowerData(allTowers[i]);
                 }
@@ -103,7 +108,7 @@ public class PlaceTowerWindow : Window
             Utils.Suffle(consumes);
 
             int uiIdx = 0;
-            while(uiIdx < 3)
+            while (uiIdx < 3)
             {
                 bool isTower = Random.Range(0f, 1f) < towerSpawnPercent;
                 if (isTower)
@@ -112,10 +117,10 @@ public class PlaceTowerWindow : Window
                     int towerIdx = 0;
                     do
                     {
-                        if( towerIdx >= allTowers.Count) break;
+                        if (towerIdx >= allTowers.Count) break;
 
                         levelUpData = DataTableManager.LevelUpTable.Get(allTowers[towerIdx].TowerData.ID, allTowers[towerIdx].Level + 1);
-                        if(levelUpData != null)
+                        if (levelUpData != null)
                         {
                             selectTowerUIs[uiIdx++].SetTowerData(allTowers[towerIdx]);
                             allTowers.RemoveAt(towerIdx);
@@ -124,10 +129,10 @@ public class PlaceTowerWindow : Window
                         {
                             towerIdx++;
                         }
-            
+
                     } while (levelUpData == null && towerIdx < allTowers.Count);
 
-                    if(levelUpData == null)
+                    if (levelUpData == null)
                     {
                         selectTowerUIs[uiIdx++].SetConsumableData(consumes[0]);
                         consumes.RemoveAt(0);
@@ -141,7 +146,7 @@ public class PlaceTowerWindow : Window
             }
         }
 
-        if(towerManager.CurrentLevel != 1)
+        if (towerManager.CurrentLevel != 1)
         {
             Managers.SoundManager.PlaySFX(AudiosId.ui_menu_popup_message_reward_01);
         }
@@ -157,11 +162,10 @@ public class PlaceTowerWindow : Window
             selectTowerUIs[i].ResetOutline();
         }
 
-        for(int i = 0; i < selectTowerUIs.Count; i++)
+        for (int i = 0; i < selectTowerUIs.Count; i++)
         {
             selectTowerUIs[i].gameObject.SetActive(false);
         }
-
         base.Close();
     }
 
@@ -169,7 +173,7 @@ public class PlaceTowerWindow : Window
     //Tutorial Methods
     public void TutorialOpen(int towerId)
     {
-        for(int i = 0; i < selectTowerUIs.Count; i++)
+        for (int i = 0; i < selectTowerUIs.Count; i++)
         {
             selectTowerUIs[i].SetTowerData(towerManager.GetIdToTower(towerId));
         }

@@ -95,17 +95,17 @@ public class RandomPickUpWindow : Window
 
     private void OnValueChangedDiamond(object sender , ValueChangedEventArgs args)
     {
-        diamondText.text = args.Snapshot.Value.ToString();
+        diamondText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
     }
 
     private void OnValueChangedGold(object sender, ValueChangedEventArgs args)
     {
-        goldText.text = args.Snapshot.Value.ToString();
+        goldText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
     }
 
     private void OnValueChangedExp(object sender, ValueChangedEventArgs args)
     {
-        expText.text = args.Snapshot.Value.ToString();
+        expText.text = int.Parse(args.Snapshot.Value.ToString()).ToString("N0");
     }
 
     private void OnClickHomeButton()

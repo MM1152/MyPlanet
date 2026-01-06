@@ -23,7 +23,11 @@ public class WarringWindow : Window
         base.Open();
         Time.timeScale = 0f;
         canvasGroup.alpha = 1f;
-        WarringWindowDelayClose(1f).Forget();
+        
+        // 사이렌 사운드 재생 및 길이 기반 딜레이 설정
+        float clipLength = Managers.SoundManager.GetClipLength(AudiosId.sci_fi_alarm_siren_loop_01);
+        Managers.SoundManager.PlaySFX(AudiosId.sci_fi_alarm_siren_loop_01, 1f, true);
+        WarringWindowDelayClose(clipLength, clipLength).Forget();
     }
 
     public override void Close()
@@ -37,22 +41,18 @@ public class WarringWindow : Window
         warringText.text = enemyType == EnemyType.EliteMonster ? $"<i>엘리트 몬스터 출현!<i>" : $"<i>보스 몬스터 출현!<i>";
     }
 
-    private async UniTaskVoid WarringWindowDelayClose(float delay = 1f)
+    private async UniTaskVoid WarringWindowDelayClose(float delay, float fadeDuration)
     {
-        await UniTask.Delay((int)(delay * 1000), true, cancellationToken: this.GetCancellationTokenOnDestroy());
+        await UniTask.Delay((int)(delay * 2000), true, cancellationToken: this.GetCancellationTokenOnDestroy());
 
+        float fadeSpeed = fadeDuration > 0f ? 1f / fadeDuration : 1f;
         while (canvasGroup.alpha > 0f)
         {
-            canvasGroup.alpha -= Time.unscaledDeltaTime;
+            canvasGroup.alpha -= Time.unscaledDeltaTime * fadeSpeed;
             await UniTask.Yield();
         }
         manager.Close();
         Managers.SoundManager.StopSFX();
         closeEvent?.Invoke();
     }
-
-
-
-
-
 }

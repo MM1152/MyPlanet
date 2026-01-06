@@ -25,16 +25,17 @@ public class ConsumableUI : MonoBehaviour
         consumableIcon.sprite = consumable.ConsumData.consumableImage;
     }
 
+    public void Clear()
+    {
+        consumable = null;
+    }
+
     private void Update()
     {
         if (consumable != null)
         {
             consumable.Update(Time.deltaTime);
             cosumableDurationText.text = $"{(int)consumable.GetDuration()/60:D2}:{(int)consumable.GetDuration()%60:D2}";
-            if (consumable.GetDuration() <= 0f)
-            {
-                consumable = null;
-            }
         }
     }
 

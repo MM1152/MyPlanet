@@ -132,8 +132,6 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
 
         currentHP = (int)(enemyData.HP * percent);
         maxHP = currentHP;
-        Debug.Log($"적 아이디 : {enemyData.ID}");
-        Debug.Log($"적 체력 초기화: {currentHP}/{enemyData.HP} (스테이지 배율: {percent})");
         atk = (int)(enemyData.ATK * percent);
         speed = enemyData.Speed * percent;
         baseRange = enemyData.Range;
@@ -146,7 +144,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         isKilledByPlayer = true;
         IsDead = false;
         attack = AttackManager.GetAttack(enemyType);
-        if (attack is BossAttack bossShotAttack) //후에 수정필요 
+        if (attack is BossAttack bossShotAttack)
         {
             var shotStrategy = bossShotAttack.GetShotStrategy(ElementType, enemyData.ID) as TurnSimpleAttack;
             if (shotStrategy != null)
@@ -303,14 +301,11 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         if (damage < 0) return;
 
         currentHP -= damage;
-        Debug.Log($"적이 {damage}만큼 데미지를 받았습니다. 남은 체력: {currentHP}");
+        
         if (bossUi != null)
             bossUi.UpdateBossHP(currentHP, maxHP);
 
-        Debug.Log($"적 남은 체력: {currentHP}/{maxHP}");
         int percent = (int)(((float)currentHP / maxHP) * 100f);
-        Debug.Log($"적 남은 체력 백분율: {percent}%");
-
         OnBarrierRefill?.Invoke(percent);
 
 #if DEBUG_MODE
@@ -361,6 +356,7 @@ public class Enemy : MonoBehaviour, IDamageAble, IMoveAble
         }
 
         enemyHpUI?.Release();
+        enemyHpUI = null;
         OnBarrierRefill = null;
         OnDie?.Invoke(this);
         OnDie = null;

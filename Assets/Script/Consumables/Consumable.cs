@@ -35,6 +35,7 @@ public abstract class Consumable
 
     public void Release()
     {
+        ResetItem();
         if(ctr != null && !ctr.IsCancellationRequested)
         {
             ctr.Cancel();
@@ -51,6 +52,11 @@ public abstract class Consumable
     public float GetDuration()
     {
         return duration;
+    }
+
+    public void RestDuration()
+    {
+        this.duration = consumData.duration;
     }
 
     protected abstract UniTaskVoid UseItemAsync(float duration , CancellationTokenSource ctr);

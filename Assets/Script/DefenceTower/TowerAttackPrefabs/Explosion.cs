@@ -19,7 +19,22 @@ public class Explosion : BaseAttackPrefab
 
     protected override void HitTarget(Collider2D collision)
     {
-        var find = collision.GetComponent<IDamageAble>();
+        var enemy = collision.GetComponent<Enemy>();
+        if (enemy == null && collision.attachedRigidbody != null)
+        {
+            enemy = collision.attachedRigidbody.GetComponentInParent<Enemy>();
+        }
+        if (enemy == null) return;
+
+        var barrier = enemy.GetComponentInChildren<Barrier>();
+        if (barrier != null && !barrier.IsDead)
+        {
+            float percent = typeEffectiveness.GetDamagePercent(barrier.ElementType);
+            barrier.OnDamage((int)(tower.CalcurateAttackDamage * percent));
+            return;
+        }
+
+        var find = enemy.GetComponent<IDamageAble>();
         if (find != null)
         {
             float percent = typeEffectiveness.GetDamagePercent(find.ElementType);

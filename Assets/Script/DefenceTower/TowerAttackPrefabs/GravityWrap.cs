@@ -11,12 +11,23 @@ public class GravityWrap : BaseAttackPrefab
     
     protected List<IMoveAble> moveAbles = new List<IMoveAble>();
     private UtilTower utiltower;
+    private IFieldTower ownerTower;
     private float FullRange => utiltower.UtilTowerData?.range ?? 0 + tower.BonusAttackRange;
     [SerializeField] private GameObject[] filedParticle;
+
+    public void SetOwnerTower(IFieldTower tower)
+    {
+        ownerTower = tower;
+    }
 
     public override void Init(Tower data)
     {
         base.Init(data);
+
+        for(int i = 0; i < filedParticle.Length; i++)
+        {
+            filedParticle[i].SetActive(false);
+        }
 
         utiltower = data as UtilTower;
         poolsId = PoolsId.GravityWrap;
@@ -34,7 +45,7 @@ public class GravityWrap : BaseAttackPrefab
     }
 
     /// <summary>
-    /// 1 : ÇÏ¾á ÀåÆÇ , 2 : ÁöÀ¶ÁöÀ¶ÁöÀ¶ ÇÏ´Â ÆÄÆ¼Å¬
+    /// 1 : ï¿½Ï¾ï¿½ ï¿½ï¿½ï¿½ï¿½ , 2 : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½Æ¼Å¬
     /// </summary>
     public void SetAssets(int particle)
     {
@@ -68,6 +79,8 @@ public class GravityWrap : BaseAttackPrefab
 
     public override void OnTriggerEnter2D(Collider2D collision)
     {
+        if(string.IsNullOrEmpty(targetTag)) return;
+        
         if(collision.CompareTag(targetTag))
         {
             var enemy = collision.GetComponent<Enemy>();
@@ -127,5 +140,8 @@ public class GravityWrap : BaseAttackPrefab
             moveAble.CurrentSpeed = moveAble.BaseSpeed;
         }
         moveAbles.Clear();
+        
+        ownerTower?.ResetAttackCooldown();
+        ownerTower = null;
     }
 }

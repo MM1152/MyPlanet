@@ -13,6 +13,7 @@ public class TowerPlaceHold : MonoBehaviour
     private Outline outline;
     private Image image;
     [HideInInspector] public Button button;
+    [SerializeField] private Image towerImage;
 
     public int index;
     public int Index => index;
@@ -23,13 +24,13 @@ public class TowerPlaceHold : MonoBehaviour
     private bool unLockAble;
     public bool UnLockAble => unLockAble;
 
-    public Dictionary<int , TowerTable.Data> applyBonusOptionValueTowerTable = new Dictionary<int, TowerTable.Data>();
+    public Dictionary<int, TowerTable.Data> applyBonusOptionValueTowerTable = new Dictionary<int, TowerTable.Data>();
     public float AttackBonusAmount { get; set; } = 0f;
     public float AttackSpeedBonusAmount { get; set; } = 0f;
 
     private TowerTable.Data towerData = null;
     public TowerTable.Data TowerData => towerData;
-    
+
     public void Init()
     {
         outline = GetComponent<Outline>();
@@ -44,7 +45,7 @@ public class TowerPlaceHold : MonoBehaviour
     {
         // -1 이면 못쓰는 부분
         // 0이면 열린 부분 ( 설치 가능 )
-        if( index == -1 )
+        if (index == -1)
         {
             disAble = true;
             disAbleSlot.SetActive(true);
@@ -64,7 +65,7 @@ public class TowerPlaceHold : MonoBehaviour
     public void PlaceTower(TowerTable.Data tower)
     {
         towerData = tower;
-        if(towerData == null)
+        if (towerData == null)
         {
             towerInfo.gameObject.SetActive(false);
         }
@@ -73,7 +74,7 @@ public class TowerPlaceHold : MonoBehaviour
             towerInfo.gameObject.SetActive(true);
             towerInfo.Init(tower.ID);
         }
-        CheckElemetTypeToAddBonus(); 
+        CheckElemetTypeToAddBonus();
     }
 
     public void SetUnLockAble(bool unlockAble)
@@ -105,9 +106,9 @@ public class TowerPlaceHold : MonoBehaviour
         outline.enabled = false;
     }
 
-    public void GetBonusOptionDataTowerIndex(int idx , TowerTable.Data towerData)
+    public void GetBonusOptionDataTowerIndex(int idx, TowerTable.Data towerData)
     {
-        if(applyBonusOptionValueTowerTable.ContainsKey(idx))
+        if (applyBonusOptionValueTowerTable.ContainsKey(idx))
         {
             return;
         }
@@ -122,7 +123,7 @@ public class TowerPlaceHold : MonoBehaviour
 
     public void RemoveBonusOptionDataTowerIndex(int idx)
     {
-        if(!applyBonusOptionValueTowerTable.ContainsKey(idx))
+        if (!applyBonusOptionValueTowerTable.ContainsKey(idx))
         {
             return;
         }
@@ -145,7 +146,7 @@ public class TowerPlaceHold : MonoBehaviour
             CheckElemetTypeToAddBonus();
         }
     }
-  
+
     // 아무타워가 안껴져있는 상태면 일단 데이터만 저장
     // 그다음에 타워를 끼게 되면 속성 체크 이후 보너스 적용
 
@@ -159,11 +160,11 @@ public class TowerPlaceHold : MonoBehaviour
             var towerData = applyBonusOptionValueTowerTable[key];
             var optionData = RandomOptionData.GetData(towerData.Option);
 
-            if (this.towerData != null && optionData.id == this.towerData.attribute + 2) 
+            if (this.towerData != null && optionData.id == this.towerData.attribute + 2)
             {
                 AttackBonusAmount += FirebaseManager.Instance.TowerData.Get(towerData.ID).OptionValue;
             }
-            else if( optionData.id == 1 )
+            else if (optionData.id == 1)
             {
                 AttackBonusAmount += FirebaseManager.Instance.TowerData.Get(towerData.ID).OptionValue;
             }
@@ -173,4 +174,14 @@ public class TowerPlaceHold : MonoBehaviour
             }
         }
     }
-}   
+
+    public void SetActiveTowerImage(bool active)
+    {
+        if (towerImage == null) return;
+
+        disAbleSlot.SetActive(!active);
+        var color = towerImage.color;
+        color.a = active ? 1f : 0.4f;
+        towerImage.color = color;
+    }
+}

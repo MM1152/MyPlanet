@@ -60,13 +60,14 @@ public class PlanetStarUpgradeTab : MonoBehaviour
 
     private void UpdatePeiceCount(PlanetTable.Data planetTableData , PlanetData.Data userPlanetData)
     {
-        // 5¼º±îÁö Âï¾úÀ»‹š
+        // 5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if(!userPlanetData.unlocked)
         {
             starCountSlider.value = 1f;
-            currentPeiceCountText.text = $"ÇØ±ÝÇÏ±â : {userPlanetData.count}/10";
-            needPeiceCountText.text = $"ÇØ±ÝÇÏ±â";
+            currentPeiceCountText.text = $"ì¡°ê° ê°œìˆ˜ : {userPlanetData.count}/10";
+            needPeiceCountText.text = $"ìž ê¸ˆ í•´ì œ í•„ìš”";
             starCountSlider.value = (float)userPlanetData.count / 10;
+            upgradeButton.interactable = userPlanetData.count >= 10;
             return;
         }
 
@@ -82,10 +83,11 @@ public class PlanetStarUpgradeTab : MonoBehaviour
         needPieceCount = (int)(planetTableData.NeedPeiceCountPercent * userPlanetData.NeedPeiceCount);
         currentPieceCount = userPlanetData.count;
 
-        currentPeiceCountText.text = $"Á¶°¢ °³¼ö : {currentPieceCount}/{needPieceCount}";
+        currentPeiceCountText.text = $"ì¡°ê° ê°œìˆ˜ : {currentPieceCount}/{needPieceCount}";
         starCountSlider.value = (float)currentPieceCount / needPieceCount;
 
-        needPeiceCountText.text = "ÇÊ¿äÇÑ Á¶°¢ °³¼ö : " + needPieceCount.ToString();
+        needPeiceCountText.text = "ì—…ê·¸ë ˆì´ë“œ í•„ìš” ì¡°ê° : " + needPieceCount.ToString();
+        upgradeButton.interactable = currentPieceCount >= needPieceCount;
     }
 
 
@@ -136,7 +138,7 @@ public class PlanetStarUpgradeTab : MonoBehaviour
 
     private int GetUnlockSlotCount(string grade , int starLevel)
     {
-        // µî±Þº° ±âº» ID °è»ê
+        // ï¿½ï¿½Þºï¿½ ï¿½âº» ID ï¿½ï¿½ï¿½
         int baseId = grade switch
         {
             "C" => 5041,
@@ -148,10 +150,10 @@ public class PlanetStarUpgradeTab : MonoBehaviour
 
         if (baseId == 0) return 0;
 
-        // ¼º±Þ¿¡ µû¸¥ ÃÖÁ¾ ID °è»ê (0¼º~5¼º)
+        // ï¿½ï¿½ï¿½Þ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ID ï¿½ï¿½ï¿½ (0ï¿½ï¿½~5ï¿½ï¿½)
         int finalId = baseId + starLevel;
         
-        // OptionTable¿¡¼­ µ¥ÀÌÅÍ °¡Á®¿À±â
+        // OptionTableï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         return DataTableManager.OptionTable.GetValueDataToInt(finalId);
     }
 

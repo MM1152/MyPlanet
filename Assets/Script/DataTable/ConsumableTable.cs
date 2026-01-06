@@ -19,6 +19,7 @@ public class ConsumalbeTable : DataTable
         public int duration { get; set; }
         public int Item_description { get; set; }
         public string Image_path { get; set; }
+        public string Sound { get; set; }   
 
         [CsvHelper.Configuration.Attributes.Ignore]
         public ICondition condition;

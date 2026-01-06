@@ -45,15 +45,17 @@ public class RandomPickUpLayout : MonoBehaviour
     public void OnClickPickOneButton()
     {
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
-        popup.SetTexts("�̱⸦ �����Ͻðڽ��ϱ�?" , $"{titleText.text} �̱⸦ �����մϴ�.\n100���̾ư� �Ҹ�˴ϴ�." , "���" , "�̱�");
+        popup.SetTexts("뽑기를 진행하시겠습니까?", $"{titleText.text} 뽑기를 진행합니다.\n100다이아가 소모됩니다.", "취소", "확인");
         popup.SetButtonAction(() => OnClickBlueButton(1).Forget(), OnClickRedButton);
+        popup.SetButtonAudio(AudiosId.ui_menu_button_beep_17, AudiosId.ui_button_simple_click_05);
     }
 
     public void OnClickPickTenButton()
     {
         var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
-        popup.SetTexts("�̱⸦ �����Ͻðڽ��ϱ�?", $"{titleText.text} �̱⸦ �����մϴ�.\n1000���̾ư� �Ҹ�˴ϴ�.", "���", "�̱�");
+        popup.SetTexts("뽑기를 진행하시겠습니까?", $"{titleText.text} 뽑기를 진행합니다.\n1000다이아가 소모됩니다.", "취소", "확인");
         popup.SetButtonAction(() => OnClickBlueButton(10).Forget(), OnClickRedButton);
+        popup.SetButtonAudio(AudiosId.ui_menu_button_beep_17, AudiosId.ui_button_simple_click_05);
     }
 
     private async UniTaskVoid OnClickBlueButton(int count)
@@ -62,24 +64,28 @@ public class RandomPickUpLayout : MonoBehaviour
 
         if (!sucess && !Variable.IsTutorialActive)
         {
+            var popup = popupManager.Open<TextPopup>(PopupIds.TextPopup);
+            popup.SetTexts("뽑기 실패!", "다이아가 부족합니다.", "취소", "확인");
+            popup.SetButtonAction(() => popupManager.ForceClose(), () => popupManager.ForceClose());
+            popup.SetButtonAudio(AudiosId.ui_button_simple_click_05, AudiosId.ui_button_simple_click_05);
             return;
         }
 
         List<UniTask> tasks = new List<UniTask>();
-        if(!Variable.IsTutorialActive)
+        if (!Variable.IsTutorialActive)
         {
             FirebaseManager.Instance.UserData.UseGoods(0, 0, count * 100).Forget();
         }
         List<RandomPickUpTable.Data> datas = new List<RandomPickUpTable.Data>();
         List<bool> isNews = new List<bool>();
-        List<(bool duplication , float precData)> isDuplication = new List<(bool duplication, float precData)>();
-        (UniTask task, bool isNew, (bool duplication, float precData) isDuplication) task = (new UniTask(), false, (false , 0f));
+        List<(bool duplication, float precData)> isDuplication = new List<(bool duplication, float precData)>();
+        (UniTask task, bool isNew, (bool duplication, float precData) isDuplication) task = (new UniTask(), false, (false, 0f));
 
         for (int i = 0; i < count; i++)
         {
             if (isPlanetPickUp)
                 datas.Add(DataTableManager.RandomPickUpTable.GetRandomDataForPlanet());
-            else 
+            else
                 datas.Add(DataTableManager.RandomPickUpTable.GetRandomDataForTower());
 
 
@@ -116,24 +122,24 @@ public class RandomPickUpLayout : MonoBehaviour
     private (UniTask, bool, (bool duplication, float precData)) UpdatePlanetData(RandomPickUpTable.Data data)
     {
         var userPlanetData = FirebaseManager.Instance.PlanetData.GetOrigin(data.connection_id);
-        if(data.reward_type == 1)
+        if (data.reward_type == 1)
         {
             //����
-            if(userPlanetData.unlocked)
+            if (userPlanetData.unlocked)
             {
                 // �ر� �Ǿ��ִ� ����
-                return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, 10) , false, (true , 10f));
+                return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, 10), false, (true, 10f));
             }
             else
             {
                 // �ر� �ȵǾ��ִ� ����
-                return (FirebaseManager.Instance.PlanetData.UnlockPlanetAsync(userPlanetData.id) , true, (false , 0f));
+                return (FirebaseManager.Instance.PlanetData.UnlockPlanetAsync(userPlanetData.id), true, (false, 0f));
             }
         }
         else
         {
             //����
-            return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, data.amount ?? 0) , false, (true , data.amount ?? 0));
+            return (FirebaseManager.Instance.PlanetData.AddPieceCountAsync(userPlanetData.id, data.amount ?? 0), false, (true, data.amount ?? 0));
         }
     }
 
@@ -142,7 +148,7 @@ public class RandomPickUpLayout : MonoBehaviour
         var userTowerData = FirebaseManager.Instance.TowerData.Get(data.connection_id);
         var randomOptionTable = DataTableManager.TowerRandomOptionValueTable;
         var randomOptionData = randomOptionTable.GetOptionData(userTowerData.TowerId);
-        var randomOptionValue = randomOptionTable.GetRandomOptionValue(userTowerData.TowerId , userTowerData.grade);
+        var randomOptionValue = randomOptionTable.GetRandomOptionValue(userTowerData.TowerId, userTowerData.grade);
         // 1. ���� ������ ������ �ִ� Ÿ���� ���� �� RandomOption �� ��
         // 2. �� ������ ��ü, �ƴ϶�� �������� ��ü
         // 3. ó����� Ÿ����� �׳� �ھƳ���
@@ -150,10 +156,10 @@ public class RandomPickUpLayout : MonoBehaviour
         if (userTowerData.Unlock)
         {
             // �� ������ �̾Ƽ� ��ü
-            if(userTowerData.OptionValue < randomOptionValue.percent)
+            if (userTowerData.OptionValue < randomOptionValue.percent)
             {
                 var prevOptionValue = userTowerData.OptionValue;
-                return (FirebaseManager.Instance.TowerData.UpdateOptionValueAsync(userTowerData,randomOptionValue.percent), false, (true, prevOptionValue));
+                return (FirebaseManager.Instance.TowerData.UpdateOptionValueAsync(userTowerData, randomOptionValue.percent), false, (true, prevOptionValue));
             }
             // �� ������ �̾Ƽ� �������� ��ü
             else

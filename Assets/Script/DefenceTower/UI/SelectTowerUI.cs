@@ -74,7 +74,7 @@ public class SelectTowerUI : MonoBehaviour
         gameObject.SetActive(true);
         isTower = true;
         this.towerData = data.TowerData;
-        towerNameText.text = $"[{towerData.Name}]" + (data.Level == 0 ? "" : $"+{data.Level}단계");
+        towerNameText.text = $"{towerData.Name}" + (data.Level == 0 ? "" : $"+{data.Level}단계");
         slotIndexText.text = data.SlotIndex + "번 슬롯";
         towerState.gameObject.SetActive(true);
         iconImage.sprite = towerIconBackgroundImage;
@@ -116,7 +116,7 @@ public class SelectTowerUI : MonoBehaviour
                     else if (i > 0) sb.Append(" / ");
                     sb.Append(upgradeList[i]);
                 }
-                towerState.text = sb.ToString();
+                towerState.text = $"{sb.ToString()}";
             }
             else
             {
@@ -144,12 +144,12 @@ public class SelectTowerUI : MonoBehaviour
         {
             if (diff < 0)
             {
-                upgradeList.Add($"[{effectName}] -{Mathf.Abs(diff)}");
+                upgradeList.Add($"[{effectName}] -{Mathf.Abs(diff):F1}");
             }
         }
         else if (diff > 0)
         {
-            upgradeList.Add($"[{effectName}] +{Mathf.Abs(diff)}");
+            upgradeList.Add(diff % 1 == 0 ? $"[{effectName}] +{Mathf.Abs(diff):F0}" : $"[{effectName}] +{Mathf.Abs(diff):F1}");
         }
     }
 

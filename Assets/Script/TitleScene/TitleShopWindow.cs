@@ -64,8 +64,9 @@ public class TitleShopWindow : Window
             ("Price", shopTable.Price.ToString()),
             ("Name", DataTableManager.TowerTable.Get(shopTable.Tower_ID).Name)
         );
-        textPopup.SetTexts("¾ÆÀÌÅÛ ±¸¸Å" , formatingText  , DataTableManager.StringTable.Get(6101) ,  DataTableManager.StringTable.Get(6100));
+        textPopup.SetTexts("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" , formatingText  , DataTableManager.StringTable.Get(6101) ,  DataTableManager.StringTable.Get(6100));
         textPopup.SetButtonAction(() => OnClickBlueButton(shopTable).Forget(), OnClickRedButton);
+        textPopup.SetButtonAudio(AudiosId.cash_register_open_coins_cha_ching_01, AudiosId.ui_button_simple_click_05);
     }
 
     private async UniTaskVoid OnClickBlueButton(ShopTable.Data purchaseData)

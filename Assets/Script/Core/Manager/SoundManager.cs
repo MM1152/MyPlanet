@@ -15,6 +15,15 @@ public class SoundManager : MonoBehaviour
     private AudiosId currentSfxId = AudiosId.None;
     public AudiosId CurrentBgmId => currentBgmId;  
 
+    public float GetClipLength(AudiosId id)
+    {
+        if (audioClips.TryGetValue(id, out AudioClip clip))
+        {
+            return clip.length;
+        }
+        return 0f;
+    }
+
     public async UniTask Init()
     {
         var assets = await Addressables.LoadAssetsAsync<AudioClip>(AddressableLabelIds.AudiosIds);
@@ -74,14 +83,17 @@ public class SoundManager : MonoBehaviour
 
     public void PlayBGM(AudiosId id, float volume = .3f, bool loop = true)
     {
+        Debug.Log($"[SoundManager] PlayBGM 호출: id={id}, volume={volume}");
+        
         if (currentBgmId == id && currentBgmSource != null && currentBgmSource.isPlaying)
         {
+            Debug.Log($"[SoundManager] 같은 BGM 재생 중 - return");
             return;
         }
 
-        if (currentBgmSource != null)
+        if (currentBgmSource != null && currentBgmSource.isPlaying)
         {
-            StopAudioSource(currentBgmSource);
+            currentBgmSource.Stop();
         }
 
         if (audioClips.TryGetValue(id, out AudioClip clip))
@@ -93,11 +105,13 @@ public class SoundManager : MonoBehaviour
             }
 
             currentBgmSource.enabled = true;
+            currentBgmSource.clip = clip;
             currentBgmSource.loop = loop;
             currentBgmSource.volume = volume;
-            currentBgmSource.clip = clip;
             currentBgmId = id;
             currentBgmSource.Play();
+            
+            Debug.Log($"[SoundManager] BGM 재생 완료 - 설정된 volume: {volume}, 실제 volume: {currentBgmSource.volume}");
         }
         else
         {
@@ -137,6 +151,8 @@ public class SoundManager : MonoBehaviour
         {
             StopAudioSource(source);
         }
+        currentBgmId = AudiosId.None;
+        currentSfxId = AudiosId.None;
     }
 
     private void ResetSource(AudioSource source)

@@ -26,6 +26,7 @@ public class WaveWindow : MonoBehaviour
 
     public void SetWaveTimerText(float timeRemaining)
     {
+        timeRemaining = Mathf.Max(0f, timeRemaining);
         waveTimerText.text = $"{(int)(timeRemaining/60):00}:{(int)(timeRemaining%60):00}";
     }
     

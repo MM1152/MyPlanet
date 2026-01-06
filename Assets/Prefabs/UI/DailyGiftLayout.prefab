@@ -763,7 +763,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7292481472103879753}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -879,6 +879,7 @@ MonoBehaviour:
   valueText: {fileID: 7293947447177006246}
   button: {fileID: 499437788805952051}
   checkBox: {fileID: 2565381777523279606}
+  popupManager: {fileID: 0}
 --- !u!1 &7894941545077797355
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,6 +950,7 @@ GameObject:
   - component: {fileID: 919070816806671431}
   - component: {fileID: 856126922927269633}
   - component: {fileID: 499437788805952051}
+  - component: {fileID: 6634899932636254304}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -1084,7 +1086,38 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 919070816806671431}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6634899932636254304}
+        m_TargetAssemblyTypeName: SoundPlayer, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6634899932636254304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8096795164759342278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f93ce2da9b6f38428253b396efb6d92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundType: 1
+  audioId: 114
+  volume: 0.3
+  loop: 0
+  playOnStart: 0
+  touchToPlay: 0
+  touchAudioId: -1
 --- !u!1 &8189525953483756118
 GameObject:
   m_ObjectHideFlags: 0
