@@ -1,7 +1,6 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
-using Unity.Android.Gradle.Manifest;
 public class CounterLaserAbility : BaseAbility
 {
     public override AbilityType abilityType => AbilityType.OnDamage;
