@@ -37,18 +37,20 @@ public class TutorialManager : MonoBehaviour
     public float rotateSpeed = 50f;
     public TextMeshProUGUI tutorialText;
 
-    private Dictionary<TutorialStep, List<Tutorial>> tutorials = new Dictionary<TutorialStep, List<Tutorial>>()
-    {
-        { TutorialStep.Preset, new List<Tutorial> { new PresetWindowTutorial(), new PresetWindowTutorial2(), new PresetWindowTutorial3() } },
-        { TutorialStep.Stage1Enter, new List<Tutorial> { new Stage1Enter1(), new Stage1Enter2(), new Stage1Enter3()} },
-        { TutorialStep.Stage1, new List<Tutorial> { new Stage1Tutorial1()  , new Stage1Tutorial2(), new Stage1Tutorial3(), new Stage1Tutorial4() , new Stage1Tutorial5()} },
-        { TutorialStep.PickUp, new List<Tutorial> { new RandomPickUpTutorial1() , new RandomPickUpTutorial2() , new RandomPickUpTutorial3() } },
-        { TutorialStep.PickUp2, new List<Tutorial> { new TowerRandomPickUp1() , new TowerRandomPickUp2() } },
-        { TutorialStep.Book, new List<Tutorial> { new BookTutorial1() , new BookTutorial2(), new BookTutorial3() } },
-        { TutorialStep.Book1, new List<Tutorial> { new BookTutorial4() , new BookTutorial5()}},
-        { TutorialStep.Stage2, new List<Tutorial> { new Stage2Tutorial() }},
-    };
+    private Dictionary<TutorialStep, List<Tutorial>> tutorials = new Dictionary<TutorialStep, List<Tutorial>>();
+    //{
+    //    { TutorialStep.Preset, new List<Tutorial> { new PresetWindowTutorial(), new PresetWindowTutorial2(), new PresetWindowTutorial3() } },
+    //    { TutorialStep.Stage1Enter, new List<Tutorial> { new Stage1Enter1(), new Stage1Enter2(), new Stage1Enter3() } },
+    //    { TutorialStep.Stage1, new List<Tutorial> { new Stage1Tutorial1(), new Stage1Tutorial2(), new Stage1Tutorial3(), new Stage1Tutorial4(), new Stage1Tutorial5() } },
+    //    { TutorialStep.PickUp, new List<Tutorial> { new RandomPickUpTutorial1(), new RandomPickUpTutorial2(), new RandomPickUpTutorial3() } },
+    //    { TutorialStep.PickUp2, new List<Tutorial> { new TowerRandomPickUp1(), new TowerRandomPickUp2() } },
+    //    { TutorialStep.Book, new List<Tutorial> { new BookTutorial1(), new BookTutorial2(), new BookTutorial3() } },
+    //    { TutorialStep.Book1, new List<Tutorial> { new BookTutorial4(), new BookTutorial5() }},
+    //    { TutorialStep.Stage2, new List<Tutorial> { new Stage2Tutorial() }},
+    //};
 
+    [SerializeField] private List<TutorialTargetedButton> tutorialTargetedButtons;
+    private Dictionary<int, TutorialTargetedButton> tutorialTargetButtonTable = new Dictionary<int, TutorialTargetedButton>();
     [SerializeField] private List<TutorialDisAbleButtons> tutorialDisableButtons;
 
     private Tutorial curTutorial;
@@ -58,6 +60,7 @@ public class TutorialManager : MonoBehaviour
 
     public CancellationTokenSource TutorialCtr => tutorialCtr;
     private CancellationTokenSource tutorialCtr;
+
 
     private bool init = false;
     private float textSkipDelay = 0.05f;
@@ -69,12 +72,33 @@ public class TutorialManager : MonoBehaviour
 
     private void Init()
     {
-        foreach(var key in tutorials.Keys)
+        var tutorialDatas = DataTableManager.TutorialTable.GetAllTutorialData();
+
+        foreach (var key in tutorialDatas.Keys)
         {
-            foreach(var tutorial in tutorials[key])
+            tutorials.Add(key, new List<Tutorial>());
+            foreach(var tutorialData in tutorialDatas[key])
             {
-                tutorial.Init(this);
+                if(tutorialData.TutorialType == TutorialType.None)
+                {
+                    var tutorial = new Tutorial();
+                    tutorial.Init(this, tutorialData);
+
+                    tutorials[key].Add(tutorial);
+                }
+                else
+                {
+                    var tutorial = DataTableManager.TutorialTable.GetCustomTutorialInstance(tutorialData.ID);
+                    tutorial.Init(this, tutorialData);
+
+                    tutorials[key].Add(tutorial);
+                }
             }
+        }
+
+        foreach (var button in tutorialTargetedButtons)
+        {
+            tutorialTargetButtonTable.Add(button.ButtonID, button);
         }
 
         init = true;
@@ -93,6 +117,7 @@ public class TutorialManager : MonoBehaviour
         curTutorialList = tutorials[tutorialId];
         currentTutorialStep = tutorialId;
         curIdx = 0;
+
         for(int i = 0; i < tutorialDisableButtons.Count; i++)
         {
             if(tutorialId == tutorialDisableButtons[i].tutorialStep)
@@ -104,7 +129,7 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
             }
-        }        
+        }
 
         Variable.IsTutorialActive = true;
 
@@ -142,7 +167,7 @@ public class TutorialManager : MonoBehaviour
 
     public void Update()
     {
-        if(CanPlayNextTutorial && Managers.TouchManager.TouchType == TouchTypes.Tab)
+        if(tutorialTextPanel.activeSelf && GetActiveTutorialTextEndImage() && CanPlayNextTutorial && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
             SetNextTutorial();
         }
@@ -196,6 +221,10 @@ public class TutorialManager : MonoBehaviour
                 curTutorialDisableButtons.disAbleButtons[i].interactable = true;
             }
         }
+
+        gameObject.SetActive(false);
+        tutorialTouchPanel.transform.SetParent(transform);
+        Debug.Log("End Tutorial");
     }
 
     public void SetTextAreaPosition(int idx)
@@ -257,6 +286,16 @@ public class TutorialManager : MonoBehaviour
     public void StopSound()
     {
         audioSource.Stop();
+    }
+
+    public TutorialTargetedButton GetInteractionButton(int key)
+    {
+        if(tutorialTargetButtonTable.ContainsKey(key))
+        {
+            return tutorialTargetButtonTable[key];
+        }
+
+        return null;
     }
 }
 

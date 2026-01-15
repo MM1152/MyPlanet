@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -6,22 +7,77 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 [Serializable]
-public abstract class Tutorial
+public class Tutorial
 {
     protected TutorialManager manager;
     public bool isPlayTexts;
     protected StringBuilder sb = new StringBuilder();
-    public void Init(TutorialManager manager)
+    protected TutorialTable.Data tutorialData;
+    public void Init(TutorialManager manager , TutorialTable.Data tutorialData)
     {
         this.manager = manager;
+        this.tutorialData = tutorialData;
     }
 
-    public abstract void TutorialEnter();
-    public abstract void TutorialUpdate();
-    public abstract void TutorialExit();
+    public virtual void TutorialEnter()
+    {
+        Debug.Log($"Start Tutorial {tutorialData.ID}");
+        Canvas.ForceUpdateCanvases();
+
+       // manager.SetTouchPlanelParent(interactionButton[0].transform);
+        manager.SetTextAreaPosition(tutorialData.TutorialAreaPosition);
+        manager.SetTouchPlanelParent(manager.transform);
+        manager.SetActiveTouchPanel(false);
+
+        if (tutorialData.TargetButtonID != -1)
+        {
+            var interactionButton = manager.GetInteractionButton(tutorialData.TargetButtonID);
+            interactionButton.UpdateButton();
+            if(interactionButton != null)
+            {
+                manager.SetTouchPlanelParent(interactionButton.transform);
+                manager.SetActiveTouchPanel(true);
+            }
+        }
+
+        var clip = GetCombineClip(new (int, int)[] {
+            (tutorialData.ClipType , tutorialData.Clip1),
+            (tutorialData.ClipType , tutorialData.Clip2),
+            (tutorialData.ClipType , tutorialData.Clip3),
+        });
+
+        Time.timeScale = tutorialData.TimeScale;
+
+        if (string.IsNullOrEmpty(tutorialData.TutorialText))
+        {
+            manager.SetTutorialBackGround(tutorialData.BackGroundLayoutRayCast);
+            manager.CanPlayNextTutorial = tutorialData.CanNextPlay;
+        }
+        else
+        {
+            SetTextWithAnimation(
+                tutorialData.TutorialText,
+                clip,
+                tutorialData.BackGroundLayoutRayCast,
+                tutorialData.CanNextPlay
+            ).Forget();
+        }
+    }
+
+    public virtual void TutorialUpdate()
+    {
+
+    }
+
+    public virtual void TutorialExit()
+    {
+        manager.SetActiveTutorialTextArea(false);
+        manager.SetTouchPlanelParent(manager.transform);
+    }
 
     public async UniTaskVoid SetTextWithAnimation(string msg , AudioClip clip = null, bool backGroundRayCastAble = true, bool canPlayNextTutorial = false , Action callback = null)
     {
@@ -76,7 +132,11 @@ public abstract class Tutorial
         List<AudioClip> audioClips = new List<AudioClip>();
         foreach (var tuple in ids)
         {
-            audioClips.Add(DataTableManager.SoundsTable.Get(tuple.type, tuple.id));
+            var clipData = DataTableManager.SoundsTable.Get(tuple.type, tuple.id);
+            if(clipData != null)
+            {
+                audioClips.Add(clipData);
+            }
         }
 
         return Utils.CombineMultipleAudioClips(audioClips.ToArray());

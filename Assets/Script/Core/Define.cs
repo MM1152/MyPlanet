@@ -514,6 +514,7 @@ public static class DataTableIds
     public static readonly string DailyGiftTable = "DailyGiftTable";
     public static readonly string TowerGradeToPieceCountTable = "TowerGradeToPieceCountTable";
     public static readonly string BounsSpawnEnemysTable = "BounsSpawnEnemysTable";
+    public static readonly string TutorialTable = "TutorialTable";
 
     public static readonly HashSet<string> AllIds = new HashSet<string>()
     {

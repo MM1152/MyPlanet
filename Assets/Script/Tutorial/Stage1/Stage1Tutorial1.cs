@@ -15,26 +15,16 @@ public class Stage1Tutorial1 : Tutorial
 
     public override void TutorialEnter()
     {
+        base.TutorialEnter();
         isFirstUpdate = false;
-
-        mainGameSceneCanvas = GameObject.FindWithTag(TagIds.MainGameSceneCanvas).GetComponent<Canvas>();
         windowManager = GameObject.FindWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
-
-        AudioClip clip1 = DataTableManager.SoundsTable.Get(1, 0);
-        AudioClip clip2 = DataTableManager.SoundsTable.Get(1, 1);
-
-        AudioClip combineClip = Utils.CombineAudioClips(clip1, clip2);
-
-
-        string msg = "스테이지 입장 시\n공격형 타워 하나를 선택할 수 있습니다.\n활성화 시킬 타워를 선택하세요";
-        SetTextWithAnimation(msg, combineClip,  backGroundRayCastAble : false).Forget();
         Time.timeScale = 0f;
     }
 
     public override void TutorialExit()
     {
+        base.TutorialExit();
         selectButton.onClick.RemoveListener(OnClickSelectButton);
-
         Time.timeScale = 1f;
     }
 
@@ -42,7 +32,7 @@ public class Stage1Tutorial1 : Tutorial
     {
         if (!isFirstUpdate && manager.GetActiveTutorialTextEndImage() && Managers.TouchManager.TouchType == TouchTypes.Tab)
         {
-            mainGameSceneCanvas.sortingOrder = 9999;
+            //mainGameSceneCanvas.sortingOrder = 9999;
             manager.SetActiveTutorialTextArea(false);
             manager.SetTutorialBackGround(false);
 
@@ -74,7 +64,7 @@ public class Stage1Tutorial1 : Tutorial
 
     private void OnClickSelectTowerUI()
     {
-        mainGameSceneCanvas.sortingOrder = 0;
+        //mainGameSceneCanvas.sortingOrder = 0;
         foreach (var towerUI in selectTowerUIs)
         {
             GameObject.Destroy(towerUI.GetToggle().GetComponent<TutorialUiEvents>());

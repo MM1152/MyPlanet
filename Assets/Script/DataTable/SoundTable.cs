@@ -40,7 +40,7 @@ public class SoundTable : DataTable
     }
     public AudioClip Get(int type , int index)
     {
-        if (soundTable.ContainsKey(type))
+        if (soundTable.ContainsKey(type) && index != -1)
         {
             return soundTable[type][index];
         }
