@@ -166,6 +166,11 @@ public class PlanetInfomation : MonoBehaviour
         {
             OnClickPlanet?.Invoke(data, this);
         }
+
+        if(Variable.IsTutorialActive && data.ID == 1001 && Managers.TouchManager.TouchType == TouchTypes.Tab && Managers.TouchManager.OnTargetUI(gameObject))
+        {
+            OnClickPlanet?.Invoke(data, this);
+        }
     }
 
     private void OnValueChangedStar(object sender , ValueChangedEventArgs args)

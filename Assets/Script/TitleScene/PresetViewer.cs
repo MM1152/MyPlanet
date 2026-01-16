@@ -109,6 +109,16 @@ public class PresetViewer : MonoBehaviour
         editButton.interactable = false;
     }
 
+    public void OnEnableEditButton()
+    {
+        editButton.interactable = true;
+    }
+
+    public Button GetEditButton()
+    {
+        return editButton;
+    }
+
     private void OnDestroy()
     {
         // 이벤트 정리

@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class Stage1Tutorial4 : Tutorial
 {
-    private string msg = "레벨이 오를 때마다 선택창에서 타워를 선택하거나 강화시킬 수 있습니다";
-
     private TowerManager towerManager;
     private WindowManager windowManager;
     private WaveManager waveManager;
@@ -19,21 +17,20 @@ public class Stage1Tutorial4 : Tutorial
     private bool isFirstUpdate = false;
     public override void TutorialEnter()
     {
+        base.TutorialEnter();
         windowManager = GameObject.FindWithTag(TagIds.WindowManagerTag).GetComponent<WindowManager>();
         towerManager = GameObject.FindWithTag(TagIds.TowerManagerTag).GetComponent<TowerManager>();
         waveManager = GameObject.FindWithTag(TagIds.WaveManagerTag).GetComponent<WaveManager>();
 
         Variable.IsSpawnActive = false;
 
-        var clip = DataTableManager.SoundsTable.Get(1,6);
-
         towerManager.SetLevel(2);
-        SetTextWithAnimation(msg , clip, backGroundRayCastAble : false).Forget();
         WaitForBossStageAsync().Forget();
     }
 
     public override void TutorialExit()
     {
+        base.TutorialExit();
         selectButton.onClick.RemoveListener(OnClickSelectButton);
     }
 

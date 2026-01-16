@@ -2,13 +2,8 @@ using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
-using UnityEngine.UI;
 
 [Serializable]
 public class Tutorial
@@ -54,11 +49,13 @@ public class Tutorial
 
         if (string.IsNullOrEmpty(tutorialData.TutorialText))
         {
+            manager.SetActiveTutorialTextArea(false);
             manager.SetTutorialBackGround(tutorialData.BackGroundLayoutRayCast);
             manager.CanPlayNextTutorial = tutorialData.CanNextPlay;
         }
         else
         {
+            manager.SetActiveTutorialTextArea(true);
             SetTextWithAnimation(
                 tutorialData.TutorialText,
                 clip,
@@ -77,6 +74,8 @@ public class Tutorial
     {
         manager.SetActiveTutorialTextArea(false);
         manager.SetTouchPlanelParent(manager.transform);
+
+        Time.timeScale = 1f;
     }
 
     public async UniTaskVoid SetTextWithAnimation(string msg , AudioClip clip = null, bool backGroundRayCastAble = true, bool canPlayNextTutorial = false , Action callback = null)

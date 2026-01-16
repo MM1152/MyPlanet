@@ -115,6 +115,7 @@ public class TutorialManager : MonoBehaviour
         curTutorialDisableButtons = null;
         gameObject.SetActive(true); 
         curTutorialList = tutorials[tutorialId];
+        curTutorial = null;
         currentTutorialStep = tutorialId;
         curIdx = 0;
 
@@ -208,7 +209,6 @@ public class TutorialManager : MonoBehaviour
 
     public void EndTutorials()
     {
-        curTutorial?.TutorialExit();
         tutorialTouchPanel.transform.parent = transform;
         gameObject.SetActive(false);
 
@@ -224,6 +224,7 @@ public class TutorialManager : MonoBehaviour
 
         gameObject.SetActive(false);
         tutorialTouchPanel.transform.SetParent(transform);
+        curTutorial?.TutorialExit();
         Debug.Log("End Tutorial");
     }
 

@@ -164,4 +164,25 @@ public class TitlePresetWindow : Window
             Debug.LogWarning($"ChangePresetData: Invalid index {index} or viewer is null");
         }
     }
+    
+    public Button GetEditButtonForTutorial()
+    {
+        return presetViewers[0].GetEditButton();
+    }
+
+    public void UpdateTutorialPart()
+    {
+        for(int i = 1; i < presetViewers.Count; i++)
+        {
+            presetViewers[i].DisableEditButton();
+        }
+    }
+
+    public void ReseteTutorialPart()
+    {
+        for (int i = 1; i < presetViewers.Count; i++)
+        {
+            presetViewers[i].OnEnableEditButton();
+        }
+    }
 }

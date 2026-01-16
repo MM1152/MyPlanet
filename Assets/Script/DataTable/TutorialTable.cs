@@ -17,6 +17,17 @@ public class TutorialTable : DataTable
     {
         {5, new Stage1Tutorial1() },
         {6, new Stage1Tutorial2() },
+        {9, new Stage1Tutorial3() },
+        {10, new Stage1Tutorial4() },
+        {11, new Stage1Tutorial5() },
+        {16, new RandomPickUpTutorial3() },
+        {23, new TowerRandomPickUp2() },
+        {26, new BookTutorial2() },
+        {32, new BookTutorial5() },
+        {33, new PresetWindowTutorial() },
+        {39, new PresetWindowTutorial3() },
+        {40, new Stage2Tutorial() },
+        {41, new Stage2Tutorial2() },
     };
     public class Data
     {
