@@ -89,14 +89,14 @@
 ### 🏗️ 구현 화면 예시
 
 
-<table>
+<table align="center">
 <tr>
   
-<td align="center"><img src="https://github.com/user-attachments/assets/62177e66-b3ef-49a8-9ff7-b08a15dc8b36" height="300"/><br><sub>실시간 전투/포획</sub></td>
-<td align="center"><img src="https://github.com/user-attachments/assets/42354fd9-2d85-4988-a163-fe0e43e36172" height="300"/><br><sub>대원 정보/무기 변경</sub></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/e3e65e5f-d1d5-4d5a-b5de-a8d6dd8546cd" height="400"/><br><sub>뽑기 시스템</sub></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/88579604-0dfd-4e27-91f6-38eee41550fa" height="400"/><br><sub>프리셋</sub></td>
 </tr>
 <tr>
-<td align="center"><img src="https://github.com/user-attachments/assets/bd75fe59-50b2-478f-9284-98504af5b9e2" height="300"/><br><sub>길 그리기</sub></td>
-<td align="center"><img src="https://github.com/user-attachments/assets/0f0e09f1-0128-434a-a2ec-bf9fc5d9434d" height="300"/><br><sub>대원 배치</sub></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/45af91bb-6e50-41ce-af32-0c0279492452" height="400"/><br><sub>인게임 플레이</sub></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/63349481-6939-4a62-9385-20c1ee1e5723" height="400"/><br><sub>보스 전투/비동기 레이드</sub></td>
 </tr>
 </table>
