@@ -1,10 +1,9 @@
 <div align="center">
-
 <h2>[2026] 버던트 프로토콜 🌍</h2>
 <p>유니티 합반 프로젝트<br>
 프리셋 기반 전략형 디펜스<br>
 </p>
-
+<img src="https://github.com/user-attachments/assets/9c1aac62-ccf9-4e3c-aa0a-43078c30f287" height="400"/>
 </div>
 
 ---
