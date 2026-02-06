@@ -17,6 +17,85 @@
 - **기간**: 2025-11 ~ 2026-01 ( 2달 )
 
 ---
+🔗 [전체 Script 폴더 보기](https://github.com/MM1152/MyPlanet/tree/main/Assets/Script)
+
+```
+Assets/Script/
+│
+├── 📁 Animation/
+├── 📁 Consumables/
+├── 📁 Core/                          # 핵심 게임 시스템
+│   ├── 📁 DataTable/
+│   ├── 📁 DesignPatten/
+│   ├── 📁 Firebase/                  # Firebase 통합
+│   ├── 📁 Interface/
+│   ├── 📁 Json/
+│   ├── 📁 Loading/
+│   ├── 📁 Manager/
+│   ├── 📁 Popup/
+│   ├── 📁 Sound/
+│   ├── 📁 StatusEffect/
+│   ├── 📁 Tower/
+│   ├── 📁 UI/
+│   └──📁 Window/
+├── 📁 DataTable/
+├── 📁 Debug/
+├── 📁 DefenceTower/                  # 방어 타워 시스템
+│   ├── 📁 Tower/                     # 타워 클래스들
+│   └── 📁 TowerAttackPrefabs/        # 타워 공격 프리팹
+├── 📁 Enemy/                         # 적 AI 및 로직
+├── 📁 Event/
+├── 📁 Particle/
+├── 📁 PickUp/
+├── 📁 Planet/
+├── 📁 Scene/
+├── 📁 Stage/
+├── 📁 StatusEffect/
+├── 📁 Terraforming/
+├── 📁 TestCodes/
+├── 📁 TextUI/
+├── 📁 TitleScene/                    # 타이틀 화면 관련
+├── 📁 Tutorial/                      # 튜토리얼 시스템
+│   ├── 📁 Book/                      # 도감 튜토리얼
+│   ├── 📁 Stage1/                    # 스테이지 1 튜토리얼
+│   └── 📁 Stage1Enter/               # 스테이지 진입 튜토리얼
+├── 📁 UI/                            # UI 컴포넌트
+└── 📁 Wave/                          # 웨이브 시스템
+```
+
+## 🔑 주요 코드 파일
+
+### 📚 Tutorial 관련
+
+| 파일 | 설명 | 링크 |
+|------|------|------|
+| `TutorialManager.cs` | 튜토리얼 전체 관리 및 진행 제어 | [📄 보기](https://github.com/MM1152/MyPlanet/blob/main/Assets/Script/Tutorial/TutorialManager.cs) |
+| `Tutorial.cs` | 튜토리얼 베이스 클래스 | [📄 보기](https://github.com/MM1152/MyPlanet/blob/main/Assets/Script/Tutorial/Tutorial.cs) |
+| `Tutorial 폴더` | 전체 튜토리얼 스크립트 | [📁 보기](https://github.com/MM1152/MyPlanet/tree/main/Assets/Script/Tutorial) |
+
+### 🔥 Firebase 관련
+
+| 파일 | 설명 | 링크 |
+|------|------|------|
+| `FirebaseManager.cs` | Firebase 싱글톤 매니저 (Auth, DB, UserData 통합) | [📄 보기](https://github.com/MM1152/MyPlanet/blob/main/Assets/Script/Core/Firebase/FirebaseManager.cs) |
+| `Firebase 폴더` | 전체 Firebase 관련 코드 | [📁 보기](https://github.com/MM1152/MyPlanet/tree/main/Assets/Script/Core/Firebase) |
+
+### 🗼 Tower 관련
+
+| 파일 | 설명 | 링크 |
+|------|------|------|
+| `Tower.cs` | 타워 베이스 클래스 (공격, 스탯, 옵션) | [📄 보기](https://github.com/MM1152/MyPlanet/blob/main/Assets/Script/DefenceTower/Tower/Tower.cs) |
+| `DefenceTower 폴더` | 전체 타워 관련 코드 | [📁 보기](https://github.com/MM1152/MyPlanet/tree/main/Assets/Script/DefenceTower) |
+
+### 🎯 Core 시스템
+
+| 파일 | 설명 | 링크 |
+|------|------|------|
+| `Define.cs` | 게임 상수, Enum 정의 | [📄 보기](https://github.com/MM1152/MyPlanet/blob/main/Assets/Script/Core/Define.cs) |
+| `TypeEffectiveness.cs` | 속성 상성 계산 | [📄 보기](https://github.com/MM1152/MyPlanet/blob/main/Assets/Script/Core/TypeEffectiveness.cs) |
+| `Utils.cs` | 유틸리티 함수 모음 | [📄 보기](https://github.com/MM1152/MyPlanet/blob/main/Assets/Script/Core/Utils.cs) |
+
+---
 
 ### 🎮 게임소개
 
